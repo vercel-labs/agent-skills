@@ -79,7 +79,7 @@ Each skill contains:
 
 If deployment fails due to network restrictions, you need to allow Vercel domains:
 
-1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
+1. Go to [claude.ai/settings/capabilities](https://claude.ai/settings/capabilities)
 2. Add `*.vercel.com` to the allowed domains
 
 ## License
