@@ -25,6 +25,30 @@ React and Next.js performance optimization guidelines from Vercel Engineering. C
 - Rendering performance (Medium)
 - JavaScript micro-optimizations (Low-Medium)
 
+### web-design-guidelines
+
+Review UI code for compliance with web interface best practices. Audits your code for 100+ rules covering accessibility, performance, and UX.
+
+**Use when:**
+- "Review my UI"
+- "Check accessibility"
+- "Audit design"
+- "Review UX"
+- "Check my site against best practices"
+
+**Categories covered:**
+- Accessibility (aria-labels, semantic HTML, keyboard handlers)
+- Focus States (visible focus, focus-visible patterns)
+- Forms (autocomplete, validation, error handling)
+- Animation (prefers-reduced-motion, compositor-friendly transforms)
+- Typography (curly quotes, ellipsis, tabular-nums)
+- Images (dimensions, lazy loading, alt text)
+- Performance (virtualization, layout thrashing, preconnect)
+- Navigation & State (URL reflects state, deep-linking)
+- Dark Mode & Theming (color-scheme, theme-color meta)
+- Touch & Interaction (touch-action, tap-highlight)
+- Locale & i18n (Intl.DateTimeFormat, Intl.NumberFormat)
+
 ### vercel-deploy-claimable
 
 Deploy applications and websites to Vercel instantly. No authentication required. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
@@ -58,9 +82,45 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 
 ## Installation
 
+Install skills using the CLI:
+
 ```bash
 npx add-skill vercel-labs/agent-skills
 ```
+
+### Codex
+
+Follow the [Codex skills guide](https://developers.openai.com/codex/skills/) and place the skill under `$CODEX_HOME/skills`:
+
+```bash
+# from the repo root
+# defaults to ~/.codex if CODEX_HOME is unset
+cp -r skills/vercel-deploy "$CODEX_HOME/skills/"
+```
+
+Codex will auto-discover `SKILL.md` files in that directory on the next start.
+
+### OpenCode
+
+OpenCode discovers skills from `~/.claude/skills/<name>/SKILL.md` automatically. See [OpenCode Skills docs](https://opencode.ai/docs/skills/) for more details.
+
+### Claude Code
+
+Use the `/install-skill` slash command to install directly from GitHub:
+
+```
+/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/<skill-name>
+```
+
+For example, to install `vercel-deploy`:
+
+```
+/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/vercel-deploy
+```
+
+Add `--personal` to install to `~/.claude/skills/` (available across all projects) or `--project` for `.claude/skills/` (project-specific, default).
+
+See the [Claude Code Skills docs](https://code.claude.com/docs/en/skills) for more details.
 
 ### claude.ai
 
@@ -68,7 +128,7 @@ Add the skill to your project knowledge or paste the contents of `SKILL.md` into
 
 For network-dependent skills (like vercel-deploy-claimable), you may need to allow domains:
 
-1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
+1. Go to [claude.ai/settings/capabilities](https://claude.ai/settings/capabilities)
 2. Add required domains (e.g., `*.vercel.com`)
 
 ## Usage
@@ -89,17 +149,6 @@ Help me optimize this Next.js page
 ## Skill Structure
 
 Each skill contains:
-- `SKILL.md` - Instructions for Claude
-- `scripts/` - Helper scripts for automation
-
-## Troubleshooting
-
-### Network egress error on claude.ai
-
-If deployment fails due to network restrictions, you need to allow Vercel domains:
-
-1. Go to [claude.ai/settings/capabilities](https://claude.ai/settings/capabilities)
-2. Add `*.vercel.com` to the allowed domains
 - `SKILL.md` - Instructions for the agent
 - `scripts/` - Helper scripts for automation (optional)
 - `references/` - Supporting documentation (optional)
