@@ -58,9 +58,47 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 
 ## Installation
 
+Install skills using the CLI:
+
 ```bash
 npx add-skill vercel-labs/agent-skills
 ```
+
+### Codex
+
+Follow the [Codex skills guide](https://developers.openai.com/codex/skills/) and place the skill under `$CODEX_HOME/skills`:
+
+```bash
+# from the repo root
+# defaults to ~/.codex if CODEX_HOME is unset
+export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+mkdir -p "$CODEX_HOME/skills"
+cp -r skills/vercel-deploy "$CODEX_HOME/skills/"
+```
+
+Codex will auto-discover `SKILL.md` files in that directory on the next start.
+
+### OpenCode
+
+OpenCode discovers skills from `~/.claude/skills/<name>/SKILL.md` automatically. See [OpenCode Skills docs](https://opencode.ai/docs/skills/) for more details.
+
+### Claude Code
+
+Use the `/install-skill` slash command to install directly from GitHub:
+
+```
+/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/<skill-name>
+```
+
+For example, to install `vercel-deploy`:
+
+```
+/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/vercel-deploy
+```
+
+Add `--personal` to install to `~/.claude/skills/` (available across all projects) or `--project` for `.claude/skills/` (project-specific, default).
+
+See the [Claude Code Skills docs](https://code.claude.com/docs/en/skills) for more details.
 
 ### claude.ai
 
