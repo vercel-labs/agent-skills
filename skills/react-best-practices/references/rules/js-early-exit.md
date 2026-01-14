@@ -44,7 +44,7 @@ function validateUsers(users: User[]) {
       return { valid: false, error: 'Name required' }
     }
   }
-  
+
   return { valid: true }
 }
 ```

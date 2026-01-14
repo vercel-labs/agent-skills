@@ -7,7 +7,7 @@ description: React and Next.js performance optimization guidelines from Vercel E
 
 ## Overview
 
-Performance optimization guide for React and Next.js applications, ordered by impact. Apply these patterns when writing or reviewing code to maximize performance gains.
+Comprehensive performance optimization guide for React and Next.js applications, containing 40+ rules across 8 categories. Rules are prioritized by impact to guide automated refactoring and code generation.
 
 ## When to Apply
 
@@ -38,6 +38,7 @@ Rules are prioritized by impact:
 ### Critical Patterns (Apply First)
 
 **Eliminate Waterfalls:**
+- Defer await until needed (move into branches)
 - Use `Promise.all()` for independent async operations
 - Start promises early, await late
 - Use `better-all` for partial dependencies
@@ -60,8 +61,24 @@ Rules are prioritized by impact:
 
 - Use SWR for automatic request deduplication
 - Defer state reads to usage point
+- Use lazy state initialization for expensive values
 - Use derived state subscriptions
 - Apply `startTransition` for non-urgent updates
+
+### Rendering Patterns
+
+- Animate SVG wrappers, not SVG elements directly
+- Use `content-visibility: auto` for long lists
+- Prevent hydration mismatch with inline scripts
+- Use explicit conditional rendering (`? :` not `&&`)
+
+### JavaScript Patterns
+
+- Batch DOM CSS changes via classes
+- Build index maps for repeated lookups
+- Cache repeated function calls
+- Use `toSorted()` instead of `sort()` for immutability
+- Early length check for array comparisons
 
 ## References
 

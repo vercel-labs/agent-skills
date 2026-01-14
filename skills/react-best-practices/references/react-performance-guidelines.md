@@ -1,4 +1,4 @@
-# React Performance Guidelines
+# React Best Practices
 
 **Version 0.1.0**  
 Vercel Engineering  
@@ -14,7 +14,7 @@ January 2026
 
 ## Abstract
 
-Performance optimization guide for React and Next.js applications, ordered by impact. Rules are prioritized from highest to lowest impact, focusing first on eliminating waterfalls and reducing bundle size for maximum performance gains.
+Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 40+ rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
 
 ---
 
@@ -48,20 +48,26 @@ Performance optimization guide for React and Next.js applications, ordered by im
    - 5.5 [Use Lazy State Initialization](#55)
    - 5.6 [Use Transitions for Non-Urgent Updates](#56)
 6. [Rendering Performance](#6-rendering-performance) — **MEDIUM**
-   - 6.1 [CSS content-visibility for Long Lists](#61)
-   - 6.2 [Hoist Static JSX Elements](#62)
-   - 6.3 [Optimize SVG Precision](#63)
-   - 6.4 [Use Activity Component for Show/Hide](#64)
-   - 6.5 [Use Explicit Conditional Rendering](#65)
+   - 6.1 [Animate SVG Wrapper Instead of SVG Element](#61)
+   - 6.2 [CSS content-visibility for Long Lists](#62)
+   - 6.3 [Hoist Static JSX Elements](#63)
+   - 6.4 [Optimize SVG Precision](#64)
+   - 6.5 [Prevent Hydration Mismatch Without Flickering](#65)
+   - 6.6 [Use Activity Component for Show/Hide](#66)
+   - 6.7 [Use Explicit Conditional Rendering](#67)
 7. [JavaScript Performance](#7-javascript-performance) — **LOW-MEDIUM**
-   - 7.1 [Build Index Maps for Repeated Lookups](#71)
-   - 7.2 [Cache Property Access in Loops](#72)
-   - 7.3 [Cache Repeated Function Calls](#73)
-   - 7.4 [Cache Storage API Calls](#74)
-   - 7.5 [Combine Multiple Array Iterations](#75)
-   - 7.6 [Early Return from Functions](#76)
-   - 7.7 [Hoist RegExp Creation](#77)
-   - 7.8 [Use Set/Map for O(1) Lookups](#78)
+   - 7.1 [Batch DOM CSS Changes](#71)
+   - 7.2 [Build Index Maps for Repeated Lookups](#72)
+   - 7.3 [Cache Property Access in Loops](#73)
+   - 7.4 [Cache Repeated Function Calls](#74)
+   - 7.5 [Cache Storage API Calls](#75)
+   - 7.6 [Combine Multiple Array Iterations](#76)
+   - 7.7 [Early Length Check for Array Comparisons](#77)
+   - 7.8 [Early Return from Functions](#78)
+   - 7.9 [Hoist RegExp Creation](#79)
+   - 7.10 [Use Loop for Min/Max Instead of Sort](#710)
+   - 7.11 [Use Set/Map for O(1) Lookups](#711)
+   - 7.12 [Use toSorted() Instead of sort() for Immutability](#712)
 8. [Advanced Patterns](#8-advanced-patterns) — **LOW**
    - 8.1 [Store Event Handlers in Refs](#81)
    - 8.2 [useLatest for Stable Callback Refs](#82)
@@ -1018,7 +1024,48 @@ function ScrollTracker() {
 
 Optimizing the rendering process reduces the work the browser needs to do.
 
-### 6.1 CSS content-visibility for Long Lists
+### 6.1 Animate SVG Wrapper Instead of SVG Element
+
+Many browsers don't have hardware acceleration for CSS3 animations on SVG elements. Wrap SVG in a `<div>` and animate the wrapper instead.
+
+**Incorrect: animating SVG directly - no hardware acceleration**
+
+```tsx
+function LoadingSpinner() {
+  return (
+    <svg 
+      className="animate-spin"
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24"
+    >
+      <circle cx="12" cy="12" r="10" stroke="currentColor" />
+    </svg>
+  )
+}
+```
+
+**Correct: animating wrapper div - hardware accelerated**
+
+```tsx
+function LoadingSpinner() {
+  return (
+    <div className="animate-spin">
+      <svg 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24"
+      >
+        <circle cx="12" cy="12" r="10" stroke="currentColor" />
+      </svg>
+    </div>
+  )
+}
+```
+
+This applies to all CSS transforms and transitions (`transform`, `opacity`, `translate`, `scale`, `rotate`). The wrapper div allows browsers to use GPU acceleration for smoother animations.
+
+### 6.2 CSS content-visibility for Long Lists
 
 Apply `content-visibility: auto` to defer off-screen rendering.
 
@@ -1050,7 +1097,7 @@ function MessageList({ messages }: { messages: Message[] }) {
 
 For 1000 messages, browser skips layout/paint for ~990 off-screen items (10× faster initial render).
 
-### 6.2 Hoist Static JSX Elements
+### 6.3 Hoist Static JSX Elements
 
 Extract static JSX outside components to avoid re-creation.
 
@@ -1088,7 +1135,7 @@ function Container() {
 
 This is especially helpful for large and static SVG nodes, which can be expensive to recreate on every render.
 
-### 6.3 Optimize SVG Precision
+### 6.4 Optimize SVG Precision
 
 Reduce SVG coordinate precision to decrease file size. The optimal precision depends on the viewBox size, but in general reducing precision should be considered.
 
@@ -1110,7 +1157,83 @@ Reduce SVG coordinate precision to decrease file size. The optimal precision dep
 npx svgo --precision=1 --multipass icon.svg
 ```
 
-### 6.4 Use Activity Component for Show/Hide
+### 6.5 Prevent Hydration Mismatch Without Flickering
+
+When rendering content that depends on client-side storage (localStorage, cookies), avoid both SSR breakage and post-hydration flickering by injecting a synchronous script that updates the DOM before React hydrates.
+
+**Incorrect: breaks SSR**
+
+```tsx
+function ThemeWrapper({ children }: { children: ReactNode }) {
+  // localStorage is not available on server - throws error
+  const theme = localStorage.getItem('theme') || 'light'
+  
+  return (
+    <div className={theme}>
+      {children}
+    </div>
+  )
+}
+```
+
+Server-side rendering will fail because `localStorage` is undefined.
+
+**Incorrect: visual flickering**
+
+```tsx
+function ThemeWrapper({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState('light')
+  
+  useEffect(() => {
+    // Runs after hydration - causes visible flash
+    const stored = localStorage.getItem('theme')
+    if (stored) {
+      setTheme(stored)
+    }
+  }, [])
+  
+  return (
+    <div className={theme}>
+      {children}
+    </div>
+  )
+}
+```
+
+Component first renders with default value (`light`), then updates after hydration, causing a visible flash of incorrect content.
+
+**Correct: no flicker, no hydration mismatch**
+
+```tsx
+function ThemeWrapper({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <div id="theme-wrapper">
+        {children}
+      </div>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                var theme = localStorage.getItem('theme') || 'light';
+                var el = document.getElementById('theme-wrapper');
+                if (el) el.className = theme;
+              } catch (e) {}
+            })();
+          `,
+        }}
+      />
+    </>
+  )
+}
+```
+
+The inline script executes synchronously before showing the element, ensuring the DOM already has the correct value. No flickering, no hydration mismatch.
+
+This pattern is especially useful for theme toggles, user preferences, authentication states, and any client-only data that should render immediately without flashing default values.
+
+### 6.6 Use Activity Component for Show/Hide
 
 Use React's `<Activity>` to preserve state/DOM for expensive components that frequently toggle visibility.
 
@@ -1130,7 +1253,7 @@ function Dropdown({ isOpen }: Props) {
 
 Avoids expensive re-renders and state loss.
 
-### 6.5 Use Explicit Conditional Rendering
+### 6.7 Use Explicit Conditional Rendering
 
 Use explicit ternary operators (`? :`) instead of `&&` for conditional rendering when the condition can be `0`, `NaN`, or other falsy values that render.
 
@@ -1172,7 +1295,83 @@ function Badge({ count }: { count: number }) {
 
 Micro-optimizations for hot paths can add up to meaningful improvements.
 
-### 7.1 Build Index Maps for Repeated Lookups
+### 7.1 Batch DOM CSS Changes
+
+Avoid changing styles one property at a time. Group multiple CSS changes together via classes or `cssText` to minimize browser reflows.
+
+**Incorrect: multiple reflows**
+
+```typescript
+function updateElementStyles(element: HTMLElement) {
+  // Each line triggers a reflow
+  element.style.width = '100px'
+  element.style.height = '200px'
+  element.style.backgroundColor = 'blue'
+  element.style.border = '1px solid black'
+}
+```
+
+**Correct: add class - single reflow**
+
+```typescript
+// CSS file
+.highlighted-box {
+  width: 100px;
+  height: 200px;
+  background-color: blue;
+  border: 1px solid black;
+}
+
+// JavaScript
+function updateElementStyles(element: HTMLElement) {
+  element.classList.add('highlighted-box')
+}
+```
+
+**Correct: change cssText - single reflow**
+
+```typescript
+function updateElementStyles(element: HTMLElement) {
+  element.style.cssText = `
+    width: 100px;
+    height: 200px;
+    background-color: blue;
+    border: 1px solid black;
+  `
+}
+```
+
+**React example:**
+
+```tsx
+// Incorrect: changing styles one by one
+function Box({ isHighlighted }: { isHighlighted: boolean }) {
+  const ref = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    if (ref.current && isHighlighted) {
+      ref.current.style.width = '100px'
+      ref.current.style.height = '200px'
+      ref.current.style.backgroundColor = 'blue'
+    }
+  }, [isHighlighted])
+  
+  return <div ref={ref}>Content</div>
+}
+
+// Correct: toggle class
+function Box({ isHighlighted }: { isHighlighted: boolean }) {
+  return (
+    <div className={isHighlighted ? 'highlighted-box' : ''}>
+      Content
+    </div>
+  )
+}
+```
+
+Prefer CSS classes over inline styles when possible. Classes are cached by the browser and provide better separation of concerns.
+
+### 7.2 Build Index Maps for Repeated Lookups
 
 Multiple `.find()` calls by the same key should use a Map.
 
@@ -1204,7 +1403,7 @@ Build map once (O(n)), then all lookups are O(1).
 
 For 1000 orders × 1000 users: 1M ops → 2K ops.
 
-### 7.2 Cache Property Access in Loops
+### 7.3 Cache Property Access in Loops
 
 Cache object property lookups in hot paths.
 
@@ -1226,7 +1425,7 @@ for (let i = 0; i < len; i++) {
 }
 ```
 
-### 7.3 Cache Repeated Function Calls
+### 7.4 Cache Repeated Function Calls
 
 Use a module-level Map to cache function results when the same function is called repeatedly with the same inputs during render.
 
@@ -1300,7 +1499,7 @@ Use a Map (not a hook) so it works everywhere: utilities, event handlers, not ju
 
 Reference: [https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast](https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast)
 
-### 7.4 Cache Storage API Calls
+### 7.5 Cache Storage API Calls
 
 `localStorage`, `sessionStorage`, and `document.cookie` are synchronous and expensive. Cache reads in memory.
 
@@ -1361,7 +1560,7 @@ document.addEventListener('visibilitychange', () => {
 })
 ```
 
-### 7.5 Combine Multiple Array Iterations
+### 7.6 Combine Multiple Array Iterations
 
 Multiple `.filter()` or `.map()` calls iterate the array multiple times. Combine into one loop.
 
@@ -1387,7 +1586,54 @@ for (const user of users) {
 }
 ```
 
-### 7.6 Early Return from Functions
+### 7.7 Early Length Check for Array Comparisons
+
+When comparing arrays with expensive operations (sorting, deep equality, serialization), check lengths first. If lengths differ, the arrays cannot be equal.
+
+In real-world applications, this optimization is especially valuable when the comparison runs in hot paths (event handlers, render loops).
+
+**Incorrect: always runs expensive comparison**
+
+```typescript
+function hasChanges(current: string[], original: string[]) {
+  // Always sorts and joins, even when lengths differ
+  return current.sort().join() !== original.sort().join()
+}
+```
+
+Two O(n log n) sorts run even when `current.length` is 5 and `original.length` is 100. There is also overhead of joining the arrays and comparing the strings.
+
+**Correct (O(1) length check first):**
+
+```typescript
+function hasChanges(current: string[], original: string[]) {
+  // Early return if lengths differ
+  if (current.length !== original.length) {
+    return true
+  }
+  // Only sort/join when lengths match
+  const currentSorted = current.toSorted()
+  const originalSorted = original.toSorted()
+  for (let i = 0; i < currentSorted.length; i++) {
+    if (currentSorted[i] !== originalSorted[i]) {
+      return true
+    }
+  }
+  return false
+}
+```
+
+This new approach is more efficient because:
+
+- It avoids the overhead of sorting and joining the arrays when lengths differ
+
+- It avoids consuming memory for the joined strings (especially important for large arrays)
+
+- It avoids mutating the original arrays
+
+- It returns early when a difference is found
+
+### 7.8 Early Return from Functions
 
 Return early when result is determined to skip unnecessary processing.
 
@@ -1418,20 +1664,20 @@ function validateUsers(users: User[]) {
 
 ```typescript
 function validateUsers(users: User[]) {
-  for (const user of users) {
+for (const user of users) {
     if (!user.email) {
       return { valid: false, error: 'Email required' }
     }
     if (!user.name) {
       return { valid: false, error: 'Name required' }
-    }
   }
+}
   
   return { valid: true }
 }
 ```
 
-### 7.7 Hoist RegExp Creation
+### 7.9 Hoist RegExp Creation
 
 Don't create RegExp inside render. Hoist to module scope or memoize with `useMemo()`.
 
@@ -1461,7 +1707,83 @@ regex.test('foo')  // true, lastIndex = 3
 regex.test('foo')  // false, lastIndex = 0
 ```
 
-### 7.8 Use Set/Map for O(1) Lookups
+### 7.10 Use Loop for Min/Max Instead of Sort
+
+Finding the smallest or largest element only requires a single pass through the array. Sorting is wasteful and slower.
+
+**Incorrect (O(n log n) - sort to find latest):**
+
+```typescript
+interface Project {
+  id: string
+  name: string
+  updatedAt: number
+}
+
+function getLatestProject(projects: Project[]) {
+  const sorted = [...projects].sort((a, b) => b.updatedAt - a.updatedAt)
+  return sorted[0]
+}
+```
+
+Sorts the entire array just to find the maximum value.
+
+**Incorrect (O(n log n) - sort for oldest and newest):**
+
+```typescript
+function getOldestAndNewest(projects: Project[]) {
+  const sorted = [...projects].sort((a, b) => a.updatedAt - b.updatedAt)
+  return { oldest: sorted[0], newest: sorted[sorted.length - 1] }
+}
+```
+
+Still sorts unnecessarily when only min/max are needed.
+
+**Correct (O(n) - single loop):**
+
+```typescript
+function getLatestProject(projects: Project[]) {
+  if (projects.length === 0) return null
+  
+  let latest = projects[0]
+  
+  for (let i = 1; i < projects.length; i++) {
+    if (projects[i].updatedAt > latest.updatedAt) {
+      latest = projects[i]
+    }
+  }
+  
+  return latest
+}
+
+function getOldestAndNewest(projects: Project[]) {
+  if (projects.length === 0) return { oldest: null, newest: null }
+  
+  let oldest = projects[0]
+  let newest = projects[0]
+  
+  for (let i = 1; i < projects.length; i++) {
+    if (projects[i].updatedAt < oldest.updatedAt) oldest = projects[i]
+    if (projects[i].updatedAt > newest.updatedAt) newest = projects[i]
+  }
+  
+  return { oldest, newest }
+}
+```
+
+Single pass through the array, no copying, no sorting.
+
+**Alternative: Math.min/Math.max for small arrays**
+
+```typescript
+const numbers = [5, 2, 8, 1, 9]
+const min = Math.min(...numbers)
+const max = Math.max(...numbers)
+```
+
+This works for small arrays but can be slower for very large arrays due to spread operator limitations. Use the loop approach for reliability.
+
+### 7.11 Use Set/Map for O(1) Lookups
 
 Convert arrays to Set/Map for repeated membership checks.
 
@@ -1477,6 +1799,55 @@ items.filter(item => allowedIds.includes(item.id))
 ```typescript
 const allowedIds = new Set(['a', 'b', 'c', ...])
 items.filter(item => allowedIds.has(item.id))
+```
+
+### 7.12 Use toSorted() Instead of sort() for Immutability
+
+`.sort()` mutates the array in place, which can cause bugs with React state and props. Use `.toSorted()` to create a new sorted array without mutation.
+
+**Incorrect: mutates original array**
+
+```typescript
+function UserList({ users }: { users: User[] }) {
+  // Mutates the users prop array!
+  const sorted = useMemo(
+    () => users.sort((a, b) => a.name.localeCompare(b.name)),
+    [users]
+  )
+  return <div>{sorted.map(renderUser)}</div>
+}
+```
+
+**Correct: creates new array**
+
+```typescript
+function UserList({ users }: { users: User[] }) {
+  // Creates new sorted array, original unchanged
+  const sorted = useMemo(
+    () => users.toSorted((a, b) => a.name.localeCompare(b.name)),
+    [users]
+  )
+  return <div>{sorted.map(renderUser)}</div>
+}
+```
+
+**Why this matters in React:**
+
+```typescript
+
+```
+
+**Browser support:**
+
+```typescript
+// Fallback for older browsers
+const sorted = [...items].sort((a, b) => a.value - b.value)
+```
+
+**Other immutable array methods:**
+
+```typescript
+
 ```
 
 ---
@@ -1571,3 +1942,5 @@ function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
 3. [https://swr.vercel.app](https://swr.vercel.app)
 4. [https://github.com/shuding/better-all](https://github.com/shuding/better-all)
 5. [https://github.com/isaacs/node-lru-cache](https://github.com/isaacs/node-lru-cache)
+6. [https://vercel.com/blog/how-we-optimized-package-imports-in-next-js](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js)
+7. [https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast](https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast)
