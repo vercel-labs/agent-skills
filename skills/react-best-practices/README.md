@@ -1,62 +1,123 @@
-# React Best Practices Skill
+# React Best Practices
 
-An agent skill containing React and Next.js performance optimization guidelines from Vercel Engineering.
+A structured repository for creating and maintaining React Best Practices optimized for agents and LLMs.
 
-## What This Skill Does
+## Structure
 
-When activated, this skill provides Claude with 40+ performance optimization rules across 8 categories, prioritized by impact. Claude will apply these patterns when:
+- `rules/` - Individual rule files (one per rule)
+  - `_sections.md` - Section metadata (titles, impacts, descriptions)
+  - `_template.md` - Template for creating new rules
+  - `area-description.md` - Individual rule files
+- `src/` - Build scripts and utilities
+- `metadata.json` - Document metadata (version, organization, abstract)
+- __`AGENTS.md`__ - Compiled output (generated)
+- __`test-cases.json`__ - Test cases for LLM evaluation (generated)
 
-- Writing new React components or Next.js pages
-- Implementing data fetching (client or server-side)
-- Reviewing code for performance issues
-- Refactoring existing React/Next.js code
-- Optimizing bundle size or load times
+## Getting Started
 
-## Installation
+1. Install dependencies:
+   ```bash
+   pnpm install
+   ```
 
-```bash
-npx add-skill vercel-labs/agent-skills
+2. Build AGENTS.md from rules:
+   ```bash
+   pnpm build
+   ```
+
+3. Validate rule files:
+   ```bash
+   pnpm validate
+   ```
+
+4. Extract test cases:
+   ```bash
+   pnpm extract-tests
+   ```
+
+## Creating a New Rule
+
+1. Copy `rules/_template.md` to `rules/area-description.md`
+2. Choose the appropriate area prefix:
+   - `async-` for Eliminating Waterfalls (Section 1)
+   - `bundle-` for Bundle Size Optimization (Section 2)
+   - `server-` for Server-Side Performance (Section 3)
+   - `client-` for Client-Side Data Fetching (Section 4)
+   - `rerender-` for Re-render Optimization (Section 5)
+   - `rendering-` for Rendering Performance (Section 6)
+   - `js-` for JavaScript Performance (Section 7)
+   - `advanced-` for Advanced Patterns (Section 8)
+3. Fill in the frontmatter and content
+4. Ensure you have clear examples with explanations
+5. Run `pnpm build` to regenerate AGENTS.md and test-cases.json
+
+## Rule File Structure
+
+Each rule file should follow this structure:
+
+```markdown
+---
+title: Rule Title Here
+impact: MEDIUM
+impactDescription: Optional description
+tags: tag1, tag2, tag3
+---
+
+## Rule Title Here
+
+Brief explanation of the rule and why it matters.
+
+**Incorrect (description of what's wrong):**
+
+```typescript
+// Bad code example
 ```
 
-## Skill Structure
+**Correct (description of what's right):**
 
-```
-react-best-practices/
-├── SKILL.md                              # Main skill definition
-└── references/
-    ├── react-performance-guidelines.md   # Complete guide with all patterns
-    └── rules/                            # Individual rule files by category
-        ├── async-*                       # Waterfall elimination
-        ├── bundle-*                      # Bundle size optimization
-        ├── server-*                      # Server-side performance
-        ├── client-*                      # Client-side data fetching
-        ├── rerender-*                    # Re-render optimization
-        ├── rendering-*                   # DOM rendering performance
-        ├── js-*                          # JavaScript micro-optimizations
-        └── advanced-*                    # Advanced patterns
+```typescript
+// Good code example
 ```
 
-## Rule Categories by Priority
+Optional explanatory text after examples.
 
-| Priority | Category | Impact | Examples |
-|----------|----------|--------|----------|
-| 1 | Eliminating Waterfalls | CRITICAL | Defer await, Promise.all, Suspense |
-| 2 | Bundle Size | CRITICAL | Avoid barrel imports, dynamic imports |
-| 3 | Server-Side | HIGH | React.cache(), LRU cache, serialization |
-| 4 | Client Data Fetching | MEDIUM-HIGH | SWR deduplication |
-| 5 | Re-render Optimization | MEDIUM | Lazy state init, transitions, memo |
-| 6 | Rendering Performance | MEDIUM | content-visibility, hydration |
-| 7 | JavaScript | LOW-MEDIUM | Batch DOM changes, index maps |
-| 8 | Advanced Patterns | LOW | useLatest, event handler refs |
+Reference: [Link](https://example.com)
 
-## Example Trigger Phrases
+## File Naming Convention
 
-- "Write a React component for..."
-- "Review this Next.js page for performance"
-- "Optimize this data fetching code"
-- "Refactor to reduce bundle size"
-- "Why is this component re-rendering?"
+- Files starting with `_` are special (excluded from build)
+- Rule files: `area-description.md` (e.g., `async-parallel.md`)
+- Section is automatically inferred from filename prefix
+- Rules are sorted alphabetically by title within each section
+- IDs (e.g., 1.1, 1.2) are auto-generated during build
 
-## License
+## Impact Levels
 
-MIT
+- `CRITICAL` - Highest priority, major performance gains
+- `HIGH` - Significant performance improvements
+- `MEDIUM-HIGH` - Moderate-high gains
+- `MEDIUM` - Moderate performance improvements
+- `LOW-MEDIUM` - Low-medium gains
+- `LOW` - Incremental improvements
+
+## Scripts
+
+- `pnpm build` - Compile rules into AGENTS.md
+- `pnpm validate` - Validate all rule files
+- `pnpm extract-tests` - Extract test cases for LLM evaluation
+- `pnpm dev` - Build and validate
+
+## Contributing
+
+When adding or modifying rules:
+
+1. Use the correct filename prefix for your section
+2. Follow the `_template.md` structure
+3. Include clear bad/good examples with explanations
+4. Add appropriate tags
+5. Run `pnpm build` to regenerate AGENTS.md and test-cases.json
+6. Rules are automatically sorted by title - no need to manage numbers!
+
+## Acknowledgments
+
+Originally created by [@shuding](https://x.com/shuding) at [Vercel](https://vercel.com).

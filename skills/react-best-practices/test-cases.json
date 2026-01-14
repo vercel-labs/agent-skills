@@ -1,0 +1,650 @@
+[
+  {
+    "ruleId": "",
+    "ruleTitle": "Store Event Handlers in Refs",
+    "type": "bad",
+    "code": "function useWindowEvent(event: string, handler: () => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
+    "language": "tsx",
+    "description": "re-subscribes on every render"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Store Event Handlers in Refs",
+    "type": "good",
+    "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: () => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
+    "language": "tsx",
+    "description": "stable subscription"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "useLatest for Stable Callback Refs",
+    "type": "bad",
+    "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearch(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query, onSearch])\n}",
+    "language": "tsx",
+    "description": "effect re-runs on every callback change"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "useLatest for Stable Callback Refs",
+    "type": "good",
+    "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchRef = useLatest(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchRef.current(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
+    "language": "tsx",
+    "description": "stable effect, fresh callback"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prevent Waterfall Chains in API Routes",
+    "type": "bad",
+    "code": "export async function GET(request: Request) {\n  const session = await auth()\n  const config = await fetchConfig()\n  const data = await fetchData(session.user.id)\n  return Response.json({ data, config })\n}",
+    "language": "typescript",
+    "description": "config waits for auth, data waits for both"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prevent Waterfall Chains in API Routes",
+    "type": "good",
+    "code": "export async function GET(request: Request) {\n  const sessionPromise = auth()\n  const configPromise = fetchConfig()\n  const session = await sessionPromise\n  const [config, data] = await Promise.all([\n    configPromise,\n    fetchData(session.user.id)\n  ])\n  return Response.json({ data, config })\n}",
+    "language": "typescript",
+    "description": "auth and config start immediately"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Await Until Needed",
+    "type": "bad",
+    "code": "async function handleRequest(userId: string, skipProcessing: boolean) {\n  const userData = await fetchUserData(userId)\n  \n  if (skipProcessing) {\n    // Returns immediately but still waited for userData\n    return { skipped: true }\n  }\n  \n  // Only this branch uses userData\n  return processUserData(userData)\n}",
+    "language": "typescript",
+    "description": "blocks both branches"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Await Until Needed",
+    "type": "good",
+    "code": "async function handleRequest(userId: string, skipProcessing: boolean) {\n  if (skipProcessing) {\n    // Returns immediately without waiting\n    return { skipped: true }\n  }\n  \n  // Fetch only when needed\n  const userData = await fetchUserData(userId)\n  return processUserData(userData)\n}",
+    "language": "typescript",
+    "description": "only blocks when needed"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Dependency-Based Parallelization",
+    "type": "bad",
+    "code": "const [user, config] = await Promise.all([\n  fetchUser(),\n  fetchConfig()\n])\nconst profile = await fetchProfile(user.id)",
+    "language": "typescript",
+    "description": "profile waits for config unnecessarily"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Dependency-Based Parallelization",
+    "type": "good",
+    "code": "import { all } from 'better-all'\n\nconst { user, config, profile } = await all({\n  async user() { return fetchUser() },\n  async config() { return fetchConfig() },\n  async profile() {\n    return fetchProfile((await this.$.user).id)\n  }\n})",
+    "language": "typescript",
+    "description": "config and profile run in parallel"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Promise.all() for Independent Operations",
+    "type": "bad",
+    "code": "const user = await fetchUser()\nconst posts = await fetchPosts()\nconst comments = await fetchComments()",
+    "language": "typescript",
+    "description": "sequential execution, 3 round trips"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Promise.all() for Independent Operations",
+    "type": "good",
+    "code": "const [user, posts, comments] = await Promise.all([\n  fetchUser(),\n  fetchPosts(),\n  fetchComments()\n])",
+    "language": "typescript",
+    "description": "parallel execution, 1 round trip"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Strategic Suspense Boundaries",
+    "type": "bad",
+    "code": "async function Page() {\n  const data = await fetchData() // Blocks entire page\n  \n  return (\n    <div>\n      <div>Sidebar</div>\n      <div>Header</div>\n      <div>\n        <DataDisplay data={data} />\n      </div>\n      <div>Footer</div>\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "wrapper blocked by data fetching"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Strategic Suspense Boundaries",
+    "type": "good",
+    "code": "function Page() {\n  return (\n    <div>\n      <div>Sidebar</div>\n      <div>Header</div>\n      <div>\n        <Suspense fallback={<Skeleton />}>\n          <DataDisplay />\n        </Suspense>\n      </div>\n      <div>Footer</div>\n    </div>\n  )\n}\n\nasync function DataDisplay() {\n  const data = await fetchData() // Only blocks this component\n  return <div>{data.content}</div>\n}",
+    "language": "tsx",
+    "description": "wrapper shows immediately, data streams in"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Barrel File Imports",
+    "type": "bad",
+    "code": "import { Check, X, Menu } from 'lucide-react'\n// Loads 1,583 modules, takes ~2.8s extra in dev\n// Runtime cost: 200-800ms on every cold start\n\nimport { Button, TextField } from '@mui/material'\n// Loads 2,225 modules, takes ~4.2s extra in dev",
+    "language": "tsx",
+    "description": "imports entire library"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Barrel File Imports",
+    "type": "good",
+    "code": "import Check from 'lucide-react/dist/esm/icons/check'\nimport X from 'lucide-react/dist/esm/icons/x'\nimport Menu from 'lucide-react/dist/esm/icons/menu'\n// Loads only 3 modules (~2KB vs ~1MB)\n\nimport Button from '@mui/material/Button'\nimport TextField from '@mui/material/TextField'\n// Loads only what you use",
+    "language": "tsx",
+    "description": "imports only what you need"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Non-Critical Third-Party Libraries",
+    "type": "bad",
+    "code": "import { Analytics } from '@vercel/analytics/react'\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Analytics />\n      </body>\n    </html>\n  )\n}",
+    "language": "tsx",
+    "description": "blocks initial bundle"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Non-Critical Third-Party Libraries",
+    "type": "good",
+    "code": "import dynamic from 'next/dynamic'\n\nconst Analytics = dynamic(\n  () => import('@vercel/analytics/react').then(m => m.Analytics),\n  { ssr: false }\n)\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Analytics />\n      </body>\n    </html>\n  )\n}",
+    "language": "tsx",
+    "description": "loads after hydration"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Dynamic Imports for Heavy Components",
+    "type": "bad",
+    "code": "import { MonacoEditor } from './monaco-editor'\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
+    "language": "tsx",
+    "description": "Monaco bundles with main chunk ~300KB"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Dynamic Imports for Heavy Components",
+    "type": "good",
+    "code": "import dynamic from 'next/dynamic'\n\nconst MonacoEditor = dynamic(\n  () => import('./monaco-editor').then(m => m.MonacoEditor),\n  { ssr: false }\n)\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
+    "language": "tsx",
+    "description": "Monaco loads on demand"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Deduplicate Global Event Listeners",
+    "type": "bad",
+    "code": "function useKeyboardShortcut(key: string, callback: () => void) {\n  useEffect(() => {\n    const handler = (e: KeyboardEvent) => {\n      if (e.metaKey && e.key === key) {\n        callback()\n      }\n    }\n    window.addEventListener('keydown', handler)\n    return () => window.removeEventListener('keydown', handler)\n  }, [key, callback])\n}",
+    "language": "tsx",
+    "description": "N instances = N listeners"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Deduplicate Global Event Listeners",
+    "type": "good",
+    "code": "import useSWRSubscription from 'swr/subscription'\n\n// Module-level Map to track callbacks per key\nconst keyCallbacks = new Map<string, Set<() => void>>()\n\nfunction useKeyboardShortcut(key: string, callback: () => void) {\n  // Register this callback in the Map\n  useEffect(() => {\n    if (!keyCallbacks.has(key)) {\n      keyCallbacks.set(key, new Set())\n    }\n    keyCallbacks.get(key)!.add(callback)\n\n    return () => {\n      const set = keyCallbacks.get(key)\n      if (set) {\n        set.delete(callback)\n        if (set.size === 0) {\n          keyCallbacks.delete(key)\n        }\n      }\n    }\n  }, [key, callback])\n\n  useSWRSubscription('global-keydown', () => {\n    const handler = (e: KeyboardEvent) => {\n      if (e.metaKey && keyCallbacks.has(e.key)) {\n        keyCallbacks.get(e.key)!.forEach(cb => cb())\n      }\n    }\n    window.addEventListener('keydown', handler)\n    return () => window.removeEventListener('keydown', handler)\n  })\n}\n\nfunction Profile() {\n  // Multiple shortcuts will share the same listener\n  useKeyboardShortcut('p', () => { /* ... */ }) \n  useKeyboardShortcut('k', () => { /* ... */ })\n  // ...\n}",
+    "language": "tsx",
+    "description": "N instances = 1 listener"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use SWR for Automatic Deduplication",
+    "type": "bad",
+    "code": "function UserList() {\n  const [users, setUsers] = useState([])\n  useEffect(() => {\n    fetch('/api/users')\n      .then(r => r.json())\n      .then(setUsers)\n  }, [])\n}",
+    "language": "tsx",
+    "description": "no deduplication, each instance fetches"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use SWR for Automatic Deduplication",
+    "type": "good",
+    "code": "import useSWR from 'swr'\n\nfunction UserList() {\n  const { data: users } = useSWR('/api/users', fetcher)\n}",
+    "language": "tsx",
+    "description": "multiple instances share one request"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Batch DOM CSS Changes",
+    "type": "bad",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  // Each line triggers a reflow\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n}",
+    "language": "typescript",
+    "description": "multiple reflows"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Batch DOM CSS Changes",
+    "type": "good",
+    "code": "// CSS file\n.highlighted-box {\n  width: 100px;\n  height: 200px;\n  background-color: blue;\n  border: 1px solid black;\n}\n\n// JavaScript\nfunction updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n}",
+    "language": "typescript",
+    "description": "add class - single reflow"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Batch DOM CSS Changes",
+    "type": "good",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  element.style.cssText = `\n    width: 100px;\n    height: 200px;\n    background-color: blue;\n    border: 1px solid black;\n  `\n}",
+    "language": "typescript",
+    "description": "change cssText - single reflow"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Repeated Function Calls",
+    "type": "bad",
+    "code": "function ProjectList({ projects }: { projects: Project[] }) {\n  return (\n    <div>\n      {projects.map(project => {\n        // slugify() called 100+ times for same project names\n        const slug = slugify(project.name)\n        \n        return <ProjectCard key={project.id} slug={slug} />\n      })}\n    </div>\n  )\n}",
+    "language": "typescript",
+    "description": "redundant computation"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Repeated Function Calls",
+    "type": "good",
+    "code": "// Module-level cache\nconst slugifyCache = new Map<string, string>()\n\nfunction cachedSlugify(text: string): string {\n  if (slugifyCache.has(text)) {\n    return slugifyCache.get(text)!\n  }\n  const result = slugify(text)\n  slugifyCache.set(text, result)\n  return result\n}\n\nfunction ProjectList({ projects }: { projects: Project[] }) {\n  return (\n    <div>\n      {projects.map(project => {\n        // Computed only once per unique project name\n        const slug = cachedSlugify(project.name)\n        \n        return <ProjectCard key={project.id} slug={slug} />\n      })}\n    </div>\n  )\n}",
+    "language": "typescript",
+    "description": "cached results"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Property Access in Loops",
+    "type": "bad",
+    "code": "for (let i = 0; i < arr.length; i++) {\n  process(obj.config.settings.value)\n}",
+    "language": "typescript",
+    "description": "3 lookups × N iterations"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Property Access in Loops",
+    "type": "good",
+    "code": "const value = obj.config.settings.value\nconst len = arr.length\nfor (let i = 0; i < len; i++) {\n  process(value)\n}",
+    "language": "typescript",
+    "description": "1 lookup total"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Storage API Calls",
+    "type": "bad",
+    "code": "function getTheme() {\n  return localStorage.getItem('theme') ?? 'light'\n}\n// Called 10 times = 10 storage reads",
+    "language": "typescript",
+    "description": "reads storage on every call"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache Storage API Calls",
+    "type": "good",
+    "code": "const storageCache = new Map<string, string | null>()\n\nfunction getLocalStorage(key: string) {\n  if (!storageCache.has(key)) {\n    storageCache.set(key, localStorage.getItem(key))\n  }\n  return storageCache.get(key)\n}\n\nfunction setLocalStorage(key: string, value: string) {\n  localStorage.setItem(key, value)\n  storageCache.set(key, value)  // keep cache in sync\n}",
+    "language": "typescript",
+    "description": "Map cache"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Combine Multiple Array Iterations",
+    "type": "bad",
+    "code": "const admins = users.filter(u => u.isAdmin)\nconst testers = users.filter(u => u.isTester)\nconst inactive = users.filter(u => !u.isActive)",
+    "language": "typescript",
+    "description": "3 iterations"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Combine Multiple Array Iterations",
+    "type": "good",
+    "code": "const admins: User[] = []\nconst testers: User[] = []\nconst inactive: User[] = []\n\nfor (const user of users) {\n  if (user.isAdmin) admins.push(user)\n  if (user.isTester) testers.push(user)\n  if (!user.isActive) inactive.push(user)\n}",
+    "language": "typescript",
+    "description": "1 iteration"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Early Return from Functions",
+    "type": "bad",
+    "code": "function validateUsers(users: User[]) {\n  let hasError = false\n  let errorMessage = ''\n  \n  for (const user of users) {\n    if (!user.email) {\n      hasError = true\n      errorMessage = 'Email required'\n    }\n    if (!user.name) {\n      hasError = true\n      errorMessage = 'Name required'\n    }\n    // Continues checking all users even after error found\n  }\n  \n  return hasError ? { valid: false, error: errorMessage } : { valid: true }\n}",
+    "language": "typescript",
+    "description": "processes all items even after finding answer"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Early Return from Functions",
+    "type": "good",
+    "code": "function validateUsers(users: User[]) {\n  for (const user of users) {\n    if (!user.email) {\n      return { valid: false, error: 'Email required' }\n    }\n    if (!user.name) {\n      return { valid: false, error: 'Name required' }\n    }\n  }\n\n  return { valid: true }\n}",
+    "language": "typescript",
+    "description": "returns immediately on first error"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist RegExp Creation",
+    "type": "bad",
+    "code": "function Highlighter({ text, query }: Props) {\n  const regex = new RegExp(`(${query})`, 'gi')\n  const parts = text.split(regex)\n  return <>{parts.map((part, i) => ...)}</>\n}",
+    "language": "tsx",
+    "description": "new RegExp every render"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist RegExp Creation",
+    "type": "good",
+    "code": "const EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/\n\nfunction Highlighter({ text, query }: Props) {\n  const regex = useMemo(\n    () => new RegExp(`(${escapeRegex(query)})`, 'gi'),\n    [query]\n  )\n  const parts = text.split(regex)\n  return <>{parts.map((part, i) => ...)}</>\n}",
+    "language": "tsx",
+    "description": "memoize or hoist"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Build Index Maps for Repeated Lookups",
+    "type": "bad",
+    "code": "function processOrders(orders: Order[], users: User[]) {\n  return orders.map(order => ({\n    ...order,\n    user: users.find(u => u.id === order.userId)\n  }))\n}",
+    "language": "typescript",
+    "description": "Incorrect (O(n) per lookup) example for Build Index Maps for Repeated Lookups"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Build Index Maps for Repeated Lookups",
+    "type": "good",
+    "code": "function processOrders(orders: Order[], users: User[]) {\n  const userById = new Map(users.map(u => [u.id, u]))\n\n  return orders.map(order => ({\n    ...order,\n    user: userById.get(order.userId)\n  }))\n}",
+    "language": "typescript",
+    "description": "Correct (O(1) per lookup) example for Build Index Maps for Repeated Lookups"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Early Length Check for Array Comparisons",
+    "type": "bad",
+    "code": "function hasChanges(current: string[], original: string[]) {\n  // Always sorts and joins, even when lengths differ\n  return current.sort().join() !== original.sort().join()\n}",
+    "language": "typescript",
+    "description": "always runs expensive comparison"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Early Length Check for Array Comparisons",
+    "type": "good",
+    "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort/join when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
+    "language": "typescript",
+    "description": "Correct (O(1) length check first) example for Early Length Check for Array Comparisons"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Loop for Min/Max Instead of Sort",
+    "type": "bad",
+    "code": "interface Project {\n  id: string\n  name: string\n  updatedAt: number\n}\n\nfunction getLatestProject(projects: Project[]) {\n  const sorted = [...projects].sort((a, b) => b.updatedAt - a.updatedAt)\n  return sorted[0]\n}",
+    "language": "typescript",
+    "description": "Incorrect (O(n log n) - sort to find latest) example for Use Loop for Min/Max Instead of Sort"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Loop for Min/Max Instead of Sort",
+    "type": "bad",
+    "code": "function getOldestAndNewest(projects: Project[]) {\n  const sorted = [...projects].sort((a, b) => a.updatedAt - b.updatedAt)\n  return { oldest: sorted[0], newest: sorted[sorted.length - 1] }\n}",
+    "language": "typescript",
+    "description": "Incorrect (O(n log n) - sort for oldest and newest) example for Use Loop for Min/Max Instead of Sort"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Loop for Min/Max Instead of Sort",
+    "type": "good",
+    "code": "function getLatestProject(projects: Project[]) {\n  if (projects.length === 0) return null\n  \n  let latest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt > latest.updatedAt) {\n      latest = projects[i]\n    }\n  }\n  \n  return latest\n}\n\nfunction getOldestAndNewest(projects: Project[]) {\n  if (projects.length === 0) return { oldest: null, newest: null }\n  \n  let oldest = projects[0]\n  let newest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt < oldest.updatedAt) oldest = projects[i]\n    if (projects[i].updatedAt > newest.updatedAt) newest = projects[i]\n  }\n  \n  return { oldest, newest }\n}",
+    "language": "typescript",
+    "description": "Correct (O(n) - single loop) example for Use Loop for Min/Max Instead of Sort"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Set/Map for O(1) Lookups",
+    "type": "bad",
+    "code": "const allowedIds = ['a', 'b', 'c', ...]\nitems.filter(item => allowedIds.includes(item.id))",
+    "language": "typescript",
+    "description": "Incorrect (O(n) per check) example for Use Set/Map for O(1) Lookups"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Set/Map for O(1) Lookups",
+    "type": "good",
+    "code": "const allowedIds = new Set(['a', 'b', 'c', ...])\nitems.filter(item => allowedIds.has(item.id))",
+    "language": "typescript",
+    "description": "Correct (O(1) per check) example for Use Set/Map for O(1) Lookups"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use toSorted() Instead of sort() for Immutability",
+    "type": "bad",
+    "code": "function UserList({ users }: { users: User[] }) {\n  // Mutates the users prop array!\n  const sorted = useMemo(\n    () => users.sort((a, b) => a.name.localeCompare(b.name)),\n    [users]\n  )\n  return <div>{sorted.map(renderUser)}</div>\n}",
+    "language": "typescript",
+    "description": "mutates original array"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use toSorted() Instead of sort() for Immutability",
+    "type": "good",
+    "code": "function UserList({ users }: { users: User[] }) {\n  // Creates new sorted array, original unchanged\n  const sorted = useMemo(\n    () => users.toSorted((a, b) => a.name.localeCompare(b.name)),\n    [users]\n  )\n  return <div>{sorted.map(renderUser)}</div>\n}",
+    "language": "typescript",
+    "description": "creates new array"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Animate SVG Wrapper Instead of SVG Element",
+    "type": "bad",
+    "code": "function LoadingSpinner() {\n  return (\n    <svg \n      className=\"animate-spin\"\n      width=\"24\" \n      height=\"24\" \n      viewBox=\"0 0 24 24\"\n    >\n      <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n    </svg>\n  )\n}",
+    "language": "tsx",
+    "description": "animating SVG directly - no hardware acceleration"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Animate SVG Wrapper Instead of SVG Element",
+    "type": "good",
+    "code": "function LoadingSpinner() {\n  return (\n    <div className=\"animate-spin\">\n      <svg \n        width=\"24\" \n        height=\"24\" \n        viewBox=\"0 0 24 24\"\n      >\n        <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n      </svg>\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "animating wrapper div - hardware accelerated"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Explicit Conditional Rendering",
+    "type": "bad",
+    "code": "function Badge({ count }: { count: number }) {\n  return (\n    <div>\n      {count && <span className=\"badge\">{count}</span>}\n    </div>\n  )\n}\n\n// When count = 0, renders: <div>0</div>\n// When count = 5, renders: <div><span class=\"badge\">5</span></div>",
+    "language": "tsx",
+    "description": "renders \"0\" when count is 0"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Explicit Conditional Rendering",
+    "type": "good",
+    "code": "function Badge({ count }: { count: number }) {\n  return (\n    <div>\n      {count > 0 ? <span className=\"badge\">{count}</span> : null}\n    </div>\n  )\n}\n\n// When count = 0, renders: <div></div>\n// When count = 5, renders: <div><span class=\"badge\">5</span></div>",
+    "language": "tsx",
+    "description": "renders nothing when count is 0"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static JSX Elements",
+    "type": "bad",
+    "code": "function LoadingSkeleton() {\n  return <div className=\"animate-pulse h-20 bg-gray-200\" />\n}\n\nfunction Container() {\n  return (\n    <div>\n      {loading && <LoadingSkeleton />}\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "recreates element every render"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static JSX Elements",
+    "type": "good",
+    "code": "const loadingSkeleton = (\n  <div className=\"animate-pulse h-20 bg-gray-200\" />\n)\n\nfunction Container() {\n  return (\n    <div>\n      {loading && loadingSkeleton}\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "reuses same element"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
+    "type": "bad",
+    "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  // localStorage is not available on server - throws error\n  const theme = localStorage.getItem('theme') || 'light'\n  \n  return (\n    <div className={theme}>\n      {children}\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "breaks SSR"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
+    "type": "bad",
+    "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  const [theme, setTheme] = useState('light')\n  \n  useEffect(() => {\n    // Runs after hydration - causes visible flash\n    const stored = localStorage.getItem('theme')\n    if (stored) {\n      setTheme(stored)\n    }\n  }, [])\n  \n  return (\n    <div className={theme}>\n      {children}\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "visual flickering"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
+    "type": "good",
+    "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  return (\n    <>\n      <div id=\"theme-wrapper\">\n        {children}\n      </div>\n      <script\n        dangerouslySetInnerHTML={{\n          __html: `\n            (function() {\n              try {\n                var theme = localStorage.getItem('theme') || 'light';\n                var el = document.getElementById('theme-wrapper');\n                if (el) el.className = theme;\n              } catch (e) {}\n            })();\n          `,\n        }}\n      />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "no flicker, no hydration mismatch"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Optimize SVG Precision",
+    "type": "bad",
+    "code": "<path d=\"M 10.293847 20.847362 L 30.938472 40.192837\" />",
+    "language": "svg",
+    "description": "excessive precision"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Optimize SVG Precision",
+    "type": "good",
+    "code": "<path d=\"M 10.3 20.8 L 30.9 40.2\" />",
+    "language": "svg",
+    "description": "1 decimal place"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer State Reads to Usage Point",
+    "type": "bad",
+    "code": "function ShareButton({ chatId }: { chatId: string }) {\n  const searchParams = useSearchParams()\n\n  const handleShare = () => {\n    const ref = searchParams.get('ref')\n    shareChat(chatId, { ref })\n  }\n\n  return <button onClick={handleShare}>Share</button>\n}",
+    "language": "tsx",
+    "description": "subscribes to all searchParams changes"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer State Reads to Usage Point",
+    "type": "good",
+    "code": "function ShareButton({ chatId }: { chatId: string }) {\n  const handleShare = () => {\n    const params = new URLSearchParams(window.location.search)\n    const ref = params.get('ref')\n    shareChat(chatId, { ref })\n  }\n\n  return <button onClick={handleShare}>Share</button>\n}",
+    "language": "tsx",
+    "description": "reads on demand, no subscription"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Narrow Effect Dependencies",
+    "type": "bad",
+    "code": "useEffect(() => {\n  console.log(user.id)\n}, [user])",
+    "language": "tsx",
+    "description": "re-runs on any user field change"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Narrow Effect Dependencies",
+    "type": "good",
+    "code": "useEffect(() => {\n  console.log(user.id)\n}, [user.id])",
+    "language": "tsx",
+    "description": "re-runs only when id changes"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Subscribe to Derived State",
+    "type": "bad",
+    "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "language": "tsx",
+    "description": "re-renders on every pixel change"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Subscribe to Derived State",
+    "type": "good",
+    "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "language": "tsx",
+    "description": "re-renders only when boolean changes"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Functional setState Updates",
+    "type": "bad",
+    "code": "function TodoList() {\n  const [items, setItems] = useState(initialItems)\n  \n  // Callback must depend on items, recreated on every items change\n  const addItems = useCallback((newItems: Item[]) => {\n    setItems([...items, ...newItems])\n  }, [items])  // ❌ items dependency causes recreations\n  \n  // Risk of stale closure if dependency is forgotten\n  const removeItem = useCallback((id: string) => {\n    setItems(items.filter(item => item.id !== id))\n  }, [])  // ❌ Missing items dependency - will use stale items!\n  \n  return <ItemsEditor items={items} onAdd={addItems} onRemove={removeItem} />\n}",
+    "language": "tsx",
+    "description": "requires state as dependency"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Functional setState Updates",
+    "type": "good",
+    "code": "function TodoList() {\n  const [items, setItems] = useState(initialItems)\n  \n  // Stable callback, never recreated\n  const addItems = useCallback((newItems: Item[]) => {\n    setItems(curr => [...curr, ...newItems])\n  }, [])  // ✅ No dependencies needed\n  \n  // Always uses latest state, no stale closure risk\n  const removeItem = useCallback((id: string) => {\n    setItems(curr => curr.filter(item => item.id !== id))\n  }, [])  // ✅ Safe and stable\n  \n  return <ItemsEditor items={items} onAdd={addItems} onRemove={removeItem} />\n}",
+    "language": "tsx",
+    "description": "stable callbacks, no stale closures"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Lazy State Initialization",
+    "type": "bad",
+    "code": "function FilteredList({ items }: { items: Item[] }) {\n  // buildSearchIndex() runs on EVERY render, even after initialization\n  const [searchIndex, setSearchIndex] = useState(buildSearchIndex(items))\n  const [query, setQuery] = useState('')\n  \n  // When query changes, buildSearchIndex runs again unnecessarily\n  return <SearchResults index={searchIndex} query={query} />\n}\n\nfunction UserProfile() {\n  // JSON.parse runs on every render\n  const [settings, setSettings] = useState(\n    JSON.parse(localStorage.getItem('settings') || '{}')\n  )\n  \n  return <SettingsForm settings={settings} onChange={setSettings} />\n}",
+    "language": "tsx",
+    "description": "runs on every render"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Lazy State Initialization",
+    "type": "good",
+    "code": "function FilteredList({ items }: { items: Item[] }) {\n  // buildSearchIndex() runs ONLY on initial render\n  const [searchIndex, setSearchIndex] = useState(() => buildSearchIndex(items))\n  const [query, setQuery] = useState('')\n  \n  return <SearchResults index={searchIndex} query={query} />\n}\n\nfunction UserProfile() {\n  // JSON.parse runs only on initial render\n  const [settings, setSettings] = useState(() => {\n    const stored = localStorage.getItem('settings')\n    return stored ? JSON.parse(stored) : {}\n  })\n  \n  return <SettingsForm settings={settings} onChange={setSettings} />\n}",
+    "language": "tsx",
+    "description": "runs only once"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Extract to Memoized Components",
+    "type": "bad",
+    "code": "function Profile({ user, loading }: Props) {\n  const avatar = useMemo(() => {\n    const id = computeAvatarId(user)\n    return <Avatar id={id} />\n  }, [user])\n\n  if (loading) return <Skeleton />\n  return <div>{avatar}</div>\n}",
+    "language": "tsx",
+    "description": "computes avatar even when loading"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Extract to Memoized Components",
+    "type": "good",
+    "code": "const UserAvatar = memo(function UserAvatar({ user }: { user: User }) {\n  const id = useMemo(() => computeAvatarId(user), [user])\n  return <Avatar id={id} />\n})\n\nfunction Profile({ user, loading }: Props) {\n  if (loading) return <Skeleton />\n  return (\n    <div>\n      <UserAvatar user={user} />\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "skips computation when loading"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Transitions for Non-Urgent Updates",
+    "type": "bad",
+    "code": "function ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => setScrollY(window.scrollY)\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
+    "language": "tsx",
+    "description": "blocks UI on every scroll"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Transitions for Non-Urgent Updates",
+    "type": "good",
+    "code": "import { startTransition } from 'react'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => {\n      startTransition(() => setScrollY(window.scrollY))\n    }\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
+    "language": "tsx",
+    "description": "non-blocking updates"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use after() for Non-Blocking Operations",
+    "type": "bad",
+    "code": "import { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Logging blocks the response\n  const userAgent = request.headers.get('user-agent') || 'unknown'\n  await logUserAction({ userAgent })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
+    "language": "tsx",
+    "description": "blocks response"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use after() for Non-Blocking Operations",
+    "type": "good",
+    "code": "import { after } from 'next/server'\nimport { headers, cookies } from 'next/headers'\nimport { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Log after response is sent\n  after(async () => {\n    const userAgent = (await headers()).get('user-agent') || 'unknown'\n    const sessionCookie = (await cookies()).get('session-id')?.value || 'anonymous'\n    \n    logUserAction({ sessionCookie, userAgent })\n  })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
+    "language": "tsx",
+    "description": "non-blocking"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Parallel Data Fetching with Component Composition",
+    "type": "bad",
+    "code": "export default async function Page() {\n  const header = await fetchHeader()\n  return (\n    <div>\n      <div>{header}</div>\n      <Sidebar />\n    </div>\n  )\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}",
+    "language": "tsx",
+    "description": "Sidebar waits for Page's fetch to complete"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Parallel Data Fetching with Component Composition",
+    "type": "good",
+    "code": "async function Header() {\n  const data = await fetchHeader()\n  return <div>{data}</div>\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}\n\nexport default function Page() {\n  return (\n    <div>\n      <Header />\n      <Sidebar />\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "both fetch simultaneously"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Minimize Serialization at RSC Boundaries",
+    "type": "bad",
+    "code": "async function Page() {\n  const user = await fetchUser()  // 50 fields\n  return <Profile user={user} />\n}\n\n'use client'\nfunction Profile({ user }: { user: User }) {\n  return <div>{user.name}</div>  // uses 1 field\n}",
+    "language": "tsx",
+    "description": "serializes all 50 fields"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Minimize Serialization at RSC Boundaries",
+    "type": "good",
+    "code": "async function Page() {\n  const user = await fetchUser()\n  return <Profile name={user.name} />\n}\n\n'use client'\nfunction Profile({ name }: { name: string }) {\n  return <div>{name}</div>\n}",
+    "language": "tsx",
+    "description": "serializes only 1 field"
+  }
+]

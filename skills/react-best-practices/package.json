@@ -1,0 +1,29 @@
+{
+  "name": "react-best-practices",
+  "version": "1.0.0",
+  "description": "React Performance Guidelines for agents and LLMs",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "pnpm build-agents && pnpm extract-tests",
+    "build-agents": "tsx src/build.ts",
+    "validate": "tsx src/validate.ts",
+    "extract-tests": "tsx src/extract-tests.ts",
+    "migrate": "tsx src/migrate.ts",
+    "dev": "pnpm build && pnpm validate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "performance",
+    "guidelines",
+    "llm",
+    "agents"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
