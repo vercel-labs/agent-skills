@@ -7,7 +7,7 @@ tags: rendering, svg, optimization, svgo
 
 ## Optimize SVG Precision
 
-Reduce SVG coordinate precision to decrease file size.
+Reduce SVG coordinate precision to decrease file size. The optimal precision depends on the viewBox size, but in general reducing precision should be considered.
 
 **Incorrect (excessive precision):**
 

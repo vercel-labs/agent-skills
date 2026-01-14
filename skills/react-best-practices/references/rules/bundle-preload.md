@@ -14,7 +14,9 @@ Preload heavy bundles before they're needed to reduce perceived latency.
 ```tsx
 function EditorButton({ onClick }: { onClick: () => void }) {
   const preload = () => {
-    void import('./monaco-editor')
+    if (typeof window !== 'undefined') {
+      void import('./monaco-editor')
+    }
   }
 
   return (
@@ -44,3 +46,5 @@ function FlagsProvider({ children, flags }: Props) {
   </FlagsContext.Provider>
 }
 ```
+
+The `typeof window !== 'undefined'` check prevents bundling preloaded modules for SSR, optimizing server bundle size and build speed.

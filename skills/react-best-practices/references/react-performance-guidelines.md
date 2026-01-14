@@ -21,10 +21,11 @@ Performance optimization guide for React and Next.js applications, ordered by im
 ## Table of Contents
 
 1. [Eliminating Waterfalls](#1-eliminating-waterfalls) — **CRITICAL**
-   - 1.1 [Dependency-Based Parallelization](#11)
-   - 1.2 [Prevent Waterfall Chains in API Routes](#12)
-   - 1.3 [Promise.all() for Independent Operations](#13)
-   - 1.4 [Strategic Suspense Boundaries](#14)
+   - 1.1 [Defer Await Until Needed](#11)
+   - 1.2 [Dependency-Based Parallelization](#12)
+   - 1.3 [Prevent Waterfall Chains in API Routes](#13)
+   - 1.4 [Promise.all() for Independent Operations](#14)
+   - 1.5 [Strategic Suspense Boundaries](#15)
 2. [Bundle Size Optimization](#2-bundle-size-optimization) — **CRITICAL**
    - 2.1 [Avoid Barrel File Imports](#21)
    - 2.2 [Conditional Module Loading](#22)
@@ -44,7 +45,8 @@ Performance optimization guide for React and Next.js applications, ordered by im
    - 5.2 [Extract to Memoized Components](#52)
    - 5.3 [Narrow Effect Dependencies](#53)
    - 5.4 [Subscribe to Derived State](#54)
-   - 5.5 [Use Transitions for Non-Urgent Updates](#55)
+   - 5.5 [Use Lazy State Initialization](#55)
+   - 5.6 [Use Transitions for Non-Urgent Updates](#56)
 6. [Rendering Performance](#6-rendering-performance) — **MEDIUM**
    - 6.1 [CSS content-visibility for Long Lists](#61)
    - 6.2 [Hoist Static JSX Elements](#62)
@@ -54,11 +56,12 @@ Performance optimization guide for React and Next.js applications, ordered by im
 7. [JavaScript Performance](#7-javascript-performance) — **LOW-MEDIUM**
    - 7.1 [Build Index Maps for Repeated Lookups](#71)
    - 7.2 [Cache Property Access in Loops](#72)
-   - 7.3 [Cache Storage API Calls](#73)
-   - 7.4 [Combine Multiple Array Iterations](#74)
-   - 7.5 [Early Return from Functions](#75)
-   - 7.6 [Hoist RegExp Creation](#76)
-   - 7.7 [Use Set/Map for O(1) Lookups](#77)
+   - 7.3 [Cache Repeated Function Calls](#73)
+   - 7.4 [Cache Storage API Calls](#74)
+   - 7.5 [Combine Multiple Array Iterations](#75)
+   - 7.6 [Early Return from Functions](#76)
+   - 7.7 [Hoist RegExp Creation](#77)
+   - 7.8 [Use Set/Map for O(1) Lookups](#78)
 8. [Advanced Patterns](#8-advanced-patterns) — **LOW**
    - 8.1 [Store Event Handlers in Refs](#81)
    - 8.2 [useLatest for Stable Callback Refs](#82)
@@ -71,7 +74,81 @@ Performance optimization guide for React and Next.js applications, ordered by im
 
 Waterfalls are the #1 performance killer. Each sequential await adds full network latency. Eliminating them yields the largest gains.
 
-### 1.1 Dependency-Based Parallelization
+### 1.1 Defer Await Until Needed
+
+Move `await` operations into the branches where they're actually used to avoid blocking code paths that don't need them.
+
+**Incorrect: blocks both branches**
+
+```typescript
+async function handleRequest(userId: string, skipProcessing: boolean) {
+  const userData = await fetchUserData(userId)
+  
+  if (skipProcessing) {
+    // Returns immediately but still waited for userData
+    return { skipped: true }
+  }
+  
+  // Only this branch uses userData
+  return processUserData(userData)
+}
+```
+
+**Correct: only blocks when needed**
+
+```typescript
+async function handleRequest(userId: string, skipProcessing: boolean) {
+  if (skipProcessing) {
+    // Returns immediately without waiting
+    return { skipped: true }
+  }
+  
+  // Fetch only when needed
+  const userData = await fetchUserData(userId)
+  return processUserData(userData)
+}
+```
+
+**Another example: early return optimization**
+
+```typescript
+// Incorrect: always fetches permissions
+async function updateResource(resourceId: string, userId: string) {
+  const permissions = await fetchPermissions(userId)
+  const resource = await getResource(resourceId)
+  
+  if (!resource) {
+    return { error: 'Not found' }
+  }
+  
+  if (!permissions.canEdit) {
+    return { error: 'Forbidden' }
+  }
+  
+  return await updateResourceData(resource, permissions)
+}
+
+// Correct: fetches only when needed
+async function updateResource(resourceId: string, userId: string) {
+  const resource = await getResource(resourceId)
+  
+  if (!resource) {
+    return { error: 'Not found' }
+  }
+  
+  const permissions = await fetchPermissions(userId)
+  
+  if (!permissions.canEdit) {
+    return { error: 'Forbidden' }
+  }
+  
+  return await updateResourceData(resource, permissions)
+}
+```
+
+This optimization is especially valuable when the skipped branch is frequently taken, or when the deferred operation is expensive.
+
+### 1.2 Dependency-Based Parallelization
 
 For operations with partial dependencies, use `better-all` to maximize parallelism. It automatically starts each task at the earliest possible moment.
 
@@ -101,7 +178,7 @@ const { user, config, profile } = await all({
 
 Reference: [https://github.com/shuding/better-all](https://github.com/shuding/better-all)
 
-### 1.2 Prevent Waterfall Chains in API Routes
+### 1.3 Prevent Waterfall Chains in API Routes
 
 In API routes and Server Actions, start independent operations immediately, even if you don't await them yet.
 
@@ -131,7 +208,9 @@ export async function GET(request: Request) {
 }
 ```
 
-### 1.3 Promise.all() for Independent Operations
+For operations with more complex dependency chains, use `better-all` to automatically maximize parallelism (see Dependency-Based Parallelization).
+
+### 1.4 Promise.all() for Independent Operations
 
 When async operations have no interdependencies, execute them concurrently using `Promise.all()`.
 
@@ -153,7 +232,7 @@ const [user, posts, comments] = await Promise.all([
 ])
 ```
 
-### 1.4 Strategic Suspense Boundaries
+### 1.5 Strategic Suspense Boundaries
 
 Instead of awaiting data in async components before returning JSX, use Suspense boundaries to show the wrapper UI faster while data loads.
 
@@ -286,7 +365,7 @@ function AnimationPlayer({ enabled }: { enabled: boolean }) {
   const [frames, setFrames] = useState<Frame[] | null>(null)
 
   useEffect(() => {
-    if (enabled && !frames) {
+    if (enabled && !frames && typeof window !== 'undefined') {
       import('./animation-frames.js')
         .then(mod => setFrames(mod.frames))
         .catch(() => setEnabled(false))
@@ -297,6 +376,8 @@ function AnimationPlayer({ enabled }: { enabled: boolean }) {
   return <Canvas frames={frames} />
 }
 ```
+
+The `typeof window !== 'undefined'` check prevents bundling this module for SSR, optimizing server bundle size and build speed.
 
 ### 2.3 Defer Non-Critical Third-Party Libraries
 
@@ -379,7 +460,9 @@ Preload heavy bundles before they're needed to reduce perceived latency.
 ```tsx
 function EditorButton({ onClick }: { onClick: () => void }) {
   const preload = () => {
-    void import('./monaco-editor')
+    if (typeof window !== 'undefined') {
+      void import('./monaco-editor')
+    }
   }
 
   return (
@@ -409,6 +492,8 @@ function FlagsProvider({ children, flags }: Props) {
   </FlagsContext.Provider>
 }
 ```
+
+The `typeof window !== 'undefined'` check prevents bundling preloaded modules for SSR, optimizing server bundle size and build speed.
 
 ---
 
@@ -589,39 +674,64 @@ Use `useSWRSubscription()` to share global event listeners across component inst
 **Incorrect: N instances = N listeners**
 
 ```tsx
-function KeyboardShortcut({ onTrigger }: Props) {
+function useKeyboardShortcut(key: string, callback: () => void) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.metaKey && e.key === 'k') {
-        onTrigger()
+      if (e.metaKey && e.key === key) {
+        callback()
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [onTrigger])
+  }, [key, callback])
 }
 ```
+
+When using the `useKeyboardShortcut` hook multiple times, each instance will register a new listener.
 
 **Correct: N instances = 1 listener**
 
 ```tsx
 import useSWRSubscription from 'swr/subscription'
 
+// Module-level Map to track callbacks per key
+const keyCallbacks = new Map<string, Set<() => void>>()
+
 function useKeyboardShortcut(key: string, callback: () => void) {
-  useSWRSubscription(['keydown', key], (_, { next }) => {
+  // Register this callback in the Map
+  useEffect(() => {
+    if (!keyCallbacks.has(key)) {
+      keyCallbacks.set(key, new Set())
+    }
+    keyCallbacks.get(key)!.add(callback)
+
+    return () => {
+      const set = keyCallbacks.get(key)
+      if (set) {
+        set.delete(callback)
+        if (set.size === 0) {
+          keyCallbacks.delete(key)
+        }
+      }
+    }
+  }, [key, callback])
+
+  useSWRSubscription('global-keydown', () => {
     const handler = (e: KeyboardEvent) => {
-      if (e.metaKey && e.key === key) {
-        next(null, e)
-        callback()
+      if (e.metaKey && keyCallbacks.has(e.key)) {
+        keyCallbacks.get(e.key)!.forEach(cb => cb())
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  })
+  }
 }
 
-function KeyboardShortcut({ onTrigger }: Props) {
-  useKeyboardShortcut('k', onTrigger)
+function Profile() {
+  // Multiple shortcuts will share the same listener
+  useKeyboardShortcut('p', () => { /* ... */ }) 
+  useKeyboardShortcut('k', () => { /* ... */ })
+  // ...
 }
 ```
 
@@ -814,7 +924,59 @@ function Sidebar() {
 }
 ```
 
-### 5.5 Use Transitions for Non-Urgent Updates
+### 5.5 Use Lazy State Initialization
+
+Pass a function to `useState` for expensive initial values. Without the function form, the initializer runs on every render even though the value is only used once.
+
+**Incorrect: runs on every render**
+
+```tsx
+function FilteredList({ items }: { items: Item[] }) {
+  // buildSearchIndex() runs on EVERY render, even after initialization
+  const [searchIndex, setSearchIndex] = useState(buildSearchIndex(items))
+  const [query, setQuery] = useState('')
+  
+  // When query changes, buildSearchIndex runs again unnecessarily
+  return <SearchResults index={searchIndex} query={query} />
+}
+
+function UserProfile() {
+  // JSON.parse runs on every render
+  const [settings, setSettings] = useState(
+    JSON.parse(localStorage.getItem('settings') || '{}')
+  )
+  
+  return <SettingsForm settings={settings} onChange={setSettings} />
+}
+```
+
+**Correct: runs only once**
+
+```tsx
+function FilteredList({ items }: { items: Item[] }) {
+  // buildSearchIndex() runs ONLY on initial render
+  const [searchIndex, setSearchIndex] = useState(() => buildSearchIndex(items))
+  const [query, setQuery] = useState('')
+  
+  return <SearchResults index={searchIndex} query={query} />
+}
+
+function UserProfile() {
+  // JSON.parse runs only on initial render
+  const [settings, setSettings] = useState(() => {
+    const stored = localStorage.getItem('settings')
+    return stored ? JSON.parse(stored) : {}
+  })
+  
+  return <SettingsForm settings={settings} onChange={setSettings} />
+}
+```
+
+Use lazy initialization when computing initial values from localStorage/sessionStorage, building data structures (indexes, maps), reading from the DOM, or performing heavy transformations.
+
+For simple primitives (`useState(0)`), direct references (`useState(props.value)`), or cheap literals (`useState({})`), the function form is unnecessary.
+
+### 5.6 Use Transitions for Non-Urgent Updates
 
 Mark frequent, non-urgent state updates as transitions to maintain UI responsiveness.
 
@@ -924,9 +1086,11 @@ function Container() {
 }
 ```
 
+This is especially helpful for large and static SVG nodes, which can be expensive to recreate on every render.
+
 ### 6.3 Optimize SVG Precision
 
-Reduce SVG coordinate precision to decrease file size.
+Reduce SVG coordinate precision to decrease file size. The optimal precision depends on the viewBox size, but in general reducing precision should be considered.
 
 **Incorrect: excessive precision**
 
@@ -1062,7 +1226,81 @@ for (let i = 0; i < len; i++) {
 }
 ```
 
-### 7.3 Cache Storage API Calls
+### 7.3 Cache Repeated Function Calls
+
+Use a module-level Map to cache function results when the same function is called repeatedly with the same inputs during render.
+
+**Incorrect: redundant computation**
+
+```typescript
+function ProjectList({ projects }: { projects: Project[] }) {
+  return (
+    <div>
+      {projects.map(project => {
+        // slugify() called 100+ times for same project names
+        const slug = slugify(project.name)
+        
+        return <ProjectCard key={project.id} slug={slug} />
+      })}
+    </div>
+  )
+}
+```
+
+**Correct: cached results**
+
+```typescript
+// Module-level cache
+const cachedSlugify = new Map<string, any>()
+
+function cachedSlugify(text: string): string {
+  if (cachedSlugify.has(text)) {
+    return cachedSlugify.get(text)
+  }
+  const result = slugify(text)
+  cachedSlugify.set(text, result)
+  return result
+}
+
+function ProjectList({ projects }: { projects: Project[] }) {
+  return (
+    <div>
+      {projects.map(project => {
+        // Computed only once per unique project name
+        const slug = cachedSlugify(project.name)
+        
+        return <ProjectCard key={project.id} slug={slug} />
+      })}
+    </div>
+  )
+}
+```
+
+**Simpler pattern for single-value functions:**
+
+```typescript
+let isLoggedInCache: boolean | null = null
+
+function isLoggedIn(): boolean {
+  if (isLoggedInCache !== null) {
+    return isLoggedInCache
+  }
+  
+  isLoggedInCache = document.cookie.includes('auth=')
+  return isLoggedInCache
+}
+
+// Clear cache when auth changes
+function onAuthChange() {
+  isLoggedInCache = null
+}
+```
+
+Use a Map (not a hook) so it works everywhere: utilities, event handlers, not just React components.
+
+Reference: [https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast](https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast)
+
+### 7.4 Cache Storage API Calls
 
 `localStorage`, `sessionStorage`, and `document.cookie` are synchronous and expensive. Cache reads in memory.
 
@@ -1123,7 +1361,7 @@ document.addEventListener('visibilitychange', () => {
 })
 ```
 
-### 7.4 Combine Multiple Array Iterations
+### 7.5 Combine Multiple Array Iterations
 
 Multiple `.filter()` or `.map()` calls iterate the array multiple times. Combine into one loop.
 
@@ -1149,7 +1387,7 @@ for (const user of users) {
 }
 ```
 
-### 7.5 Early Return from Functions
+### 7.6 Early Return from Functions
 
 Return early when result is determined to skip unnecessary processing.
 
@@ -1193,7 +1431,7 @@ function validateUsers(users: User[]) {
 }
 ```
 
-### 7.6 Hoist RegExp Creation
+### 7.7 Hoist RegExp Creation
 
 Don't create RegExp inside render. Hoist to module scope or memoize with `useMemo()`.
 
@@ -1223,7 +1461,7 @@ regex.test('foo')  // true, lastIndex = 3
 regex.test('foo')  // false, lastIndex = 0
 ```
 
-### 7.7 Use Set/Map for O(1) Lookups
+### 7.8 Use Set/Map for O(1) Lookups
 
 Convert arrays to Set/Map for repeated membership checks.
 

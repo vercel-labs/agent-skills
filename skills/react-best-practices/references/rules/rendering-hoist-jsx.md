@@ -40,3 +40,5 @@ function Container() {
   )
 }
 ```
+
+This is especially helpful for large and static SVG nodes, which can be expensive to recreate on every render.
