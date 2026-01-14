@@ -107,28 +107,6 @@ For network-dependent skills (like vercel-deploy-claimable), you may need to all
 1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
 2. Add required domains (e.g., `*.vercel.com`)
 
-### Codex
-
-Follow the [Codex skills guide](https://developers.openai.com/codex/skills/) and place the skill under `$CODEX_HOME/skills`:
-
-```bash
-# from the repo root
-# defaults to ~/.codex if CODEX_HOME is unset
-cp -r skills/vercel-deploy "$CODEX_HOME/skills/"
-```
-
-Codex will auto-discover `SKILL.md` files in that directory on the next start.
-
-### OpenCode
-
-Copy the desired skill folder to your skills directory:
-
-```bash
-cp -r skills/vercel-deploy ~/.claude/skills/
-```
-
-OpenCode discovers skills from `~/.claude/skills/<name>/SKILL.md` automatically. See [OpenCode Skills docs](https://opencode.ai/docs/skills/) for more details.
-
 ## Usage
 
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
