@@ -1,14 +1,33 @@
-# Claude Skills for Vercel
+# Agent Skills
 
-A collection of skills for [Claude.ai](https://claude.ai) and [Claude Code](https://claude.com/claude-code) for working with Vercel deployments.
+A collection of skills for AI coding agents. Skills are packaged instructions and scripts that extend agent capabilities.
 
 Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
-### vercel-deploy
+### react-best-practices
 
-Deploy applications and websites to Vercel instantly. No authentication required.
+React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
+
+**Use when:**
+- Writing new React components or Next.js pages
+- Implementing data fetching (client or server-side)
+- Reviewing code for performance issues
+- Optimizing bundle size or load times
+
+**Categories covered:**
+- Eliminating waterfalls (Critical)
+- Bundle size optimization (Critical)
+- Server-side performance (High)
+- Client-side data fetching (Medium-High)
+- Re-render optimization (Medium)
+- Rendering performance (Medium)
+- JavaScript micro-optimizations (Low-Medium)
+
+### vercel-deploy-claimable
+
+Deploy applications and websites to Vercel instantly. No authentication required. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
 
 **Use when:**
 - "Deploy my app"
@@ -31,7 +50,7 @@ Deploy applications and websites to Vercel instantly. No authentication required
 
 **Output:**
 ```
-✓ Deployment successful!
+Deployment successful!
 
 Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
@@ -39,48 +58,40 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 
 ## Installation
 
-### Claude Code
-
-Copy the desired skill folder to your Claude Code skills directory:
-
 ```bash
-cp -r skills/vercel-deploy ~/.claude/skills/
+npx add-skill vercel-labs/agent-skills
 ```
 
 ### claude.ai
 
 Add the skill to your project knowledge or paste the contents of `SKILL.md` into your conversation.
 
-No CLI installation or authentication needed.
+For network-dependent skills (like vercel-deploy-claimable), you may need to allow domains:
+
+1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
+2. Add required domains (e.g., `*.vercel.com`)
 
 ## Usage
 
-Skills are automatically available once installed. Simply ask Claude to deploy:
+Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
 
+**Examples:**
 ```
 Deploy my app
 ```
-
 ```
-Deploy this and give me the link
+Review this React component for performance issues
 ```
-
-Claude will package your project, deploy it, and return both URLs.
+```
+Help me optimize this Next.js page
+```
 
 ## Skill Structure
 
 Each skill contains:
-- `SKILL.md` - Instructions for Claude
-- `scripts/` - Helper scripts for automation
-
-## Troubleshooting
-
-### Network egress error on claude.ai
-
-If deployment fails due to network restrictions, you need to allow Vercel domains:
-
-1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
-2. Add `*.vercel.com` to the allowed domains
+- `SKILL.md` - Instructions for the agent
+- `scripts/` - Helper scripts for automation (optional)
+- `references/` - Supporting documentation (optional)
 
 ## License
 
