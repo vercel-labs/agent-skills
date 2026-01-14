@@ -106,21 +106,14 @@ OpenCode discovers skills from `~/.claude/skills/<name>/SKILL.md` automatically.
 
 ### Claude Code
 
-Use the `/install-skill` slash command to install directly from GitHub:
+Follow the [Claude Code Skills docs](https://code.claude.com/docs/en/skills) and place the skill under `~/.claude/skills`:
 
-```
-/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/<skill-name>
-```
-
-For example, to install `vercel-deploy`:
-
-```
-/install-skill https://github.com/vercel-labs/claude-skills/tree/main/skills/vercel-deploy
+```bash
+# from the repo root
+cp -r skills/vercel-deploy "~/.claude/skills/"
 ```
 
-Add `--personal` to install to `~/.claude/skills/` (available across all projects) or `--project` for `.claude/skills/` (project-specific, default).
-
-See the [Claude Code Skills docs](https://code.claude.com/docs/en/skills) for more details.
+Claude code will auto-discover `SKILL.md` files in that directory on the next start.
 
 ### claude.ai
 
