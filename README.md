@@ -131,6 +131,10 @@ For network-dependent skills (like vercel-deploy-claimable), you may need to all
 1. Go to [claude.ai/admin-settings/capabilities](https://claude.ai/admin-settings/capabilities)
 2. Add required domains (e.g., `*.vercel.com`)
 
+### Roo Code
+
+Roo Code discovers skills from `~/.roo/skills/` (available across all projects) or `.roo/skills/` (project-specific) automatically. See [Roo Code Skills docs](https://docs.roocode.com/features/skills) for more details.
+
 ## Usage
 
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
