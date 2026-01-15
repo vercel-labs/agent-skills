@@ -51,7 +51,7 @@ Review UI code for compliance with web interface best practices. Audits your cod
 
 ### vercel-deploy-claimable
 
-Deploy applications and websites to Vercel instantly. No authentication required. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
+Deploy applications and websites to Vercel instantly. Designed for use with claude.ai and Claude Desktop to enable deployments directly from conversations. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
 
 **Use when:**
 - "Deploy my app"
@@ -60,7 +60,6 @@ Deploy applications and websites to Vercel instantly. No authentication required
 - "Deploy and give me the link"
 
 **Features:**
-- No authentication required - works instantly
 - Auto-detects 40+ frameworks from `package.json`
 - Returns preview URL (live site) and claim URL (transfer ownership)
 - Handles static HTML projects automatically
