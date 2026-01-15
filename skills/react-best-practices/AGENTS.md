@@ -418,7 +418,7 @@ Load large data or modules only when a feature is activated.
 **Example: lazy-load animation frames**
 
 ```tsx
-function AnimationPlayer({ enabled }: { enabled: boolean }) {
+function AnimationPlayer({ enabled, setEnabled }: { enabled: boolean, setEnabled: (v: boolean) => void }) {
   const [frames, setFrames] = useState<Frame[] | null>(null)
 
   useEffect(() => {
@@ -427,7 +427,7 @@ function AnimationPlayer({ enabled }: { enabled: boolean }) {
         .then(mod => setFrames(mod.frames))
         .catch(() => setEnabled(false))
     }
-  }, [enabled, frames])
+  }, [enabled, frames, setEnabled])
 
   if (!frames) return <Skeleton />
   return <Canvas frames={frames} />
