@@ -7,9 +7,7 @@ import { readdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule, TestCase } from './types.js'
 import { parseRuleFile } from './parser.js'
-
-const RULES_DIR = join(process.cwd(), 'rules')
-const OUTPUT_FILE = join(process.cwd(), 'test-cases.json')
+import { RULES_DIR, TEST_CASES_FILE } from './config.js'
 
 /**
  * Extract test cases from a rule
@@ -45,6 +43,8 @@ function extractTestCases(rule: Rule): TestCase[] {
 async function extractTests() {
   try {
     console.log('Extracting test cases from rules...')
+    console.log(`Rules directory: ${RULES_DIR}`)
+    console.log(`Output file: ${TEST_CASES_FILE}`)
     
     const files = await readdir(RULES_DIR)
     const ruleFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('_') && f !== 'README.md')
@@ -63,9 +63,9 @@ async function extractTests() {
     }
     
     // Write test cases as JSON
-    await writeFile(OUTPUT_FILE, JSON.stringify(allTestCases, null, 2), 'utf-8')
+    await writeFile(TEST_CASES_FILE, JSON.stringify(allTestCases, null, 2), 'utf-8')
     
-    console.log(`✓ Extracted ${allTestCases.length} test cases to ${OUTPUT_FILE}`)
+    console.log(`✓ Extracted ${allTestCases.length} test cases to ${TEST_CASES_FILE}`)
     console.log(`  - Bad examples: ${allTestCases.filter(tc => tc.type === 'bad').length}`)
     console.log(`  - Good examples: ${allTestCases.filter(tc => tc.type === 'good').length}`)
   } catch (error) {

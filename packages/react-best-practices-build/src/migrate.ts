@@ -7,9 +7,9 @@
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
+import { SKILL_DIR, RULES_DIR } from './config.js'
 
-const RPG_FILE = join(process.cwd(), 'RPG.md')
-const RULES_DIR = join(process.cwd(), 'rules')
+const RPG_FILE = join(SKILL_DIR, 'RPG.md')
 
 /**
  * Extract section number and title from heading

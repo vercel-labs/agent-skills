@@ -1,0 +1,33 @@
+name: React Best Practices CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/react-best-practices/**'
+      - 'packages/react-best-practices-build/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/react-best-practices/**'
+      - 'packages/react-best-practices-build/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/react-best-practices-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.24.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: packages/react-best-practices-build/pnpm-lock.yaml
+      - run: pnpm install
+      - run: pnpm validate
+      - run: pnpm build

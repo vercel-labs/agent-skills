@@ -7,8 +7,7 @@ import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { Rule } from './types.js'
 import { parseRuleFile } from './parser.js'
-
-const RULES_DIR = join(process.cwd(), 'rules')
+import { RULES_DIR } from './config.js'
 
 interface ValidationError {
   file: string
@@ -72,6 +71,7 @@ function validateRule(rule: Rule, file: string): ValidationError[] {
 async function validate() {
   try {
     console.log('Validating rule files...')
+    console.log(`Rules directory: ${RULES_DIR}`)
     
     const files = await readdir(RULES_DIR)
     const ruleFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('_'))

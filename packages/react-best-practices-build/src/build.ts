@@ -7,9 +7,7 @@ import { readdir, readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule, Section, GuidelinesDocument, ImpactLevel } from './types.js'
 import { parseRuleFile, RuleFile } from './parser.js'
-
-const RULES_DIR = join(process.cwd(), 'rules')
-const OUTPUT_FILE = join(process.cwd(), 'AGENTS.md')
+import { RULES_DIR, METADATA_FILE, OUTPUT_FILE } from './config.js'
 
 /**
  * Generate markdown from rules
@@ -119,6 +117,8 @@ function generateMarkdown(
 async function build() {
   try {
     console.log('Building AGENTS.md from rules...')
+    console.log(`Rules directory: ${RULES_DIR}`)
+    console.log(`Output file: ${OUTPUT_FILE}`)
 
     // Read all rule files (exclude files starting with _ and README.md)
     const files = await readdir(RULES_DIR)
@@ -220,10 +220,9 @@ async function build() {
     }
 
     // Read metadata
-    const metadataFile = join(process.cwd(), 'metadata.json')
     let metadata
     try {
-      const metadataContent = await readFile(metadataFile, 'utf-8')
+      const metadataContent = await readFile(METADATA_FILE, 'utf-8')
       metadata = JSON.parse(metadataContent)
     } catch {
       metadata = {
