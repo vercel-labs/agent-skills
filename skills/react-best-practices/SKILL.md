@@ -7,6 +7,22 @@ description: React and Next.js performance optimization guidelines from Vercel E
 
 Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 45 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
 
+## React Compiler Detection (Check First!)
+
+**Before applying memoization rules (Section 5) or JSX hoisting (Section 6.3), check if React Compiler is enabled:**
+
+1. Look for `babel-plugin-react-compiler` in `package.json` dependencies
+2. Check `babel.config.js` or `.babelrc` for `babel-plugin-react-compiler`
+3. Check `next.config.js` for `experimental.reactCompiler: true`
+
+**If React Compiler is detected, SKIP these patterns:**
+- `memo()` wrappers (rule 5.2)
+- `useMemo()` for component memoization (rule 5.2)  
+- `useCallback()` for memoizing callbacks
+- Manual JSX hoisting (rule 6.3)
+
+The React Compiler automatically handles these optimizations. Applying them manually adds unnecessary code.
+
 ## When to Apply
 
 Reference these guidelines when:

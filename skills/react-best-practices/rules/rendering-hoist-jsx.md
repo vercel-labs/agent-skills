@@ -7,6 +7,8 @@ tags: rendering, jsx, static, optimization
 
 ## Hoist Static JSX Elements
 
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `experimental.reactCompiler: true` in next.config.js. The compiler automatically hoists static elements.
+
 Extract static JSX outside components to avoid re-creation.
 
 **Incorrect (recreates element every render):**
@@ -43,4 +45,16 @@ function Container() {
 
 This is especially helpful for large and static SVG nodes, which can be expensive to recreate on every render.
 
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, the compiler automatically hoists static JSX elements and optimizes component re-renders, making manual hoisting unnecessary.
+**With React Compiler:** Just write the component normally - the compiler automatically hoists static elements:
+
+```tsx
+// React Compiler handles this automatically
+function Container() {
+  return (
+    <div>
+      {loading && <div className="animate-pulse h-20 bg-gray-200" />}
+    </div>
+  )
+}
+```
+
