@@ -28,7 +28,7 @@ Check these locations in the target project:
 
 1. **package.json** - Look for `babel-plugin-react-compiler` in dependencies or devDependencies
 2. **babel.config.js / .babelrc** - Look for `babel-plugin-react-compiler` in plugins
-3. **next.config.js** - Look for `experimental: { reactCompiler: true }`
+3. **next.config.js** - Look for `reactCompiler: true` or `experimental: { reactCompiler: true }`
 
 ### Rules to SKIP When React Compiler is Enabled
 
@@ -1019,7 +1019,7 @@ function ShareButton({ chatId }: { chatId: string }) {
 
 **Impact: MEDIUM (enables early returns)**
 
-> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `experimental.reactCompiler: true` in next.config.js. The compiler automatically handles memoization.
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically handles memoization.
 
 Extract expensive work into memoized components to enable early returns before computation.
 
@@ -1397,7 +1397,7 @@ For 1000 messages, browser skips layout/paint for ~990 off-screen items (10× fa
 
 **Impact: LOW (avoids re-creation)**
 
-> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `experimental.reactCompiler: true` in next.config.js. The compiler automatically hoists static elements.
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically hoists static elements.
 
 Extract static JSX outside components to avoid re-creation.
 

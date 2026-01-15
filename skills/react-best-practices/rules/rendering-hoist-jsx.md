@@ -7,7 +7,7 @@ tags: rendering, jsx, static, optimization
 
 ## Hoist Static JSX Elements
 
-> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `experimental.reactCompiler: true` in next.config.js. The compiler automatically hoists static elements.
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically hoists static elements.
 
 Extract static JSX outside components to avoid re-creation.
 

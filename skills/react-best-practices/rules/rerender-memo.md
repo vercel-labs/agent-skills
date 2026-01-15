@@ -7,7 +7,7 @@ tags: rerender, memo, useMemo, optimization
 
 ## Extract to Memoized Components
 
-> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `experimental.reactCompiler: true` in next.config.js. The compiler automatically handles memoization.
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically handles memoization.
 
 Extract expensive work into memoized components to enable early returns before computation.
 

@@ -13,7 +13,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
 
 1. Look for `babel-plugin-react-compiler` in `package.json` dependencies
 2. Check `babel.config.js` or `.babelrc` for `babel-plugin-react-compiler`
-3. Check `next.config.js` for `experimental.reactCompiler: true`
+3. Check `next.config.js` for `reactCompiler: true` or `experimental.reactCompiler: true`
 
 **If React Compiler is detected, SKIP these patterns:**
 - `memo()` wrappers (rule 5.2)
