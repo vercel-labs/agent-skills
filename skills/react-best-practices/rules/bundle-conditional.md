@@ -19,7 +19,7 @@ function AnimationPlayer({ enabled }: { enabled: boolean }) {
     if (enabled && !frames && typeof window !== 'undefined') {
       import('./animation-frames.js')
         .then(mod => setFrames(mod.frames))
-        .catch(() => setEnabled(false))
+        .catch(console.error)
     }
   }, [enabled, frames])
 
