@@ -155,18 +155,18 @@ detect_framework() {
     echo "null"
 }
 
-# Função helper para extrair valores JSON
-# Tenta usar jq se disponível, senão usa fallback seguro
+# Helper function to extract JSON values
+# Try to use jq if available, otherwise use fallback secure
 extract_json_value() {
     local json="$1"
     local key="$2"
     
-    # Tenta usar jq primeiro (mais robusto)
+    # Try to use jq first (more robust)
     if command -v jq >/dev/null 2>&1; then
         echo "$json" | jq -r ".$key // empty" 2>/dev/null
     else
-        # Fallback: usa grep mas com validação mais segura
-        # Remove espaços e quebras de linha, procura pelo padrão
+        # Fallback: use grep but with more secure validation
+        # Remove blank spaces and line breaks, search for the pattern
         local cleaned=$(echo "$json" | tr -d '\n\r' | sed 's/[[:space:]]*//g')
         echo "$cleaned" | grep -o "\"$key\":\"[^\"]*\"" | sed 's/.*:"\([^"]*\)".*/\1/' || echo ""
     fi
