@@ -106,7 +106,7 @@ If deployment fails due to network restrictions (common on claude.ai), tell the 
 ```
 Deployment failed due to network restrictions. To fix this:
 
-1. Go to https://claude.ai/admin-settings/capabilities
+1. Go to https://claude.ai/settings/capabilities
 2. Add *.vercel.com to the allowed domains
 3. Try deploying again
 ```

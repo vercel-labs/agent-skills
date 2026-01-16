@@ -107,4 +107,4 @@ cp -r skills/{skill-name} ~/.claude/skills/
 **claude.ai:**
 Add the skill to project knowledge or paste SKILL.md contents into the conversation.
 
-If the skill requires network access, instruct users to add required domains at `claude.ai/admin-settings/capabilities`.
+If the skill requires network access, instruct users to add required domains at `claude.ai/settings/capabilities`.
