@@ -177,6 +177,38 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Version and Minimize localStorage Data",
+    "type": "bad",
+    "code": "// No version, stores everything, no error handling\nlocalStorage.setItem('userConfig', JSON.stringify(fullUserObject))\nconst data = localStorage.getItem('userConfig')",
+    "language": "typescript",
+    "description": "Incorrect example for Version and Minimize localStorage Data"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Version and Minimize localStorage Data",
+    "type": "good",
+    "code": "const VERSION = 'v2'\n\nfunction saveConfig(config: { theme: string; language: string }) {\n  try {\n    localStorage.setItem(`userConfig:${VERSION}`, JSON.stringify(config))\n  } catch {\n    // Throws in incognito/private browsing, quota exceeded, or disabled\n  }\n}\n\nfunction loadConfig() {\n  try {\n    const data = localStorage.getItem(`userConfig:${VERSION}`)\n    return data ? JSON.parse(data) : null\n  } catch {\n    return null\n  }\n}\n\n// Migration from v1 to v2\nfunction migrate() {\n  try {\n    const v1 = localStorage.getItem('userConfig:v1')\n    if (v1) {\n      const old = JSON.parse(v1)\n      saveConfig({ theme: old.darkMode ? 'dark' : 'light', language: old.lang })\n      localStorage.removeItem('userConfig:v1')\n    }\n  } catch {}\n}",
+    "language": "typescript",
+    "description": "Correct example for Version and Minimize localStorage Data"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
+    "type": "bad",
+    "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch)\n  document.addEventListener('wheel', handleWheel)\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
+    "language": "typescript",
+    "description": "Incorrect example for Use Passive Event Listeners for Scrolling Performance"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
+    "type": "good",
+    "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch, { passive: true })\n  document.addEventListener('wheel', handleWheel, { passive: true })\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
+    "language": "typescript",
+    "description": "Correct example for Use Passive Event Listeners for Scrolling Performance"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Use SWR for Automatic Deduplication",
     "type": "bad",
     "code": "function UserList() {\n  const [users, setUsers] = useState([])\n  useEffect(() => {\n    fetch('/api/users')\n      .then(r => r.json())\n      .then(setUsers)\n  }, [])\n}",
@@ -614,6 +646,22 @@
     "code": "import { after } from 'next/server'\nimport { headers, cookies } from 'next/headers'\nimport { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Log after response is sent\n  after(async () => {\n    const userAgent = (await headers()).get('user-agent') || 'unknown'\n    const sessionCookie = (await cookies()).get('session-id')?.value || 'anonymous'\n    \n    logUserAction({ sessionCookie, userAgent })\n  })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
     "language": "tsx",
     "description": "non-blocking"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Per-Request Deduplication with React.cache()",
+    "type": "bad",
+    "code": "const getUser = cache(async (params: { uid: number }) => {\n  return await db.user.findUnique({ where: { id: params.uid } })\n})\n\n// Each call creates new object, never hits cache\ngetUser({ uid: 1 })\ngetUser({ uid: 1 })  // Cache miss, runs query again",
+    "language": "typescript",
+    "description": "always cache miss"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Per-Request Deduplication with React.cache()",
+    "type": "good",
+    "code": "const params = { uid: 1 }\ngetUser(params)  // Query runs\ngetUser(params)  // Cache hit (same reference)",
+    "language": "typescript",
+    "description": "cache hit"
   },
   {
     "ruleId": "",

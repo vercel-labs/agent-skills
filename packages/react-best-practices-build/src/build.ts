@@ -7,7 +7,21 @@ import { readdir, readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule, Section, GuidelinesDocument, ImpactLevel } from './types.js'
 import { parseRuleFile, RuleFile } from './parser.js'
-import { RULES_DIR, METADATA_FILE, OUTPUT_FILE } from './config.js'
+import { RULES_DIR, METADATA_FILE, OUTPUT_FILE, SKILL_DIR } from './config.js'
+
+// Parse command line arguments
+const args = process.argv.slice(2)
+const upgradeVersion = args.includes('--upgrade-version')
+
+/**
+ * Increment a semver-style version string (e.g., "0.1.0" -> "0.1.1", "1.0" -> "1.1")
+ */
+function incrementVersion(version: string): string {
+  const parts = version.split('.').map(Number)
+  // Increment the last part
+  parts[parts.length - 1]++
+  return parts.join('.')
+}
 
 /**
  * Generate markdown from rules
@@ -235,6 +249,27 @@ async function build() {
         abstract:
           'Performance optimization guide for React and Next.js applications, ordered by impact.',
       }
+    }
+
+    // Upgrade version if flag is passed
+    if (upgradeVersion) {
+      const oldVersion = metadata.version
+      metadata.version = incrementVersion(oldVersion)
+      console.log(`Upgrading version: ${oldVersion} -> ${metadata.version}`)
+
+      // Write updated metadata.json
+      await writeFile(METADATA_FILE, JSON.stringify(metadata, null, 2) + '\n', 'utf-8')
+      console.log(`✓ Updated metadata.json`)
+
+      // Update SKILL.md frontmatter
+      const skillFile = join(SKILL_DIR, 'SKILL.md')
+      const skillContent = await readFile(skillFile, 'utf-8')
+      const updatedSkillContent = skillContent.replace(
+        /^(---[\s\S]*?version:\s*)"[^"]*"([\s\S]*?---)$/m,
+        `$1"${metadata.version}"$2`
+      )
+      await writeFile(skillFile, updatedSkillContent, 'utf-8')
+      console.log(`✓ Updated SKILL.md`)
     }
 
     // Generate markdown

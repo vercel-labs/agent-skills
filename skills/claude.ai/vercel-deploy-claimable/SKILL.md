@@ -1,6 +1,9 @@
 ---
 name: vercel-deploy
 description: Deploy applications and websites to Vercel. Use this skill when the user requests deployment actions such as "Deploy my app", "Deploy this to production", "Create a preview deployment", "Deploy and give me the link", or "Push this live". No authentication required - returns preview URL and claimable deployment link.
+metadata:
+  author: vercel
+  version: "1.0.0"
 ---
 
 # Vercel Deploy
@@ -103,7 +106,7 @@ If deployment fails due to network restrictions (common on claude.ai), tell the 
 ```
 Deployment failed due to network restrictions. To fix this:
 
-1. Go to https://claude.ai/admin-settings/capabilities
+1. Go to https://claude.ai/settings/capabilities
 2. Add *.vercel.com to the allowed domains
 3. Try deploying again
 ```
