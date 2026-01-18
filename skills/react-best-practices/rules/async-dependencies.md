@@ -33,4 +33,17 @@ const { user, config, profile } = await all({
 })
 ```
 
+**Alternative without extra dependencies:**
+
+```typescript
+const userPromise = fetchUser()
+const profilePromise = userPromise.then(user => fetchProfile(user.id))
+
+const [user, config, profile] = await Promise.all([
+  userPromise,
+  fetchConfig(),
+  profilePromise
+])
+```
+
 Reference: [https://github.com/shuding/better-all](https://github.com/shuding/better-all)
