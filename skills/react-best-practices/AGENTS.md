@@ -38,6 +38,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 3.3 [Parallel Data Fetching with Component Composition](#33-parallel-data-fetching-with-component-composition)
    - 3.4 [Per-Request Deduplication with React.cache()](#34-per-request-deduplication-with-reactcache)
    - 3.5 [Use after() for Non-Blocking Operations](#35-use-after-for-non-blocking-operations)
+   - 3.6 [Use useActionState for Form State Management](#36-use-useactionstate-for-form-state-management)
 4. [Client-Side Data Fetching](#4-client-side-data-fetching) — **MEDIUM-HIGH**
    - 4.1 [Deduplicate Global Event Listeners](#41-deduplicate-global-event-listeners)
    - 4.2 [Use Passive Event Listeners for Scrolling Performance](#42-use-passive-event-listeners-for-scrolling-performance)
@@ -857,6 +858,145 @@ The response is sent immediately while logging happens in the background.
 - Works in Server Actions, Route Handlers, and Server Components
 
 Reference: [https://nextjs.org/docs/app/api-reference/functions/after](https://nextjs.org/docs/app/api-reference/functions/after)
+
+### 3.6 Use useActionState for Form State Management
+
+**Impact: MEDIUM-HIGH (60-70% less form boilerplate)**
+
+`useActionState` replaces `useFormState` and simplifies form handling by combining state management, pending status, and action results into a single hook. It eliminates manual state setup, try-catch blocks, and makes forms work before JavaScript hydration.
+
+**Incorrect: manual state management**
+
+```tsx
+"use client"
+import { useState } from "react"
+import { submitPayment } from "@/actions/payment"
+
+function PaymentForm() {
+  const [state, setState] = useState(null)
+  const [isPending, setIsPending] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleSubmit = async (formData) => {
+    setIsPending(true)
+    setError(null)
+    try {
+      const result = await submitPayment(formData)
+      setState(result)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsPending(false)
+    }
+  }
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      handleSubmit(new FormData(e.target))
+    }}>
+      <input name="cardNumber" required />
+      {error && <div className="error">{error}</div>}
+      {state?.success && <div className="success">Payment successful!</div>}
+      <button disabled={isPending} type="submit">
+        {isPending ? "Processing..." : "Submit Payment"}
+      </button>
+    </form>
+  )
+}
+```
+
+**Correct: using useActionState**
+
+```tsx
+"use client"
+import { useActionState } from "react"
+import { submitPayment } from "@/actions/payment"
+
+function PaymentForm() {
+  const [state, formAction, isPending] = useActionState(submitPayment, {})
+
+  return (
+    <form action={formAction}>
+      <input name="cardNumber" required />
+      {state?.error && <div className="error">{state.error}</div>}
+      {state?.success && <div className="success">Payment successful!</div>}
+      <button disabled={isPending} type="submit">
+        {isPending ? "Processing..." : "Submit Payment"}
+      </button>
+    </form>
+  )
+}
+```
+
+**Server Action:**
+
+```tsx
+"use server"
+import { z } from "zod"
+
+const paymentSchema = z.object({
+  cardNumber: z.string().regex(/^\d{16}$/, "Invalid card number")
+})
+
+export async function submitPayment(previousState, formData) {
+  try {
+    const data = {
+      cardNumber: formData.get("cardNumber")
+    }
+
+    const validated = paymentSchema.parse(data)
+    const result = await processPayment(validated)
+
+    return {
+      success: true,
+      message: "Payment processed!",
+      orderId: result.orderId
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    }
+  }
+}
+```
+
+**Why this matters:**
+
+- **70% less boilerplate** - No manual useState for state, isPending, error
+
+- **Progressive enhancement** - Forms work before JS hydration with Server Actions
+
+- **Built-in pending state** - isPending automatically tracks loading
+
+- **Type-safe errors** - Server validation errors flow naturally into state
+
+- **Single hook** - Combines all form concerns (state, pending, actions)
+
+- **Works with `<form action>`** - Modern HTML form semantics
+
+**Use useActionState when:**
+
+- Handling form submissions with Server Actions
+
+- Need to display validation errors or success messages
+
+- Want automatic loading state with `isPending`
+
+- Building forms that should work with progressive enhancement
+
+- Managing form state with server-side validation
+
+**When to avoid:**
+
+- Managing non-form component state (use `useState` instead)
+
+- Client-side only validation without Server Actions (combine with `useState`)
+
+- Complex multi-step forms (consider extracting sub-components)
+
+Reference: [https://react.dev/reference/react/useActionState](https://react.dev/reference/react/useActionState)
 
 ---
 
@@ -1715,79 +1855,32 @@ Micro-optimizations for hot paths can add up to meaningful improvements.
 
 **Impact: MEDIUM (reduces reflows/repaints)**
 
-Avoid changing styles one property at a time. Group multiple CSS changes together via classes or `cssText` to minimize browser reflows.
+Avoid interleaving style writes with layout reads. When you read a layout property (like `offsetWidth`, `getBoundingClientRect()`, or `getComputedStyle()`) between style changes, the browser is forced to trigger a synchronous reflow.
 
-**Incorrect: multiple reflows**
+**Incorrect: interleaved reads and writes force reflows**
 
 ```typescript
 function updateElementStyles(element: HTMLElement) {
-  // Each line triggers a reflow
   element.style.width = '100px'
+  const width = element.offsetWidth  // Forces reflow
   element.style.height = '200px'
-  element.style.backgroundColor = 'blue'
-  element.style.border = '1px solid black'
+  const height = element.offsetHeight  // Forces another reflow
 }
 ```
 
-**Correct: add class - single reflow**
+**Correct: batch writes, then read once**
 
 ```typescript
-// CSS file
-.highlighted-box {
-  width: 100px;
-  height: 200px;
-  background-color: blue;
-  border: 1px solid black;
-}
-
-// JavaScript
 function updateElementStyles(element: HTMLElement) {
   element.classList.add('highlighted-box')
+
+  const { width, height } = element.getBoundingClientRect()
 }
 ```
 
-**Correct: change cssText - single reflow**
+**Better: use CSS classes**
 
-```typescript
-function updateElementStyles(element: HTMLElement) {
-  element.style.cssText = `
-    width: 100px;
-    height: 200px;
-    background-color: blue;
-    border: 1px solid black;
-  `
-}
-```
-
-**React example:**
-
-```tsx
-// Incorrect: changing styles one by one
-function Box({ isHighlighted }: { isHighlighted: boolean }) {
-  const ref = useRef<HTMLDivElement>(null)
-  
-  useEffect(() => {
-    if (ref.current && isHighlighted) {
-      ref.current.style.width = '100px'
-      ref.current.style.height = '200px'
-      ref.current.style.backgroundColor = 'blue'
-    }
-  }, [isHighlighted])
-  
-  return <div ref={ref}>Content</div>
-}
-
-// Correct: toggle class
-function Box({ isHighlighted }: { isHighlighted: boolean }) {
-  return (
-    <div className={isHighlighted ? 'highlighted-box' : ''}>
-      Content
-    </div>
-  )
-}
-```
-
-Prefer CSS classes over inline styles when possible. Classes are cached by the browser and provide better separation of concerns.
+Prefer CSS classes over inline styles when possible. CSS files are cached by the browser, and classes provide better separation of concerns and are easier to maintain.
 
 ### 7.2 Build Index Maps for Repeated Lookups
 
@@ -2044,7 +2137,7 @@ function hasChanges(current: string[], original: string[]) {
   if (current.length !== original.length) {
     return true
   }
-  // Only sort/join when lengths match
+  // Only sort when lengths match
   const currentSorted = current.toSorted()
   const originalSorted = original.toSorted()
   for (let i = 0; i < currentSorted.length; i++) {
@@ -2229,7 +2322,7 @@ const min = Math.min(...numbers)
 const max = Math.max(...numbers)
 ```
 
-This works for small arrays but can be slower for very large arrays due to spread operator limitations. Use the loop approach for reliability.
+This works for small arrays, but can be slower or just throw an error for very large arrays due to spread operator limitations. Maximal array length is approximately 124000 in Chrome 143 and 638000 in Safari 18; exact numbers may vary - see [the fiddle](https://jsfiddle.net/qw1jabsx/4/). Use the loop approach for reliability.
 
 ### 7.11 Use Set/Map for O(1) Lookups
 
@@ -2325,7 +2418,7 @@ Store callbacks in refs when used in effects that shouldn't re-subscribe on call
 **Incorrect: re-subscribes on every render**
 
 ```tsx
-function useWindowEvent(event: string, handler: () => void) {
+function useWindowEvent(event: string, handler: (e) => void) {
   useEffect(() => {
     window.addEventListener(event, handler)
     return () => window.removeEventListener(event, handler)
@@ -2338,7 +2431,7 @@ function useWindowEvent(event: string, handler: () => void) {
 ```tsx
 import { useEffectEvent } from 'react'
 
-function useWindowEvent(event: string, handler: () => void) {
+function useWindowEvent(event: string, handler: (e) => void) {
   const onEvent = useEffectEvent(handler)
 
   useEffect(() => {
@@ -2363,7 +2456,7 @@ Access latest values in callbacks without adding them to dependency arrays. Prev
 ```typescript
 function useLatest<T>(value: T) {
   const ref = useRef(value)
-  useEffect(() => {
+  useLayoutEffect(() => {
     ref.current = value
   }, [value])
   return ref

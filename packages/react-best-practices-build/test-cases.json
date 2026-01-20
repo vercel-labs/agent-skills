@@ -3,7 +3,7 @@
     "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "bad",
-    "code": "function useWindowEvent(event: string, handler: () => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
+    "code": "function useWindowEvent(event: string, handler: (e) => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
     "language": "tsx",
     "description": "re-subscribes on every render"
   },
@@ -11,7 +11,7 @@
     "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "good",
-    "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: () => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
+    "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: (e) => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
     "language": "tsx",
     "description": "stable subscription"
   },
@@ -227,25 +227,17 @@
     "ruleId": "",
     "ruleTitle": "Batch DOM CSS Changes",
     "type": "bad",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  // Each line triggers a reflow\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n}",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  element.style.width = '100px'\n  const width = element.offsetWidth  // Forces reflow\n  element.style.height = '200px'\n  const height = element.offsetHeight  // Forces another reflow\n}",
     "language": "typescript",
-    "description": "multiple reflows"
+    "description": "interleaved reads and writes force reflows"
   },
   {
     "ruleId": "",
     "ruleTitle": "Batch DOM CSS Changes",
     "type": "good",
-    "code": "// CSS file\n.highlighted-box {\n  width: 100px;\n  height: 200px;\n  background-color: blue;\n  border: 1px solid black;\n}\n\n// JavaScript\nfunction updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n}",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n\n  const { width, height } = element.getBoundingClientRect()\n}",
     "language": "typescript",
-    "description": "add class - single reflow"
-  },
-  {
-    "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
-    "type": "good",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  element.style.cssText = `\n    width: 100px;\n    height: 200px;\n    background-color: blue;\n    border: 1px solid black;\n  `\n}",
-    "language": "typescript",
-    "description": "change cssText - single reflow"
+    "description": "batch writes, then read once"
   },
   {
     "ruleId": "",
@@ -371,7 +363,7 @@
     "ruleId": "",
     "ruleTitle": "Early Length Check for Array Comparisons",
     "type": "good",
-    "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort/join when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
+    "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
     "language": "typescript",
     "description": "Correct (O(1) length check first) example for Early Length Check for Array Comparisons"
   },
@@ -555,7 +547,7 @@
     "ruleId": "",
     "ruleTitle": "Subscribe to Derived State",
     "type": "bad",
-    "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
     "language": "tsx",
     "description": "re-renders on every pixel change"
   },
@@ -563,7 +555,7 @@
     "ruleId": "",
     "ruleTitle": "Subscribe to Derived State",
     "type": "good",
-    "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
     "language": "tsx",
     "description": "re-renders only when boolean changes"
   },
@@ -694,5 +686,21 @@
     "code": "async function Page() {\n  const user = await fetchUser()\n  return <Profile name={user.name} />\n}\n\n'use client'\nfunction Profile({ name }: { name: string }) {\n  return <div>{name}</div>\n}",
     "language": "tsx",
     "description": "serializes only 1 field"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useActionState for Form State Management",
+    "type": "bad",
+    "code": "\"use client\"\nimport { useState } from \"react\"\nimport { submitPayment } from \"@/actions/payment\"\n\nfunction PaymentForm() {\n  const [state, setState] = useState(null)\n  const [isPending, setIsPending] = useState(false)\n  const [error, setError] = useState(null)\n\n  const handleSubmit = async (formData) => {\n    setIsPending(true)\n    setError(null)\n    try {\n      const result = await submitPayment(formData)\n      setState(result)\n    } catch (err) {\n      setError(err.message)\n    } finally {\n      setIsPending(false)\n    }\n  }\n\n  return (\n    <form onSubmit={(e) => {\n      e.preventDefault()\n      handleSubmit(new FormData(e.target))\n    }}>\n      <input name=\"cardNumber\" required />\n      {error && <div className=\"error\">{error}</div>}\n      {state?.success && <div className=\"success\">Payment successful!</div>}\n      <button disabled={isPending} type=\"submit\">\n        {isPending ? \"Processing...\" : \"Submit Payment\"}\n      </button>\n    </form>\n  )\n}",
+    "language": "tsx",
+    "description": "manual state management"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useActionState for Form State Management",
+    "type": "good",
+    "code": "\"use client\"\nimport { useActionState } from \"react\"\nimport { submitPayment } from \"@/actions/payment\"\n\nfunction PaymentForm() {\n  const [state, formAction, isPending] = useActionState(submitPayment, {})\n\n  return (\n    <form action={formAction}>\n      <input name=\"cardNumber\" required />\n      {state?.error && <div className=\"error\">{state.error}</div>}\n      {state?.success && <div className=\"success\">Payment successful!</div>}\n      <button disabled={isPending} type=\"submit\">\n        {isPending ? \"Processing...\" : \"Submit Payment\"}\n      </button>\n    </form>\n  )\n}",
+    "language": "tsx",
+    "description": "using useActionState"
   }
 ]
