@@ -16,7 +16,7 @@ function Notifications() {
   const [data, setData] = useState<Notification[]>([])
 
   useEffect(() => {
-    const onResize = () => setData(prev => prev) // example listener
+    const onResize = () => { /* ... */ }
     window.addEventListener('resize', onResize)
 
     fetch('/api/notifications')
