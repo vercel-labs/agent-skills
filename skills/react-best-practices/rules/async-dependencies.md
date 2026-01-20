@@ -35,6 +35,8 @@ const { user, config, profile } = await all({
 
 **Alternative without extra dependencies:**
 
+We can also create all the promises first, and do `Promise.all()` at the end.
+
 ```typescript
 const userPromise = fetchUser()
 const profilePromise = userPromise.then(user => fetchProfile(user.id))
