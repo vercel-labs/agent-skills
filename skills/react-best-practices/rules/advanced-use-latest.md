@@ -37,28 +37,3 @@ function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
   }, [query, onSearch])
 }
 ```
-
-**Alternative (custom useLatest hook):**
-
-If `useEffectEvent` is not available in your React version, you can use a custom hook:
-
-```typescript
-function useLatest<T>(value: T) {
-  const ref = useRef(value)
-  useLayoutEffect(() => {
-    ref.current = value
-  }, [value])
-  return ref
-}
-
-// Usage:
-function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
-  const [query, setQuery] = useState('')
-  const onSearchRef = useLatest(onSearch)
-
-  useEffect(() => {
-    const timeout = setTimeout(() => onSearchRef.current(query), 300)
-    return () => clearTimeout(timeout)
-  }, [query])
-}
-```
