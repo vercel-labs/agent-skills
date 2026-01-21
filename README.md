@@ -91,13 +91,13 @@ Skills are automatically available once installed. The agent will use them when 
 
 **Examples:**
 ```
-Deploy my app
-```
-```
 Review this React component for performance issues
 ```
 ```
-Help me optimize this Next.js page
+Help me optimize this component to avoid re-renders
+```
+```
+Check if this data fetching pattern causes waterfalls
 ```
 
 ## Skill Structure
@@ -106,7 +106,3 @@ Each skill contains:
 - `SKILL.md` - Instructions for the agent
 - `scripts/` - Helper scripts for automation (optional)
 - `references/` - Supporting documentation (optional)
-
-## License
-
-MIT

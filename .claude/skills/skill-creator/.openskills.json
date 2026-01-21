@@ -1,0 +1,7 @@
+{
+  "source": "anthropics/skills",
+  "sourceType": "git",
+  "repoUrl": "https://github.com/anthropics/skills",
+  "subpath": "skills/skill-creator",
+  "installedAt": "2026-01-21T03:20:00.286Z"
+}

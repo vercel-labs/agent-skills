@@ -4,7 +4,7 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 ## Repository Overview
 
-A collection of skills for Claude.ai and Claude Code for working with Vercel deployments. Skills are packaged instructions and scripts that extend Claude's capabilities.
+A collection of skills for Claude.ai and Claude Code for React v16 development. Skills are packaged instructions and scripts that extend Claude's capabilities with React best practices and optimization patterns.
 
 ## Creating a New Skill
 
