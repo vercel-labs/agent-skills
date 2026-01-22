@@ -17,7 +17,7 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "useLatest for Stable Callback Refs",
+    "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "bad",
     "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearch(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query, onSearch])\n}",
     "language": "tsx",
@@ -25,11 +25,11 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "useLatest for Stable Callback Refs",
+    "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "good",
-    "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchRef = useLatest(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchRef.current(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
+    "code": "import { useEffectEvent } from 'react';\n\nfunction SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchEvent = useEffectEvent(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchEvent(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
     "language": "tsx",
-    "description": "stable effect, fresh callback"
+    "description": "using React's useEffectEvent"
   },
   {
     "ruleId": "",
@@ -225,19 +225,27 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
+    "ruleTitle": "Avoid Layout Thrashing",
     "type": "bad",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  element.style.width = '100px'\n  const width = element.offsetWidth  // Forces reflow\n  element.style.height = '200px'\n  const height = element.offsetHeight  // Forces another reflow\n}",
+    "code": "function layoutThrashing(element: HTMLElement) {\n  element.style.width = '100px'\n  const width = element.offsetWidth  // Forces reflow\n  element.style.height = '200px'\n  const height = element.offsetHeight  // Forces another reflow\n}",
     "language": "typescript",
     "description": "interleaved reads and writes force reflows"
   },
   {
     "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
+    "ruleTitle": "Avoid Layout Thrashing",
     "type": "good",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n\n  const { width, height } = element.getBoundingClientRect()\n}",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  // Batch all writes together\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n  \n  // Read after all writes are done (single reflow)\n  const { width, height } = element.getBoundingClientRect()\n}",
     "language": "typescript",
     "description": "batch writes, then read once"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Layout Thrashing",
+    "type": "good",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n  \n  const { width, height } = element.getBoundingClientRect()\n}",
+    "language": "typescript",
+    "description": "batch reads, then writes"
   },
   {
     "ruleId": "",
@@ -513,6 +521,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Use useTransition Over Manual Loading States",
+    "type": "bad",
+    "code": "function SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isLoading, setIsLoading] = useState(false)\n\n  const handleSearch = async (value: string) => {\n    setIsLoading(true)\n    setQuery(value)\n    const data = await fetchResults(value)\n    setResults(data)\n    setIsLoading(false)\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isLoading && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "manual loading state"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useTransition Over Manual Loading States",
+    "type": "good",
+    "code": "import { useTransition, useState } from 'react'\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isPending, startTransition] = useTransition()\n\n  const handleSearch = (value: string) => {\n    setQuery(value) // Update input immediately\n    \n    startTransition(async () => {\n      // Fetch and update results\n      const data = await fetchResults(value)\n      setResults(data)\n    })\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isPending && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "useTransition with built-in pending state"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Defer State Reads to Usage Point",
     "type": "bad",
     "code": "function ShareButton({ chatId }: { chatId: string }) {\n  const searchParams = useSearchParams()\n\n  const handleShare = () => {\n    const ref = searchParams.get('ref')\n    shareChat(chatId, { ref })\n  }\n\n  return <button onClick={handleShare}>Share</button>\n}",
@@ -593,6 +617,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
+    "type": "bad",
+    "code": "const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
+    "language": "tsx",
+    "description": "`onClick` has different values on every rerender"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
+    "type": "good",
+    "code": "const NOOP = () => {};\n\nconst UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
+    "language": "tsx",
+    "description": "stable default value"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Extract to Memoized Components",
     "type": "bad",
     "code": "function Profile({ user, loading }: Props) {\n  const avatar = useMemo(() => {\n    const id = computeAvatarId(user)\n    return <Avatar id={id} />\n  }, [user])\n\n  if (loading) return <Skeleton />\n  return <div>{avatar}</div>\n}",
@@ -606,6 +646,22 @@
     "code": "const UserAvatar = memo(function UserAvatar({ user }: { user: User }) {\n  const id = useMemo(() => computeAvatarId(user), [user])\n  return <Avatar id={id} />\n})\n\nfunction Profile({ user, loading }: Props) {\n  if (loading) return <Skeleton />\n  return (\n    <div>\n      <UserAvatar user={user} />\n    </div>\n  )\n}",
     "language": "tsx",
     "description": "skips computation when loading"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
+    "type": "bad",
+    "code": "function Header({ user, notifications }: Props) {\n  const isLoading = useMemo(() => {\n    return user.isLoading || notifications.isLoading\n  }, [user.isLoading, notifications.isLoading])\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
+    "language": "tsx",
+    "description": "Incorrect example for Do not wrap a simple expression with a primitive result type in useMemo"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
+    "type": "good",
+    "code": "function Header({ user, notifications }: Props) {\n  const isLoading = user.isLoading || notifications.isLoading\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
+    "language": "tsx",
+    "description": "Correct example for Do not wrap a simple expression with a primitive result type in useMemo"
   },
   {
     "ruleId": "",
