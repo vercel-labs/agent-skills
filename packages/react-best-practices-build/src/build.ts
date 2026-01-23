@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build script to compile individual rule files into AGENTS.md
+ * Build script to compile individual rule files into GUIDELINES.md
  */
 
 import { readdir, readFile, writeFile } from 'fs/promises'
@@ -130,7 +130,7 @@ function generateMarkdown(
  */
 async function build() {
   try {
-    console.log('Building AGENTS.md from rules...')
+    console.log('Building GUIDELINES.md from rules...')
     console.log(`Rules directory: ${RULES_DIR}`)
     console.log(`Output file: ${OUTPUT_FILE}`)
 
@@ -279,7 +279,7 @@ async function build() {
     await writeFile(OUTPUT_FILE, markdown, 'utf-8')
 
     console.log(
-      `✓ Built AGENTS.md with ${sections.length} sections and ${ruleData.length} rules`
+      `✓ Built GUIDELINES.md with ${sections.length} sections and ${ruleData.length} rules`
     )
   } catch (error) {
     console.error('Build failed:', error)
