@@ -9,6 +9,7 @@
     "build-all": "tsx src/build.ts --all",
     "build-react": "tsx src/build.ts --skill=react-best-practices",
     "build-rn": "tsx src/build.ts --skill=react-native-guidelines",
+    "build-composition": "tsx src/build.ts --skill=composition-patterns",
     "validate": "tsx src/validate.ts",
     "extract-tests": "tsx src/extract-tests.ts",
     "migrate": "tsx src/migrate.ts",

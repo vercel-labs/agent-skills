@@ -67,6 +67,20 @@ export const SKILLS: Record<string, SkillConfig> = {
       fonts: 13,
     },
   },
+  'composition-patterns': {
+    name: 'composition-patterns',
+    title: 'Composition Patterns',
+    description: 'React codebases using composition',
+    skillDir: join(SKILLS_DIR, 'composition-patterns'),
+    rulesDir: join(SKILLS_DIR, 'composition-patterns/rules'),
+    metadataFile: join(SKILLS_DIR, 'composition-patterns/metadata.json'),
+    outputFile: join(SKILLS_DIR, 'composition-patterns/AGENTS.md'),
+    sectionMap: {
+      architecture: 1,
+      state: 2,
+      patterns: 3,
+    },
+  },
 }
 
 // Default skill (for backwards compatibility)
