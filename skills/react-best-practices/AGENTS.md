@@ -1898,7 +1898,7 @@ For simple primitives (`useState(0)`), direct references (`useState(props.value)
 
 Mark frequent, non-urgent state updates as transitions to maintain UI responsiveness.
 
-**Incorrect: blocks UI on every scroll**
+**Incorrect: Web - blocks UI on every scroll**
 
 ```tsx
 function ScrollTracker() {
@@ -1911,7 +1911,7 @@ function ScrollTracker() {
 }
 ```
 
-**Correct: non-blocking updates**
+**Correct: Web - non-blocking updates**
 
 ```tsx
 import { startTransition } from 'react'
@@ -1925,6 +1925,55 @@ function ScrollTracker() {
     window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
   }, [])
+}
+```
+
+**Incorrect: React Native - blocks UI on every scroll**
+
+```tsx
+import { ScrollView, Text } from 'react-native'
+
+function ScrollTracker() {
+  const [scrollY, setScrollY] = useState(0)
+  
+  return (
+    <ScrollView
+      onScroll={(e) => {
+        // Direct state update blocks UI rendering
+        setScrollY(e.nativeEvent.contentOffset.y)
+      }}
+      scrollEventThrottle={16}
+    >
+      <Text>Scroll Position: {scrollY}</Text>
+      {/* Heavy content */}
+    </ScrollView>
+  )
+}
+```
+
+**Correct: React Native - non-blocking updates**
+
+```tsx
+import { ScrollView, Text } from 'react-native'
+import { startTransition } from 'react'
+
+function ScrollTracker() {
+  const [scrollY, setScrollY] = useState(0)
+  
+  return (
+    <ScrollView
+      onScroll={(e) => {
+        // Non-urgent update doesn't block scrolling
+        startTransition(() => {
+          setScrollY(e.nativeEvent.contentOffset.y)
+        })
+      }}
+      scrollEventThrottle={16}
+    >
+      <Text>Scroll Position: {scrollY}</Text>
+      {/* Heavy content */}
+    </ScrollView>
+  )
 }
 ```
 

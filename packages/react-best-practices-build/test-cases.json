@@ -765,7 +765,7 @@
     "type": "bad",
     "code": "function ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => setScrollY(window.scrollY)\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
     "language": "tsx",
-    "description": "blocks UI on every scroll"
+    "description": "Web - blocks UI on every scroll"
   },
   {
     "ruleId": "",
@@ -773,7 +773,23 @@
     "type": "good",
     "code": "import { startTransition } from 'react'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => {\n      startTransition(() => setScrollY(window.scrollY))\n    }\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
     "language": "tsx",
-    "description": "non-blocking updates"
+    "description": "Web - non-blocking updates"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Transitions for Non-Urgent Updates",
+    "type": "bad",
+    "code": "import { ScrollView, Text } from 'react-native'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  \n  return (\n    <ScrollView\n      onScroll={(e) => {\n        // Direct state update blocks UI rendering\n        setScrollY(e.nativeEvent.contentOffset.y)\n      }}\n      scrollEventThrottle={16}\n    >\n      <Text>Scroll Position: {scrollY}</Text>\n      {/* Heavy content */}\n    </ScrollView>\n  )\n}",
+    "language": "tsx",
+    "description": "React Native - blocks UI on every scroll"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Transitions for Non-Urgent Updates",
+    "type": "good",
+    "code": "import { ScrollView, Text } from 'react-native'\nimport { startTransition } from 'react'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  \n  return (\n    <ScrollView\n      onScroll={(e) => {\n        // Non-urgent update doesn't block scrolling\n        startTransition(() => {\n          setScrollY(e.nativeEvent.contentOffset.y)\n        })\n      }}\n      scrollEventThrottle={16}\n    >\n      <Text>Scroll Position: {scrollY}</Text>\n      {/* Heavy content */}\n    </ScrollView>\n  )\n}",
+    "language": "tsx",
+    "description": "React Native - non-blocking updates"
   },
   {
     "ruleId": "",
