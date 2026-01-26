@@ -1,19 +1,26 @@
 ---
-name: react-native-skills
-description: React Native and Expo best practices for building performant mobile apps. Use when building React Native components, optimizing list performance, implementing animations, or working with native modules. Triggers on tasks involving React Native, Expo, mobile performance, or native platform APIs.
+name: vercel-react-native-skills
+description:
+  React Native and Expo best practices for building performant mobile apps. Use
+  when building React Native components, optimizing list performance,
+  implementing animations, or working with native modules. Triggers on tasks
+  involving React Native, Expo, mobile performance, or native platform APIs.
 license: MIT
 metadata:
   author: vercel
-  version: "1.0.0"
+  version: '1.0.0'
 ---
 
 # React Native Skills
 
-Comprehensive best practices for React Native and Expo applications. Contains rules across multiple categories covering performance, animations, UI patterns, and platform-specific optimizations.
+Comprehensive best practices for React Native and Expo applications. Contains
+rules across multiple categories covering performance, animations, UI patterns,
+and platform-specific optimizations.
 
 ## When to Apply
 
 Reference these guidelines when:
+
 - Building React Native or Expo apps
 - Optimizing list and scroll performance
 - Implementing animations with Reanimated
@@ -23,15 +30,15 @@ Reference these guidelines when:
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | List Performance | CRITICAL | `list-performance-` |
-| 2 | Animation | HIGH | `animation-` |
-| 3 | UI Patterns | HIGH | `ui-` |
-| 4 | State Management | MEDIUM | `react-state-` |
-| 5 | Rendering | MEDIUM | `rendering-` |
-| 6 | Monorepo | MEDIUM | `monorepo-` |
-| 7 | Configuration | LOW | `fonts-`, `imports-` |
+| Priority | Category         | Impact   | Prefix               |
+| -------- | ---------------- | -------- | -------------------- |
+| 1        | List Performance | CRITICAL | `list-performance-`  |
+| 2        | Animation        | HIGH     | `animation-`         |
+| 3        | UI Patterns      | HIGH     | `ui-`                |
+| 4        | State Management | MEDIUM   | `react-state-`       |
+| 5        | Rendering        | MEDIUM   | `rendering-`         |
+| 6        | Monorepo         | MEDIUM   | `monorepo-`          |
+| 7        | Configuration    | LOW      | `fonts-`, `imports-` |
 
 ## Quick Reference
 
@@ -97,6 +104,7 @@ rules/animation-gpu-properties.md
 ```
 
 Each rule file contains:
+
 - Brief explanation of why it matters
 - Incorrect code example with explanation
 - Correct code example with explanation
