@@ -2155,10 +2155,7 @@ accessibility out of the box.
 **Impact: LOW (modern API, more flexible)**
 
 Never use `TouchableOpacity` or `TouchableHighlight`. Use `Pressable` from
-
-`react-native` or `react-native-gesture-handler` instead. Pressable is the
-
-modern API with more flexibility for styling press states.
+`react-native` or `react-native-gesture-handler` instead.
 
 **Incorrect: legacy Touchable components**
 
@@ -2174,17 +2171,14 @@ function MyButton({ onPress }: { onPress: () => void }) {
 }
 ```
 
-**Correct: Pressable with style function**
+**Correct: Pressable**
 
 ```tsx
 import { Pressable } from 'react-native'
 
 function MyButton({ onPress }: { onPress: () => void }) {
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-    >
+    <Pressable onPress={onPress}>
       <Text>Press me</Text>
     </Pressable>
   )
@@ -2206,10 +2200,12 @@ function ListItem({ onPress }: { onPress: () => void }) {
 ```
 
 Use `react-native-gesture-handler` Pressable inside scrollable lists for better
-
 gesture coordination, as long as you are using the ScrollView from
-
 `react-native-gesture-handler` as well.
+
+**For animated press states (scale, opacity changes):** Use `GestureDetector`
+with Reanimated shared values instead of Pressable's style callback. See rule
+3.3 (Use GestureDetector for Animated Press States).
 
 ---
 
