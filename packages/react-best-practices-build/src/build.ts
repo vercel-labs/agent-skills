@@ -137,7 +137,7 @@ async function buildSkill(skillConfig: SkillConfig) {
   console.log(`  Rules directory: ${skillConfig.rulesDir}`)
   console.log(`  Output file: ${skillConfig.outputFile}`)
 
-  // Read all rule files (exclude files starting with _ and README.md and ideas.md)
+  // Read all rule files (exclude files starting with _ and README.md)
   const files = await readdir(skillConfig.rulesDir)
   const ruleFiles = files
     .filter((f) => f.endsWith('.md') && !f.startsWith('_') && f !== 'README.md')
