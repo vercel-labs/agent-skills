@@ -49,6 +49,41 @@ Review UI code for compliance with web interface best practices. Audits your cod
 - Touch & Interaction (touch-action, tap-highlight)
 - Locale & i18n (Intl.DateTimeFormat, Intl.NumberFormat)
 
+### react-native-guidelines
+
+React Native best practices optimized for AI agents. Contains 16 rules across 7 sections covering performance, architecture, and platform-specific patterns.
+
+**Use when:**
+- Building React Native or Expo apps
+- Optimizing mobile performance
+- Implementing animations or gestures
+- Working with native modules or platform APIs
+
+**Categories covered:**
+- Performance (Critical) - FlashList, memoization, heavy computation
+- Layout (High) - flex patterns, safe areas, keyboard handling
+- Animation (High) - Reanimated, gesture handling
+- Images (Medium) - expo-image, caching, lazy loading
+- State Management (Medium) - Zustand patterns, React Compiler
+- Architecture (Medium) - monorepo structure, imports
+- Platform (Medium) - iOS/Android specific patterns
+
+### composition-patterns
+
+React composition patterns that scale. Helps avoid boolean prop proliferation through compound components, state lifting, and internal composition.
+
+**Use when:**
+- Refactoring components with many boolean props
+- Building reusable component libraries
+- Designing flexible APIs
+- Reviewing component architecture
+
+**Patterns covered:**
+- Extracting compound components
+- Lifting state to reduce props
+- Composing internals for flexibility
+- Avoiding prop drilling
+
 ### vercel-deploy-claimable
 
 Deploy applications and websites to Vercel instantly. Designed for use with claude.ai and Claude Desktop to enable deployments directly from conversations. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
