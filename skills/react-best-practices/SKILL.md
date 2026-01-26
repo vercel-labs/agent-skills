@@ -1,6 +1,6 @@
 ---
 name: vercel-react-best-practices
-description: React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.
+description: React, React Native, and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/React Native/Next.js code to ensure optimal performance patterns. Includes framework-specific solutions (Next.js, Vite, CRA) and library alternatives (SWR vs React Query, Jotai). Triggers on tasks involving React components, Next.js pages, React Native apps, data fetching, bundle optimization, or performance improvements.
 license: MIT
 metadata:
   author: vercel
@@ -9,16 +9,18 @@ metadata:
 
 # Vercel React Best Practices
 
-Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 57 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React, React Native, and Next.js applications, maintained by Vercel. Contains 57 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation. Includes platform-specific examples (Web, React Native) and library alternatives (SWR, React Query, Jotai).
 
 ## When to Apply
 
 Reference these guidelines when:
-- Writing new React components or Next.js pages
-- Implementing data fetching (client or server-side)
-- Reviewing code for performance issues
-- Refactoring existing React/Next.js code
+- Writing new React components, React Native screens, or Next.js pages
+- Implementing data fetching (client or server-side) with SWR, React Query, or other libraries
+- Reviewing code for performance issues across web and mobile platforms
+- Refactoring existing React/React Native/Next.js code
 - Optimizing bundle size or load times
+- Choosing between framework alternatives (Next.js vs Vite vs CRA)
+- Selecting state management or data fetching libraries
 
 ## Rule Categories by Priority
 
@@ -46,8 +48,8 @@ Reference these guidelines when:
 ### 2. Bundle Size Optimization (CRITICAL)
 
 - `bundle-barrel-imports` - Import directly, avoid barrel files
-- `bundle-dynamic-imports` - Use next/dynamic for heavy components
-- `bundle-defer-third-party` - Load analytics/logging after hydration
+- `bundle-dynamic-imports` - Use dynamic imports for heavy components (next/dynamic or React.lazy)
+- `bundle-defer-third-party` - Load analytics/logging after hydration (next/dynamic or React.lazy)
 - `bundle-conditional` - Load modules only when feature is activated
 - `bundle-preload` - Preload on hover/focus for perceived speed
 
@@ -63,8 +65,8 @@ Reference these guidelines when:
 
 ### 4. Client-Side Data Fetching (MEDIUM-HIGH)
 
-- `client-swr-dedup` - Use SWR for automatic request deduplication
-- `client-event-listeners` - Deduplicate global event listeners
+- `client-swr-dedup` - Use data fetching libraries (React Query or SWR) for automatic deduplication
+- `client-event-listeners` - Deduplicate global event listeners (Jotai or useSWRSubscription)
 - `client-passive-event-listeners` - Use passive listeners for scroll
 - `client-localstorage-schema` - Version and minimize localStorage data
 
@@ -74,13 +76,13 @@ Reference these guidelines when:
 - `rerender-memo` - Extract expensive work into memoized components
 - `rerender-memo-with-default-value` - Hoist default non-primitive props
 - `rerender-dependencies` - Use primitive dependencies in effects
-- `rerender-derived-state` - Subscribe to derived booleans, not raw values
+- `rerender-derived-state` - Subscribe to derived booleans, not raw values (web: useMediaQuery, RN: custom hook)
 - `rerender-derived-state-no-effect` - Derive state during render, not effects
 - `rerender-functional-setstate` - Use functional setState for stable callbacks
 - `rerender-lazy-state-init` - Pass function to useState for expensive values
 - `rerender-simple-expression-in-memo` - Avoid memo for simple primitives
 - `rerender-move-effect-to-event` - Put interaction logic in event handlers
-- `rerender-transitions` - Use startTransition for non-urgent updates
+- `rerender-transitions` - Use startTransition for non-urgent updates (web and React Native)
 - `rerender-use-ref-transient-values` - Use refs for transient frequent values
 
 ### 6. Rendering Performance (MEDIUM)
@@ -113,7 +115,7 @@ Reference these guidelines when:
 ### 8. Advanced Patterns (LOW)
 
 - `advanced-event-handler-refs` - Store event handlers in refs
-- `advanced-init-once` - Initialize app once per app load
+- `advanced-init-once` - Initialize app once per app load (module-level let or useRef)
 - `advanced-use-latest` - useLatest for stable callback refs
 
 ## How to Use
@@ -128,7 +130,10 @@ rules/bundle-barrel-imports.md
 Each rule file contains:
 - Brief explanation of why it matters
 - Incorrect code example with explanation
-- Correct code example with explanation
+- Correct code examples with platform/framework/library alternatives:
+  - Web (Next.js, Vite, CRA)
+  - React Native (where applicable)
+  - Library alternatives (SWR vs React Query, Jotai, etc.)
 - Additional context and references
 
 ## Full Compiled Document
