@@ -42,8 +42,8 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 3.7 [Use after() for Non-Blocking Operations](#37-use-after-for-non-blocking-operations)
 4. [Client-Side Data Fetching](#4-client-side-data-fetching) — **MEDIUM-HIGH**
    - 4.1 [Deduplicate Global Event Listeners](#41-deduplicate-global-event-listeners)
-   - 4.2 [Use Passive Event Listeners for Scrolling Performance](#42-use-passive-event-listeners-for-scrolling-performance)
-   - 4.3 [Use SWR for Automatic Deduplication](#43-use-swr-for-automatic-deduplication)
+   - 4.2 [Use Data Fetching Libraries for Automatic Deduplication](#42-use-data-fetching-libraries-for-automatic-deduplication)
+   - 4.3 [Use Passive Event Listeners for Scrolling Performance](#43-use-passive-event-listeners-for-scrolling-performance)
    - 4.4 [Version and Minimize localStorage Data](#44-version-and-minimize-localstorage-data)
 5. [Re-render Optimization](#5-re-render-optimization) — **MEDIUM**
    - 5.1 [Calculate Derived State During Rendering](#51-calculate-derived-state-during-rendering)
@@ -1212,7 +1212,111 @@ function Profile() {
 }
 ```
 
-### 4.2 Use Passive Event Listeners for Scrolling Performance
+### 4.2 Use Data Fetching Libraries for Automatic Deduplication
+
+**Impact: MEDIUM-HIGH (automatic deduplication)**
+
+Data fetching libraries like React Query or SWR enable request deduplication, caching, and revalidation across component instances.
+
+- [https://tanstack.com/query](https://tanstack.com/query)
+
+- [https://swr.vercel.app](https://swr.vercel.app)
+
+**Incorrect: no deduplication, each instance fetches**
+
+```tsx
+function UserList() {
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    fetch('/api/users')
+      .then(r => r.json())
+      .then(setUsers)
+  }, [])
+}
+```
+
+**Correct: with React Query - multiple instances share one request, preferred if using React Query**
+
+```tsx
+import { useQuery } from '@tanstack/react-query'
+
+function UserList() {
+  const { data: users } = useQuery({
+    queryKey: ['/api/users'],
+    queryFn: () => fetch('/api/users').then(r => r.json())
+  })
+}
+```
+
+**Correct: with SWR - multiple instances share one request**
+
+```tsx
+import useSWR from 'swr'
+
+function UserList() {
+  const { data: users } = useSWR('/api/users', fetcher)
+}
+```
+
+**For immutable data: with React Query - preferred if using React Query**
+
+```tsx
+import { useQuery } from '@tanstack/react-query'
+
+function StaticContent() {
+  const { data } = useQuery({
+    queryKey: ['/api/config'],
+    queryFn: () => fetch('/api/config').then(r => r.json()),
+    staleTime: Infinity,  // Never refetch
+    gcTime: Infinity      // Never garbage collect
+  })
+}
+```
+
+**For immutable data: with SWR**
+
+```tsx
+import { useImmutableSWR } from '@/lib/swr'
+
+function StaticContent() {
+  const { data } = useImmutableSWR('/api/config', fetcher)
+}
+```
+
+**For mutations: with React Query - preferred if using React Query**
+
+```tsx
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+function UpdateButton() {
+  const queryClient = useQueryClient()
+  const { mutate } = useMutation({
+    mutationFn: (data) => fetch('/api/user', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }).then(r => r.json()),
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] })
+    }
+  })
+  
+  return <button onClick={() => mutate({ name: 'John' })}>Update</button>
+}
+```
+
+**For mutations: with SWR**
+
+```tsx
+import { useSWRMutation } from 'swr/mutation'
+
+function UpdateButton() {
+  const { trigger } = useSWRMutation('/api/user', updateUser)
+  return <button onClick={() => trigger()}>Update</button>
+}
+```
+
+### 4.3 Use Passive Event Listeners for Scrolling Performance
 
 **Impact: MEDIUM (eliminates scroll delay caused by event listeners)**
 
@@ -1255,58 +1359,6 @@ useEffect(() => {
 **Use passive when:** tracking/analytics, logging, any listener that doesn't call `preventDefault()`.
 
 **Don't use passive when:** implementing custom swipe gestures, custom zoom controls, or any listener that needs `preventDefault()`.
-
-### 4.3 Use SWR for Automatic Deduplication
-
-**Impact: MEDIUM-HIGH (automatic deduplication)**
-
-SWR enables request deduplication, caching, and revalidation across component instances.
-
-**Incorrect: no deduplication, each instance fetches**
-
-```tsx
-function UserList() {
-  const [users, setUsers] = useState([])
-  useEffect(() => {
-    fetch('/api/users')
-      .then(r => r.json())
-      .then(setUsers)
-  }, [])
-}
-```
-
-**Correct: multiple instances share one request**
-
-```tsx
-import useSWR from 'swr'
-
-function UserList() {
-  const { data: users } = useSWR('/api/users', fetcher)
-}
-```
-
-**For immutable data:**
-
-```tsx
-import { useImmutableSWR } from '@/lib/swr'
-
-function StaticContent() {
-  const { data } = useImmutableSWR('/api/config', fetcher)
-}
-```
-
-**For mutations:**
-
-```tsx
-import { useSWRMutation } from 'swr/mutation'
-
-function UpdateButton() {
-  const { trigger } = useSWRMutation('/api/user', updateUser)
-  return <button onClick={() => trigger()}>Update</button>
-}
-```
-
-Reference: [https://swr.vercel.app](https://swr.vercel.app)
 
 ### 4.4 Version and Minimize localStorage Data
 
@@ -1656,7 +1708,7 @@ function Sidebar() {
 }
 ```
 
-**Correct: re-renders only when boolean changes**
+**Correct: Web - re-renders only when boolean changes**
 
 ```tsx
 function Sidebar() {
@@ -1664,6 +1716,49 @@ function Sidebar() {
   return <nav className={isMobile ? 'mobile' : 'desktop'} />
 }
 ```
+
+**React Native: requires custom hook for derived state**
+
+```tsx
+import { useWindowDimensions } from 'react-native'
+import { useSyncExternalStore } from 'react'
+
+// Custom hook that only updates when breakpoint changes
+function useIsMobile() {
+  const subscribe = (callback: () => void) => {
+    const dimensions = Dimensions.addEventListener('change', callback)
+    return () => dimensions?.remove()
+  }
+
+  const getSnapshot = () => {
+    const { width } = Dimensions.get('window')
+    return width < 768
+  }
+
+  return useSyncExternalStore(subscribe, getSnapshot)
+}
+
+function Sidebar() {
+  const isMobile = useIsMobile()  // Only re-renders when crossing 768px threshold
+  return <View style={isMobile ? styles.mobile : styles.desktop} />
+}
+```
+
+In React Native, `useWindowDimensions()` still triggers re-renders on every dimension change. You need to create a custom hook that only re-renders when the derived boolean changes:
+
+**Alternative: simpler but less efficient**
+
+```tsx
+import { useWindowDimensions, View } from 'react-native'
+
+function Sidebar() {
+  const { width } = useWindowDimensions()
+  const isMobile = width < 768  // Still re-renders on every dimension change
+  return <View style={isMobile ? styles.mobile : styles.desktop} />
+}
+```
+
+If re-render frequency is not critical, use `useWindowDimensions()` directly:
 
 ### 5.9 Use Functional setState Updates
 

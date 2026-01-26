@@ -249,7 +249,7 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "Use SWR for Automatic Deduplication",
+    "ruleTitle": "Use Data Fetching Libraries for Automatic Deduplication",
     "type": "bad",
     "code": "function UserList() {\n  const [users, setUsers] = useState([])\n  useEffect(() => {\n    fetch('/api/users')\n      .then(r => r.json())\n      .then(setUsers)\n  }, [])\n}",
     "language": "tsx",
@@ -257,11 +257,19 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "Use SWR for Automatic Deduplication",
+    "ruleTitle": "Use Data Fetching Libraries for Automatic Deduplication",
+    "type": "good",
+    "code": "import { useQuery } from '@tanstack/react-query'\n\nfunction UserList() {\n  const { data: users } = useQuery({\n    queryKey: ['/api/users'],\n    queryFn: () => fetch('/api/users').then(r => r.json())\n  })\n}",
+    "language": "tsx",
+    "description": "with React Query - multiple instances share one request, preferred if using React Query"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use Data Fetching Libraries for Automatic Deduplication",
     "type": "good",
     "code": "import useSWR from 'swr'\n\nfunction UserList() {\n  const { data: users } = useSWR('/api/users', fetcher)\n}",
     "language": "tsx",
-    "description": "multiple instances share one request"
+    "description": "with SWR - multiple instances share one request"
   },
   {
     "ruleId": "",
@@ -653,7 +661,7 @@
     "type": "good",
     "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
     "language": "tsx",
-    "description": "re-renders only when boolean changes"
+    "description": "Web - re-renders only when boolean changes"
   },
   {
     "ruleId": "",
