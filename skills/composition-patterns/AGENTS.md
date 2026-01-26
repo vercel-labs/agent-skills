@@ -573,7 +573,11 @@ by the provider. Swap the provider, keep the UI.
 
 **Impact: HIGH (enables state sharing outside component boundaries)**
 
-Move state management into dedicated provider components. This allows sibling components outside the main UI to access and modify state without prop drilling or awkward refs.
+Move state management into dedicated provider components. This allows sibling
+
+components outside the main UI to access and modify state without prop drilling
+
+or awkward refs.
 
 **Incorrect: state trapped inside component**
 
@@ -626,20 +630,6 @@ function ForwardMessageComposer({ onInputChange }) {
 }
 ```
 
-**Incorrect: useImperativeHandle with refs**
-
-```tsx
-function ForwardMessageDialog() {
-  const composerRef = useRef(null)
-  return (
-    <Dialog>
-      <ForwardMessageComposer ref={composerRef} />
-      <ForwardButton onPress={() => composerRef.current?.submit()} />
-    </Dialog>
-  )
-}
-```
-
 **Incorrect: reading state from ref on submit**
 
 ```tsx
@@ -678,10 +668,10 @@ function ForwardMessageDialog() {
     <ForwardMessageProvider>
       <Dialog>
         <ForwardMessageComposer />
-        <MessagePreview /> {/* Uses Composer.Context */}
+        <MessagePreview /> {/* Custom components can access state and actions */}
         <DialogActions>
           <CancelButton />
-          <ForwardButton /> {/* Uses actions.submit from context */}
+          <ForwardButton /> {/* Custom components can access state and actions */}
         </DialogActions>
       </Dialog>
     </ForwardMessageProvider>
@@ -694,9 +684,17 @@ function ForwardButton() {
 }
 ```
 
-The ForwardButton lives outside the Composer.Frame but still has access to the submit action because it's within the provider.
+The ForwardButton lives outside the Composer.Frame but still has access to the
 
-**Key insight:** Components that need shared state don't have to be visually nested inside each other—they just need to be within the same provider.
+submit action because it's within the provider. Even though it's a one-off
+
+component, it can still access the composer's state and actions from outside the
+
+UI itself.
+
+**Key insight:** Components that need shared state don't have to be visually
+
+nested inside each other—they just need to be within the same provider.
 
 ---
 
