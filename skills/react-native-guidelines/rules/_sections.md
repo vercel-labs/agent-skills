@@ -11,60 +11,70 @@ The section ID (in parentheses) is the filename prefix used to group rules.
 **Description:** Fundamental React Native rendering rules. Violations cause
 runtime crashes or broken UI.
 
-## 2. Animation Performance (animation)
+## 2. List Performance (list-performance)
 
 **Impact:** HIGH  
-**Description:** GPU-accelerated animations and avoiding render thrashing during
-gestures and scroll.
+**Description:** Optimizing virtualized lists (FlatList, LegendList, FlashList)
+for smooth scrolling and fast updates.
 
-## 3. List Performance (list)
+## 3. Animation (animation)
 
 **Impact:** HIGH  
-**Description:** Optimizing virtualized lists (FlatList, LegendList) for smooth
-scrolling and fast updates.
+**Description:** GPU-accelerated animations, Reanimated patterns, and avoiding
+render thrashing during gestures.
 
-## 4. State Management (react-state)
+## 4. Scroll Performance (scroll)
+
+**Impact:** HIGH  
+**Description:** Tracking scroll position without causing render thrashing.
+
+## 5. React State (react-state)
 
 **Impact:** MEDIUM  
 **Description:** Patterns for managing React state to avoid stale closures and
 unnecessary re-renders.
 
-## 5. React Compiler (react-compiler)
+## 6. State Architecture (state)
+
+**Impact:** MEDIUM  
+**Description:** Ground truth principles for state variables and derived values.
+
+## 7. React Compiler (react-compiler)
 
 **Impact:** MEDIUM  
 **Description:** Compatibility patterns for React Compiler with React Native and
 Reanimated.
 
-## 6. Layout & Measurement (measure)
+## 8. User Interface (ui)
 
 **Impact:** MEDIUM  
-**Description:** Measuring view dimensions synchronously and handling layout
-changes.
+**Description:** Native UI patterns for images, menus, modals, styling, and
+platform-consistent interfaces.
 
-## 7. Design System (design-system)
+## 9. Design System (design-system)
 
 **Impact:** MEDIUM  
 **Description:** Architecture patterns for building maintainable component
 libraries.
 
-## 8. User Interface (menus)
+## 10. Monorepo (monorepo)
 
-**Impact:** MEDIUM  
-**Description:** Native UI patterns for accessible, platform-consistent
-interfaces.
-
-## 9. Monorepo (monorepo)
-
-**Impact:** MEDIUM  
+**Impact:** LOW  
 **Description:** Dependency management and native module configuration in
 monorepos.
 
-## 10. Scroll (scroll)
-
-**Impact:** HIGH  
-**Description:** Tracking scroll position without causing render thrashing.
-
-## 11. Imports (imports)
+## 11. Third-Party Dependencies (imports)
 
 **Impact:** LOW  
-**Description:** Import patterns for maintainability and easy refactoring.
+**Description:** Wrapping and re-exporting third-party dependencies for
+maintainability.
+
+## 12. JavaScript (js)
+
+**Impact:** LOW  
+**Description:** Micro-optimizations like hoisting expensive object creation.
+
+## 13. Fonts (fonts)
+
+**Impact:** LOW  
+**Description:** Native font loading for improved performance.
