@@ -41,6 +41,10 @@ optimized for agents and LLMs.
 
 - `scroll-position-no-state.md` - Never track scroll in useState
 
+### Navigation (HIGH)
+
+- `navigation-native-navigators.md` - Use native stack and native tabs
+
 ### React State (MEDIUM)
 
 - `react-state-dispatcher.md` - Use functional setState updates
@@ -98,6 +102,7 @@ optimized for agents and LLMs.
    - `list-performance-` for List Performance
    - `animation-` for Animation
    - `scroll-` for Scroll Performance
+   - `navigation-` for Navigation
    - `react-state-` for React State
    - `state-` for State Architecture
    - `react-compiler-` for React Compiler
