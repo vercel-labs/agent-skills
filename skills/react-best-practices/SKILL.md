@@ -9,7 +9,7 @@ metadata:
 
 # Vercel React Best Practices
 
-Comprehensive performance optimization guide for React, React Native, and Next.js applications, maintained by Vercel. Contains 57 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation. Includes platform-specific examples (Web, React Native) and library alternatives (SWR, React Query, Jotai).
+Comprehensive performance optimization guide for React, React Native, and Next.js applications, maintained by Vercel. Contains 65 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation. Includes platform-specific examples (Web, React Native) and library alternatives (SWR, React Query, Jotai).
 
 ## When to Apply
 
@@ -26,6 +26,7 @@ Reference these guidelines when:
 
 | Priority | Category | Impact | Prefix |
 |----------|----------|--------|--------|
+| 0 | Hooks & Core Patterns | HIGH | `hooks-` |
 | 1 | Eliminating Waterfalls | CRITICAL | `async-` |
 | 2 | Bundle Size Optimization | CRITICAL | `bundle-` |
 | 3 | Server-Side Performance | HIGH | `server-` |
@@ -37,6 +38,10 @@ Reference these guidelines when:
 
 ## Quick Reference
 
+### 0. Hooks & Core Patterns (HIGH)
+
+- `hooks-builtin-patterns` - Correct usage patterns for built-in React hooks
+
 ### 1. Eliminating Waterfalls (CRITICAL)
 
 - `async-defer-await` - Move await into branches where actually used
@@ -44,14 +49,17 @@ Reference these guidelines when:
 - `async-dependencies` - Use better-all for partial dependencies
 - `async-api-routes` - Start promises early, await late in API routes
 - `async-suspense-boundaries` - Use Suspense to stream content
+- `async-use-api` - Use React use() API for data and context
 
 ### 2. Bundle Size Optimization (CRITICAL)
 
 - `bundle-barrel-imports` - Import directly, avoid barrel files
+- `bundle-avoid-namespace-react` - Avoid namespace React imports (import * as React)
 - `bundle-dynamic-imports` - Use dynamic imports for heavy components (next/dynamic or React.lazy)
 - `bundle-defer-third-party` - Load analytics/logging after hydration (next/dynamic or React.lazy)
 - `bundle-conditional` - Load modules only when feature is activated
 - `bundle-preload` - Preload on hover/focus for perceived speed
+- `bundle-type-imports` - Use explicit type imports (import type)
 
 ### 3. Server-Side Performance (HIGH)
 
@@ -75,6 +83,7 @@ Reference these guidelines when:
 - `rerender-defer-reads` - Don't subscribe to state only used in callbacks
 - `rerender-memo` - Extract expensive work into memoized components
 - `rerender-memo-with-default-value` - Hoist default non-primitive props
+- `rerender-props-default-values` - Hoist default props to avoid re-renders
 - `rerender-dependencies` - Use primitive dependencies in effects
 - `rerender-derived-state` - Subscribe to derived booleans, not raw values (web: useMediaQuery, RN: custom hook)
 - `rerender-derived-state-no-effect` - Derive state during render, not effects
@@ -83,6 +92,7 @@ Reference these guidelines when:
 - `rerender-simple-expression-in-memo` - Avoid memo for simple primitives
 - `rerender-move-effect-to-event` - Put interaction logic in event handlers
 - `rerender-transitions` - Use startTransition for non-urgent updates (web and React Native)
+- `rerender-starttransition-patterns` - Advanced startTransition patterns and best practices
 - `rerender-use-ref-transient-values` - Use refs for transient frequent values
 
 ### 6. Rendering Performance (MEDIUM)
@@ -95,6 +105,7 @@ Reference these guidelines when:
 - `rendering-hydration-suppress-warning` - Suppress expected mismatches
 - `rendering-activity` - Use Activity component for show/hide
 - `rendering-conditional-render` - Use ternary, not && for conditionals
+- `rendering-react-dom-apis` - Use React DOM APIs correctly
 - `rendering-usetransition-loading` - Prefer useTransition for loading state
 
 ### 7. JavaScript Performance (LOW-MEDIUM)
@@ -109,6 +120,7 @@ Reference these guidelines when:
 - `js-early-exit` - Return early from functions
 - `js-hoist-regexp` - Hoist RegExp creation outside loops
 - `js-min-max-loop` - Use loop for min/max instead of sort
+- `js-prefer-dayjs` - Prefer Day.js over Moment.js for smaller bundle
 - `js-set-map-lookups` - Use Set/Map for O(1) lookups
 - `js-tosorted-immutable` - Use toSorted() for immutability
 
