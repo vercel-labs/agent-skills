@@ -854,5 +854,37 @@
     "code": "async function Page() {\n  const user = await fetchUser()\n  return <Profile name={user.name} />\n}\n\n'use client'\nfunction Profile({ name }: { name: string }) {\n  return <div>{name}</div>\n}",
     "language": "tsx",
     "description": "serializes only 1 field"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache and Paginate Sitemaps",
+    "type": "bad",
+    "code": "// app/sitemap.xml/route.ts\nexport async function GET() {\n  const pages = await db.page.findMany({\n    where: { published: true },\n    select: { slug: true, updatedAt: true }\n  })\n\n  const xml = buildSitemapXml(\n    pages.map(page => ({\n      loc: `https://example.com/${page.slug}`,\n      lastmod: page.updatedAt.toISOString()\n    }))\n  )\n\n  return new Response(xml, {\n    headers: { 'Content-Type': 'application/xml' }\n  })\n}",
+    "language": "typescript",
+    "description": "full table scan on every request"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache and Paginate Sitemaps",
+    "type": "good",
+    "code": "// app/sitemap.xml/route.ts\nconst PAGE_SIZE = 10000\n\nexport async function GET(request: Request) {\n  const { searchParams } = new URL(request.url)\n  const page = Number(searchParams.get('page') ?? '1')\n\n  const items = await db.page.findMany({\n    where: { published: true },\n    orderBy: { updatedAt: 'desc' },\n    select: { slug: true, updatedAt: true },\n    take: PAGE_SIZE,\n    skip: (page - 1) * PAGE_SIZE\n  })\n\n  const xml = buildSitemapXml(\n    items.map(item => ({\n      loc: `https://example.com/${item.slug}`,\n      lastmod: item.updatedAt.toISOString()\n    }))\n  )\n\n  return new Response(xml, {\n    headers: {\n      'Content-Type': 'application/xml',\n      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'\n    }\n  })\n}",
+    "language": "typescript",
+    "description": "paged sitemap with cache headers"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache and Paginate Sitemaps",
+    "type": "good",
+    "code": "// app/sitemap.ts\nconst PAGE_SIZE = 10000\n\nexport async function generateSitemaps() {\n  const total = await db.page.count({ where: { published: true } })\n  const pageCount = Math.ceil(total / PAGE_SIZE)\n\n  return Array.from({ length: pageCount }, (_, index) => ({\n    page: index + 1\n  }))\n}\n\nexport default async function sitemap({ page }: { page: number }) {\n  const items = await db.page.findMany({\n    where: { published: true },\n    orderBy: { updatedAt: 'desc' },\n    select: { slug: true, updatedAt: true },\n    take: PAGE_SIZE,\n    skip: (page - 1) * PAGE_SIZE\n  })\n\n  return items.map(item => ({\n    url: `https://example.com/${item.slug}`,\n    lastModified: item.updatedAt\n  }))\n}",
+    "language": "typescript",
+    "description": "generateSitemaps with paging"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Cache and Paginate Sitemaps",
+    "type": "good",
+    "code": "// app/[site]/sitemap.ts\nexport async function generateSitemaps() {\n  const sites = await db.site.findMany({\n    where: { isActive: true },\n    select: { slug: true }\n  })\n\n  return sites.map(site => ({\n    site: site.slug\n  }))\n}\n\nexport default async function sitemap({ site }: { site: string }) {\n  const items = await db.page.findMany({\n    where: { published: true, siteSlug: site },\n    select: { slug: true, updatedAt: true }\n  })\n\n  return items.map(item => ({\n    url: `https://${site}.example.com/${item.slug}`,\n    lastModified: item.updatedAt\n  }))\n}",
+    "language": "typescript",
+    "description": "dynamic route + generateSitemaps"
   }
 ]
