@@ -750,12 +750,17 @@ Request images at 2x the display size for retina screens.
 
 **Impact: HIGH (efficient recycling, less layout thrashing)**
 
-When a list has different item layouts (messages, images, headers, etc.), use
-a `type` field on each item and provide `getItemType` to the list. This puts
-items into separate recycling pools so a message component never gets recycled
-into an image component.
+When a list has different item layouts (messages, images, headers, etc.), use a
 
-**Incorrect (single component with conditionals):**
+`type` field on each item and provide `getItemType` to the list. This puts items
+
+into separate recycling pools so a message component never gets recycled into an
+
+image component.
+
+[LegendList getItemType](https://legendapp.com/open-source/list/api/props/#getitemtype-v2)
+
+**Incorrect: single component with conditionals**
 
 ```tsx
 type Item = { id: string; text?: string; imageUrl?: string; isHeader?: boolean }
@@ -781,7 +786,7 @@ function Feed({ items }: { items: Item[] }) {
 }
 ```
 
-**Correct (typed items with separate components):**
+**Correct: typed items with separate components**
 
 ```tsx
 type HeaderItem = { id: string; type: 'header'; title: string }
@@ -793,6 +798,7 @@ function Feed({ items }: { items: FeedItem[] }) {
   return (
     <LegendList
       data={items}
+      keyExtractor={(item) => item.id}
       getItemType={(item) => item.type}
       renderItem={({ item }) => {
         switch (item.type) {
@@ -812,30 +818,39 @@ function Feed({ items }: { items: FeedItem[] }) {
 
 **Why this matters:**
 
-- **Recycling efficiency**: Items with the same type share a recycling pool
-- **No layout thrashing**: A header never recycles into an image cell
-- **Type safety**: TypeScript can narrow the item type in each branch
-- **Better size estimation**: Use `getEstimatedItemSize` with `itemType` for accurate estimates per type
-
 ```tsx
 <LegendList
   data={items}
+  keyExtractor={(item) => item.id}
   getItemType={(item) => item.type}
   getEstimatedItemSize={(index, item, itemType) => {
     switch (itemType) {
-      case 'header': return 48
-      case 'message': return 72
-      case 'image': return 300
-      default: return 72
+      case 'header':
+        return 48
+      case 'message':
+        return 72
+      case 'image':
+        return 300
+      default:
+        return 72
     }
   }}
-  renderItem={({ item }) => { /* ... */ }}
+  renderItem={({ item }) => {
+    /* ... */
+  }}
   recycleItems
 />
 ```
 
-Reference:
-[LegendList getItemType](https://legendapp.com/open-source/list/api/props/#getitemtype-v2)
+- **Recycling efficiency**: Items with the same type share a recycling pool
+
+- **No layout thrashing**: A header never recycles into an image cell
+
+- **Type safety**: TypeScript can narrow the item type in each branch
+
+- **Better size estimation**: Use `getEstimatedItemSize` with `itemType` for
+
+  accurate estimates per type
 
 ---
 
@@ -1156,16 +1171,28 @@ JS-based alternatives.
 **Impact: HIGH (native performance, platform-appropriate UI)**
 
 Always use native navigators instead of JS-based ones. Native navigators use
+
 platform APIs (UINavigationController on iOS, Fragment on Android) for better
+
 performance and native behavior.
 
 **For stacks:** Use `@react-navigation/native-stack` or expo-router's default
+
 stack (which uses native-stack). Avoid `@react-navigation/stack`.
 
 **For tabs:** Use `react-native-bottom-tabs` (native) or expo-router's native
+
 tabs. Avoid `@react-navigation/bottom-tabs` when native feel matters.
 
-**Incorrect (JS stack navigator):**
+- [React Navigation Native Stack](https://reactnavigation.org/docs/native-stack-navigator)
+
+- [React Native Bottom Tabs with React Navigation](https://oss.callstack.com/react-native-bottom-tabs/docs/guides/usage-with-react-navigation)
+
+- [React Native Bottom Tabs with Expo Router](https://oss.callstack.com/react-native-bottom-tabs/docs/guides/usage-with-expo-router)
+
+- [Expo Router Native Tabs](https://docs.expo.dev/router/advanced/native-tabs)
+
+**Incorrect: JS stack navigator**
 
 ```tsx
 import { createStackNavigator } from '@react-navigation/stack'
@@ -1175,14 +1202,14 @@ const Stack = createStackNavigator()
 function App() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name='Home' component={HomeScreen} />
+      <Stack.Screen name='Details' component={DetailsScreen} />
     </Stack.Navigator>
   )
 }
 ```
 
-**Correct (native stack with react-navigation):**
+**Correct: native stack with react-navigation**
 
 ```tsx
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -1192,14 +1219,14 @@ const Stack = createNativeStackNavigator()
 function App() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name='Home' component={HomeScreen} />
+      <Stack.Screen name='Details' component={DetailsScreen} />
     </Stack.Navigator>
   )
 }
 ```
 
-**Correct (expo-router uses native stack by default):**
+**Correct: expo-router uses native stack by default**
 
 ```tsx
 // app/_layout.tsx
@@ -1210,7 +1237,7 @@ export default function Layout() {
 }
 ```
 
-**Incorrect (JS bottom tabs):**
+**Incorrect: JS bottom tabs**
 
 ```tsx
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -1220,17 +1247,17 @@ const Tab = createBottomTabNavigator()
 function App() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name='Settings' component={SettingsScreen} />
     </Tab.Navigator>
   )
 }
 ```
 
-**Correct (native bottom tabs with react-navigation):**
+**Correct: native bottom tabs with react-navigation**
 
 ```tsx
-import { createNativeBottomTabNavigator } from 'react-native-bottom-tabs/react-navigation'
+import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation'
 
 const Tab = createNativeBottomTabNavigator()
 
@@ -1238,14 +1265,14 @@ function App() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name='Home'
         component={HomeScreen}
         options={{
           tabBarIcon: () => ({ sfSymbol: 'house' }),
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name='Settings'
         component={SettingsScreen}
         options={{
           tabBarIcon: () => ({ sfSymbol: 'gear' }),
@@ -1256,51 +1283,57 @@ function App() {
 }
 ```
 
-**Correct (expo-router native tabs):**
+**Correct: expo-router native tabs**
 
 ```tsx
 // app/(tabs)/_layout.tsx
-import { NativeTabs } from 'expo-router/native-tabs'
+import { NativeTabs } from 'expo-router/unstable-native-tabs'
 
 export default function TabLayout() {
   return (
     <NativeTabs>
-      <NativeTabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ sfSymbol: 'house' }),
-        }}
-      />
-      <NativeTabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ sfSymbol: 'gear' }),
-        }}
-      />
+      <NativeTabs.Trigger name='index'>
+        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf='house.fill' md='home' />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name='settings'>
+        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf='gear' md='settings' />
+      </NativeTabs.Trigger>
     </NativeTabs>
   )
 }
 ```
 
-**Prefer native header options over custom components:**
+On iOS, native tabs automatically enable `contentInsetAdjustmentBehavior` on the
+
+first `ScrollView` at the root of each tab screen, so content scrolls correctly
+
+behind the translucent tab bar. If you need to disable this, use
+
+`disableAutomaticContentInsets` on the trigger.
+
+**Incorrect: custom header component**
 
 ```tsx
-// Incorrect: custom header component
 <Stack.Screen
-  name="Profile"
+  name='Profile'
+  component={ProfileScreen}
   options={{
-    header: () => <CustomHeader title="Profile" />,
+    header: () => <CustomHeader title='Profile' />,
   }}
 />
+```
 
-// Correct: native header options
+**Correct: native header options**
+
+```tsx
 <Stack.Screen
-  name="Profile"
+  name='Profile'
+  component={ProfileScreen}
   options={{
     title: 'Profile',
-    headerLargeTitle: true,
+    headerLargeTitleEnabled: true,
     headerSearchBarOptions: {
       placeholder: 'Search',
     },
@@ -1309,19 +1342,18 @@ export default function TabLayout() {
 ```
 
 Native headers support iOS large titles, search bars, blur effects, and proper
+
 safe area handling automatically.
 
-**Why native navigators:**
-
 - **Performance**: Native transitions and gestures run on the UI thread
-- **Platform behavior**: Automatic iOS large titles, Android material design
-- **System integration**: Scroll-to-top on tab tap, PiP avoidance, proper safe areas
-- **Accessibility**: Platform accessibility features work automatically
 
-Reference:
-- [React Navigation Native Stack](https://reactnavigation.org/docs/native-stack-navigator)
-- [React Navigation Native Bottom Tabs](https://reactnavigation.org/docs/native-bottom-tab-navigator)
-- [Expo Router Native Tabs](https://docs.expo.dev/router/advanced/native-tabs)
+- **Platform behavior**: Automatic iOS large titles, Android material design
+
+- **System integration**: Scroll-to-top on tab tap, PiP avoidance, proper safe
+
+  areas
+
+- **Accessibility**: Platform accessibility features work automatically
 
 ---
 
@@ -2430,6 +2462,7 @@ accessibility out of the box.
 **Impact: LOW (modern API, more flexible)**
 
 Never use `TouchableOpacity` or `TouchableHighlight`. Use `Pressable` from
+
 `react-native` or `react-native-gesture-handler` instead.
 
 **Incorrect: legacy Touchable components**
@@ -2475,12 +2508,16 @@ function ListItem({ onPress }: { onPress: () => void }) {
 ```
 
 Use `react-native-gesture-handler` Pressable inside scrollable lists for better
+
 gesture coordination, as long as you are using the ScrollView from
+
 `react-native-gesture-handler` as well.
 
 **For animated press states (scale, opacity changes):** Use `GestureDetector`
-with Reanimated shared values instead of Pressable's style callback. See rule
-3.3 (Use GestureDetector for Animated Press States).
+
+with Reanimated shared values instead of Pressable's style callback. See the
+
+`animation-gesture-detector-press` rule.
 
 ---
 

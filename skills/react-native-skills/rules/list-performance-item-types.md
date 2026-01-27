@@ -50,6 +50,7 @@ function Feed({ items }: { items: FeedItem[] }) {
   return (
     <LegendList
       data={items}
+      keyExtractor={(item) => item.id}
       getItemType={(item) => item.type}
       renderItem={({ item }) => {
         switch (item.type) {
@@ -78,6 +79,7 @@ function Feed({ items }: { items: FeedItem[] }) {
 ```tsx
 <LegendList
   data={items}
+  keyExtractor={(item) => item.id}
   getItemType={(item) => item.type}
   getEstimatedItemSize={(index, item, itemType) => {
     switch (itemType) {
