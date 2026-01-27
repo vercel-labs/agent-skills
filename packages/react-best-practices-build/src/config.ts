@@ -81,6 +81,26 @@ export const SKILLS: Record<string, SkillConfig> = {
       patterns: 3,
     },
   },
+  'web-design-guidelines': {
+    name: 'web-design-guidelines',
+    title: 'Web Design Guidelines',
+    description: 'web UI code',
+    skillDir: join(SKILLS_DIR, 'web-design-guidelines'),
+    rulesDir: join(SKILLS_DIR, 'web-design-guidelines/rules'),
+    metadataFile: join(SKILLS_DIR, 'web-design-guidelines/metadata.json'),
+    outputFile: join(SKILLS_DIR, 'web-design-guidelines/AGENTS.md'),
+    sectionMap: {
+      accessibility: 1,
+      layout: 2,
+      typography: 3,
+      color: 4,
+      interaction: 5,
+      responsive: 6,
+      performance: 7,
+      animation: 8,
+      styling: 9,
+    },
+  },
 }
 
 // Default skill (for backwards compatibility)

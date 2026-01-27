@@ -247,11 +247,7 @@ const Composer = {
 </Composer.Provider>
 ```
 
-Consumers explicitly compose exactly what they need. No hidden conditionals. And
-
-the state, actions and meta are dependency-injected by a parent provider,
-
-allowing multiple usages of the same component structure.
+Consumers explicitly compose exactly what they need. No hidden conditionals. And the state, actions and meta are dependency-injected by a parent provider, allowing multiple usages of the same component structure.
 
 ---
 
@@ -456,12 +452,13 @@ function ComposerInput() {
 function ForwardMessageProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState(initialState)
   const inputRef = useRef(null)
+  const submit = useForwardMessage()
 
   return (
     <ComposerContext
       value={{
         state,
-        actions: { update: setState, submit: useForwardMessage() },
+        actions: { update: setState, submit },
         meta: { inputRef },
       }}
     >
@@ -538,7 +535,7 @@ function ForwardMessageDialog() {
   )
 }
 
-// This button lives OUTSIDE Composer.Frame but can still submit!
+// This button lives OUTSIDE Composer.Frame but can still submit based on its context!
 function ForwardButton() {
   const {
     actions: { submit },
@@ -546,7 +543,7 @@ function ForwardButton() {
   return <Button onPress={submit}>Forward</Button>
 }
 
-// This preview lives OUTSIDE Composer.Frame but can read state!
+// This preview lives OUTSIDE Composer.Frame but can read composer's state!
 function MessagePreview() {
   const { state } = use(ComposerContext)
   return <Preview message={state.input} attachments={state.attachments} />
@@ -738,7 +735,7 @@ itself.
 <EditMessageComposer messageId="xyz" />
 
 // Or
-<ForwardMessageComposer />
+<ForwardMessageComposer messageId="123" />
 ```
 
 Each implementation is unique, explicit and self-contained. Yet they can each
@@ -780,16 +777,18 @@ function EditMessageComposer({ messageId }: { messageId: string }) {
   )
 }
 
-function ForwardMessageComposer() {
+function ForwardMessageComposer({ messageId }: { messageId: string }) {
   return (
-    <Composer.Frame>
-      <Composer.Input placeholder="Add a message, if you'd like." />
-      <Composer.Footer>
-        <Composer.Formatting />
-        <Composer.Emojis />
-        <Composer.Mentions />
-      </Composer.Footer>
-    </Composer.Frame>
+    <ForwardMessageProvider messageId={messageId}>
+      <Composer.Frame>
+        <Composer.Input placeholder="Add a message, if you'd like." />
+        <Composer.Footer>
+          <Composer.Formatting />
+          <Composer.Emojis />
+          <Composer.Mentions />
+        </Composer.Footer>
+      </Composer.Frame>
+    </ForwardMessageProvider>
   )
 }
 ```
@@ -859,7 +858,7 @@ function ComposerFrame({ children }: { children: React.ReactNode }) {
 }
 
 function ComposerFooter({ children }: { children: React.ReactNode }) {
-  return <footer className='flex'>{children}</div>
+  return <footer className='flex'>{children}</footer>
 }
 
 // Usage is flexible

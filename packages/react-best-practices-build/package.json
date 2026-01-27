@@ -1,7 +1,7 @@
 {
   "name": "react-best-practices-build",
   "version": "1.0.0",
-  "description": "Build tooling for React Best Practices and React Native Guidelines skills",
+  "description": "Build tooling for agent skills (React, React Native, Composition Patterns, Web Design Guidelines)",
   "type": "module",
   "scripts": {
     "build": "pnpm build-agents && pnpm extract-tests",
@@ -10,6 +10,7 @@
     "build-react": "tsx src/build.ts --skill=react-best-practices",
     "build-rn": "tsx src/build.ts --skill=react-native-skills",
     "build-composition": "tsx src/build.ts --skill=composition-patterns",
+    "build-web-design": "tsx src/build.ts --skill=web-design-guidelines",
     "validate": "tsx src/validate.ts",
     "extract-tests": "tsx src/extract-tests.ts",
     "migrate": "tsx src/migrate.ts",
@@ -17,8 +18,12 @@
   },
   "keywords": [
     "react",
+    "react-native",
+    "web-design",
     "performance",
     "guidelines",
+    "ui",
+    "ux",
     "llm",
     "agents"
   ],
