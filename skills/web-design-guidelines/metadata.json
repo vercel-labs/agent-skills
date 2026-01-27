@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "organization": "Engineering",
+  "date": "January 2026",
+  "abstract": "Comprehensive web design guidelines for building accessible, performant, and user-friendly interfaces. Contains rules across 8 categories covering accessibility, layout, typography, color, interaction, responsive design, performance, and animation. Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and impact assessments to guide automated code generation and review.",
+  "references": [
+    "https://www.w3.org/WAI/WCAG21/quickref/",
+    "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+    "https://web.dev/learn/design/",
+    "https://web.dev/learn/accessibility/",
+    "https://www.nngroup.com/articles/"
+  ]
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "ruleId": "",
+    "ruleTitle": "Provide Alt Text for Images",
+    "type": "bad",
+    "code": "<img src=\"logo.png\">\n\n<img src=\"chart.png\" alt=\"\">\n\n<img src=\"hero.jpg\" alt=\"image\">",
+    "language": "html",
+    "description": "Incorrect example for Provide Alt Text for Images"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Provide Alt Text for Images",
+    "type": "good",
+    "code": "<img src=\"logo.png\" alt=\"Company Logo\">\n\n<img src=\"chart.png\" alt=\"Bar chart showing Q4 revenue increased 25% compared to Q3\">\n\n<img src=\"hero.jpg\" alt=\"Team collaborating around a whiteboard in modern office\">",
+    "language": "html",
+    "description": "Correct example for Provide Alt Text for Images"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Ensure Sufficient Color Contrast",
+    "type": "bad",
+    "code": "/* Low contrast - fails WCAG */\n.text-light {\n  color: #999999;\n  background-color: #ffffff;\n  /* Contrast ratio: 2.85:1 */\n}\n\n.button-subtle {\n  color: #aaaaaa;\n  background-color: #dddddd;\n  /* Contrast ratio: 1.47:1 */\n}",
+    "language": "css",
+    "description": "Incorrect example for Ensure Sufficient Color Contrast"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Ensure Sufficient Color Contrast",
+    "type": "good",
+    "code": "/* Sufficient contrast - passes WCAG AA */\n.text-readable {\n  color: #595959;\n  background-color: #ffffff;\n  /* Contrast ratio: 7:1 */\n}\n\n.button-accessible {\n  color: #1a1a1a;\n  background-color: #dddddd;\n  /* Contrast ratio: 11.9:1 */\n}",
+    "language": "css",
+    "description": "Correct example for Ensure Sufficient Color Contrast"
+  }
+]
