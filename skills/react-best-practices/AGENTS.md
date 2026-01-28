@@ -46,28 +46,28 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 4.3 [Use SWR for Automatic Deduplication](#43-use-swr-for-automatic-deduplication)
    - 4.4 [Version and Minimize localStorage Data](#44-version-and-minimize-localstorage-data)
 5. [Re-render Optimization](#5-re-render-optimization) — **MEDIUM**
-   - 5.1 [Calculate Derived State During Rendering](#51-calculate-derived-state-during-rendering)
-   - 5.2 [Defer State Reads to Usage Point](#52-defer-state-reads-to-usage-point)
-   - 5.3 [Do not wrap a simple expression with a primitive result type in useMemo](#53-do-not-wrap-a-simple-expression-with-a-primitive-result-type-in-usememo)
-   - 5.4 [Extract Default Non-primitive Parameter Value from Memoized Component to Constant](#54-extract-default-non-primitive-parameter-value-from-memoized-component-to-constant)
-   - 5.5 [Extract to Memoized Components](#55-extract-to-memoized-components)
-   - 5.6 [Narrow Effect Dependencies](#56-narrow-effect-dependencies)
-   - 5.7 [Put Interaction Logic in Event Handlers](#57-put-interaction-logic-in-event-handlers)
-   - 5.8 [Subscribe to Derived State](#58-subscribe-to-derived-state)
-   - 5.9 [Use Functional setState Updates](#59-use-functional-setstate-updates)
-   - 5.10 [Use Lazy State Initialization](#510-use-lazy-state-initialization)
-   - 5.11 [Use Transitions for Non-Urgent Updates](#511-use-transitions-for-non-urgent-updates)
-   - 5.12 [Use useRef for Transient Values](#512-use-useref-for-transient-values)
+   - 5.1 [Defer State Reads to Usage Point](#51-defer-state-reads-to-usage-point)
+   - 5.2 [Do not wrap a simple expression with a primitive result type in useMemo](#52-do-not-wrap-a-simple-expression-with-a-primitive-result-type-in-usememo)
+   - 5.3 [Extract Default Non-primitive Parameter Value from Memoized Component to Constant](#53-extract-default-non-primitive-parameter-value-from-memoized-component-to-constant)
+   - 5.4 [Extract to Memoized Components](#54-extract-to-memoized-components)
+   - 5.5 [Narrow Effect Dependencies](#55-narrow-effect-dependencies)
+   - 5.6 [Subscribe to Derived State](#56-subscribe-to-derived-state)
+   - 5.7 [Use Functional setState Updates](#57-use-functional-setstate-updates)
+   - 5.8 [Use Lazy State Initialization](#58-use-lazy-state-initialization)
+   - 5.9 [Use Transitions for Non-Urgent Updates](#59-use-transitions-for-non-urgent-updates)
 6. [Rendering Performance](#6-rendering-performance) — **MEDIUM**
    - 6.1 [Animate SVG Wrapper Instead of SVG Element](#61-animate-svg-wrapper-instead-of-svg-element)
    - 6.2 [CSS content-visibility for Long Lists](#62-css-content-visibility-for-long-lists)
    - 6.3 [Hoist Static JSX Elements](#63-hoist-static-jsx-elements)
    - 6.4 [Optimize SVG Precision](#64-optimize-svg-precision)
    - 6.5 [Prevent Hydration Mismatch Without Flickering](#65-prevent-hydration-mismatch-without-flickering)
-   - 6.6 [Suppress Expected Hydration Mismatches](#66-suppress-expected-hydration-mismatches)
-   - 6.7 [Use Activity Component for Show/Hide](#67-use-activity-component-for-showhide)
-   - 6.8 [Use Explicit Conditional Rendering](#68-use-explicit-conditional-rendering)
-   - 6.9 [Use useTransition Over Manual Loading States](#69-use-usetransition-over-manual-loading-states)
+   - 6.6 [Common Hydration Error Patterns and Fixes](#66-common-hydration-error-patterns-and-fixes)
+   - 6.7 [Suppress Expected Hydration Mismatches](#67-suppress-expected-hydration-mismatches)
+   - 6.8 [Understanding 'use client' Directive](#68-understanding-use-client-directive)
+   - 6.9 [Use useId for Stable Hydration-Safe Identifiers](#69-use-useid-for-stable-hydration-safe-identifiers)
+   - 6.10 [Use Activity Component for Show/Hide](#610-use-activity-component-for-showhide)
+   - 6.11 [Use Explicit Conditional Rendering](#611-use-explicit-conditional-rendering)
+   - 6.12 [Use useTransition Over Manual Loading States](#612-use-usetransition-over-manual-loading-states)
 7. [JavaScript Performance](#7-javascript-performance) — **LOW-MEDIUM**
    - 7.1 [Avoid Layout Thrashing](#71-avoid-layout-thrashing)
    - 7.2 [Build Index Maps for Repeated Lookups](#72-build-index-maps-for-repeated-lookups)
@@ -85,6 +85,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 8.1 [Initialize App Once, Not Per Mount](#81-initialize-app-once-not-per-mount)
    - 8.2 [Store Event Handlers in Refs](#82-store-event-handlers-in-refs)
    - 8.3 [useEffectEvent for Stable Callback Refs](#83-useeffectevent-for-stable-callback-refs)
+   - 8.4 [Use the use() Hook for Unwrapping Promises](#84-use-the-use-hook-for-unwrapping-promises)
 
 ---
 
@@ -1283,43 +1284,7 @@ function cachePrefs(user: FullUser) {
 
 Reducing unnecessary re-renders minimizes wasted computation and improves UI responsiveness.
 
-### 5.1 Calculate Derived State During Rendering
-
-**Impact: MEDIUM (avoids redundant renders and state drift)**
-
-If a value can be computed from current props/state, do not store it in state or update it in an effect. Derive it during render to avoid extra renders and state drift. Do not set state in effects solely in response to prop changes; prefer derived values or keyed resets instead.
-
-**Incorrect: redundant state and effect**
-
-```tsx
-function Form() {
-  const [firstName, setFirstName] = useState('First')
-  const [lastName, setLastName] = useState('Last')
-  const [fullName, setFullName] = useState('')
-
-  useEffect(() => {
-    setFullName(firstName + ' ' + lastName)
-  }, [firstName, lastName])
-
-  return <p>{fullName}</p>
-}
-```
-
-**Correct: derive during render**
-
-```tsx
-function Form() {
-  const [firstName, setFirstName] = useState('First')
-  const [lastName, setLastName] = useState('Last')
-  const fullName = firstName + ' ' + lastName
-
-  return <p>{fullName}</p>
-}
-```
-
-Reference: [https://react.dev/learn/you-might-not-need-an-effect](https://react.dev/learn/you-might-not-need-an-effect)
-
-### 5.2 Defer State Reads to Usage Point
+### 5.1 Defer State Reads to Usage Point
 
 **Impact: MEDIUM (avoids unnecessary subscriptions)**
 
@@ -1354,7 +1319,7 @@ function ShareButton({ chatId }: { chatId: string }) {
 }
 ```
 
-### 5.3 Do not wrap a simple expression with a primitive result type in useMemo
+### 5.2 Do not wrap a simple expression with a primitive result type in useMemo
 
 **Impact: LOW-MEDIUM (wasted computation on every render)**
 
@@ -1386,7 +1351,7 @@ function Header({ user, notifications }: Props) {
 }
 ```
 
-### 5.4 Extract Default Non-primitive Parameter Value from Memoized Component to Constant
+### 5.3 Extract Default Non-primitive Parameter Value from Memoized Component to Constant
 
 **Impact: MEDIUM (restores memoization by using a constant for default value)**
 
@@ -1418,7 +1383,7 @@ const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () =
 <UserAvatar />
 ```
 
-### 5.5 Extract to Memoized Components
+### 5.4 Extract to Memoized Components
 
 **Impact: MEDIUM (enables early returns)**
 
@@ -1458,7 +1423,7 @@ function Profile({ user, loading }: Props) {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
 
-### 5.6 Narrow Effect Dependencies
+### 5.5 Narrow Effect Dependencies
 
 **Impact: LOW (minimizes effect re-runs)**
 
@@ -1499,48 +1464,7 @@ useEffect(() => {
 }, [isMobile])
 ```
 
-### 5.7 Put Interaction Logic in Event Handlers
-
-**Impact: MEDIUM (avoids effect re-runs and duplicate side effects)**
-
-If a side effect is triggered by a specific user action (submit, click, drag), run it in that event handler. Do not model the action as state + effect; it makes effects re-run on unrelated changes and can duplicate the action.
-
-**Incorrect: event modeled as state + effect**
-
-```tsx
-function Form() {
-  const [submitted, setSubmitted] = useState(false)
-  const theme = useContext(ThemeContext)
-
-  useEffect(() => {
-    if (submitted) {
-      post('/api/register')
-      showToast('Registered', theme)
-    }
-  }, [submitted, theme])
-
-  return <button onClick={() => setSubmitted(true)}>Submit</button>
-}
-```
-
-**Correct: do it in the handler**
-
-```tsx
-function Form() {
-  const theme = useContext(ThemeContext)
-
-  function handleSubmit() {
-    post('/api/register')
-    showToast('Registered', theme)
-  }
-
-  return <button onClick={handleSubmit}>Submit</button>
-}
-```
-
-Reference: [https://react.dev/learn/removing-effect-dependencies#should-this-code-move-to-an-event-handler](https://react.dev/learn/removing-effect-dependencies#should-this-code-move-to-an-event-handler)
-
-### 5.8 Subscribe to Derived State
+### 5.6 Subscribe to Derived State
 
 **Impact: MEDIUM (reduces re-render frequency)**
 
@@ -1565,7 +1489,7 @@ function Sidebar() {
 }
 ```
 
-### 5.9 Use Functional setState Updates
+### 5.7 Use Functional setState Updates
 
 **Impact: MEDIUM (prevents stale closures and unnecessary callback recreations)**
 
@@ -1643,7 +1567,7 @@ function TodoList() {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, the compiler can automatically optimize some cases, but functional updates are still recommended for correctness and to prevent stale closure bugs.
 
-### 5.10 Use Lazy State Initialization
+### 5.8 Use Lazy State Initialization
 
 **Impact: MEDIUM (wasted computation on every render)**
 
@@ -1697,7 +1621,7 @@ Use lazy initialization when computing initial values from localStorage/sessionS
 
 For simple primitives (`useState(0)`), direct references (`useState(props.value)`), or cheap literals (`useState({})`), the function form is unnecessary.
 
-### 5.11 Use Transitions for Non-Urgent Updates
+### 5.9 Use Transitions for Non-Urgent Updates
 
 **Impact: MEDIUM (maintains UI responsiveness)**
 
@@ -1730,75 +1654,6 @@ function ScrollTracker() {
     window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
   }, [])
-}
-```
-
-### 5.12 Use useRef for Transient Values
-
-**Impact: MEDIUM (avoids unnecessary re-renders on frequent updates)**
-
-When a value changes frequently and you don't want a re-render on every update (e.g., mouse trackers, intervals, transient flags), store it in `useRef` instead of `useState`. Keep component state for UI; use refs for temporary DOM-adjacent values. Updating a ref does not trigger a re-render.
-
-**Incorrect: renders every update**
-
-```tsx
-function Tracker() {
-  const [lastX, setLastX] = useState(0)
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => setLastX(e.clientX)
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: lastX,
-        width: 8,
-        height: 8,
-        background: 'black',
-      }}
-    />
-  )
-}
-```
-
-**Correct: no re-render for tracking**
-
-```tsx
-function Tracker() {
-  const lastXRef = useRef(0)
-  const dotRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      lastXRef.current = e.clientX
-      const node = dotRef.current
-      if (node) {
-        node.style.transform = `translateX(${e.clientX}px)`
-      }
-    }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  return (
-    <div
-      ref={dotRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: 8,
-        height: 8,
-        background: 'black',
-        transform: 'translateX(0px)',
-      }}
-    />
-  )
 }
 ```
 
@@ -2031,11 +1886,114 @@ The inline script executes synchronously before showing the element, ensuring th
 
 This pattern is especially useful for theme toggles, user preferences, authentication states, and any client-only data that should render immediately without flashing default values.
 
-### 6.6 Suppress Expected Hydration Mismatches
+### 6.6 Common Hydration Error Patterns and Fixes
+
+**Impact: HIGH (prevents hydration mismatches in SSR applications)**
+
+Hydration errors occur when the server-rendered HTML doesn't match what React expects on the client. These cause visual glitches, broken interactivity, and performance issues.
+
+#### Browser-Only APIs
+
+Code using `window`, `document`, `localStorage` renders differently on server vs client.
+
+**Incorrect (hydration mismatch):**
+
+```tsx
+function UserGreeting() {
+  // Returns different values on server vs client
+  const name = localStorage.getItem('userName') || 'Guest'
+  return <div>Hello, {name}</div>
+}
+```
+
+**Correct (mounted check pattern):**
+
+```tsx
+'use client'
+
+function UserGreeting() {
+  const [mounted, setMounted] = useState(false)
+  const [name, setName] = useState('Guest')
+
+  useEffect(() => {
+    setMounted(true)
+    setName(localStorage.getItem('userName') || 'Guest')
+  }, [])
+
+  if (!mounted) return <div>Hello, Guest</div>
+  return <div>Hello, {name}</div>
+}
+```
+
+#### Date/Time Rendering
+
+Server and client may have different timezones.
+
+**Incorrect:**
+
+```tsx
+function Timestamp({ date }: { date: Date }) {
+  return <time>{date.toLocaleString()}</time>
+}
+```
+
+**Correct:**
+
+```tsx
+'use client'
+
+function Timestamp({ date }: { date: Date }) {
+  const [formatted, setFormatted] = useState<string>()
+
+  useEffect(() => {
+    setFormatted(date.toLocaleString())
+  }, [date])
+
+  return <time>{formatted ?? date.toISOString()}</time>
+}
+```
+
+#### Invalid HTML Nesting
+
+Invalid DOM nesting causes browsers to "fix" the HTML differently than React expects.
+
+**Incorrect:**
+
+```tsx
+<p>
+  <div>Invalid - div cannot be inside p</div>
+</p>
+```
+
+**Correct:**
+
+```tsx
+<div>
+  <div>Use div as wrapper</div>
+</div>
+```
+
+Common invalid nestings: `<p>` inside `<p>`, `<div>` inside `<p>`, `<h1-h6>` inside `<p>`, interactive elements inside `<button>` or `<a>`.
+
+#### Browser Extensions
+
+Extensions may modify DOM before hydration. Use `suppressHydrationWarning` sparingly:
+
+```tsx
+<body suppressHydrationWarning>
+  {children}
+</body>
+```
+
+Only use when: you understand the mismatch is harmless, you cannot fix the root cause, it's on a leaf element.
+
+Reference: [React Hydration Documentation](https://react.dev/reference/react-dom/client/hydrateRoot)
+
+### 6.7 Suppress Expected Hydration Mismatches
 
 **Impact: LOW-MEDIUM (avoids noisy hydration warnings for known differences)**
 
-In SSR frameworks (e.g., Next.js), some values are intentionally different on server vs client (random IDs, dates, locale/timezone formatting). For these *expected* mismatches, wrap the dynamic text in an element with `suppressHydrationWarning` to prevent noisy warnings. Do not use this to hide real bugs. Don’t overuse it.
+In SSR frameworks (e.g., Next.js), some values are intentionally different on server vs client (random IDs, dates, locale/timezone formatting). For these *expected* mismatches, wrap the dynamic text in an element with `suppressHydrationWarning` to prevent noisy warnings. Do not use this to hide real bugs. Don't overuse it.
 
 **Incorrect: known mismatch warnings**
 
@@ -2057,7 +2015,179 @@ function Timestamp() {
 }
 ```
 
-### 6.7 Use Activity Component for Show/Hide
+### 6.8 Understanding 'use client' Directive
+
+**Impact: HIGH (prevents architectural mistakes in React Server Components)**
+
+**Common misconception**: `'use client'` means the code runs only in the browser.
+
+**Reality**: Client Components still render on the server (SSR), then hydrate on the client. The directive marks the Server/Client Component boundary, not server/browser execution.
+
+**What actually happens:**
+
+```tsx
+'use client'
+
+// This component:
+// 1. Renders on the server (SSR) - outputs HTML
+// 2. JavaScript ships to client
+// 3. Hydrates on the client - attaches event handlers
+export function Counter() {
+  const [count, setCount] = useState(0)
+  return <button onClick={() => setCount(count + 1)}>{count}</button>
+}
+```
+
+**When to use 'use client':**
+
+- React hooks (`useState`, `useEffect`, etc.)
+- Event handlers (`onClick`, `onChange`, etc.)
+- Browser APIs (after hydration)
+- Class components with lifecycle methods
+
+**When NOT to use 'use client':**
+
+- Pure data display (no interactivity)
+- Server-only features (direct database access)
+- Async data fetching
+
+**Push 'use client' down the tree:**
+
+```tsx
+// Server Component - no 'use client'
+async function ProductPage({ id }: { id: string }) {
+  const product = await fetchProduct(id)
+
+  return (
+    <div>
+      {/* Static content stays on server */}
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+
+      {/* Only interactive parts are client components */}
+      <AddToCartButton productId={id} />
+    </div>
+  )
+}
+```
+
+**Common mistake - thinking 'use client' skips SSR:**
+
+```tsx
+'use client'
+
+function Timer() {
+  // WRONG assumption: "This won't run on server"
+  // REALITY: This WILL run on server during SSR
+  const now = new Date()
+  return <div>{now.toLocaleString()}</div> // Hydration mismatch!
+}
+```
+
+**Understanding 'use server':**
+
+Marks functions as Server Actions - execute on server, callable from client:
+
+```tsx
+'use server'
+
+export async function submitForm(formData: FormData) {
+  await db.forms.create({ data: Object.fromEntries(formData) })
+}
+```
+
+Reference: [React Server Components](https://react.dev/reference/rsc/server-components)
+
+### 6.9 Use useId for Stable Hydration-Safe Identifiers
+
+**Impact: MEDIUM (prevents hydration mismatches from random IDs)**
+
+When generating unique IDs for accessibility attributes (like `id`, `htmlFor`, `aria-labelledby`), use React's `useId()` hook instead of random values. Random values like `Math.random()` or `Date.now()` generate different IDs on server and client, causing hydration mismatches.
+
+**Incorrect: hydration mismatch**
+
+```tsx
+function TextField({ label }: { label: string }) {
+  // Generates different values on server vs client
+  const id = `input-${Math.random().toString(36).slice(2)}`
+
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} type="text" />
+    </div>
+  )
+}
+```
+
+The server renders with one random ID, the client hydrates with a different one, causing a hydration error and broken accessibility.
+
+**Incorrect: counter-based IDs**
+
+```tsx
+let counter = 0
+
+function TextField({ label }: { label: string }) {
+  // Counter may differ between server and client renders
+  const id = `input-${++counter}`
+
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} type="text" />
+    </div>
+  )
+}
+```
+
+Module-level counters can produce different values depending on render order, component mount/unmount cycles, or Strict Mode.
+
+**Correct: useId hook**
+
+```tsx
+import { useId } from 'react'
+
+function TextField({ label }: { label: string }) {
+  const id = useId()
+
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} type="text" />
+    </div>
+  )
+}
+```
+
+`useId()` generates stable identifiers that match between server and client renders, ensuring no hydration mismatch.
+
+**Correct: multiple related IDs**
+
+```tsx
+import { useId } from 'react'
+
+function FormField({ label, hint }: { label: string; hint: string }) {
+  const id = useId()
+
+  return (
+    <div>
+      <label htmlFor={`${id}-input`}>{label}</label>
+      <input
+        id={`${id}-input`}
+        aria-describedby={`${id}-hint`}
+        type="text"
+      />
+      <p id={`${id}-hint`}>{hint}</p>
+    </div>
+  )
+}
+```
+
+Use a single `useId()` call and derive related IDs with suffixes to keep related elements connected.
+
+Reference: [https://react.dev/reference/react/useId](https://react.dev/reference/react/useId)
+
+### 6.10 Use Activity Component for Show/Hide
 
 **Impact: MEDIUM (preserves state/DOM)**
 
@@ -2079,7 +2209,7 @@ function Dropdown({ isOpen }: Props) {
 
 Avoids expensive re-renders and state loss.
 
-### 6.8 Use Explicit Conditional Rendering
+### 6.11 Use Explicit Conditional Rendering
 
 **Impact: LOW (prevents rendering 0 or NaN)**
 
@@ -2115,7 +2245,7 @@ function Badge({ count }: { count: number }) {
 // When count = 5, renders: <div><span class="badge">5</span></div>
 ```
 
-### 6.9 Use useTransition Over Manual Loading States
+### 6.12 Use useTransition Over Manual Loading States
 
 **Impact: LOW (reduces re-renders and improves code clarity)**
 
@@ -2920,6 +3050,99 @@ function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {
   }, [query])
 }
 ```
+
+### 8.4 Use the use() Hook for Unwrapping Promises
+
+**Impact: MEDIUM (enables promise handling without async/await)**
+
+React's `use()` hook allows synchronous components to read the value of a Promise by integrating with Suspense. This is useful when you receive a Promise as a prop but can't make the component async.
+
+**Incorrect: cannot use await in sync component**
+
+```tsx
+type Props = { dataPromise: Promise<Data> }
+
+// This won't work - can't use await without async
+function DataDisplay({ dataPromise }: Props) {
+  const data = await dataPromise // SyntaxError!
+  return <div>{data.title}</div>
+}
+```
+
+You cannot use `await` in a synchronous component function.
+
+**Incorrect: useEffect with state**
+
+```tsx
+type Props = { dataPromise: Promise<Data> }
+
+function DataDisplay({ dataPromise }: Props) {
+  const [data, setData] = useState<Data | null>(null)
+
+  useEffect(() => {
+    dataPromise.then(setData)
+  }, [dataPromise])
+
+  if (!data) return <div>Loading...</div>
+  return <div>{data.title}</div>
+}
+```
+
+This works but requires managing loading state manually and doesn't integrate with Suspense boundaries.
+
+**Correct: use() hook**
+
+```tsx
+import { use } from 'react'
+
+type Props = { dataPromise: Promise<Data> }
+
+function DataDisplay({ dataPromise }: Props) {
+  const data = use(dataPromise)
+  return <div>{data.title}</div>
+}
+
+// Parent component with Suspense
+function Page() {
+  const dataPromise = fetchData() // Returns Promise<Data>
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DataDisplay dataPromise={dataPromise} />
+    </Suspense>
+  )
+}
+```
+
+The `use()` hook suspends the component until the Promise resolves, working seamlessly with Suspense boundaries.
+
+**Correct: with context**
+
+```tsx
+import { use } from 'react'
+
+const ThemeContext = createContext<Theme | null>(null)
+
+function Button() {
+  // use() also works with Context (alternative to useContext)
+  const theme = use(ThemeContext)
+  return <button style={{ color: theme?.color }}>Click</button>
+}
+```
+
+Unlike other hooks, `use()` can be called conditionally and works with both Promises and Context.
+
+**Key differences from other hooks:**
+
+- Can be called inside loops and conditionals
+
+- Works with Promises (suspends until resolved)
+
+- Works with Context (like `useContext`)
+
+- The Promise must be created outside the component or cached to avoid re-creating on every render
+
+Reference: [https://react.dev/reference/react/use](https://react.dev/reference/react/use)
 
 ---
 
