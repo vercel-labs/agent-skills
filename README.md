@@ -117,7 +117,7 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 ## Installation
 
 ```bash
-npx add-skill vercel-labs/agent-skills
+npx skills add vercel-labs/agent-skills
 ```
 
 ## Usage
