@@ -29,6 +29,7 @@ optimized for agents and LLMs.
 - `list-performance-item-memo.md` - Pass primitives for memoization
 - `list-performance-item-expensive.md` - Keep list items lightweight
 - `list-performance-images.md` - Use compressed images in lists
+- `list-performance-item-types.md` - Use item types for heterogeneous lists
 
 ### Animation (HIGH)
 
@@ -40,6 +41,10 @@ optimized for agents and LLMs.
 ### Scroll Performance (HIGH)
 
 - `scroll-position-no-state.md` - Never track scroll in useState
+
+### Navigation (HIGH)
+
+- `navigation-native-navigators.md` - Use native stack and native tabs
 
 ### React State (MEDIUM)
 
@@ -98,6 +103,7 @@ optimized for agents and LLMs.
    - `list-performance-` for List Performance
    - `animation-` for Animation
    - `scroll-` for Scroll Performance
+   - `navigation-` for Navigation
    - `react-state-` for React State
    - `state-` for State Architecture
    - `react-compiler-` for React Compiler

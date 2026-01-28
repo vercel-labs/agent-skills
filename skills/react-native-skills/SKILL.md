@@ -34,11 +34,12 @@ Reference these guidelines when:
 | -------- | ---------------- | -------- | -------------------- |
 | 1        | List Performance | CRITICAL | `list-performance-`  |
 | 2        | Animation        | HIGH     | `animation-`         |
-| 3        | UI Patterns      | HIGH     | `ui-`                |
-| 4        | State Management | MEDIUM   | `react-state-`       |
-| 5        | Rendering        | MEDIUM   | `rendering-`         |
-| 6        | Monorepo         | MEDIUM   | `monorepo-`          |
-| 7        | Configuration    | LOW      | `fonts-`, `imports-` |
+| 3        | Navigation       | HIGH     | `navigation-`        |
+| 4        | UI Patterns      | HIGH     | `ui-`                |
+| 5        | State Management | MEDIUM   | `react-state-`       |
+| 6        | Rendering        | MEDIUM   | `rendering-`         |
+| 7        | Monorepo         | MEDIUM   | `monorepo-`          |
+| 8        | Configuration    | LOW      | `fonts-`, `imports-` |
 
 ## Quick Reference
 
@@ -51,6 +52,7 @@ Reference these guidelines when:
 - `list-performance-function-references` - Extract functions outside render
 - `list-performance-images` - Optimize images in lists
 - `list-performance-item-expensive` - Move expensive work outside items
+- `list-performance-item-types` - Use item types for heterogeneous lists
 
 ### 2. Animation (HIGH)
 
@@ -58,7 +60,11 @@ Reference these guidelines when:
 - `animation-derived-value` - Use useDerivedValue for computed animations
 - `animation-gesture-detector-press` - Use Gesture.Tap instead of Pressable
 
-### 3. UI Patterns (HIGH)
+### 3. Navigation (HIGH)
+
+- `navigation-native-navigators` - Use native stack and native tabs over JS navigators
+
+### 4. UI Patterns (HIGH)
 
 - `ui-expo-image` - Use expo-image for all images
 - `ui-image-gallery` - Use Galeria for image lightboxes
@@ -70,7 +76,7 @@ Reference these guidelines when:
 - `ui-measure-views` - Use onLayout, not measure()
 - `ui-styling` - Use StyleSheet.create or Nativewind
 
-### 4. State Management (MEDIUM)
+### 5. State Management (MEDIUM)
 
 - `react-state-minimize` - Minimize state subscriptions
 - `react-state-dispatcher` - Use dispatcher pattern for callbacks
@@ -78,17 +84,17 @@ Reference these guidelines when:
 - `react-compiler-destructure-functions` - Destructure for React Compiler
 - `react-compiler-reanimated-shared-values` - Handle shared values with compiler
 
-### 5. Rendering (MEDIUM)
+### 6. Rendering (MEDIUM)
 
 - `rendering-text-in-text-component` - Wrap text in Text components
 - `rendering-no-falsy-and` - Avoid falsy && for conditional rendering
 
-### 6. Monorepo (MEDIUM)
+### 7. Monorepo (MEDIUM)
 
 - `monorepo-native-deps-in-app` - Keep native dependencies in app package
 - `monorepo-single-dependency-versions` - Use single versions across packages
 
-### 7. Configuration (LOW)
+### 8. Configuration (LOW)
 
 - `fonts-config-plugin` - Use config plugins for custom fonts
 - `imports-design-system-folder` - Organize design system imports

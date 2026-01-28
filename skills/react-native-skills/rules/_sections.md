@@ -28,53 +28,59 @@ render thrashing during gestures.
 **Impact:** HIGH  
 **Description:** Tracking scroll position without causing render thrashing.
 
-## 5. React State (react-state)
+## 5. Navigation (navigation)
+
+**Impact:** HIGH  
+**Description:** Using native navigators for stack and tab navigation instead of
+JS-based alternatives.
+
+## 6. React State (react-state)
 
 **Impact:** MEDIUM  
 **Description:** Patterns for managing React state to avoid stale closures and
 unnecessary re-renders.
 
-## 6. State Architecture (state)
+## 7. State Architecture (state)
 
 **Impact:** MEDIUM  
 **Description:** Ground truth principles for state variables and derived values.
 
-## 7. React Compiler (react-compiler)
+## 8. React Compiler (react-compiler)
 
 **Impact:** MEDIUM  
 **Description:** Compatibility patterns for React Compiler with React Native and
 Reanimated.
 
-## 8. User Interface (ui)
+## 9. User Interface (ui)
 
 **Impact:** MEDIUM  
 **Description:** Native UI patterns for images, menus, modals, styling, and
 platform-consistent interfaces.
 
-## 9. Design System (design-system)
+## 10. Design System (design-system)
 
 **Impact:** MEDIUM  
 **Description:** Architecture patterns for building maintainable component
 libraries.
 
-## 10. Monorepo (monorepo)
+## 11. Monorepo (monorepo)
 
 **Impact:** LOW  
 **Description:** Dependency management and native module configuration in
 monorepos.
 
-## 11. Third-Party Dependencies (imports)
+## 12. Third-Party Dependencies (imports)
 
 **Impact:** LOW  
 **Description:** Wrapping and re-exporting third-party dependencies for
 maintainability.
 
-## 12. JavaScript (js)
+## 13. JavaScript (js)
 
 **Impact:** LOW  
 **Description:** Micro-optimizations like hoisting expensive object creation.
 
-## 13. Fonts (fonts)
+## 14. Fonts (fonts)
 
 **Impact:** LOW  
 **Description:** Native font loading for improved performance.

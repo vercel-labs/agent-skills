@@ -31,42 +31,45 @@ Comprehensive performance optimization guide for React Native applications, desi
    - 2.5 [Pass Primitives to List Items for Memoization](#25-pass-primitives-to-list-items-for-memoization)
    - 2.6 [Use a List Virtualizer for Any List](#26-use-a-list-virtualizer-for-any-list)
    - 2.7 [Use Compressed Images in Lists](#27-use-compressed-images-in-lists)
+   - 2.8 [Use Item Types for Heterogeneous Lists](#28-use-item-types-for-heterogeneous-lists)
 3. [Animation](#3-animation) — **HIGH**
    - 3.1 [Animate Transform and Opacity Instead of Layout Properties](#31-animate-transform-and-opacity-instead-of-layout-properties)
    - 3.2 [Prefer useDerivedValue Over useAnimatedReaction](#32-prefer-usederivedvalue-over-useanimatedreaction)
    - 3.3 [Use GestureDetector for Animated Press States](#33-use-gesturedetector-for-animated-press-states)
 4. [Scroll Performance](#4-scroll-performance) — **HIGH**
    - 4.1 [Never Track Scroll Position in useState](#41-never-track-scroll-position-in-usestate)
-5. [React State](#5-react-state) — **MEDIUM**
-   - 5.1 [Minimize State Variables and Derive Values](#51-minimize-state-variables-and-derive-values)
-   - 5.2 [Use fallback state instead of initialState](#52-use-fallback-state-instead-of-initialstate)
-   - 5.3 [useState Dispatch updaters for State That Depends on Current Value](#53-usestate-dispatch-updaters-for-state-that-depends-on-current-value)
-6. [State Architecture](#6-state-architecture) — **MEDIUM**
-   - 6.1 [State Must Represent Ground Truth](#61-state-must-represent-ground-truth)
-7. [React Compiler](#7-react-compiler) — **MEDIUM**
-   - 7.1 [Destructure Functions Early in Render (React Compiler)](#71-destructure-functions-early-in-render-react-compiler)
-   - 7.2 [Use .get() and .set() for Reanimated Shared Values (not .value)](#72-use-get-and-set-for-reanimated-shared-values-not-value)
-8. [User Interface](#8-user-interface) — **MEDIUM**
-   - 8.1 [Measuring View Dimensions](#81-measuring-view-dimensions)
-   - 8.2 [Modern React Native Styling Patterns](#82-modern-react-native-styling-patterns)
-   - 8.3 [Use contentInset for Dynamic ScrollView Spacing](#83-use-contentinset-for-dynamic-scrollview-spacing)
-   - 8.4 [Use contentInsetAdjustmentBehavior for Safe Areas](#84-use-contentinsetadjustmentbehavior-for-safe-areas)
-   - 8.5 [Use expo-image for Optimized Images](#85-use-expo-image-for-optimized-images)
-   - 8.6 [Use Galeria for Image Galleries and Lightbox](#86-use-galeria-for-image-galleries-and-lightbox)
-   - 8.7 [Use Native Menus for Dropdowns and Context Menus](#87-use-native-menus-for-dropdowns-and-context-menus)
-   - 8.8 [Use Native Modals Over JS-Based Bottom Sheets](#88-use-native-modals-over-js-based-bottom-sheets)
-   - 8.9 [Use Pressable Instead of Touchable Components](#89-use-pressable-instead-of-touchable-components)
-9. [Design System](#9-design-system) — **MEDIUM**
-   - 9.1 [Use Compound Components Over Polymorphic Children](#91-use-compound-components-over-polymorphic-children)
-10. [Monorepo](#10-monorepo) — **LOW**
-   - 10.1 [Install Native Dependencies in App Directory](#101-install-native-dependencies-in-app-directory)
-   - 10.2 [Use Single Dependency Versions Across Monorepo](#102-use-single-dependency-versions-across-monorepo)
-11. [Third-Party Dependencies](#11-third-party-dependencies) — **LOW**
-   - 11.1 [Import from Design System Folder](#111-import-from-design-system-folder)
-12. [JavaScript](#12-javascript) — **LOW**
-   - 12.1 [Hoist Intl Formatter Creation](#121-hoist-intl-formatter-creation)
-13. [Fonts](#13-fonts) — **LOW**
-   - 13.1 [Load fonts natively at build time](#131-load-fonts-natively-at-build-time)
+5. [Navigation](#5-navigation) — **HIGH**
+   - 5.1 [Use Native Navigators for Navigation](#51-use-native-navigators-for-navigation)
+6. [React State](#6-react-state) — **MEDIUM**
+   - 6.1 [Minimize State Variables and Derive Values](#61-minimize-state-variables-and-derive-values)
+   - 6.2 [Use fallback state instead of initialState](#62-use-fallback-state-instead-of-initialstate)
+   - 6.3 [useState Dispatch updaters for State That Depends on Current Value](#63-usestate-dispatch-updaters-for-state-that-depends-on-current-value)
+7. [State Architecture](#7-state-architecture) — **MEDIUM**
+   - 7.1 [State Must Represent Ground Truth](#71-state-must-represent-ground-truth)
+8. [React Compiler](#8-react-compiler) — **MEDIUM**
+   - 8.1 [Destructure Functions Early in Render (React Compiler)](#81-destructure-functions-early-in-render-react-compiler)
+   - 8.2 [Use .get() and .set() for Reanimated Shared Values (not .value)](#82-use-get-and-set-for-reanimated-shared-values-not-value)
+9. [User Interface](#9-user-interface) — **MEDIUM**
+   - 9.1 [Measuring View Dimensions](#91-measuring-view-dimensions)
+   - 9.2 [Modern React Native Styling Patterns](#92-modern-react-native-styling-patterns)
+   - 9.3 [Use contentInset for Dynamic ScrollView Spacing](#93-use-contentinset-for-dynamic-scrollview-spacing)
+   - 9.4 [Use contentInsetAdjustmentBehavior for Safe Areas](#94-use-contentinsetadjustmentbehavior-for-safe-areas)
+   - 9.5 [Use expo-image for Optimized Images](#95-use-expo-image-for-optimized-images)
+   - 9.6 [Use Galeria for Image Galleries and Lightbox](#96-use-galeria-for-image-galleries-and-lightbox)
+   - 9.7 [Use Native Menus for Dropdowns and Context Menus](#97-use-native-menus-for-dropdowns-and-context-menus)
+   - 9.8 [Use Native Modals Over JS-Based Bottom Sheets](#98-use-native-modals-over-js-based-bottom-sheets)
+   - 9.9 [Use Pressable Instead of Touchable Components](#99-use-pressable-instead-of-touchable-components)
+10. [Design System](#10-design-system) — **MEDIUM**
+   - 10.1 [Use Compound Components Over Polymorphic Children](#101-use-compound-components-over-polymorphic-children)
+11. [Monorepo](#11-monorepo) — **LOW**
+   - 11.1 [Install Native Dependencies in App Directory](#111-install-native-dependencies-in-app-directory)
+   - 11.2 [Use Single Dependency Versions Across Monorepo](#112-use-single-dependency-versions-across-monorepo)
+12. [Third-Party Dependencies](#12-third-party-dependencies) — **LOW**
+   - 12.1 [Import from Design System Folder](#121-import-from-design-system-folder)
+13. [JavaScript](#13-javascript) — **LOW**
+   - 13.1 [Hoist Intl Formatter Creation](#131-hoist-intl-formatter-creation)
+14. [Fonts](#14-fonts) — **LOW**
+   - 14.1 [Load fonts natively at build time](#141-load-fonts-natively-at-build-time)
 
 ---
 
@@ -743,6 +746,112 @@ such as `expo-image` or `SolitoImage` (which uses `expo-image` under the hood).
 
 Request images at 2x the display size for retina screens.
 
+### 2.8 Use Item Types for Heterogeneous Lists
+
+**Impact: HIGH (efficient recycling, less layout thrashing)**
+
+When a list has different item layouts (messages, images, headers, etc.), use a
+
+`type` field on each item and provide `getItemType` to the list. This puts items
+
+into separate recycling pools so a message component never gets recycled into an
+
+image component.
+
+[LegendList getItemType](https://legendapp.com/open-source/list/api/props/#getitemtype-v2)
+
+**Incorrect: single component with conditionals**
+
+```tsx
+type Item = { id: string; text?: string; imageUrl?: string; isHeader?: boolean }
+
+function ListItem({ item }: { item: Item }) {
+  if (item.isHeader) {
+    return <HeaderItem title={item.text} />
+  }
+  if (item.imageUrl) {
+    return <ImageItem url={item.imageUrl} />
+  }
+  return <MessageItem text={item.text} />
+}
+
+function Feed({ items }: { items: Item[] }) {
+  return (
+    <LegendList
+      data={items}
+      renderItem={({ item }) => <ListItem item={item} />}
+      recycleItems
+    />
+  )
+}
+```
+
+**Correct: typed items with separate components**
+
+```tsx
+type HeaderItem = { id: string; type: 'header'; title: string }
+type MessageItem = { id: string; type: 'message'; text: string }
+type ImageItem = { id: string; type: 'image'; url: string }
+type FeedItem = HeaderItem | MessageItem | ImageItem
+
+function Feed({ items }: { items: FeedItem[] }) {
+  return (
+    <LegendList
+      data={items}
+      keyExtractor={(item) => item.id}
+      getItemType={(item) => item.type}
+      renderItem={({ item }) => {
+        switch (item.type) {
+          case 'header':
+            return <SectionHeader title={item.title} />
+          case 'message':
+            return <MessageRow text={item.text} />
+          case 'image':
+            return <ImageRow url={item.url} />
+        }
+      }}
+      recycleItems
+    />
+  )
+}
+```
+
+**Why this matters:**
+
+```tsx
+<LegendList
+  data={items}
+  keyExtractor={(item) => item.id}
+  getItemType={(item) => item.type}
+  getEstimatedItemSize={(index, item, itemType) => {
+    switch (itemType) {
+      case 'header':
+        return 48
+      case 'message':
+        return 72
+      case 'image':
+        return 300
+      default:
+        return 72
+    }
+  }}
+  renderItem={({ item }) => {
+    /* ... */
+  }}
+  recycleItems
+/>
+```
+
+- **Recycling efficiency**: Items with the same type share a recycling pool
+
+- **No layout thrashing**: A header never recycles into an image cell
+
+- **Type safety**: TypeScript can narrow the item type in each branch
+
+- **Better size estimation**: Use `getEstimatedItemSize` with `itemType` for
+
+  accurate estimates per type
+
 ---
 
 ## 3. Animation
@@ -1050,14 +1159,212 @@ function Feed() {
 
 ---
 
-## 5. React State
+## 5. Navigation
+
+**Impact: HIGH**
+
+Using native navigators for stack and tab navigation instead of
+JS-based alternatives.
+
+### 5.1 Use Native Navigators for Navigation
+
+**Impact: HIGH (native performance, platform-appropriate UI)**
+
+Always use native navigators instead of JS-based ones. Native navigators use
+
+platform APIs (UINavigationController on iOS, Fragment on Android) for better
+
+performance and native behavior.
+
+**For stacks:** Use `@react-navigation/native-stack` or expo-router's default
+
+stack (which uses native-stack). Avoid `@react-navigation/stack`.
+
+**For tabs:** Use `react-native-bottom-tabs` (native) or expo-router's native
+
+tabs. Avoid `@react-navigation/bottom-tabs` when native feel matters.
+
+- [React Navigation Native Stack](https://reactnavigation.org/docs/native-stack-navigator)
+
+- [React Native Bottom Tabs with React Navigation](https://oss.callstack.com/react-native-bottom-tabs/docs/guides/usage-with-react-navigation)
+
+- [React Native Bottom Tabs with Expo Router](https://oss.callstack.com/react-native-bottom-tabs/docs/guides/usage-with-expo-router)
+
+- [Expo Router Native Tabs](https://docs.expo.dev/router/advanced/native-tabs)
+
+**Incorrect: JS stack navigator**
+
+```tsx
+import { createStackNavigator } from '@react-navigation/stack'
+
+const Stack = createStackNavigator()
+
+function App() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='Home' component={HomeScreen} />
+      <Stack.Screen name='Details' component={DetailsScreen} />
+    </Stack.Navigator>
+  )
+}
+```
+
+**Correct: native stack with react-navigation**
+
+```tsx
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
+const Stack = createNativeStackNavigator()
+
+function App() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='Home' component={HomeScreen} />
+      <Stack.Screen name='Details' component={DetailsScreen} />
+    </Stack.Navigator>
+  )
+}
+```
+
+**Correct: expo-router uses native stack by default**
+
+```tsx
+// app/_layout.tsx
+import { Stack } from 'expo-router'
+
+export default function Layout() {
+  return <Stack />
+}
+```
+
+**Incorrect: JS bottom tabs**
+
+```tsx
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
+const Tab = createBottomTabNavigator()
+
+function App() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name='Settings' component={SettingsScreen} />
+    </Tab.Navigator>
+  )
+}
+```
+
+**Correct: native bottom tabs with react-navigation**
+
+```tsx
+import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation'
+
+const Tab = createNativeBottomTabNavigator()
+
+function App() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name='Home'
+        component={HomeScreen}
+        options={{
+          tabBarIcon: () => ({ sfSymbol: 'house' }),
+        }}
+      />
+      <Tab.Screen
+        name='Settings'
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: () => ({ sfSymbol: 'gear' }),
+        }}
+      />
+    </Tab.Navigator>
+  )
+}
+```
+
+**Correct: expo-router native tabs**
+
+```tsx
+// app/(tabs)/_layout.tsx
+import { NativeTabs } from 'expo-router/unstable-native-tabs'
+
+export default function TabLayout() {
+  return (
+    <NativeTabs>
+      <NativeTabs.Trigger name='index'>
+        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf='house.fill' md='home' />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name='settings'>
+        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf='gear' md='settings' />
+      </NativeTabs.Trigger>
+    </NativeTabs>
+  )
+}
+```
+
+On iOS, native tabs automatically enable `contentInsetAdjustmentBehavior` on the
+
+first `ScrollView` at the root of each tab screen, so content scrolls correctly
+
+behind the translucent tab bar. If you need to disable this, use
+
+`disableAutomaticContentInsets` on the trigger.
+
+**Incorrect: custom header component**
+
+```tsx
+<Stack.Screen
+  name='Profile'
+  component={ProfileScreen}
+  options={{
+    header: () => <CustomHeader title='Profile' />,
+  }}
+/>
+```
+
+**Correct: native header options**
+
+```tsx
+<Stack.Screen
+  name='Profile'
+  component={ProfileScreen}
+  options={{
+    title: 'Profile',
+    headerLargeTitleEnabled: true,
+    headerSearchBarOptions: {
+      placeholder: 'Search',
+    },
+  }}
+/>
+```
+
+Native headers support iOS large titles, search bars, blur effects, and proper
+
+safe area handling automatically.
+
+- **Performance**: Native transitions and gestures run on the UI thread
+
+- **Platform behavior**: Automatic iOS large titles, Android material design
+
+- **System integration**: Scroll-to-top on tab tap, PiP avoidance, proper safe
+
+  areas
+
+- **Accessibility**: Platform accessibility features work automatically
+
+---
+
+## 6. React State
 
 **Impact: MEDIUM**
 
 Patterns for managing React state to avoid stale closures and
 unnecessary re-renders.
 
-### 5.1 Minimize State Variables and Derive Values
+### 6.1 Minimize State Variables and Derive Values
 
 **Impact: MEDIUM (fewer re-renders, less state drift)**
 
@@ -1118,7 +1425,7 @@ State should be the minimal source of truth. Everything else is derived.
 
 Reference: [https://react.dev/learn/choosing-the-state-structure](https://react.dev/learn/choosing-the-state-structure)
 
-### 5.2 Use fallback state instead of initialState
+### 6.2 Use fallback state instead of initialState
 
 **Impact: MEDIUM (reactive fallbacks without syncing)**
 
@@ -1173,7 +1480,7 @@ function ProfileForm({ data }: { data: User }) {
 }
 ```
 
-### 5.3 useState Dispatch updaters for State That Depends on Current Value
+### 6.3 useState Dispatch updaters for State That Depends on Current Value
 
 **Impact: MEDIUM (avoids stale closures, prevents unnecessary re-renders)**
 
@@ -1267,13 +1574,13 @@ const onTap = () => {
 
 ---
 
-## 6. State Architecture
+## 7. State Architecture
 
 **Impact: MEDIUM**
 
 Ground truth principles for state variables and derived values.
 
-### 6.1 State Must Represent Ground Truth
+### 7.1 State Must Represent Ground Truth
 
 **Impact: HIGH (cleaner logic, easier debugging, single source of truth)**
 
@@ -1361,14 +1668,14 @@ State is the minimal truth. Everything else is derived.
 
 ---
 
-## 7. React Compiler
+## 8. React Compiler
 
 **Impact: MEDIUM**
 
 Compatibility patterns for React Compiler with React Native and
 Reanimated.
 
-### 7.1 Destructure Functions Early in Render (React Compiler)
+### 8.1 Destructure Functions Early in Render (React Compiler)
 
 **Impact: HIGH (stable references, fewer re-renders)**
 
@@ -1416,7 +1723,7 @@ function SaveButton({ onSave }) {
 }
 ```
 
-### 7.2 Use .get() and .set() for Reanimated Shared Values (not .value)
+### 8.2 Use .get() and .set() for Reanimated Shared Values (not .value)
 
 **Impact: LOW (required for React Compiler compatibility)**
 
@@ -1466,14 +1773,14 @@ for more.
 
 ---
 
-## 8. User Interface
+## 9. User Interface
 
 **Impact: MEDIUM**
 
 Native UI patterns for images, menus, modals, styling, and
 platform-consistent interfaces.
 
-### 8.1 Measuring View Dimensions
+### 9.1 Measuring View Dimensions
 
 **Impact: MEDIUM (synchronous measurement, avoid unnecessary re-renders)**
 
@@ -1550,7 +1857,7 @@ function MeasuredBox({ children }: { children: React.ReactNode }) {
 
 Use functional setState to compare—don't read state directly in the callback.
 
-### 8.2 Modern React Native Styling Patterns
+### 9.2 Modern React Native Styling Patterns
 
 **Impact: MEDIUM (consistent design, smoother borders, cleaner layouts)**
 
@@ -1626,7 +1933,7 @@ Limiting font sizes creates visual consistency. Use `fontWeight` (bold/semibold)
 
 and grayscale colors for hierarchy instead.
 
-### 8.3 Use contentInset for Dynamic ScrollView Spacing
+### 9.3 Use contentInset for Dynamic ScrollView Spacing
 
 **Impact: LOW (smoother updates, no layout recalculation)**
 
@@ -1671,7 +1978,7 @@ Use `scrollIndicatorInsets` alongside `contentInset` to keep the scroll
 
 indicator aligned. For static spacing that never changes, padding is fine.
 
-### 8.4 Use contentInsetAdjustmentBehavior for Safe Areas
+### 9.4 Use contentInsetAdjustmentBehavior for Safe Areas
 
 **Impact: MEDIUM (native safe area handling, no layout shifts)**
 
@@ -1732,7 +2039,7 @@ function MyScreen() {
 
 The native approach handles dynamic safe areas (keyboard, toolbars) and allows content to scroll behind the status bar naturally.
 
-### 8.5 Use expo-image for Optimized Images
+### 9.5 Use expo-image for Optimized Images
 
 **Impact: HIGH (memory efficiency, caching, blurhash placeholders, progressive loading)**
 
@@ -1799,7 +2106,7 @@ For cross-platform (web + native), use `SolitoImage` from `solito/image` which u
 
 Reference: [https://docs.expo.dev/versions/latest/sdk/image/](https://docs.expo.dev/versions/latest/sdk/image/)
 
-### 8.6 Use Galeria for Image Galleries and Lightbox
+### 9.6 Use Galeria for Image Galleries and Lightbox
 
 **Impact: MEDIUM**
 
@@ -1901,7 +2208,7 @@ component.
 
 Reference: [https://github.com/nandorojo/galeria](https://github.com/nandorojo/galeria)
 
-### 8.7 Use Native Menus for Dropdowns and Context Menus
+### 9.7 Use Native Menus for Dropdowns and Context Menus
 
 **Impact: HIGH (native accessibility, platform-consistent UX)**
 
@@ -2073,7 +2380,7 @@ function MenuWithSubmenu() {
 
 Reference: [https://zeego.dev/components/dropdown-menu](https://zeego.dev/components/dropdown-menu)
 
-### 8.8 Use Native Modals Over JS-Based Bottom Sheets
+### 9.8 Use Native Modals Over JS-Based Bottom Sheets
 
 **Impact: HIGH (native performance, gestures, accessibility)**
 
@@ -2150,11 +2457,12 @@ Native modals provide swipe-to-dismiss, proper keyboard avoidance, and
 
 accessibility out of the box.
 
-### 8.9 Use Pressable Instead of Touchable Components
+### 9.9 Use Pressable Instead of Touchable Components
 
 **Impact: LOW (modern API, more flexible)**
 
 Never use `TouchableOpacity` or `TouchableHighlight`. Use `Pressable` from
+
 `react-native` or `react-native-gesture-handler` instead.
 
 **Incorrect: legacy Touchable components**
@@ -2200,23 +2508,27 @@ function ListItem({ onPress }: { onPress: () => void }) {
 ```
 
 Use `react-native-gesture-handler` Pressable inside scrollable lists for better
+
 gesture coordination, as long as you are using the ScrollView from
+
 `react-native-gesture-handler` as well.
 
 **For animated press states (scale, opacity changes):** Use `GestureDetector`
-with Reanimated shared values instead of Pressable's style callback. See rule
-3.3 (Use GestureDetector for Animated Press States).
+
+with Reanimated shared values instead of Pressable's style callback. See the
+
+`animation-gesture-detector-press` rule.
 
 ---
 
-## 9. Design System
+## 10. Design System
 
 **Impact: MEDIUM**
 
 Architecture patterns for building maintainable component
 libraries.
 
-### 9.1 Use Compound Components Over Polymorphic Children
+### 10.1 Use Compound Components Over Polymorphic Children
 
 **Impact: MEDIUM (flexible composition, clearer API)**
 
@@ -2284,14 +2596,14 @@ function ButtonIcon({ children }: { children: React.ReactNode }) {
 
 ---
 
-## 10. Monorepo
+## 11. Monorepo
 
 **Impact: LOW**
 
 Dependency management and native module configuration in
 monorepos.
 
-### 10.1 Install Native Dependencies in App Directory
+### 11.1 Install Native Dependencies in App Directory
 
 **Impact: CRITICAL (required for autolinking to work)**
 
@@ -2328,7 +2640,7 @@ Even if the shared package uses the native dependency, the app must also list it
 
 for autolinking to detect and link the native code.
 
-### 10.2 Use Single Dependency Versions Across Monorepo
+### 11.2 Use Single Dependency Versions Across Monorepo
 
 **Impact: MEDIUM (avoids duplicate bundles, version conflicts)**
 
@@ -2393,14 +2705,14 @@ the root. When adding dependencies, specify exact versions without `^` or `~`.
 
 ---
 
-## 11. Third-Party Dependencies
+## 12. Third-Party Dependencies
 
 **Impact: LOW**
 
 Wrapping and re-exporting third-party dependencies for
 maintainability.
 
-### 11.1 Import from Design System Folder
+### 12.1 Import from Design System Folder
 
 **Impact: LOW (enables global changes and easy refactoring)**
 
@@ -2445,13 +2757,13 @@ Start by simply re-exporting. Customize later without changing app code.
 
 ---
 
-## 12. JavaScript
+## 13. JavaScript
 
 **Impact: LOW**
 
 Micro-optimizations like hoisting expensive object creation.
 
-### 12.1 Hoist Intl Formatter Creation
+### 13.1 Hoist Intl Formatter Creation
 
 **Impact: LOW-MEDIUM (avoids expensive object recreation)**
 
@@ -2513,13 +2825,13 @@ objects—each instantiation parses locale data and builds internal lookup table
 
 ---
 
-## 13. Fonts
+## 14. Fonts
 
 **Impact: LOW**
 
 Native font loading for improved performance.
 
-### 13.1 Load fonts natively at build time
+### 14.1 Load fonts natively at build time
 
 **Impact: LOW (fonts available at launch, no async loading)**
 
