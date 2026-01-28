@@ -79,6 +79,7 @@ export const SKILLS: Record<string, SkillConfig> = {
       architecture: 1,
       state: 2,
       patterns: 3,
+      react19: 4,
     },
   },
 }

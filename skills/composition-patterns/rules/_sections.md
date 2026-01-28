@@ -22,3 +22,8 @@ composed components.
 **Impact:** MEDIUM  
 **Description:** Specific techniques for implementing compound components and
 context providers.
+
+## 4. React 19 APIs (react19)
+
+**Impact:** MEDIUM  
+**Description:** React 19+ only. Don't use `forwardRef`; use `use()` instead of `useContext()`.

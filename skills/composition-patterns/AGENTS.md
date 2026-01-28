@@ -30,6 +30,8 @@ Composition patterns for building flexible, maintainable React components. Avoid
 3. [Implementation Patterns](#3-implementation-patterns) — **MEDIUM**
    - 3.1 [Create Explicit Component Variants](#31-create-explicit-component-variants)
    - 3.2 [Prefer Composing Children Over Render Props](#32-prefer-composing-children-over-render-props)
+4. [React 19 APIs](#4-react-19-apis) — **MEDIUM**
+   - 4.1 [React 19 API Changes](#41-react-19-api-changes)
 
 ---
 
@@ -247,11 +249,7 @@ const Composer = {
 </Composer.Provider>
 ```
 
-Consumers explicitly compose exactly what they need. No hidden conditionals. And
-
-the state, actions and meta are dependency-injected by a parent provider,
-
-allowing multiple usages of the same component structure.
+Consumers explicitly compose exactly what they need. No hidden conditionals. And the state, actions and meta are dependency-injected by a parent provider, allowing multiple usages of the same component structure.
 
 ---
 
@@ -456,12 +454,13 @@ function ComposerInput() {
 function ForwardMessageProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState(initialState)
   const inputRef = useRef(null)
+  const submit = useForwardMessage()
 
   return (
     <ComposerContext
       value={{
         state,
-        actions: { update: setState, submit: useForwardMessage() },
+        actions: { update: setState, submit },
         meta: { inputRef },
       }}
     >
@@ -538,7 +537,7 @@ function ForwardMessageDialog() {
   )
 }
 
-// This button lives OUTSIDE Composer.Frame but can still submit!
+// This button lives OUTSIDE Composer.Frame but can still submit based on its context!
 function ForwardButton() {
   const {
     actions: { submit },
@@ -546,7 +545,7 @@ function ForwardButton() {
   return <Button onPress={submit}>Forward</Button>
 }
 
-// This preview lives OUTSIDE Composer.Frame but can read state!
+// This preview lives OUTSIDE Composer.Frame but can read composer's state!
 function MessagePreview() {
   const { state } = use(ComposerContext)
   return <Preview message={state.input} attachments={state.attachments} />
@@ -738,7 +737,7 @@ itself.
 <EditMessageComposer messageId="xyz" />
 
 // Or
-<ForwardMessageComposer />
+<ForwardMessageComposer messageId="123" />
 ```
 
 Each implementation is unique, explicit and self-contained. Yet they can each
@@ -780,16 +779,18 @@ function EditMessageComposer({ messageId }: { messageId: string }) {
   )
 }
 
-function ForwardMessageComposer() {
+function ForwardMessageComposer({ messageId }: { messageId: string }) {
   return (
-    <Composer.Frame>
-      <Composer.Input placeholder="Add a message, if you'd like." />
-      <Composer.Footer>
-        <Composer.Formatting />
-        <Composer.Emojis />
-        <Composer.Mentions />
-      </Composer.Footer>
-    </Composer.Frame>
+    <ForwardMessageProvider messageId={messageId}>
+      <Composer.Frame>
+        <Composer.Input placeholder="Add a message, if you'd like." />
+        <Composer.Footer>
+          <Composer.Formatting />
+          <Composer.Emojis />
+          <Composer.Mentions />
+        </Composer.Footer>
+      </Composer.Frame>
+    </ForwardMessageProvider>
   )
 }
 ```
@@ -859,7 +860,7 @@ function ComposerFrame({ children }: { children: React.ReactNode }) {
 }
 
 function ComposerFooter({ children }: { children: React.ReactNode }) {
-  return <footer className='flex'>{children}</div>
+  return <footer className='flex'>{children}</footer>
 }
 
 // Usage is flexible
@@ -889,6 +890,52 @@ return (
 Use render props when the parent needs to provide data or state to the child.
 
 Use children when composing static structure.
+
+---
+
+## 4. React 19 APIs
+
+**Impact: MEDIUM**
+
+React 19+ only. Don't use `forwardRef`; use `use()` instead of `useContext()`.
+
+### 4.1 React 19 API Changes
+
+**Impact: MEDIUM (cleaner component definitions and context usage)**
+
+> **⚠️ React 19+ only.** Skip this if you're on React 18 or earlier.
+
+In React 19, `ref` is now a regular prop (no `forwardRef` wrapper needed), and `use()` replaces `useContext()`.
+
+**Incorrect: forwardRef in React 19**
+
+```tsx
+const ComposerInput = forwardRef<TextInput, Props>((props, ref) => {
+  return <TextInput ref={ref} {...props} />
+})
+```
+
+**Correct: ref as a regular prop**
+
+```tsx
+function ComposerInput({ ref, ...props }: Props & { ref?: React.Ref<TextInput> }) {
+  return <TextInput ref={ref} {...props} />
+}
+```
+
+**Incorrect: useContext in React 19**
+
+```tsx
+const value = useContext(MyContext)
+```
+
+**Correct: use instead of useContext**
+
+```tsx
+const value = use(MyContext)
+```
+
+`use()` can also be called conditionally, unlike `useContext()`.
 
 ---
 

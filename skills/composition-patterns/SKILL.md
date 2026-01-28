@@ -4,7 +4,8 @@ description:
   React composition patterns that scale. Use when refactoring components with
   boolean prop proliferation, building flexible component libraries, or
   designing reusable APIs. Triggers on tasks involving compound components,
-  render props, context providers, or component architecture.
+  render props, context providers, or component architecture. Includes React 19
+  API changes.
 license: MIT
 metadata:
   author: vercel
@@ -35,6 +36,7 @@ Reference these guidelines when:
 | 1        | Component Architecture  | HIGH   | `architecture-` |
 | 2        | State Management        | MEDIUM | `state-`        |
 | 3        | Implementation Patterns | MEDIUM | `patterns-`     |
+| 4        | React 19 APIs           | MEDIUM | `react19-`      |
 
 ## Quick Reference
 
@@ -59,6 +61,12 @@ Reference these guidelines when:
   boolean modes
 - `patterns-children-over-render-props` - Use children for composition instead
   of renderX props
+
+### 4. React 19 APIs (MEDIUM)
+
+> **⚠️ React 19+ only.** Skip this section if using React 18 or earlier.
+
+- `react19-no-forwardref` - Don't use `forwardRef`; use `use()` instead of `useContext()`
 
 ## How to Use
 
