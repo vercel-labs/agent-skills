@@ -35,11 +35,12 @@ Comprehensive performance optimization guide for React and Next.js applications,
 3. [Server-Side Performance](#3-server-side-performance) — **HIGH**
    - 3.1 [Authenticate Server Actions Like API Routes](#31-authenticate-server-actions-like-api-routes)
    - 3.2 [Avoid Duplicate Serialization in RSC Props](#32-avoid-duplicate-serialization-in-rsc-props)
-   - 3.3 [Cross-Request LRU Caching](#33-cross-request-lru-caching)
-   - 3.4 [Minimize Serialization at RSC Boundaries](#34-minimize-serialization-at-rsc-boundaries)
-   - 3.5 [Parallel Data Fetching with Component Composition](#35-parallel-data-fetching-with-component-composition)
-   - 3.6 [Per-Request Deduplication with React.cache()](#36-per-request-deduplication-with-reactcache)
-   - 3.7 [Use after() for Non-Blocking Operations](#37-use-after-for-non-blocking-operations)
+   - 3.3 [Cache and Paginate Sitemaps](#33-cache-and-paginate-sitemaps)
+   - 3.4 [Cross-Request LRU Caching](#34-cross-request-lru-caching)
+   - 3.5 [Minimize Serialization at RSC Boundaries](#35-minimize-serialization-at-rsc-boundaries)
+   - 3.6 [Parallel Data Fetching with Component Composition](#36-parallel-data-fetching-with-component-composition)
+   - 3.7 [Per-Request Deduplication with React.cache()](#37-per-request-deduplication-with-reactcache)
+   - 3.8 [Use after() for Non-Blocking Operations](#38-use-after-for-non-blocking-operations)
 4. [Client-Side Data Fetching](#4-client-side-data-fetching) — **MEDIUM-HIGH**
    - 4.1 [Deduplicate Global Event Listeners](#41-deduplicate-global-event-listeners)
    - 4.2 [Use Passive Event Listeners for Scrolling Performance](#42-use-passive-event-listeners-for-scrolling-performance)
@@ -744,7 +745,133 @@ Deduplication works recursively. Impact varies by data type:
 
 **Exception:** Pass derived data when transformation is expensive or client doesn't need original.
 
-### 3.3 Cross-Request LRU Caching
+### 3.3 Cache and Paginate Sitemaps
+
+**Impact: MEDIUM (reduces DB load from crawler spikes)**
+
+Sitemaps are requested by crawlers, monitors, and uptime checks. Generating them by scanning the entire database on every request wastes CPU/DB and can cause timeouts. Cache the response and page large sitemaps so each request does bounded work.
+
+**Incorrect: full table scan on every request**
+
+```typescript
+// app/sitemap.xml/route.ts
+export async function GET() {
+  const pages = await db.page.findMany({
+    where: { published: true },
+    select: { slug: true, updatedAt: true }
+  })
+
+  const xml = buildSitemapXml(
+    pages.map(page => ({
+      loc: `https://example.com/${page.slug}`,
+      lastmod: page.updatedAt.toISOString()
+    }))
+  )
+
+  return new Response(xml, {
+    headers: { 'Content-Type': 'application/xml' }
+  })
+}
+```
+
+**Correct: paged sitemap with cache headers**
+
+```typescript
+// app/sitemap.xml/route.ts
+const PAGE_SIZE = 10000
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const page = Number(searchParams.get('page') ?? '1')
+
+  const items = await db.page.findMany({
+    where: { published: true },
+    orderBy: { updatedAt: 'desc' },
+    select: { slug: true, updatedAt: true },
+    take: PAGE_SIZE,
+    skip: (page - 1) * PAGE_SIZE
+  })
+
+  const xml = buildSitemapXml(
+    items.map(item => ({
+      loc: `https://example.com/${item.slug}`,
+      lastmod: item.updatedAt.toISOString()
+    }))
+  )
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
+    }
+  })
+}
+```
+
+**Also good: generateSitemaps with paging**
+
+```typescript
+// app/sitemap.ts
+const PAGE_SIZE = 10000
+
+export async function generateSitemaps() {
+  const total = await db.page.count({ where: { published: true } })
+  const pageCount = Math.ceil(total / PAGE_SIZE)
+
+  return Array.from({ length: pageCount }, (_, index) => ({
+    page: index + 1
+  }))
+}
+
+export default async function sitemap({ page }: { page: number }) {
+  const items = await db.page.findMany({
+    where: { published: true },
+    orderBy: { updatedAt: 'desc' },
+    select: { slug: true, updatedAt: true },
+    take: PAGE_SIZE,
+    skip: (page - 1) * PAGE_SIZE
+  })
+
+  return items.map(item => ({
+    url: `https://example.com/${item.slug}`,
+    lastModified: item.updatedAt
+  }))
+}
+```
+
+**Also good: dynamic route + generateSitemaps**
+
+```typescript
+// app/[site]/sitemap.ts
+export async function generateSitemaps() {
+  const sites = await db.site.findMany({
+    where: { isActive: true },
+    select: { slug: true }
+  })
+
+  return sites.map(site => ({
+    site: site.slug
+  }))
+}
+
+export default async function sitemap({ site }: { site: string }) {
+  const items = await db.page.findMany({
+    where: { published: true, siteSlug: site },
+    select: { slug: true, updatedAt: true }
+  })
+
+  return items.map(item => ({
+    url: `https://${site}.example.com/${item.slug}`,
+    lastModified: item.updatedAt
+  }))
+}
+```
+
+If your sitemap data already exists behind an internal API (or a public endpoint you control), you can fetch it instead of querying the database directly. Just keep the same caching and pagination discipline to avoid moving the bottleneck from DB to API.
+
+If you have multiple sitemap pages, expose a sitemap index that lists each page URL, and cache that index too. Prefer cursor-based pagination over deep offsets for very large tables.
+
+### 3.4 Cross-Request LRU Caching
 
 **Impact: HIGH (caches across requests)**
 
@@ -781,7 +908,7 @@ Use when sequential user actions hit multiple endpoints needing the same data wi
 
 Reference: [https://github.com/isaacs/node-lru-cache](https://github.com/isaacs/node-lru-cache)
 
-### 3.4 Minimize Serialization at RSC Boundaries
+### 3.5 Minimize Serialization at RSC Boundaries
 
 **Impact: HIGH (reduces data transfer size)**
 
@@ -815,7 +942,7 @@ function Profile({ name }: { name: string }) {
 }
 ```
 
-### 3.5 Parallel Data Fetching with Component Composition
+### 3.6 Parallel Data Fetching with Component Composition
 
 **Impact: CRITICAL (eliminates server-side waterfalls)**
 
@@ -894,7 +1021,7 @@ export default function Page() {
 }
 ```
 
-### 3.6 Per-Request Deduplication with React.cache()
+### 3.7 Per-Request Deduplication with React.cache()
 
 **Impact: MEDIUM (deduplicates within request)**
 
@@ -960,7 +1087,7 @@ Use `React.cache()` to deduplicate these operations across your component tree.
 
 Reference: [https://react.dev/reference/react/cache](https://react.dev/reference/react/cache)
 
-### 3.7 Use after() for Non-Blocking Operations
+### 3.8 Use after() for Non-Blocking Operations
 
 **Impact: MEDIUM (faster response times)**
 
