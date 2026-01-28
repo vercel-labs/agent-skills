@@ -18,6 +18,40 @@ Comprehensive performance optimization guide for React and Next.js applications,
 
 ---
 
+## ⚠️ React Compiler Detection (Check First!)
+
+**Before applying rules from Section 5 (Re-render Optimization) or Section 6.3 (Hoist Static JSX), you MUST check if React Compiler is enabled in the project.**
+
+### How to Detect React Compiler
+
+Check these locations in the target project:
+
+1. **package.json** - Look for `babel-plugin-react-compiler` in dependencies or devDependencies
+2. **babel.config.js / .babelrc** - Look for `babel-plugin-react-compiler` in plugins
+3. **next.config.js** - Look for `reactCompiler: true` or `experimental: { reactCompiler: true }`
+
+### Rules to SKIP When React Compiler is Enabled
+
+If React Compiler is detected, **DO NOT apply these patterns**:
+
+| Rule | Pattern to Skip | Reason |
+|------|-----------------|--------|
+| 5.2 | `memo()` wrappers | Compiler auto-memoizes components |
+| 5.2 | `useMemo()` for component memoization | Compiler handles this |
+| 5.5 | `useCallback()` for stable callbacks | Compiler auto-memoizes callbacks |
+| 6.3 | Manual JSX hoisting | Compiler auto-hoists static elements |
+
+**The React Compiler automatically performs these optimizations.** Adding them manually creates unnecessary code that the compiler will optimize anyway.
+
+### What to Do Instead
+
+When React Compiler is enabled:
+- Write components without manual memoization
+- Focus on other optimizations (Sections 1-4, 7-8) which remain valuable
+- Trust the compiler to optimize re-renders automatically
+
+---
+
 ## Table of Contents
 
 1. [Eliminating Waterfalls](#1-eliminating-waterfalls) — **CRITICAL**
@@ -1422,6 +1456,8 @@ const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () =
 
 **Impact: MEDIUM (enables early returns)**
 
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically handles memoization.
+
 Extract expensive work into memoized components to enable early returns before computation.
 
 **Incorrect: computes avatar even when loading**
@@ -1456,7 +1492,24 @@ function Profile({ user, loading }: Props) {
 }
 ```
 
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
+**With React Compiler (no manual memoization needed):**
+
+```tsx
+// React Compiler automatically memoizes - no memo() or useMemo() needed
+function UserAvatar({ user }: { user: User }) {
+  const id = computeAvatarId(user)
+  return <Avatar id={id} />
+}
+
+function Profile({ user, loading }: Props) {
+  if (loading) return <Skeleton />
+  return (
+    <div>
+      <UserAvatar user={user} />
+    </div>
+  )
+}
+```
 
 ### 5.6 Narrow Effect Dependencies
 
@@ -1891,6 +1944,8 @@ For 1000 messages, browser skips layout/paint for ~990 off-screen items (10× fa
 
 **Impact: LOW (avoids re-creation)**
 
+> **⚠️ Skip this rule if React Compiler is enabled.** Check for `babel-plugin-react-compiler` in package.json or `reactCompiler: true` (or `experimental.reactCompiler: true`) in next.config.js. The compiler automatically hoists static elements.
+
 Extract static JSX outside components to avoid re-creation.
 
 **Incorrect: recreates element every render**
@@ -1927,7 +1982,18 @@ function Container() {
 
 This is especially helpful for large and static SVG nodes, which can be expensive to recreate on every render.
 
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, the compiler automatically hoists static JSX elements and optimizes component re-renders, making manual hoisting unnecessary.
+**With React Compiler:** Just write the component normally - the compiler automatically hoists static elements:
+
+```tsx
+// React Compiler handles this automatically
+function Container() {
+  return (
+    <div>
+      {loading && <div className="animate-pulse h-20 bg-gray-200" />}
+    </div>
+  )
+}
+```
 
 ### 6.4 Optimize SVG Precision
 
