@@ -155,6 +155,37 @@ detect_framework() {
     echo "null"
 }
 
+# Helper function to extract JSON values
+# Try to use jq if available, otherwise use fallback secure
+extract_json_value() {
+    local json="$1"
+    local key="$2"
+    
+    # Try to use jq first (more robust)
+    if command -v jq >/dev/null 2>&1; then
+        echo "$json" | jq -r ".$key // empty" 2>/dev/null
+    else
+        # Fallback: use grep but with more secure validation
+        # Remove blank spaces and line breaks, search for the pattern
+        local cleaned=$(echo "$json" | tr -d '\n\r' | sed 's/[[:space:]]*//g')
+        echo "$cleaned" | grep -o "\"$key\":\"[^\"]*\"" | sed 's/.*:"\([^"]*\)".*/\1/' || echo ""
+    fi
+}
+
+# Check if the response is valid JSON
+validate_json() {
+    local json="$1"
+    
+    if command -v jq >/dev/null 2>&1; then
+        echo "$json" | jq . >/dev/null 2>&1
+    else
+        # Basic validation: check if starts with { and ends with }
+        # Remove blank spaces
+        local trimmed=$(echo "$json" | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        echo "$trimmed" | grep -q '^{.*}$'
+    fi
+}
+
 # Parse arguments
 INPUT_PATH="${1:-.}"
 
@@ -221,16 +252,25 @@ fi
 echo "Deploying..." >&2
 RESPONSE=$(curl -s -X POST "$DEPLOY_ENDPOINT" -F "file=@$TARBALL" -F "framework=$FRAMEWORK")
 
+# Check if the response is valid JSON before processing
+if ! validate_json "$RESPONSE"; then
+    echo "Error: Invalid JSON response from server" >&2
+    echo "$RESPONSE" >&2
+    exit 1
+fi
+
 # Check for error in response
-if echo "$RESPONSE" | grep -q '"error"'; then
-    ERROR_MSG=$(echo "$RESPONSE" | grep -o '"error":"[^"]*"' | cut -d'"' -f4)
+ERROR_MSG=$(extract_json_value "$RESPONSE" "error")
+if [ -n "$ERROR_MSG" ]; then
     echo "Error: $ERROR_MSG" >&2
     exit 1
 fi
 
-# Extract URLs from response
-PREVIEW_URL=$(echo "$RESPONSE" | grep -o '"previewUrl":"[^"]*"' | cut -d'"' -f4)
-CLAIM_URL=$(echo "$RESPONSE" | grep -o '"claimUrl":"[^"]*"' | cut -d'"' -f4)
+# Extract values from response using robust JSON parsing
+PREVIEW_URL=$(extract_json_value "$RESPONSE" "previewUrl")
+CLAIM_URL=$(extract_json_value "$RESPONSE" "claimUrl")
+DEPLOYMENT_ID=$(extract_json_value "$RESPONSE" "deploymentId")
+PROJECT_ID=$(extract_json_value "$RESPONSE" "projectId")
 
 if [ -z "$PREVIEW_URL" ]; then
     echo "Error: Could not extract preview URL from response" >&2
