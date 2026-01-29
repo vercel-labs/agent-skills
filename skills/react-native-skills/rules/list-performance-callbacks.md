@@ -30,7 +30,7 @@ return (
 **Correct (a single function instance passed to each item):**
 
 ```typescript
-const onPress = useCallback(() => handlePress(item.id), [handlePress, item.id])
+const onPress = useCallback((item) => handlePress(item.id), [handlePress])
 
 return (
   <LegendList
