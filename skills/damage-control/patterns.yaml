@@ -1,0 +1,610 @@
+# Claude Code Security Patterns
+# =============================
+# Add patterns here to block dangerous commands.
+# Each script (py, sh, ts) loads this file.
+
+# These patterns are matched against Bash tool commands only
+bashToolPatterns:
+  # ---------------------------------------------------------------------------
+  # DESTRUCTIVE FILE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\brm\s+(-[^\s]*)*-[rRf]'
+    reason: rm with recursive or force flags
+
+  - pattern: '\brm\s+-[rRf]'
+    reason: rm with recursive or force flags
+
+  - pattern: '\brm\s+--recursive'
+    reason: rm with --recursive flag
+
+  - pattern: '\brm\s+--force'
+    reason: rm with --force flag
+
+  - pattern: '\bsudo\s+rm\b'
+    reason: sudo rm
+
+  - pattern: '\brmdir\s+--ignore-fail-on-non-empty'
+    reason: rmdir ignore-fail
+
+  # ---------------------------------------------------------------------------
+  # PERMISSION CHANGES
+  # ---------------------------------------------------------------------------
+  - pattern: '\bchmod\s+(-[^\s]+\s+)*777\b'
+    reason: chmod 777 (world writable)
+
+  - pattern: '\bchmod\s+-[Rr].*777'
+    reason: recursive chmod 777
+
+  - pattern: '\bchown\s+-[Rr].*\broot\b'
+    reason: recursive chown to root
+
+  # ---------------------------------------------------------------------------
+  # GIT DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bgit\s+reset\s+--hard\b'
+    reason: git reset --hard (use --soft or stash)
+
+  - pattern: '\bgit\s+clean\s+(-[^\s]*)*-[fd]'
+    reason: git clean with force/directory flags
+
+  # Note: This blocks --force but NOT --force-with-lease
+  - pattern: '\bgit\s+push\s+.*--force(?!-with-lease)'
+    reason: git push --force (use --force-with-lease)
+
+  - pattern: '\bgit\s+push\s+(-[^\s]*)*-f\b'
+    reason: git push -f (use --force-with-lease)
+
+  - pattern: '\bgit\s+stash\s+clear\b'
+    reason: git stash clear (deletes ALL stashes)
+
+  - pattern: '\bgit\s+reflog\s+expire\b'
+    reason: git reflog expire (destroys recovery mechanism)
+
+  - pattern: '\bgit\s+gc\s+.*--prune=now'
+    reason: git gc --prune=now (can lose dangling commits)
+
+  - pattern: '\bgit\s+filter-branch\b'
+    reason: git filter-branch (rewrites entire history)
+
+  # ---------------------------------------------------------------------------
+  # GIT OPERATIONS REQUIRING CONFIRMATION (ask: true)
+  # ---------------------------------------------------------------------------
+  - pattern: '\bgit\s+checkout\s+--\s*\.'
+    reason: Discards all uncommitted changes
+    ask: true
+
+  - pattern: '\bgit\s+restore\s+\.'
+    reason: Discards all uncommitted changes
+    ask: true
+
+  - pattern: '\bgit\s+stash\s+drop\b'
+    reason: Permanently deletes a stash
+    ask: true
+
+  - pattern: '\bgit\s+branch\s+(-[^\s]*)*-D'
+    reason: Force deletes branch (even if unmerged)
+    ask: true
+
+  - pattern: '\bgit\s+push\s+\S+\s+--delete\b'
+    reason: Deletes remote branch
+    ask: true
+
+  - pattern: '\bgit\s+push\s+\S+\s+:\S+'
+    reason: Deletes remote branch (old syntax)
+    ask: true
+
+  # ---------------------------------------------------------------------------
+  # SYSTEM-LEVEL DESTRUCTION
+  # ---------------------------------------------------------------------------
+  - pattern: '\bmkfs\.'
+    reason: filesystem format command
+
+  - pattern: '\bdd\s+.*of=/dev/'
+    reason: dd writing to device
+
+  # ---------------------------------------------------------------------------
+  # PROCESS DESTRUCTION
+  # ---------------------------------------------------------------------------
+  - pattern: '\bkill\s+-9\s+-1\b'
+    reason: kill all processes
+
+  - pattern: '\bkillall\s+-9\b'
+    reason: killall -9
+
+  - pattern: '\bpkill\s+-9\b'
+    reason: pkill -9
+
+  # ---------------------------------------------------------------------------
+  # HISTORY/SHELL MANIPULATION
+  # ---------------------------------------------------------------------------
+  - pattern: '\bhistory\s+-c\b'
+    reason: clearing shell history
+
+  # ---------------------------------------------------------------------------
+  # AWS CLI DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\baws\s+s3\s+rm\s+.*--recursive'
+    reason: aws s3 rm --recursive (deletes all objects)
+
+  - pattern: '\baws\s+s3\s+rb\s+.*--force'
+    reason: aws s3 rb --force (force removes bucket)
+
+  - pattern: '\baws\s+ec2\s+terminate-instances\b'
+    reason: aws ec2 terminate-instances
+
+  - pattern: '\baws\s+rds\s+delete-db-instance\b'
+    reason: aws rds delete-db-instance
+
+  - pattern: '\baws\s+cloudformation\s+delete-stack\b'
+    reason: aws cloudformation delete-stack (deletes infrastructure)
+
+  - pattern: '\baws\s+dynamodb\s+delete-table\b'
+    reason: aws dynamodb delete-table
+
+  - pattern: '\baws\s+eks\s+delete-cluster\b'
+    reason: aws eks delete-cluster
+
+  - pattern: '\baws\s+lambda\s+delete-function\b'
+    reason: aws lambda delete-function
+
+  - pattern: '\baws\s+iam\s+delete-role\b'
+    reason: aws iam delete-role
+
+  - pattern: '\baws\s+iam\s+delete-user\b'
+    reason: aws iam delete-user
+
+  # ---------------------------------------------------------------------------
+  # GCP (gcloud) DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bgcloud\s+projects\s+delete\b'
+    reason: gcloud projects delete (DELETES ENTIRE PROJECT)
+
+  - pattern: '\bgcloud\s+compute\s+instances\s+delete\b'
+    reason: gcloud compute instances delete
+
+  - pattern: '\bgcloud\s+sql\s+instances\s+delete\b'
+    reason: gcloud sql instances delete
+
+  - pattern: '\bgcloud\s+container\s+clusters\s+delete\b'
+    reason: gcloud container clusters delete (GKE)
+
+  - pattern: '\bgcloud\s+storage\s+rm\s+.*-r'
+    reason: gcloud storage rm -r (recursive delete)
+
+  - pattern: '\bgcloud\s+functions\s+delete\b'
+    reason: gcloud functions delete
+
+  - pattern: '\bgcloud\s+iam\s+service-accounts\s+delete\b'
+    reason: gcloud iam service-accounts delete
+
+  # ---------------------------------------------------------------------------
+  # FIREBASE DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bfirebase\s+projects:delete\b'
+    reason: firebase projects:delete (deletes entire project)
+
+  - pattern: '\bfirebase\s+firestore:delete\s+.*--all-collections'
+    reason: firebase firestore:delete --all-collections (wipes all data)
+
+  - pattern: '\bfirebase\s+database:remove\b'
+    reason: firebase database:remove (wipes Realtime DB)
+
+  - pattern: '\bfirebase\s+hosting:disable\b'
+    reason: firebase hosting:disable
+
+  - pattern: '\bfirebase\s+functions:delete\b'
+    reason: firebase functions:delete
+
+  # ---------------------------------------------------------------------------
+  # VERCEL DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bvercel\s+remove\s+.*--yes'
+    reason: vercel remove --yes (removes deployment)
+
+  - pattern: '\bvercel\s+projects\s+rm\b'
+    reason: vercel projects rm (deletes project)
+
+  - pattern: '\bvercel\s+env\s+rm\s+.*--yes'
+    reason: vercel env rm --yes (removes env variables)
+
+  # ---------------------------------------------------------------------------
+  # NETLIFY DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bnetlify\s+sites:delete\b'
+    reason: netlify sites:delete (deletes entire site)
+
+  - pattern: '\bnetlify\s+functions:delete\b'
+    reason: netlify functions:delete
+
+  # ---------------------------------------------------------------------------
+  # CLOUDFLARE (wrangler) DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bwrangler\s+delete\b'
+    reason: wrangler delete (deletes Worker)
+
+  - pattern: '\bwrangler\s+r2\s+bucket\s+delete\b'
+    reason: wrangler r2 bucket delete
+
+  - pattern: '\bwrangler\s+kv:namespace\s+delete\b'
+    reason: wrangler kv:namespace delete
+
+  - pattern: '\bwrangler\s+d1\s+delete\b'
+    reason: wrangler d1 delete (deletes database)
+
+  - pattern: '\bwrangler\s+queues\s+delete\b'
+    reason: wrangler queues delete
+
+  # ---------------------------------------------------------------------------
+  # DOCKER DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bdocker\s+system\s+prune\s+.*-a'
+    reason: docker system prune -a (removes all unused data)
+
+  - pattern: '\bdocker\s+rm\s+.*-f.*\$\(docker\s+ps'
+    reason: docker rm -f $(docker ps) (force removes containers)
+
+  - pattern: '\bdocker\s+rmi\s+.*-f'
+    reason: docker rmi -f (force removes images)
+
+  - pattern: '\bdocker\s+volume\s+rm\b'
+    reason: docker volume rm (data loss)
+
+  - pattern: '\bdocker\s+volume\s+prune\b'
+    reason: docker volume prune (removes unused volumes)
+
+  # ---------------------------------------------------------------------------
+  # KUBERNETES (kubectl) DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bkubectl\s+delete\s+namespace\b'
+    reason: kubectl delete namespace
+
+  - pattern: '\bkubectl\s+delete\s+all\s+--all'
+    reason: kubectl delete all --all
+
+  - pattern: '\bkubectl\s+delete\s+.*--all\s+--all-namespaces'
+    reason: kubectl delete across all namespaces
+
+  - pattern: '\bhelm\s+uninstall\b'
+    reason: helm uninstall (removes release)
+
+  # ---------------------------------------------------------------------------
+  # DATABASE CLI DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bredis-cli\s+FLUSHALL'
+    reason: redis-cli FLUSHALL (wipes ALL data)
+
+  - pattern: '\bredis-cli\s+FLUSHDB'
+    reason: redis-cli FLUSHDB (wipes database)
+
+  - pattern: '\bmongosh.*dropDatabase'
+    reason: MongoDB dropDatabase
+
+  - pattern: '\bmongo.*dropDatabase'
+    reason: MongoDB dropDatabase
+
+  - pattern: '\bdropdb\b'
+    reason: PostgreSQL dropdb
+
+  - pattern: '\bmysqladmin\s+drop\b'
+    reason: MySQL drop database
+
+  # ---------------------------------------------------------------------------
+  # INFRASTRUCTURE AS CODE DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bterraform\s+destroy\b'
+    reason: terraform destroy (destroys all infrastructure)
+
+  - pattern: '\bpulumi\s+destroy\b'
+    reason: pulumi destroy (destroys all resources)
+
+  - pattern: '\bserverless\s+remove\b'
+    reason: serverless remove (removes stack)
+
+  - pattern: '\bsls\s+remove\b'
+    reason: sls remove (removes stack)
+
+  - pattern: '\bsam\s+delete\b'
+    reason: sam delete (deletes SAM application)
+
+  # ---------------------------------------------------------------------------
+  # HEROKU DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bheroku\s+apps:destroy\b'
+    reason: heroku apps:destroy
+
+  - pattern: '\bheroku\s+pg:reset\b'
+    reason: heroku pg:reset (resets database)
+
+  # ---------------------------------------------------------------------------
+  # OTHER CLOUD PLATFORMS DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bfly\s+apps\s+destroy\b'
+    reason: fly apps destroy (Fly.io)
+
+  - pattern: '\bfly\s+destroy\b'
+    reason: fly destroy (Fly.io)
+
+  - pattern: '\bdoctl\s+compute\s+droplet\s+delete\b'
+    reason: doctl droplet delete (DigitalOcean)
+
+  - pattern: '\bdoctl\s+databases\s+delete\b'
+    reason: doctl databases delete (DigitalOcean)
+
+  - pattern: '\bsupabase\s+db\s+reset\b'
+    reason: supabase db reset
+
+  # ---------------------------------------------------------------------------
+  # GITHUB CLI DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bgh\s+repo\s+delete\b'
+    reason: gh repo delete (deletes repository)
+
+  # ---------------------------------------------------------------------------
+  # PACKAGE REGISTRY DESTRUCTIVE OPERATIONS
+  # ---------------------------------------------------------------------------
+  - pattern: '\bnpm\s+unpublish\b'
+    reason: npm unpublish (removes package from registry)
+
+  # ---------------------------------------------------------------------------
+  # SQL DESTRUCTIVE OPERATIONS (catastrophic - no WHERE clause)
+  # ---------------------------------------------------------------------------
+  - pattern: 'DELETE\s+FROM\s+\w+\s*;'
+    reason: DELETE without WHERE clause (will delete ALL rows)
+
+  - pattern: 'DELETE\s+FROM\s+\w+\s*$'
+    reason: DELETE without WHERE clause (will delete ALL rows)
+
+  - pattern: 'DELETE\s+\*\s+FROM'
+    reason: DELETE * (will delete ALL rows)
+
+  - pattern: '\bTRUNCATE\s+TABLE\b'
+    reason: TRUNCATE TABLE (will delete ALL rows)
+
+  - pattern: '\bDROP\s+TABLE\b'
+    reason: DROP TABLE
+
+  - pattern: '\bDROP\s+DATABASE\b'
+    reason: DROP DATABASE
+
+  # ---------------------------------------------------------------------------
+  # SQL OPERATIONS REQUIRING CONFIRMATION (ask: true)
+  # ---------------------------------------------------------------------------
+  - pattern: '\bDELETE\s+FROM\s+\w+\s+WHERE\b.*\bid\s*='
+    reason: SQL DELETE with specific ID
+    ask: true
+
+# ---------------------------------------------------------------------------
+# ZERO ACCESS PATHS - No read, write, or any access allowed
+# ---------------------------------------------------------------------------
+# These contain secrets/credentials - block ALL operations including reads
+# Enforced by: Bash, Edit, Write tools
+# Supports glob patterns: *.pem, .env*, *-credentials.json
+zeroAccessPaths:
+  # ---------------------------------------------------------------------------
+  # ENVIRONMENT FILES (HIGH RISK - contain secrets)
+  # ---------------------------------------------------------------------------
+  - ".env"
+  - ".env.*"
+  - ".env*.local"
+  - "*.env"
+
+  # ---------------------------------------------------------------------------
+  # SSH KEYS AND CONFIG
+  # ---------------------------------------------------------------------------
+  - "~/.ssh/"
+
+  # ---------------------------------------------------------------------------
+  # GPG KEYS
+  # ---------------------------------------------------------------------------
+  - "~/.gnupg/"
+
+  # ---------------------------------------------------------------------------
+  # CLOUD PROVIDER CREDENTIALS
+  # ---------------------------------------------------------------------------
+  # AWS
+  - "~/.aws/"
+
+  # GCP
+  - "~/.config/gcloud/"
+  - "*-credentials.json"
+  - "*serviceAccount*.json"
+  - "*service-account*.json"
+
+  # Azure
+  - "~/.azure/"
+
+  # Kubernetes
+  - "~/.kube/"
+  - "kubeconfig"
+  - "*-secret.yaml"
+  - "secrets.yaml"
+
+  # Docker
+  - "~/.docker/"
+
+  # ---------------------------------------------------------------------------
+  # SSL/TLS CERTIFICATES AND PRIVATE KEYS
+  # ---------------------------------------------------------------------------
+  - "*.pem"
+  - "*.key"
+  - "*.p12"
+  - "*.pfx"
+
+  # ---------------------------------------------------------------------------
+  # TERRAFORM STATE (contains secrets in plaintext!)
+  # ---------------------------------------------------------------------------
+  - "*.tfstate"
+  - "*.tfstate.backup"
+  - ".terraform/"
+
+  # ---------------------------------------------------------------------------
+  # PLATFORM TOKENS (Vercel, Netlify, etc.)
+  # ---------------------------------------------------------------------------
+  - ".vercel/"
+  - ".netlify/"
+
+  # ---------------------------------------------------------------------------
+  # FIREBASE/SUPABASE
+  # ---------------------------------------------------------------------------
+  - "firebase-adminsdk*.json"
+  - "serviceAccountKey.json"
+  - ".supabase/"
+
+  # ---------------------------------------------------------------------------
+  # PACKAGE MANAGER AUTH & CREDENTIALS
+  # ---------------------------------------------------------------------------
+  - "~/.netrc"
+  - "~/.npmrc"
+  - "~/.pypirc"
+  - "~/.git-credentials"
+  - ".git-credentials"
+
+  # ---------------------------------------------------------------------------
+  # DATABASE DUMPS (may contain production data)
+  # ---------------------------------------------------------------------------
+  - "dump.sql"
+  - "backup.sql"
+  - "*.dump"
+
+# ---------------------------------------------------------------------------
+# READ-ONLY PATHS - Can read, but not write/edit/delete
+# ---------------------------------------------------------------------------
+# Safe to read but should never be modified by AI
+# Enforced by: Bash, Edit, Write tools
+# Supports glob patterns: *.lock, *.min.js
+readOnlyPaths:
+  # ---------------------------------------------------------------------------
+  # SYSTEM DIRECTORIES
+  # ---------------------------------------------------------------------------
+  - /etc/
+  - /usr/
+  - /bin/
+  - /sbin/
+  - /boot/
+  - /root/
+
+  # ---------------------------------------------------------------------------
+  # SHELL HISTORY FILES
+  # ---------------------------------------------------------------------------
+  - ~/.bash_history
+  - ~/.zsh_history
+  - ~/.node_repl_history
+
+  # ---------------------------------------------------------------------------
+  # SHELL CONFIG FILES
+  # ---------------------------------------------------------------------------
+  - ~/.bashrc
+  - ~/.zshrc
+  - ~/.profile
+  - ~/.bash_profile
+
+  # ---------------------------------------------------------------------------
+  # LOCK FILES - Never manually edit, use package managers
+  # ---------------------------------------------------------------------------
+  - "package-lock.json"
+  - "yarn.lock"
+  - "pnpm-lock.yaml"
+  - "Gemfile.lock"
+  - "poetry.lock"
+  - "Pipfile.lock"
+  - "composer.lock"
+  - "Cargo.lock"
+  - "go.sum"
+  - "flake.lock"
+  - "bun.lockb"
+  - "uv.lock"
+  - "npm-shrinkwrap.json"
+  - "*.lock"
+  - "*.lockb"
+
+  # ---------------------------------------------------------------------------
+  # MINIFIED/COMPILED FILES - Generated, don't edit
+  # ---------------------------------------------------------------------------
+  - "*.min.js"
+  - "*.min.css"
+  - "*.bundle.js"
+  - "*.chunk.js"
+
+  # ---------------------------------------------------------------------------
+  # BUILD ARTIFACTS - Generated directories, don't edit
+  # ---------------------------------------------------------------------------
+  - dist/
+  - build/
+  - out/
+  - .next/
+  - .nuxt/
+  - .output/
+  - node_modules/
+  - __pycache__/
+  - .venv/
+  - venv/
+  - target/
+
+# ---------------------------------------------------------------------------
+# NO-DELETE PATHS - Can read/write/edit, but not delete
+# ---------------------------------------------------------------------------
+# Protect important files from accidental deletion
+# Enforced by: Bash tool only (Edit/Write don't delete files)
+# Supports glob patterns: *.md, LICENSE*
+noDeletePaths:
+  # ---------------------------------------------------------------------------
+  # CLAUDE CODE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  - ~/.claude/
+  - CLAUDE.md
+
+  # ---------------------------------------------------------------------------
+  # LICENSE AND LEGAL FILES
+  # ---------------------------------------------------------------------------
+  - "LICENSE"
+  - "LICENSE.*"
+  - "COPYING"
+  - "COPYING.*"
+  - "NOTICE"
+  - "PATENTS"
+
+  # ---------------------------------------------------------------------------
+  # PROJECT DOCUMENTATION
+  # ---------------------------------------------------------------------------
+  - "README.md"
+  - "README.*"
+  - "CONTRIBUTING.md"
+  - "CHANGELOG.md"
+  - "CODE_OF_CONDUCT.md"
+  - "SECURITY.md"
+
+  # ---------------------------------------------------------------------------
+  # GIT DIRECTORY
+  # ---------------------------------------------------------------------------
+  - .git/
+  - .gitignore
+  - .gitattributes
+  - .gitmodules
+
+  # ---------------------------------------------------------------------------
+  # CI/CD CONFIGURATION
+  # ---------------------------------------------------------------------------
+  - .github/
+  - .gitlab-ci.yml
+  - .circleci/
+  - Jenkinsfile
+  - .travis.yml
+  - azure-pipelines.yml
+
+  # ---------------------------------------------------------------------------
+  # DOCKER CONFIGURATION
+  # ---------------------------------------------------------------------------
+  - Dockerfile
+  - "Dockerfile.*"
+  - docker-compose.yml
+  - "docker-compose.*.yml"
+  - .dockerignore
+
+  # ---------------------------------------------------------------------------
+  # COMMON PROJECT DIRECTORIES (uncomment to enable)
+  # ---------------------------------------------------------------------------
+  # - src/
+  # - lib/
+  # - app/
+  # - tests/
+  # - docs/

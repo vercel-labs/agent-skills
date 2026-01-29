@@ -1,94 +1,136 @@
 ---
 name: vercel-deploy
-description: Deploy applications and websites to Vercel. Use this skill when the user requests deployment actions such as "Deploy my app", "Deploy this to production", "Create a preview deployment", "Deploy and give me the link", or "Push this live". No authentication required - returns preview URL and claimable deployment link.
+description: Build and deploy web UI projects (React, Vue, Svelte, Next.js, etc.) to Vercel cloud or locally. Supports framework auto-detection, cloud deployment with shareable URLs, local development serving, and portable uv packages. Use when building web apps, deploying to production, running locally, or packaging for distribution.
 metadata:
   author: vercel
-  version: "1.0.0"
+  version: "2.0.0"
 ---
 
-# Vercel Deploy
+# Deploy
 
-Deploy any project to Vercel instantly. No authentication required.
+Deploy any project to Vercel or run locally. Supports Vercel cloud deployment (no auth required) and local development serving.
 
 ## How It Works
 
-1. Packages your project into a tarball (excludes `node_modules` and `.git`)
-2. Auto-detects framework from `package.json`
-3. Uploads to deployment service
-4. Returns **Preview URL** (live site) and **Claim URL** (transfer to your Vercel account)
+1. **Ask the user** which deployment option they prefer:
+   - **Vercel** - Deploy to cloud, get preview URL and claim link
+   - **Local** - Build and serve locally via FastAPI
+   - **Package for uv** - Create portable package runnable with `uv`
 
-## Usage
+2. Execute the appropriate script based on user choice
+
+3. Return deployment URL or local server information
+
+## Deployment Options
+
+### Option 1: Vercel (Cloud Deployment)
+
+Packages project and deploys to Vercel. No authentication required.
 
 ```bash
 bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh [path]
 ```
 
-**Arguments:**
-- `path` - Directory to deploy, or a `.tgz` file (defaults to current directory)
+**Returns:** Preview URL (live site) and Claim URL (transfer to your Vercel account)
 
-**Examples:**
+### Option 2: Local Deployment
+
+Builds the npm project and serves the static output via FastAPI.
 
 ```bash
-# Deploy current directory
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh
-
-# Deploy specific project
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh /path/to/project
-
-# Deploy existing tarball
-bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh /path/to/project.tgz
+bash /mnt/skills/user/vercel-deploy/scripts/deploy-local.sh [path] [port]
 ```
 
-## Output
+**Arguments:**
+- `path` - Directory to deploy (defaults to current directory)
+- `port` - Port to serve on (defaults to 8000)
 
+**Returns:** Local URL (e.g., http://localhost:8000)
+
+### Option 3: Package for uv
+
+Creates a portable package with a run script that uses `uv` to serve the built project.
+
+```bash
+bash /mnt/skills/user/vercel-deploy/scripts/package-uv.sh [path] [output-dir]
+```
+
+**Arguments:**
+- `path` - Directory to package (defaults to current directory)
+- `output-dir` - Where to create the package (defaults to `./deploy-package`)
+
+**Returns:** Path to the generated package with instructions
+
+## Usage Flow
+
+When a user asks to deploy, **always ask which option they prefer**:
+
+```
+How would you like to deploy this project?
+
+1. **Vercel** - Deploy to cloud (get shareable URL)
+2. **Local** - Run locally on your machine
+3. **Package for uv** - Create portable package to run anywhere
+```
+
+## Output Examples
+
+### Vercel Deployment
 ```
 Preparing deployment...
 Detected framework: nextjs
 Creating deployment package...
 Deploying...
-✓ Deployment successful!
+Deployment successful!
 
 Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
-The script also outputs JSON to stdout for programmatic use:
+### Local Deployment
+```
+Building project...
+npm install completed
+npm run build completed
+Starting local server...
 
-```json
-{
-  "previewUrl": "https://skill-deploy-abc123.vercel.app",
-  "claimUrl": "https://vercel.com/claim-deployment?code=...",
-  "deploymentId": "dpl_...",
-  "projectId": "prj_..."
-}
+Local server running at: http://localhost:8000
+Press Ctrl+C to stop the server
+```
+
+### Package for uv
+```
+Building project...
+Creating uv package...
+Package created at: ./deploy-package
+
+To run the package:
+  cd ./deploy-package
+  ./run.sh
+
+Or with uv directly:
+  cd ./deploy-package
+  uv run server.py
 ```
 
 ## Framework Detection
 
-The script auto-detects frameworks from `package.json`. Supported frameworks include:
+Auto-detects frameworks from `package.json`. Supported frameworks include:
 
 - **React**: Next.js, Gatsby, Create React App, Remix, React Router
 - **Vue**: Nuxt, Vitepress, Vuepress, Gridsome
 - **Svelte**: SvelteKit, Svelte, Sapper
 - **Other Frontend**: Astro, Solid Start, Angular, Ember, Preact, Docusaurus
-- **Backend**: Express, Hono, Fastify, NestJS, Elysia, h3, Nitro
 - **Build Tools**: Vite, Parcel
 - **And more**: Blitz, Hydrogen, RedwoodJS, Storybook, Sanity, etc.
 
 For static HTML projects (no `package.json`), framework is set to `null`.
 
-## Static HTML Projects
-
-For projects without a `package.json`:
-- If there's a single `.html` file not named `index.html`, it gets renamed automatically
-- This ensures the page is served at the root URL (`/`)
-
 ## Present Results to User
 
-Always show both URLs:
-
+### For Vercel:
 ```
-✓ Deployment successful!
+Deployment successful!
 
 Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
@@ -97,11 +139,33 @@ View your site at the Preview URL.
 To transfer this deployment to your Vercel account, visit the Claim URL.
 ```
 
+### For Local:
+```
+Local server is running!
+
+URL: http://localhost:8000
+
+The server will keep running until you stop it with Ctrl+C.
+```
+
+### For uv Package:
+```
+Package created successfully!
+
+Location: ./deploy-package
+
+To run anywhere with uv installed:
+  cd ./deploy-package
+  ./run.sh
+
+Requirements: uv (https://github.com/astral-sh/uv), Python 3.11+
+```
+
 ## Troubleshooting
 
-### Network Egress Error
+### Vercel Network Egress Error
 
-If deployment fails due to network restrictions (common on claude.ai), tell the user:
+If deployment fails due to network restrictions (common on claude.ai):
 
 ```
 Deployment failed due to network restrictions. To fix this:
@@ -109,4 +173,24 @@ Deployment failed due to network restrictions. To fix this:
 1. Go to https://claude.ai/settings/capabilities
 2. Add *.vercel.com to the allowed domains
 3. Try deploying again
+```
+
+### Local Deployment - npm not found
+
+```
+npm is required for building the project. Please install Node.js:
+https://nodejs.org/
+```
+
+### Local Deployment - Build failed
+
+Check the build output for errors. Common issues:
+- Missing dependencies: Run `npm install` first
+- Build script missing: Ensure `package.json` has a `build` script
+
+### Package for uv - uv not found
+
+The generated package requires `uv` to run. Install it:
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
