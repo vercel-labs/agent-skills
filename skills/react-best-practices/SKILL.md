@@ -90,7 +90,9 @@ Reference these guidelines when:
 - `rendering-hoist-jsx` - Extract static JSX outside components
 - `rendering-svg-precision` - Reduce SVG coordinate precision
 - `rendering-hydration-no-flicker` - Use inline script for client-only data
-- `rendering-hydration-suppress-warning` - Suppress expected mismatches
+- `rendering-hydration-errors` - Common hydration error patterns and fixes
+- `rendering-use-client-directive` - Understanding 'use client' (not browser-only!)
+- `rendering-use-id` - Use useId() for stable hydration-safe identifiers
 - `rendering-activity` - Use Activity component for show/hide
 - `rendering-conditional-render` - Use ternary, not && for conditionals
 - `rendering-usetransition-loading` - Prefer useTransition for loading state
@@ -115,6 +117,7 @@ Reference these guidelines when:
 - `advanced-event-handler-refs` - Store event handlers in refs
 - `advanced-init-once` - Initialize app once per app load
 - `advanced-use-latest` - useLatest for stable callback refs
+- `advanced-use-hook` - Use use() hook for promises in sync components
 
 ## How to Use
 
