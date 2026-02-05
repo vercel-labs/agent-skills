@@ -114,10 +114,94 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+### command-name (Plugin Structure)
+
+Claude Code plugin directory layout, manifest (`.claude-plugin/plugin.json`), and component organization (commands, agents, skills, hooks).
+
+**Use when:**
+- "Create a plugin", "scaffold a plugin", "understand plugin structure"
+- Organizing plugin components, setting up `plugin.json`
+- Using `${CLAUDE_PLUGIN_ROOT}`, configuring auto-discovery
+- Plugin architecture and file naming conventions
+
+### copilot-sdk
+
+Build agentic applications with the GitHub Copilot SDK. Embed Copilot's agent runtime in apps using Python, TypeScript, Go, or .NET.
+
+**Use when:**
+- Embedding AI agents in apps, creating custom tools
+- Implementing streaming responses, managing sessions
+- Connecting to MCP servers or creating custom agents
+- "Copilot SDK", "agentic app", "programmable agent"
+
+### create-pr
+
+Creates GitHub pull requests with properly formatted titles using the project's PR template from `.github/`.
+
+**Use when:**
+- Creating PRs, submitting changes for review
+- User says `/pr` or "create a pull request"
+- Pushing branch and opening PR via `gh pr create`
+
+### find-skills
+
+Discover and install skills from the open agent skills ecosystem via the Skills CLI (`npx skills`).
+
+**Use when:**
+- "How do I do X", "find a skill for X", "is there a skill that can..."
+- User wants to extend agent capabilities
+- Searching for installable skills at skills.sh
+
+### git-commit
+
+Generate concise, descriptive git commit messages from staged changes (imperative mood, 50-char subject, 72-char body).
+
+**Use when:**
+- Creating commits from staged changes
+- Crafting or reviewing commit message quality
+- Following conventional commit style
+
+### prompt-engineering
+
+Guide for generating effective prompts for agentic systems: technique selection, decision tree, and canonical template.
+
+**Use when:**
+- Creating or designing prompts for AI agents
+- Tool-using agents, planning agents, autonomous systems
+- Choosing techniques (ReAct, CoT, CoVe, few-shot, etc.)
+
+### refactor
+
+Refactor code to simplify architecture and implementation using TDD; preserves functionality via tests (Red-Green-Refactor).
+
+**Use when:**
+- Code is complex or hard to understand
+- Multiple responsibilities, code smells, duplication
+- Improving maintainability without changing behavior
+- Requires existing passing tests before starting
+
+### skill-creator
+
+Guide for creating effective skills: structure, SKILL.md format, bundled scripts and references, and context-efficient design.
+
+**Use when:**
+- Creating a new skill or updating an existing one
+- Extending agent capabilities with workflows or tool integrations
+- Designing skill metadata and progressive disclosure
+
+### tdd
+
+Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring; pytest-focused.
+
+**Use when:**
+- Implementing new features or fixing bugs (test first)
+- Adding tests to legacy code, improving test quality
+- Following Red-Green-Refactor with pytest
+
 ## Installation
 
 ```bash
-npx skills add vercel-labs/agent-skills
+npx skills add mguinada/agent-skills
 ```
 
 ## Usage
