@@ -18,7 +18,7 @@ the tier-suffix and directory conventions in
 | Template | Tier | Suffix | Placement |
 |----------|------|--------|-----------|
 | [unit.spec.ts](templates/unit.spec.ts) | Unit | `*.spec.ts` | `src/**/<module>.spec.ts` |
-| [integration.int.spec.ts](templates/integration.int.spec.ts) | Integration | `*.int.spec.ts` | `test/integration/` |
+| [integration.int.spec.ts](templates/integration.int.spec.ts) | Boundary integration | `*.int.spec.ts` | `test/integration/` |
 | [functional.func.spec.ts](templates/functional.func.spec.ts) | Functional | `*.func.spec.ts` | `test/functional/` |
 | [contract.contract.spec.ts](templates/contract.contract.spec.ts) | Contract | `*.contract.spec.ts` | `test/contract/` |
 | [e2e.e2e.spec.ts](templates/e2e.e2e.spec.ts) | E2E | `*.e2e.spec.ts` | `test/e2e/` |

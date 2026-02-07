@@ -8,12 +8,78 @@ This reference is language-agnostic. For file suffixes, directory layout, and
 naming conventions in a specific language, see the corresponding language
 organization skill (e.g., `typescript-testing-organization`).
 
+## Classification Rule (Hard Boundary)
+
+A test tier is determined ONLY by:
+
+- **SUT boundary**: what is “inside” the System Under Test boundary for this test
+- **Real boundary count**: how many *real* boundaries are crossed (\(0 / 1 / many\))
+
+Everything else (AAA vs GWT, `test()` vs `it()`, naming aesthetics) is secondary
+and MUST NOT be used to classify the tier.
+
+### Never classify by “how many units it touches”
+
+Classification is NOT based on “how many modules/classes/functions were
+involved.”
+
+- A test can touch many in-process units and still be a **unit test** (if no
+  real boundary is crossed and the SUT boundary is a single unit + chosen
+  collaborators).
+- A test can touch a single unit and still be a **boundary integration test**
+  (if it crosses a real boundary, such as a real database).
+
+### What counts as a “real boundary”
+
+A boundary is “real” when the test intentionally relies on the real semantics
+of that boundary (not a stub/fake/in-memory stand-in).
+
+Common real boundaries:
+
+- Database (constraints, transactions, migrations, SQL semantics)
+- Network / HTTP transport stack (router, middleware, serialization)
+- Message queue / broker
+- Filesystem
+- System clock (real time source)
+- Serializer / parser (real encoding/decoding rules)
+- Process boundary (OS/process integration)
+
+### The mechanical classifier (4 questions)
+
+1. **Did the test cross any real boundary?**
+   - No → Unit or Functional or Contract
+   - Yes → Boundary Integration or E2E/System
+2. **If yes: how many real boundaries are exercised?**
+   - Exactly one → Boundary Integration
+   - More than one → E2E/System (multi-boundary integration is generally forbidden)
+3. **If no: is the SUT a single unit or a use-case slice across units?**
+   - Single unit → Unit
+   - Slice/journey across units → Functional
+4. **Is the primary thing being proven cross-service compatibility/schema/versioning?**
+   - Yes → Contract
+   - No → keep prior classification
+
+### Decision table (quick summary)
+
+| Real boundary count | SUT boundary | Primary claim | Tier |
+|---:|-------------|--------------|------|
+| 0 | single unit (+ chosen in-process collaborators) | invariants / outputs | Unit |
+| 0 | service-level slice across multiple units (bounded context) | use-case acceptance criteria | Functional |
+| 0 (usually) | contract between producer and consumer | compatibility / schema / versioning | Contract |
+| 1 | adapter + exactly one real boundary | boundary semantics | Boundary Integration |
+| many | multiple deployed components wired together | wiring/config + critical paths | System/E2E/Harness |
+
 ---
 
 ## 1. Unit Tests (many)
 
 **Purpose:** Verify that a single unit (module, class, function) fulfills its
 explicit responsibility and contract.
+
+**SUT boundary:** One unit (module/class/function) plus any in-process
+collaborators you intentionally include.
+
+**Real boundary count:** 0.
 
 **Audience:** The developer who owns the unit. Failures pinpoint the exact
 module that broke.
@@ -50,10 +116,15 @@ module that broke.
 
 ---
 
-## 2. Integration Tests (some)
+## 2. Boundary Integration Tests (some)
 
 **Purpose:** Exercise exactly one meaningful real boundary at a time to verify
 that the system behaves correctly across that boundary.
+
+**SUT boundary:** Your adapter layer + exactly one real boundary (chosen
+deliberately).
+
+**Real boundary count:** 1.
 
 **Audience:** The team that owns the boundary adapter. Failures reveal
 serialization bugs, SQL semantics issues, transaction problems, migration
@@ -61,20 +132,17 @@ drift, concurrency errors, or retry logic failures.
 
 **Scope:**
 - "Meaningful boundary" = where the failure modes change: database, message
-  queue, filesystem, HTTP transport, external service adapter.
+  queue, filesystem, HTTP transport stack (router + middleware + serialization),
+  serializer/parser, system clock, external service adapter.
 - Typical targets: repositories, controllers/handlers/adapters, gateways.
 
 **Boundaries:**
-- MUST exercise exactly one real boundary per test.
+- MUST exercise exactly one real boundary per test (real boundary count = 1).
+- Other boundaries MUST be faked/stubbed (do not “accidentally” cross two).
 - MUST be hermetic: no shared mutable state across tests.
 - MUST be reproducible and parallelizable.
 - SHOULD use ephemeral infrastructure (e.g., container per suite/test) when
   feasible; rollback is acceptable if it preserves isolation guarantees.
-
-**Open question (decide per project):**
-- "Controller integration" — does it mean real HTTP transport (start a server)
-  or in-process handler invocation? Both are valid; the choice MUST be explicit
-  and consistent within a project.
 
 **Data setup:**
 - MUST prefer builders/factories and small composable seeds over giant fixtures.
@@ -92,7 +160,8 @@ drift, concurrency errors, or retry logic failures.
   target observable effects, not implementation internals.
 
 **Anti-patterns:**
-- Testing multiple boundaries in one test (that is a functional test).
+- Crossing multiple real boundaries in one test (“multi-boundary integration”).
+  This is System/E2E by definition and is generally forbidden.
 - Using shared mutable state between tests (ordering dependencies).
 - Giant fixture files that nobody maintains.
 
@@ -104,6 +173,11 @@ drift, concurrency errors, or retry logic failures.
 crossing multiple units and sometimes multiple modules/services, but still in
 a controlled environment.
 
+**SUT boundary:** A service-level use-case slice across multiple internal units
+(controller/handler → service → domain → ports) within one bounded context.
+
+**Real boundary count:** 0.
+
 **Audience:** Product and engineering. Failures reveal broken orchestration,
 routing, or validation logic at the feature level.
 
@@ -113,9 +187,14 @@ routing, or validation logic at the feature level.
 - Still avoids "real world": no real third-party calls in PR runs.
 
 **Boundaries:**
+- Real boundary count MUST be 0.
 - MUST keep the count small per feature (a handful, not dozens).
 - MUST NOT call real third-party services in CI.
 - SHOULD use controlled fakes for external dependencies.
+- If a test includes a real boundary, it is NOT a functional test by tier
+  classification. It is intentionally mixing concerns and MUST be explicitly
+  justified, then treated (and named) as boundary integration or system/E2E by
+  real boundary count.
 
 **Doubles policy:**
 - Internal collaborators SHOULD be real.
@@ -139,6 +218,11 @@ routing, or validation logic at the feature level.
 **Purpose:** Validate that your stubs/fakes match real provider/consumer
 behavior and that cross-service assumptions hold.
 
+**SUT boundary:** The contract between producer and consumer (schema +
+compatibility rules).
+
+**Real boundary count:** optional; usually 0.
+
 **Audience:** Integration and platform teams. Failures reveal schema drift,
 breaking API changes, or stale stubs.
 
@@ -148,11 +232,16 @@ breaking API changes, or stale stubs.
 - Consumer contract tests verify your stubs/fakes accurately represent the
   provider.
 
+**Real boundaries:**
+- Optional; usually none. Sometimes you run provider verification against a
+  real provider build, but the point is contract fidelity, not “full
+  integration.”
+
 **Scheduling:**
 - SHOULD run nightly/weekly, especially for third-party APIs.
 - MAY run on every PR for internal contracts if fast enough.
-- MUST NOT be the only test tier exercising a boundary (integration tests
-  cover the boundary itself; contracts verify assumptions).
+- MUST NOT be the only test tier exercising a boundary (boundary integration
+  tests cover the boundary itself; contracts verify assumptions).
 
 **Practical notes:**
 - Stub/fake HTTP handlers (e.g., MSW handlers) are stubs/fakes. Do NOT treat
@@ -161,7 +250,7 @@ breaking API changes, or stale stubs.
   Protobuf, CloudEvents envelope, etc.).
 
 **Anti-patterns:**
-- Treating contract tests as integration tests (they serve different purposes).
+- Treating contract tests as boundary integration tests (they serve different purposes).
 - Running expensive third-party contract checks on every PR.
 
 ---
@@ -196,6 +285,11 @@ breaking API changes, or stale stubs.
 
 **Purpose:** Verify full-stack critical paths from the user's perspective.
 
+**SUT boundary:** Multiple deployed components wired together (often including
+real infrastructure).
+
+**Real boundary count:** many (by definition).
+
 **Audience:** Product, QA, and on-call engineers. Failures indicate a
 user-facing regression in a critical flow.
 
@@ -222,7 +316,67 @@ user-facing regression in a critical flow.
 **Anti-patterns:**
 - Too many E2E tests (slow, flaky, expensive).
 - Using E2E tests as the primary safety net instead of investing in lower tiers.
-- Testing edge cases at the E2E tier that belong in unit or integration tests.
+- Testing edge cases at the E2E tier that belong in unit or boundary integration tests.
+
+---
+
+## Controller tests: strict classification rules
+
+A “controller test” is NOT a tier. It becomes one of three tiers depending on
+how you drive it.
+
+### A) Unit (or small slice)
+
+- You call the handler/controller function directly with stubs/fakes for
+  dependencies.
+- Real boundary count = 0 (no real HTTP transport, middleware, serialization).
+- Claim: business behavior for that handler logic.
+
+### B) Boundary integration
+
+- You drive the controller through the real HTTP stack (router + middleware +
+  serialization), but you stub/fake service and DB ports.
+- Real boundary count = 1 (HTTP transport/middleware/serialization boundary).
+- Claim: “this endpoint behaves correctly as an HTTP endpoint” (status codes,
+  headers, auth middleware, request validation, JSON shape).
+
+### C) Functional
+
+- You drive through the service public interface (often HTTP) and include
+  multiple internal units (controller + service + domain), but all external
+  boundaries are faked.
+- Real boundary count = 0 (by default).
+- Claim: “given this context/state, the use-case outcome is X”.
+
+---
+
+## Repository tests: strict classification rules
+
+Repository tests are **boundary integration tests** when:
+
+- They use a real DB (ephemeral DB / Testcontainers pattern) and assert DB
+  semantics (constraints, transactions, migrations, SQL behavior).
+- They are hermetic and parallel-safe.
+
+Repository tests are NOT unit tests unless:
+
+- The “repository” is an in-memory fake, or a pure mapper with no real DB
+  boundary.
+
+---
+
+## Naming and structure (tier-aligned, non-classifying)
+
+Naming/style is NOT how you classify tiers, but it SHOULD be tier-aligned.
+
+### Given/When/Then vs factual invariants
+
+- Unit + Boundary integration: prefer factual/invariant titles.
+  - Examples: “throws when dt <= 0”, “enforces unique(email)”, “round-trips null mapping”.
+- Functional + Contract + E2E: scenario framing is allowed and often helpful.
+  - Examples: “given inactive user, when login, then returns 403”.
+
+These are aesthetics guidelines; they MUST NOT be used as classification inputs.
 
 ---
 
@@ -231,7 +385,7 @@ user-facing regression in a critical flow.
 | Tier | Default Perspective | Notes |
 |------|-------------------|-------|
 | Unit | Gray/white-box | You know internals, but assertions SHOULD still be contract-shaped |
-| Integration | Gray-box | You know the boundary and failure modes; assert observable effects |
+| Boundary Integration | Gray-box | You know the boundary and failure modes; assert observable effects |
 | Functional | Black-box leaning | User-observable outcomes; selective gray-box hooks allowed |
 | Contract | Black-box | Schema/contract compliance |
 | E2E/System | Black-box | User-observable outcomes; selective gray-box hooks allowed |

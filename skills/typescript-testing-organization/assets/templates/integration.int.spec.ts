@@ -1,7 +1,7 @@
 /**
- * Integration Test Template
+ * Boundary Integration Test Template
  *
- * Tier: Integration
+ * Tier: Boundary integration
  * Suffix: *.int.spec.ts
  * Placement: test/integration/<boundary-name>.int.spec.ts
  *
@@ -12,7 +12,7 @@
  * - Parallelizable: each test owns its data
  * - Prefer builders/factories over giant fixtures
  *
- * See: tdd-classicist/references/taxonomy-test-tiers.md (integration tier)
+ * See: tdd-classicist/references/taxonomy-test-tiers.md (boundary integration tier)
  * See: tdd-classicist/references/suite-health.md
  */
 
@@ -22,7 +22,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 // import { MyRepository } from '../../src/my-repository';
 // import { buildEntity } from '../_support/builders/entity.builder';
 
-describe("MyRepository (integration)", () => {
+describe("MyRepository (boundary integration)", () => {
   // let db: TestDatabase;
   // let repo: MyRepository;
 

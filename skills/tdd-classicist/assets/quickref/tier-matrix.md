@@ -2,11 +2,11 @@
 
 Derived from [taxonomy-test-tiers.md](../../references/taxonomy-test-tiers.md).
 
-| Tier | Purpose | Audience | Scope | Boundaries | Doubles | Assertions |
-|------|---------|----------|-------|------------|---------|------------|
-| **Unit** | Verify one unit's contract | Unit owner | In-process, IO-free, deterministic | No infra, no network, no time/random | Stubs/fakes preferred; mocks rare | State/output/invariants |
-| **Integration** | Verify one real boundary | Boundary/adapter team | One real boundary at a time | DB, queue, HTTP, filesystem | Boundary real; others stubbed/faked | Observable effects across boundary |
-| **Functional** | Verify user-story slice | Product + engineering | Cross-unit, controlled env | No real third parties in CI | External services faked; internals real | User-observable outcomes |
-| **Contract** | Verify stubs match reality | Integration/platform team | Provider/consumer assumptions | Schema/API compliance | Stubs/fakes being validated | Schema conformance |
-| **Regression** | Pin a fixed bug | Bug fixer + maintainers | Lowest tier that reproduces | Same as chosen tier | Same as chosen tier | "Would have failed before fix" |
-| **E2E/System** | Verify critical user paths | Product, QA, on-call | Full-stack, minimal count | No real third parties in CI | Fakes for third parties only | User-observable outcomes |
+| Tier | Real boundary count | SUT boundary | Primary proof | Doubles | Assertions |
+|------|-------------------:|-------------|---------------|---------|------------|
+| **Unit** | 0 | Single unit (+ chosen in-process collaborators) | Invariants + outputs | Stubs/fakes preferred; mocks rare | State/output/invariants |
+| **Boundary integration** | 1 | Adapter + exactly one real boundary | Boundary semantics | Boundary real; others stubbed/faked | Observable effects across boundary |
+| **Functional** | 0 | Use-case slice across units (bounded context) | Acceptance criteria at service interface | External services faked; internals real | User-observable outcomes |
+| **Contract** | 0 (usually) | Producer/consumer contract (schema + compatibility) | Compatibility + schema fidelity | Stubs/fakes being validated | Schema conformance |
+| **Regression** | (inherits) | (inherits) | “Would have failed before fix” | (inherits) | (inherits) |
+| **E2E/System** | many | Multiple deployed components wired together | Wiring/config + critical paths | Fakes for third parties only (in CI) | User-observable outcomes |

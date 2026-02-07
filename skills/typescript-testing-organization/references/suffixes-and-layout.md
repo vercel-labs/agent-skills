@@ -29,7 +29,7 @@ encoded immediately before `.spec`.
 | Tier | Suffix | Example |
 |------|--------|---------|
 | Unit | `*.spec.ts` / `*.spec.tsx` | `calcRiskScore.spec.ts` |
-| Integration | `*.int.spec.ts` | `raw-events.repository.int.spec.ts` |
+| Boundary integration | `*.int.spec.ts` | `raw-events.repository.int.spec.ts` |
 | Functional | `*.func.spec.ts` | `order-checkout.func.spec.ts` |
 | Contract | `*.contract.spec.ts` | `payment-api.contract.spec.ts` |
 | E2E / System | `*.e2e.spec.ts` | `critical-checkout-flow.e2e.spec.ts` |
@@ -103,6 +103,27 @@ test/
     critical-checkout-flow.e2e.spec.ts
 ```
 
+## Controller and repository naming examples (tier-encoded)
+
+Tier classification is defined in `tdd-classicist` and is based on real boundary
+count + SUT boundary. This section only shows **naming patterns** once you know
+the tier.
+
+### Controller tests (controller is not a tier)
+
+| What you are testing | Tier | Suggested naming |
+|---|---|---|
+| Controller logic via direct function call | Unit | `src/.../user.controller.spec.ts` |
+| Endpoint via real HTTP stack (router/middleware/serialization), services faked | Boundary integration | `test/integration/user.controller.http.int.spec.ts` |
+| Use-case slice via public interface with externals faked | Functional | `test/functional/user-login.func.spec.ts` |
+
+### Repository tests
+
+| What you are testing | Tier | Suggested naming |
+|---|---|---|
+| Repository backed by real Postgres/DB | Boundary integration | `test/integration/orders.repository.postgres.int.spec.ts` |
+| In-memory fake repository | Unit | `src/.../orders.repository.spec.ts` |
+
 ---
 
 ## Nx / Monorepo Guidance
@@ -114,7 +135,7 @@ tests in the repo root unless you have a strong reason.
 
 | Target | Tiers Included | When |
 |--------|---------------|------|
-| `test` (PR default) | Unit + Integration | Every PR |
+| `test` (PR default) | Unit + Boundary integration | Every PR |
 | `test:functional` | Functional | Every PR or gated |
 | `test:contract` | Contract | Scheduled (nightly/weekly) |
 | `test:e2e` | E2E / System | Scheduled or gated |
@@ -124,7 +145,7 @@ tests in the repo root unless you have a strong reason.
 | Tier | Glob |
 |------|------|
 | Unit | `src/**/*.spec.ts?(x)` |
-| Integration | `test/integration/**/*.int.spec.ts` |
+| Boundary integration | `test/integration/**/*.int.spec.ts` |
 | Functional | `test/functional/**/*.func.spec.ts` |
 | Contract | `test/contract/**/*.contract.spec.ts` |
 | E2E | `test/e2e/**/*.e2e.spec.ts` |

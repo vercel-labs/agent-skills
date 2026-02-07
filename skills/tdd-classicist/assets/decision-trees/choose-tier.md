@@ -1,6 +1,6 @@
 # Decision Tree — Choose a Test Tier
 
-Use this procedure to determine which tier a test belongs to. Start at step 1
+Use this procedure to determine which tier a test belongs to. Start at the top
 and follow the branches.
 
 Derived from [taxonomy-test-tiers.md](../../references/taxonomy-test-tiers.md).
@@ -9,51 +9,55 @@ Derived from [taxonomy-test-tiers.md](../../references/taxonomy-test-tiers.md).
 
 ## Procedure
 
-### 1. Is this test pinning a specific bug fix?
+Classification is based on two inputs:
+
+- **Real boundary count** (\(0 / 1 / many\))
+- **SUT boundary** (single unit vs use-case slice vs contract vs deployed journey)
+
+Do NOT classify by “how many units it touches.”
+
+### 0. Is this test pinning a specific bug fix?
 
 - **Yes** → This is a **regression test**. Determine the bug's mechanism, then
-  continue to step 2 to find the **lowest tier** that reproduces it. Tag the
+  continue to step 1 to find the **lowest tier** that reproduces it. Tag the
   test as `[regression]`.
-- **No** → Continue to step 2.
+- **No** → Continue to step 1.
 
-### 2. Does this test need to exercise a real infrastructure boundary?
+### 1. Did the test cross any real boundary?
 
 "Real boundary" = database, message queue, filesystem, HTTP transport, external
-service adapter — anywhere the failure modes change (serialization, SQL
-semantics, transactions, concurrency, retries).
+service adapter, system clock, serializer/parser, middleware stack — anywhere
+the failure modes change (serialization, SQL semantics, transactions,
+concurrency, retries).
 
 - **No** → Go to step 3.
-- **Yes, exactly one boundary** → **Integration test**.
-- **Yes, multiple boundaries** → Go to step 4.
+- **Yes** → Go to step 2.
 
-### 3. Is the code under test a single unit with an explicit contract?
+### 2. If yes: how many real boundaries are you exercising?
+
+- **Exactly one** → **Boundary integration**.
+- **More than one** → **E2E/System**.
+
+  Multi-boundary integration is generally forbidden; if you need it, treat it
+  explicitly as system/E2E (or redesign to isolate one boundary per test).
+
+### 3. If no real boundary: is the SUT a single unit or a use-case slice across units?
 
 "Unit" = module, class, function with a clear responsibility. The test is
 in-process, deterministic, and IO-free (or IO-abstracted).
 
 - **Yes** → **Unit test** (colocated with the unit).
-- **No, it spans multiple units / a feature slice** → Go to step 4.
+- **No, it spans multiple units / a use-case slice** → **Functional test**.
 
-### 4. Does this test validate a user-story slice or feature behavior?
+### 4. Contract override: is the primary claim cross-service compatibility/schema/versioning?
 
-It crosses multiple units, possibly multiple modules, but stays in a controlled
-environment (no real third parties in CI).
+- **Yes** → **Contract test** (even if executed inside one codebase's test
+  runner, and even if it runs provider verification against a real provider
+  build).
 
-- **Yes** → **Functional test** (few per feature).
-- **No** → Go to step 5.
-
-### 5. Does this test validate that stubs/fakes match real provider/consumer behavior?
-
-It checks schema conformance or verifies assumptions about an external API.
-
-- **Yes** → **Contract test** (schedule nightly/weekly for third-party APIs).
-- **No** → Go to step 6.
-
-### 6. Does this test exercise a full-stack critical user path?
-
-- **Yes** → **E2E / System test** (minimal count; fakes for third parties in CI).
-- **No** → Re-examine the test's purpose. It may belong at a simpler tier than
-  you think. Default to the **lowest tier** that covers the behavior.
+  Treat it as contract because the thing being proven is the contract, not
+  “integration.”
+- **No** → Keep the prior classification.
 
 ---
 
@@ -63,20 +67,16 @@ It checks schema conformance or verifies assumptions about an external API.
 Bug fix? ──yes──→ [regression] tag + find lowest tier
   │no
   ▼
-Real boundary? ──yes, one──→ Integration
-  │no          └─yes, many──→ step 4
-  ▼
-Single unit? ──yes──→ Unit
+Cross real boundary? ──yes──→ Count boundaries
   │no
   ▼
-Feature slice? ──yes──→ Functional
-  │no
+Count boundaries ──1──→ Boundary integration
+  │              └many→ E2E/System
   ▼
-Stub/fake validation? ──yes──→ Contract
-  │no
-  ▼
-Full-stack critical path? ──yes──→ E2E/System
-  │no
-  ▼
-Default to lowest tier that covers the behavior.
+No real boundary → Single unit? yes→ Unit
+               │
+               └no → Functional
+
+Contract claim? yes→ Contract (override)
+             no→ keep prior classification
 ```

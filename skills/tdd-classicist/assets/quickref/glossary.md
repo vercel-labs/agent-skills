@@ -9,8 +9,9 @@ precedence within this skill's doctrine.
 | Term | Definition |
 |------|-----------|
 | **Unit test** | In-process, deterministic, IO-free test colocated with the unit under test. Verifies a single unit's contract. |
-| **Integration test** | Test that exercises exactly one meaningful real boundary (DB, queue, HTTP, filesystem). Hermetic and reproducible. |
-| **Functional test** | In-process slice test that validates a user-story or feature behavior across multiple units. Controlled environment; no real third parties. |
+| **Boundary integration test** | Test that exercises exactly one meaningful real boundary (real boundary count = 1): DB, queue, filesystem, HTTP transport stack, serializer/parser, system clock, etc. Hermetic and reproducible. |
+| **Integration test** | Alias for **boundary integration test** in this doctrine. |
+| **Functional test** | In-process slice test that validates a user-story or feature behavior across multiple units (real boundary count = 0). Controlled environment; no real third parties. |
 | **Contract test** | Validates that stubs/fakes match real provider/consumer behavior. Often scheduled (nightly/weekly). |
 | **Regression test** | Test pinning a specific bug fix at the lowest tier that reproduces the bug's mechanism. A property of intent, not a separate tier. |
 | **E2E / System / Harness test** | Full-stack test of critical user paths. Minimal count, high signal. Uses controlled fakes for third parties in CI. |
@@ -38,6 +39,7 @@ precedence within this skill's doctrine.
 | Term | Definition |
 |------|-----------|
 | **SUT** | System Under Test — the object/module being tested. |
+| **SUT boundary** | What is considered “inside” the SUT for a given test (the unit/slice/contract/journey plus any intentionally included collaborators). |
 | **Collaborator** | An object the SUT depends on to fulfill its behavior. |
 | **Red-Green-Refactor** | The TDD cycle: write a failing test (red), write minimal code to pass (green), clean up (refactor). |
 | **Iron Law** | No production code without a failing test first. |
@@ -60,4 +62,5 @@ precedence within this skill's doctrine.
 | **Builder** | A test helper that constructs domain objects with sensible defaults and composable overrides. |
 | **Seed** | A small, deterministic dataset used to set up test state. |
 | **Object Mother** | A factory class providing pre-built test fixtures (similar to builders). |
-| **Boundary** | The point where failure modes change (e.g., serialization, SQL, HTTP transport). Integration tests exercise one boundary. |
+| **Real boundary** | A boundary where the test relies on the real semantics of the boundary (not a stub/fake/in-memory stand-in): DB, network/HTTP stack, queue, filesystem, system clock, serializer/parser, process boundary. |
+| **Boundary** | The point where failure modes change (e.g., serialization, SQL, HTTP transport). Boundary integration tests exercise **exactly one real boundary**. |
