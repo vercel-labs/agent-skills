@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "organization": "Engineering",
+  "date": "February 2026",
+  "abstract": "Comprehensive guide for Nx TypeScript monorepo architecture, ESM builds, npm workspaces linking, Vitest testing, hexagonal architecture constraints, and project tags. Designed for AI agents and LLMs. Contains 33 rules across 8 categories, prioritized by impact from critical (architecture, ESM) to medium (observability, boundaries). Each rule includes explanations, incorrect vs. correct examples, and references.",
+  "references": [
+    "https://nx.dev/docs",
+    "https://nx.dev/docs/concepts/typescript-project-linking",
+    "https://nx.dev/blog/typescript-project-references",
+    "https://vitest.dev/guide/",
+    "https://www.typescriptlang.org/docs/handbook/project-references.html",
+    "https://nodejs.org/api/esm.html",
+    "https://docs.npmjs.com/cli/using-npm/workspaces",
+    "https://opentelemetry.io/docs/languages/js/"
+  ]
+}
