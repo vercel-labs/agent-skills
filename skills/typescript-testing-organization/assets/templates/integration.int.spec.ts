@@ -14,9 +14,10 @@
  *
  * See: tdd-classicist/references/taxonomy-test-tiers.md (boundary integration tier)
  * See: tdd-classicist/references/suite-health.md
+ * See: typescript-testing-organization/references/style-guidance.md (test() vs it())
  */
 
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
 
 // import { createTestDatabase, destroyTestDatabase } from '../_support/harness/db';
 // import { MyRepository } from '../../src/my-repository';
@@ -37,7 +38,7 @@ describe("MyRepository (boundary integration)", () => {
     // await destroyTestDatabase(db);
   });
 
-  it("persists an entity and retrieves it by id", async () => {
+  test("persists an entity and retrieves it by id", async () => {
     // Arrange — use builders/factories, not raw SQL
     // const entity = buildEntity({ name: 'test' });
 
@@ -49,7 +50,7 @@ describe("MyRepository (boundary integration)", () => {
     // expect(found).toEqual(entity);
   });
 
-  it("returns null when entity does not exist", async () => {
+  test("returns null when entity does not exist", async () => {
     // Act
     // const found = await repo.findById('nonexistent-id');
 

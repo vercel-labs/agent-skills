@@ -46,7 +46,8 @@ Do NOT apply when:
 
 | Question | Route to |
 |----------|----------|
-| "What tier should this test be?" | [taxonomy-test-tiers](references/taxonomy-test-tiers.md) |
+| "What tier should this test be?" | [assets/decision-trees/choose-tier.md](assets/decision-trees/choose-tier.md) |
+| Tier definitions + constraints (canonical) | [taxonomy-test-tiers](references/taxonomy-test-tiers.md) |
 | "Should I mock/stub/fake this?" | [taxonomy-test-doubles](references/taxonomy-test-doubles.md) |
 | "What should I assert?" | [assertions-and-contracts](references/assertions-and-contracts.md) |
 | "Is my test suite healthy?" | [suite-health](references/suite-health.md) |

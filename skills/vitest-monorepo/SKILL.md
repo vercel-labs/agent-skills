@@ -11,8 +11,8 @@ compatibility:
 
 # Vitest Monorepo
 
-Configuration and methodology rules for Vitest in monorepo workspaces. Contains
-3 rules covering workspace-root config patterns, `import.meta.url` pattern, and
+Configuration rules for Vitest in monorepo workspaces. Contains 3 rules covering
+workspace-root config patterns, `import.meta.url` pattern, and
 workspace-relative include paths.
 
 ## When to Apply

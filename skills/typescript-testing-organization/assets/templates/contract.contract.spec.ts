@@ -12,6 +12,7 @@
  * - MSW handlers are stubs/fakes — not expectation-driven mocks
  *
  * See: tdd-classicist/references/taxonomy-test-tiers.md (contract tier)
+ * See: typescript-testing-organization/references/style-guidance.md (scenario tiers)
  */
 
 import { describe, it, expect } from "vitest";
@@ -27,7 +28,8 @@ describe("Contract: Payment API", () => {
   // afterEach(() => server.resetHandlers());
   // afterAll(() => server.close());
 
-  it("POST /charges returns 201 with charge_id and status", async () => {
+  describe("given a valid charge request", () => {
+    it("POST /charges returns 201 with charge_id and status", async () => {
     // Act — call the real client against the MSW stub
     // const result = await paymentClient.createCharge({
     //   amount: 1000,
@@ -41,17 +43,20 @@ describe("Contract: Payment API", () => {
     //   amount: 1000,
     //   currency: 'usd',
     // });
+    });
   });
 
-  it("POST /charges returns 400 for invalid currency", async () => {
-    // Act
-    // const result = await paymentClient.createCharge({
-    //   amount: 1000,
-    //   currency: 'invalid',
-    // });
+  describe("given an invalid currency", () => {
+    it("POST /charges returns 400 with INVALID_CURRENCY", async () => {
+      // Act
+      // const result = await paymentClient.createCharge({
+      //   amount: 1000,
+      //   currency: 'invalid',
+      // });
 
-    // Assert — error contract
-    // expect(result.error.code).toBe('INVALID_CURRENCY');
+      // Assert — error contract
+      // expect(result.error.code).toBe('INVALID_CURRENCY');
+    });
   });
 
   // Validate that your MSW handlers match the real API:

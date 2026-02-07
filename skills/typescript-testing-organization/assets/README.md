@@ -10,6 +10,8 @@ the tier-suffix and directory conventions in
 2. Copy the template for that tier into the correct location.
 3. Rename following the suffix convention (`*.spec.ts`, `*.int.spec.ts`, etc.).
 4. Replace placeholder comments with real test logic.
+5. Follow tier-aligned style constraints from
+   [style-guidance.md](../references/style-guidance.md).
 
 ## Templates
 

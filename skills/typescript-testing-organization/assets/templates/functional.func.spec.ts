@@ -13,6 +13,7 @@
  * - Keep count small per feature
  *
  * See: tdd-classicist/references/taxonomy-test-tiers.md (functional tier)
+ * See: typescript-testing-organization/references/style-guidance.md (scenario tiers)
  */
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
@@ -36,7 +37,8 @@ describe("Feature: Order Checkout", () => {
     // await app.close();
   });
 
-  it("completes checkout for a valid order", async () => {
+  describe("given a verified user and a valid order", () => {
+    it("returns a confirmed checkout with a confirmation id", async () => {
     // Arrange — create test data via builders
     // const user = buildUser({ verified: true });
     // const order = buildOrder({ items: [{ sku: 'ITEM-1', qty: 2 }] });
@@ -44,20 +46,23 @@ describe("Feature: Order Checkout", () => {
     // Act — exercise the feature through its public entry point
     // const result = await app.checkout(user, order);
 
-    // Assert — user-observable outcomes
-    // expect(result.status).toBe('confirmed');
-    // expect(result.confirmationId).toBeDefined();
+      // Assert — user-observable outcomes
+      // expect(result.status).toBe('confirmed');
+      // expect(result.confirmationId).toBeDefined();
+    });
   });
 
-  it("rejects checkout for unverified user", async () => {
-    // Arrange
-    // const user = buildUser({ verified: false });
-    // const order = buildOrder({ items: [{ sku: 'ITEM-1', qty: 1 }] });
+  describe("given an unverified user", () => {
+    it("returns USER_NOT_VERIFIED", async () => {
+      // Arrange
+      // const user = buildUser({ verified: false });
+      // const order = buildOrder({ items: [{ sku: 'ITEM-1', qty: 1 }] });
 
-    // Act
-    // const result = await app.checkout(user, order);
+      // Act
+      // const result = await app.checkout(user, order);
 
-    // Assert
-    // expect(result.error).toBe('USER_NOT_VERIFIED');
+      // Assert
+      // expect(result.error).toBe('USER_NOT_VERIFIED');
+    });
   });
 });
