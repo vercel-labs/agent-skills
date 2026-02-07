@@ -96,7 +96,7 @@ The structure of the name: **[context] behavior [expected outcome]**.
 | Tier | Default Perspective | Assertion Guidance |
 |------|-------------------|-------------------|
 | Unit | Gray/white-box | You know internals, but assertions MUST be contract-shaped. Do not assert implementation details unless the detail *is* the contract. |
-| Boundary integration | Gray-box | You know the boundary and its failure modes. Assert observable effects across the boundary (persisted rows, HTTP responses, emitted messages). |
+| Integration | Gray-box | You know the boundary and its failure modes. Assert observable effects across the boundary (persisted rows, HTTP responses, emitted messages). |
 | Functional | Black-box leaning | Assert user-observable outcomes. MAY use gray-box hooks if they reduce brittleness without undermining what is being proven. |
 | Contract | Black-box | Assert schema/contract compliance only. |
 | E2E/System | Black-box | Assert user-observable outcomes. MAY use gray-box hooks selectively. |

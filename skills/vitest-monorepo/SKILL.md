@@ -21,9 +21,7 @@ Reference these guidelines when:
 
 - Vitest reports "0 tests" or "No test suite found"
 - Setting up or troubleshooting `vitest.config.ts` in a monorepo
-- Writing new tests (test-first methodology)
-- Deciding test placement (unit vs integration vs E2E)
-- Configuring test coverage paths
+- Configuring test coverage paths or include patterns
 
 ## When NOT to Apply
 
@@ -32,6 +30,11 @@ Do NOT reference these guidelines when:
 - The project uses Jest or another test runner (not Vitest)
 - The project is not a monorepo (single-package vitest works differently)
 - You are working in this skills repository itself
+- Deciding **which test tier** a test belongs to → see **tdd-classicist**
+- Deciding **test file suffixes or directory layout** → see
+  **typescript-testing-organization**
+- Following the **TDD cycle** or choosing **test doubles** → see
+  **tdd-classicist**
 
 ## Quick Reference
 
@@ -69,5 +72,9 @@ user confirmation. Present proposed changes as diffs and wait for approval.
 
 ## Related Skills
 
-- For ESM `import.meta.url` details beyond vitest.config.ts, see the **esm-typescript** skill.
-- For `tsconfig.spec.json` patterns (`build-rootdir-separation`), see the **nx-monorepo** skill.
+- **tdd-classicist** — Testing doctrine: test tiers, doubles taxonomy,
+  assertions, TDD cycle (language-agnostic)
+- **typescript-testing-organization** — TS test file suffixes, directory layout,
+  templates, and audit scripts
+- **esm-typescript** — ESM `import.meta.url` details beyond vitest.config.ts
+- **nx-monorepo** — `tsconfig.spec.json` patterns (`build-rootdir-separation`)

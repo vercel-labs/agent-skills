@@ -1,19 +1,38 @@
-# Assets — Copyable Templates
+# Assets — Non-Normative Text Aids
 
-This directory contains ready-to-use templates. Copy into your project and
-customize.
+This directory contains **text-only** quick-reference tables, decision trees,
+and checklists derived from the normative doctrine in `references/`.
 
-## Usage
+## Policy
 
-1. Copy the template file into the target location.
-2. Rename following the project's naming conventions.
-3. Replace placeholder comments with real test logic.
-4. Follow the tier placement rules from
-   [taxonomy-test-tiers](../references/taxonomy-test-tiers.md).
+- Assets are **non-normative**: they summarize and operationalize the rules in
+  `references/` but MUST NOT introduce new rules.
+- Assets MUST NOT contain language-specific code templates, framework imports,
+  or file suffix conventions. Those belong in language organization skills
+  (e.g., `typescript-testing-organization`).
+- If an asset contradicts a reference, the reference wins.
 
-## Templates
+## Contents
 
-| Template | Purpose |
-|----------|---------|
-| [unit-test.ts](templates/unit-test.ts) | Canonical unit test boilerplate — naming, structure, assertion style |
-| [integration-test.ts](templates/integration-test.ts) | Canonical integration test boilerplate — boundary setup, isolation |
+### Quick References
+
+| File | Purpose |
+|------|---------|
+| [quickref/tier-matrix.md](quickref/tier-matrix.md) | Tier → purpose, scope, boundaries, doubles, assertions (one table) |
+| [quickref/doubles-matrix.md](quickref/doubles-matrix.md) | Dummy/fake/stub/spy/mock + allowed-by-tier (one table) |
+| [quickref/glossary.md](quickref/glossary.md) | Canonical definitions of testing terms |
+
+### Decision Trees
+
+| File | Purpose |
+|------|---------|
+| [decision-trees/choose-tier.md](decision-trees/choose-tier.md) | Deterministic procedure for selecting a test tier |
+| [decision-trees/choose-double.md](decision-trees/choose-double.md) | Deterministic procedure for selecting a test double type |
+
+### Checklists
+
+| File | Purpose |
+|------|---------|
+| [checklists/test-review.md](checklists/test-review.md) | Contract-shaped assertions, brittleness checks |
+| [checklists/regression-fix.md](checklists/regression-fix.md) | "Lowest tier that reproduces mechanism" workflow |
+| [checklists/suite-health.md](checklists/suite-health.md) | Hermetic / deterministic / parallel rubric |

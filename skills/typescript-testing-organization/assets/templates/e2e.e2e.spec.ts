@@ -12,7 +12,6 @@
  * - Assert user-observable outcomes (black-box)
  *
  * See: tdd-classicist/references/taxonomy-test-tiers.md (E2E tier)
- * See: typescript-testing-organization/references/style-guidance.md (scenario tiers)
  */
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
@@ -34,8 +33,7 @@ describe("E2E: Critical Checkout Flow", () => {
     // await stopSystem(system);
   });
 
-  describe("given a new user", () => {
-    it("can register, add items, and complete checkout", async () => {
+  it("user can register, add items, and complete checkout", async () => {
     // Seed via public APIs
     // const user = await system.api.post('/register', {
     //   email: 'test@example.com',
@@ -49,9 +47,8 @@ describe("E2E: Critical Checkout Flow", () => {
     // Assert user-observable outcomes
     // expect(checkout.status).toBe(201);
     // expect(checkout.body.confirmationId).toBeDefined();
-    });
   });
 
   // Only critical user journeys belong here.
-  // Edge cases belong in unit or boundary integration tests.
+  // Edge cases belong in unit or integration tests.
 });

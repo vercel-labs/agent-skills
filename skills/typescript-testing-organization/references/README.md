@@ -18,4 +18,3 @@ naming, directory layout, and support code organization.
 | [suffixes-and-layout.md](suffixes-and-layout.md) | Tier-encoded file suffixes, directory structure, regression tagging |
 | [support-code.md](support-code.md) | `test/_support/` conventions: builders, seeds, fakes, stubs, spies, MSW |
 | [spec-vs-test.md](spec-vs-test.md) | Why `.spec` (not `.test`): semantic distinction and runner mechanics |
-| [style-guidance.md](style-guidance.md) | Tier-aligned style constraints (`test()` vs `it()`, “should” wording) |

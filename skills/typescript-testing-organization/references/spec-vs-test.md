@@ -77,28 +77,11 @@ export default defineConfig({
 ## When `.test` May Appear
 
 - **Legacy codebases** that standardized on `.test` before this convention.
-  Prefer standardizing to one suffix per project to avoid ambiguity.
+  Migrate incrementally; do not mix `.test` and `.spec` in the same project.
 - **External dependencies** or generated code that uses `.test`. Leave as-is
   for third-party code.
 - **Other languages** (Go uses `_test.go`; Python uses `test_*.py`). This
   convention is TypeScript-specific.
-
-## Optional Alternative: If You Adopt Both Suffixes
-
-If you ever decide to use both `.test` and `.spec` in the same repository,
-make it **mechanically enforceable** by binding suffix to tier, not to
-“spec-ness”:
-
-- Verification tiers (unit/integration/property): `*.test.ts`
-- Scenario tiers (functional/contract/e2e): `*.spec.ts`
-
-This is NOT the convention encoded by `suffixes-and-layout.md` in this skill
-today (which standardizes on `.spec` for all runnable tests). If you adopt the
-dual-suffix policy, you MUST update:
-
-- `references/suffixes-and-layout.md`
-- `assets/templates/`
-- `scripts/audit-test-layout.sh`
 
 ---
 

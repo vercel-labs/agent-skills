@@ -1,7 +1,7 @@
 /**
- * Boundary Integration Test Template
+ * Integration Test Template
  *
- * Tier: Boundary integration
+ * Tier: Integration
  * Suffix: *.int.spec.ts
  * Placement: test/integration/<boundary-name>.int.spec.ts
  *
@@ -12,18 +12,17 @@
  * - Parallelizable: each test owns its data
  * - Prefer builders/factories over giant fixtures
  *
- * See: tdd-classicist/references/taxonomy-test-tiers.md (boundary integration tier)
+ * See: tdd-classicist/references/taxonomy-test-tiers.md (integration tier)
  * See: tdd-classicist/references/suite-health.md
- * See: typescript-testing-organization/references/style-guidance.md (test() vs it())
  */
 
-import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 
 // import { createTestDatabase, destroyTestDatabase } from '../_support/harness/db';
 // import { MyRepository } from '../../src/my-repository';
 // import { buildEntity } from '../_support/builders/entity.builder';
 
-describe("MyRepository (boundary integration)", () => {
+describe("MyRepository (integration)", () => {
   // let db: TestDatabase;
   // let repo: MyRepository;
 
@@ -38,7 +37,7 @@ describe("MyRepository (boundary integration)", () => {
     // await destroyTestDatabase(db);
   });
 
-  test("persists an entity and retrieves it by id", async () => {
+  it("persists an entity and retrieves it by id", async () => {
     // Arrange — use builders/factories, not raw SQL
     // const entity = buildEntity({ name: 'test' });
 
@@ -50,7 +49,7 @@ describe("MyRepository (boundary integration)", () => {
     // expect(found).toEqual(entity);
   });
 
-  test("returns null when entity does not exist", async () => {
+  it("returns null when entity does not exist", async () => {
     // Act
     // const found = await repo.findById('nonexistent-id');
 

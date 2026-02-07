@@ -14,10 +14,9 @@
  *
  * See: tdd-classicist/references/taxonomy-test-tiers.md (unit tier)
  * See: tdd-classicist/references/assertions-and-contracts.md
- * See: typescript-testing-organization/references/style-guidance.md (test() vs it())
  */
 
-import { describe, test, expect } from "vitest";
+import { describe, it, expect } from "vitest";
 
 // import { myFunction } from './my-module';
 
@@ -25,7 +24,7 @@ describe("MyModule", () => {
   // Group by capability or behavior, not by method name
 
   describe("when given valid input", () => {
-    test("returns the expected result", () => {
+    it("returns the expected result", () => {
       // Arrange — set up real objects, minimal stubs if needed
       const input = {
         /* ... */
@@ -40,7 +39,7 @@ describe("MyModule", () => {
   });
 
   describe("when given invalid input", () => {
-    test("returns a structured error with a stable code", () => {
+    it("returns a structured error with a stable code", () => {
       // Arrange
       const badInput = {
         /* ... */

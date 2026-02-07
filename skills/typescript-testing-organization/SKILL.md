@@ -42,15 +42,12 @@ Do NOT apply when:
 | "What suffix / where does this TS test file go?" | [suffixes-and-layout](references/suffixes-and-layout.md) |
 | "How do I organize test helpers?" | [support-code](references/support-code.md) |
 | "Why .spec and not .test?" | [spec-vs-test](references/spec-vs-test.md) |
-| "Should I use test() or it()? Can I use 'should'?" | [style-guidance](references/style-guidance.md) |
 | "What tier should this test be?" | → **tdd-classicist** skill |
 | "Should I mock or stub this?" | → **tdd-classicist** skill |
 | Test file boilerplate (any tier) | `assets/templates/` |
 | Audit test layout invariants | `scripts/audit-test-layout.sh` |
 | Audit import boundaries | `scripts/audit-test-import-boundaries.sh` |
 | Audit test double usage | `scripts/audit-test-doubles.sh` |
-| Audit tier-aligned style | `scripts/audit-test-style.sh` |
-| Audit multi-boundary integration (heuristic) | `scripts/audit-multi-boundary-integration.sh` |
 
 ## Procedure
 
