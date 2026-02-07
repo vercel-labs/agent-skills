@@ -116,11 +116,9 @@ Reference these guidelines when:
 
 Read individual rule files for detailed explanations and code examples:
 
-```
-rules/arch-hexagonal-deps.md
-rules/linking-exports-field.md
-rules/testing-vitest-workspace-root.md
-```
+- [arch-hexagonal-deps](references/rules/arch-hexagonal-deps.md) — Domain libs must not depend on data/API/infra/tool
+- [linking-exports-field](references/rules/linking-exports-field.md) — Lib package.json must have exports with @nx/source
+- [testing-vitest-workspace-root](references/rules/testing-vitest-workspace-root.md) — Set Vitest root to workspace root
 
 Each rule file contains:
 
@@ -131,8 +129,8 @@ Each rule file contains:
 
 ## Additional Resources
 
-- For detailed error troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+- For detailed error troubleshooting, see [TROUBLESHOOTING.md](references/TROUBLESHOOTING.md)
 
 ## Full Compiled Document
 
-For the complete guide with all rules expanded: `AGENTS.md`
+For the complete guide with all rules expanded: [compiled-rules.md](references/compiled-rules.md)
