@@ -13,6 +13,9 @@ Domain libraries (`type:domain`) contain pure business logic only. They MUST NOT
 have I/O operations (database, HTTP, file system) or framework dependencies
 (Express, Kysely, pg). Only `tslib` and pure utility libraries are allowed.
 
+For the full dependency matrix (which layers may depend on which), see
+[arch-hexagonal-deps](arch-hexagonal-deps.md).
+
 This ensures domain logic is:
 - Testable with simple unit tests (no mocks for infrastructure)
 - Portable across different infrastructure implementations

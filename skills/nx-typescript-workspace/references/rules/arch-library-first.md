@@ -44,18 +44,10 @@ export function ingestEvent(input: EventInput, deps: IngestDeps): IngestResult {
   const hash = computeEventHash(input);
   return { ...input, hash, bufferedAt: deps.clock.now() };
 }
-
-// apps/guard-api/src/routes/events.ts
-// ✅ App only wires dependencies
-import { ingestEvent } from '@turbi/guard-ingestion-domain';
-import { RawEventsRepo } from '@turbi/guard-ingestion-data';
-
-router.put('/events/:id', async (req, res) => {
-  const result = ingestEvent(validated, { clock: systemClock });
-  await repo.create(result);
-  res.status(201).json({ ok: true });
-});
 ```
+
+For how the consuming app should wire this, see
+[arch-apps-thin-shell](arch-apps-thin-shell.md).
 
 **Exception:** CI/CD and build/release plumbing is exempt, but reusable logic
 within it MUST live in `tools/` or `libs/` and be tested.

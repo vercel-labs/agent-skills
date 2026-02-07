@@ -1,0 +1,34 @@
+{
+  "name": "PROJECT_NAME",
+  "tags": ["scope:SCOPE", "type:api", "release:app"],
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "PROJECT_PATH/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/PROJECT_PATH",
+        "main": "PROJECT_PATH/src/main.ts",
+        "tsConfig": "PROJECT_PATH/tsconfig.lib.json"
+      },
+      "dependsOn": ["^build"]
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "PROJECT_NAME:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/PROJECT_PATH"],
+      "options": {
+        "configFile": "PROJECT_PATH/vitest.config.ts",
+        "reportsDirectory": "coverage/PROJECT_PATH",
+        "passWithNoTests": false
+      }
+    }
+  }
+}

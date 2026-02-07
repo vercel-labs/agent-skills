@@ -1,0 +1,27 @@
+{
+  "name": "PROJECT_NAME",
+  "tags": ["npm:private", "scope:SCOPE", "bc:BOUNDED_CONTEXT", "type:TYPE"],
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "PROJECT_PATH/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/PROJECT_PATH",
+        "main": "PROJECT_PATH/src/index.ts",
+        "tsConfig": "PROJECT_PATH/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/PROJECT_PATH"],
+      "options": {
+        "configFile": "PROJECT_PATH/vitest.config.ts",
+        "reportsDirectory": "coverage/PROJECT_PATH",
+        "passWithNoTests": false
+      }
+    }
+  }
+}

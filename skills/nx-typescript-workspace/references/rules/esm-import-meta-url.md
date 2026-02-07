@@ -49,17 +49,9 @@ export default defineConfig({
 });
 ```
 
-**Critical:** `vitest.config.ts` MUST be included in `tsconfig.spec.json`'s
-`include` array for TypeScript to recognize `import.meta.url`:
-
-```json
-{
-  "include": [
-    "vitest.config.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts"
-  ]
-}
-```
+**Note:** The `..` count in `path.resolve` depends on project depth — see
+[testing-vitest-workspace-root](testing-vitest-workspace-root.md) for the
+formula. Also, `vitest.config.ts` MUST be in `tsconfig.spec.json`'s `include`
+array — see [build-rootdir-separation](build-rootdir-separation.md) for why.
 
 Reference: [Node.js — import.meta.url](https://nodejs.org/api/esm.html#importmetaurl)

@@ -57,7 +57,8 @@ export default defineConfig({
 });
 ```
 
-**Reminder:** `vitest.config.ts` MUST be in the `include` array of
-`tsconfig.spec.json` for TypeScript to recognize `import.meta.url`.
+**Reminder:** `vitest.config.ts` MUST be in `tsconfig.spec.json`'s `include`
+array — see [build-rootdir-separation](build-rootdir-separation.md) for the
+full tsconfig pattern.
 
 Reference: [Vitest Configuration](https://vitest.dev/config/)

@@ -17,6 +17,9 @@ mindset (Red-Green-Refactor):
 2. Validate that tests compile and can be run.
 3. Confirm tests FAIL (Red phase) before implementation makes them pass.
 
+**Exception:** Critical production hotfixes may have tests added in a follow-up
+PR within 24 hours.
+
 **Incorrect (implementation without tests):**
 
 ```typescript

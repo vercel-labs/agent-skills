@@ -10,8 +10,8 @@ tags: observability, logging, json, structured
 **Impact: MEDIUM (enables machine parsing, filtering, and alerting)**
 
 All logging MUST be structured (JSON format). Unstructured string logs are
-impossible to parse, filter, or alert on at scale. Use a structured logger
-(e.g., pino, winston with JSON format) and include contextual fields.
+impossible to parse, filter, or alert on at scale. **Pino** is the standard
+logger in this workspace. Include contextual fields with every log entry.
 
 **Incorrect (unstructured string logging):**
 

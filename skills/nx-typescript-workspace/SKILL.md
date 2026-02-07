@@ -137,6 +137,19 @@ Do NOT reference these guidelines when:
 
 ## How to Use
 
+**For automated checks** — run the relevant script before reading rule files:
+
+| Symptom area | Script | Rules covered |
+|-------------|--------|---------------|
+| Linking / ESM package.json | `bash scripts/check-package-json.sh` | 4 rules |
+| Vitest configuration | `bash scripts/check-vitest-config.sh` | 4 rules |
+| TypeScript / tsconfig | `bash scripts/check-tsconfig.sh` | 4 rules |
+| Project tags | `bash scripts/check-project-tags.sh` | 2 rules |
+| Import violations | `bash scripts/check-imports.sh` | 4 rules |
+
+Scripts output JSON. Fix reported violations; only open rule files if you need
+to understand the rationale.
+
 **For a specific topic** — read the relevant rule from the Quick Reference
 above. Each file is self-contained with incorrect/correct examples.
 
