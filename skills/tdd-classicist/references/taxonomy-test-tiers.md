@@ -8,41 +8,66 @@ This reference is language-agnostic. For file suffixes, directory layout, and
 naming conventions in a specific language, see the corresponding language
 organization skill (e.g., `typescript-testing-organization`).
 
-## Classification Rule (Hard Boundary)
+## Tier classification rules (hard boundary)
 
-A test tier is determined ONLY by:
+A test’s tier is determined by two things only:
 
-- **SUT boundary**: what is “inside” the System Under Test boundary for this test
-- **Real boundary count**: how many *real* boundaries are crossed (\(0 / 1 / many\))
+1. **Primary claim**: the contract the test proves (what the test is claiming)
+2. **SUT boundary + real boundary count**: what is “inside” the test’s SUT
+   boundary and how many *real* boundaries are exercised (\(0 / 1 / many\))
 
 Everything else (AAA vs GWT, `test()` vs `it()`, naming aesthetics) is secondary
 and MUST NOT be used to classify the tier.
 
+### Definitions
+
+#### Real boundary
+
+A “real boundary” is any production implementation whose semantics meaningfully
+differ from a fake/stub and whose failure modes you explicitly want coverage
+for.
+
+Examples:
+
+- Database (driver + SQL semantics, constraints, transactions, migrations)
+- HTTP transport stack (routing/middleware/validation/serialization)
+- Message broker client
+- Filesystem
+- Clock/time
+- Serialization codecs/parsers
+- External service adapter
+
+#### SUT boundary
+
+The set of code you consider “inside” the test. Everything outside is a
+collaborator and MUST be faked/stubbed unless it is explicitly part of the real
+boundary under test.
+
+#### Primary claim
+
+The contract the test proves. If a test proves multiple primary claims, it is
+mis-scoped and MUST be split.
+
+### Non-negotiable constraints (MUST)
+
+- A test MUST have exactly one primary claim.
+- A test MUST be classifiable by the rules below without reading
+  implementation details. The tier should be inferable from the test harness
+  and which real boundary is exercised (if any).
+- A test MUST NOT be classified by “how many units it touches.”
+- A non-E2E test MUST NOT exercise more than one real boundary.
+- Any test that exercises multiple real boundaries is a System/E2E/Harness test
+  by definition.
+
 ### Never classify by “how many units it touches”
 
-Classification is NOT based on “how many modules/classes/functions were
-involved.”
+Classification is NOT based on “how many modules/classes/functions were involved.”
 
 - A test can touch many in-process units and still be a **unit test** (if no
   real boundary is crossed and the SUT boundary is a single unit + chosen
   collaborators).
 - A test can touch a single unit and still be a **boundary integration test**
   (if it crosses a real boundary, such as a real database).
-
-### What counts as a “real boundary”
-
-A boundary is “real” when the test intentionally relies on the real semantics
-of that boundary (not a stub/fake/in-memory stand-in).
-
-Common real boundaries:
-
-- Database (constraints, transactions, migrations, SQL semantics)
-- Network / HTTP transport stack (router, middleware, serialization)
-- Message queue / broker
-- Filesystem
-- System clock (real time source)
-- Serializer / parser (real encoding/decoding rules)
-- Process boundary (OS/process integration)
 
 ### The mechanical classifier (4 questions)
 
@@ -330,7 +355,7 @@ how you drive it.
 - You call the handler/controller function directly with stubs/fakes for
   dependencies.
 - Real boundary count = 0 (no real HTTP transport, middleware, serialization).
-- Claim: business behavior for that handler logic.
+- Claim: handler/business logic invariants (without asserting transport semantics).
 
 ### B) Boundary integration
 
@@ -339,14 +364,19 @@ how you drive it.
 - Real boundary count = 1 (HTTP transport/middleware/serialization boundary).
 - Claim: “this endpoint behaves correctly as an HTTP endpoint” (status codes,
   headers, auth middleware, request validation, JSON shape).
+- Business rules SHOULD be minimal or delegated; do not turn this into a use-case
+  test.
 
 ### C) Functional
 
 - You drive through the service public interface (often HTTP) and include
   multiple internal units (controller + service + domain), but all external
   boundaries are faked.
-- Real boundary count = 0 (by default).
+- Real boundary count = 0.
 - Claim: “given this context/state, the use-case outcome is X”.
+
+If a single test tries to prove both **(B)** transport/middleware semantics and
+**(C)** use-case acceptance criteria, it is mis-scoped. Split it.
 
 ---
 
@@ -363,6 +393,12 @@ Repository tests are NOT unit tests unless:
 - The “repository” is an in-memory fake, or a pure mapper with no real DB
   boundary.
 
+Repository tests MUST NOT silently become System/E2E:
+
+- If a repository test also exercises HTTP transport, a message broker, the
+  filesystem, or any other real boundary, it is out of tier. Split it so the
+  boundary integration test exercises exactly one real boundary.
+
 ---
 
 ## Naming and structure (tier-aligned, non-classifying)
@@ -375,6 +411,9 @@ Naming/style is NOT how you classify tiers, but it SHOULD be tier-aligned.
   - Examples: “throws when dt <= 0”, “enforces unique(email)”, “round-trips null mapping”.
 - Functional + Contract + E2E: scenario framing is allowed and often helpful.
   - Examples: “given inactive user, when login, then returns 403”.
+
+Scenario phrasing is allowed, but titles MUST still be outcome-shaped (observable
+result), not vague intentions.
 
 These are aesthetics guidelines; they MUST NOT be used as classification inputs.
 

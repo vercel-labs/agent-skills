@@ -14,6 +14,9 @@ Classification is based on two inputs:
 - **Real boundary count** (\(0 / 1 / many\))
 - **SUT boundary** (single unit vs use-case slice vs contract vs deployed journey)
 
+The test MUST have exactly one primary claim (one contract proved). If it has
+multiple, split it before classifying.
+
 Do NOT classify by “how many units it touches.”
 
 ### 0. Is this test pinning a specific bug fix?

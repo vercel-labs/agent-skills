@@ -16,7 +16,7 @@ Each file is self-contained, language-agnostic, and covers one topic area.
 
 | File | Topic |
 |------|-------|
-| [taxonomy-test-tiers.md](taxonomy-test-tiers.md) | Unit / Integration / Functional / Contract / Regression / E2E — purpose, audience, scope, boundaries |
+| [taxonomy-test-tiers.md](taxonomy-test-tiers.md) | Unit / Boundary integration / Functional / Contract / Regression / E2E — purpose, audience, scope, boundaries |
 | [taxonomy-test-doubles.md](taxonomy-test-doubles.md) | Meszaros taxonomy (dummy/fake/stub/spy/mock), tiered doubles policy, decision guidance |
 | [assertions-and-contracts.md](assertions-and-contracts.md) | Assertion strategy, contracts as spine, gray/black/white-box guidance |
 | [suite-health.md](suite-health.md) | Hermetic, deterministic, parallel-by-default; fixture strategy; anti-patterns |

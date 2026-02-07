@@ -57,7 +57,7 @@ stub → fake → spy → mock
 | Tier | Preferred Doubles | Notes |
 |------|------------------|-------|
 | Unit | Stubs, fakes | Real collaborators when cheap. Spies for side-effect contracts. Mocks rare. |
-| Integration | Stubs/fakes for non-boundary deps | The boundary under test MUST be real. |
+| Boundary integration | Stubs/fakes for non-boundary deps | The boundary under test MUST be real. |
 | Functional | Fakes for external services | Internal collaborators SHOULD be real. |
 | Contract | Stubs/fakes being validated | The point is to verify the double matches reality. |
 | E2E/System | Fakes for third parties only | Everything else SHOULD be real. |

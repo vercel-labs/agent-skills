@@ -3,7 +3,7 @@ name: tdd-classicist
 description:
   Classicist TDD methodology — test-first Red-Green-Refactor cycle, Meszaros
   test-double taxonomy (dummy/fake/stub/spy/mock), tiered test pyramid
-  (unit → integration → functional → contract → regression → E2E), assertion
+  (unit → boundary integration → functional → contract → regression → E2E), assertion
   policies, and contracts-as-spine doctrine. Use when writing tests, choosing
   test doubles, deciding test tier, reviewing test quality, or fixing bugs.
   Do NOT use for test file naming/suffixes/layout (see
@@ -22,7 +22,7 @@ pyramid, and assertion policies grounded in contracts.
 
 Apply this skill when ANY of the following are true:
 
-- You need to decide which **test tier** a test belongs to (unit / integration /
+- You need to decide which **test tier** a test belongs to (unit / boundary integration /
   functional / contract / regression / E2E)
 - You need to choose a **test double type** (dummy / fake / stub / spy / mock)
 - You need guidance on **what to assert** (state vs behavior, contract-shaped

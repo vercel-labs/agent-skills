@@ -47,7 +47,7 @@ Use this checklist to audit the health of a test suite. Derived from
 ## Organization
 
 - [ ] Directory and suffix conventions are standardized and documented.
-- [ ] CI can target tiers predictably (unit, integration, functional, e2e).
+- [ ] CI can target tiers predictably (unit, boundary-integration, functional, contract, e2e).
 - [ ] No drift between documented conventions and actual file locations.
 - [ ] Enforcement is automated (linters, audit scripts).
 

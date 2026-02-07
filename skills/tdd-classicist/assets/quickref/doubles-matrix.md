@@ -17,7 +17,7 @@ Derived from [taxonomy-test-doubles.md](../../references/taxonomy-test-doubles.m
 | Tier | Dummy | Fake | Stub | Spy | Mock |
 |------|:-----:|:----:|:----:|:---:|:----:|
 | Unit | Yes | Yes | Yes (preferred) | Occasionally | Rare; must justify |
-| Integration | Yes | For non-boundary deps | For non-boundary deps | Occasionally | Rare |
+| Boundary integration | Yes | For non-boundary deps | For non-boundary deps | Occasionally | Rare |
 | Functional | Yes | For external services | For external services | Occasionally | Rare |
 | Contract | - | Being validated | Being validated | - | - |
 | E2E/System | - | For third parties only | For third parties only | - | - |

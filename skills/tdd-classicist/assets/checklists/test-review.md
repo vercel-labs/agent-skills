@@ -10,6 +10,7 @@ and [taxonomy-test-doubles.md](../../references/taxonomy-test-doubles.md) and
 ## Contract and Intent
 
 - [ ] Can you name the contract this test is proving?
+- [ ] Does the test have exactly one **primary claim** (one contract proved)?
 - [ ] Does the test name read like a contract statement
       (`[context] behavior [expected outcome]`)?
 - [ ] Is the test traceable to an explicit contract (unit contract, API schema,

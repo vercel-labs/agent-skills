@@ -12,8 +12,8 @@ compatibility:
 # Vitest Monorepo
 
 Configuration and methodology rules for Vitest in monorepo workspaces. Contains
-6 rules covering workspace-root config patterns, test-first methodology, the
-testing pyramid, and deterministic test requirements.
+3 rules covering workspace-root config patterns, `import.meta.url` pattern, and
+workspace-relative include paths.
 
 ## When to Apply
 
@@ -41,9 +41,6 @@ Do NOT reference these guidelines when:
 - [testing-vitest-workspace-root](references/rules/testing-vitest-workspace-root.md) — Set vitest root to workspace root
 - [testing-import-meta-url](references/rules/testing-import-meta-url.md) — Use `import.meta.url` pattern in `vitest.config.ts`
 - [testing-workspace-relative-include](references/rules/testing-workspace-relative-include.md) — Use workspace-relative include paths
-- [testing-test-first](references/rules/testing-test-first.md) — Tests MUST be written before implementation
-- [testing-pyramid](references/rules/testing-pyramid.md) — Unit (colocated), Integration (test/integration/), E2E (critical only)
-- [testing-deterministic](references/rules/testing-deterministic.md) — No live network calls, controlled time/randomness
 
 ## Vitest workspaceRoot Depth Formula
 

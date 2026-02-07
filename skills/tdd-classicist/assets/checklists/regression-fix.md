@@ -13,7 +13,7 @@ regression test. Derived from
       which layer.
 - [ ] Identify the **lowest test tier** that reproduces the bug's mechanism:
   - Can a unit test reproduce it? → Unit test.
-  - Does it require a real boundary (DB, HTTP, queue)? → Integration test.
+  - Does it require a real boundary (DB, HTTP, queue)? → Boundary integration test.
   - Does it require multiple units / a feature slice? → Functional test.
   - Does it only manifest in a full-stack scenario? → E2E test (last resort).
 

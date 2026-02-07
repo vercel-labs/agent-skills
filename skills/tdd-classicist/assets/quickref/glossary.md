@@ -57,6 +57,7 @@ precedence within this skill's doctrine.
 | Term | Definition |
 |------|-----------|
 | **Contract** | An explicit statement of what a unit/service/API provides to its consumers. Tests should be traceable to a contract. |
+| **Primary claim** | The single contract a test is proving. If a test has multiple primary claims, it is mis-scoped and should be split. |
 | **Hermetic** | A test that is self-contained: creates its own state, does not depend on other tests or shared mutable state. |
 | **Deterministic** | A test that produces the same result on every run, on any machine. |
 | **Builder** | A test helper that constructs domain objects with sensible defaults and composable overrides. |
