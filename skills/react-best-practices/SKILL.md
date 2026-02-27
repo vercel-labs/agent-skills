@@ -116,6 +116,13 @@ Reference these guidelines when:
 - `advanced-init-once` - Initialize app once per app load
 - `advanced-use-latest` - useLatest for stable callback refs
 
+### Auth Pages & Middleware
+
+When implementing authentication with middleware-based route protection:
+- **Always exclude auth-related pages** (`/login`, `/reset-password`, `/signup`, etc.) from the middleware auth gate so they remain accessible without a session.
+- **Hide app chrome** (nav bars, sidebars) on auth pages — these pages are standalone and should not render authenticated UI.
+- **Always include a password reset flow** when using email/password auth. Users who forget their password need a self-service recovery path. See the Supabase skill for the full implementation checklist.
+
 ## How to Use
 
 Read individual rule files for detailed explanations and code examples:
