@@ -848,8 +848,23 @@ export default function ArticlePage({ article }: { article: Article }) {
 **Correct: push `'use client'` to the leaf — only SearchInput is client JS**
 
 ```tsx
-'use client'
+// article-page.tsx — Server Component
+import { SearchInput } from './search-input'
+import { HeavyMarkdownRenderer } from './markdown'
+import { StaticFooter } from './footer'
+
+export default function ArticlePage({ article }: { article: Article }) {
+  return (
+    <div>
+      <SearchInput />
+      <HeavyMarkdownRenderer content={article.content} />  {/* ✅ stays on server */}
+      <StaticFooter />
+    </div>
+  )
+}
+
 // search-input.tsx — only this component is sent to the browser
+'use client'
 import { useState } from 'react'
 
 export function SearchInput() {
@@ -1002,6 +1017,21 @@ export function Providers() {
 **Correct: Server Component passed as children**
 
 ```tsx
+'use client'
+// providers.tsx
+import { useState, createContext, type ReactNode } from 'react'
+
+const ThemeContext = createContext('light')
+
+export function Providers({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState('light')
+  return (
+    <ThemeContext.Provider value={theme}>
+      {children}
+    </ThemeContext.Provider>
+  )
+}
+
 // layout.tsx — Server Component orchestrates composition
 import { Providers } from './providers'
 import { ServerDashboard } from './server-dashboard'

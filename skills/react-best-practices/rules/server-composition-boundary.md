@@ -48,9 +48,7 @@ export function Providers({ children }: { children: ReactNode }) {
     </ThemeContext.Provider>
   )
 }
-```
 
-```tsx
 // layout.tsx — Server Component orchestrates composition
 import { Providers } from './providers'
 import { ServerDashboard } from './server-dashboard'

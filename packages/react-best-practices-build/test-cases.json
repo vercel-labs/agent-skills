@@ -819,7 +819,7 @@
     "ruleId": "",
     "ruleTitle": "Pass Server Components as Children to Client Wrappers",
     "type": "good",
-    "code": "// layout.tsx — Server Component orchestrates composition\nimport { Providers } from './providers'\nimport { ServerDashboard } from './server-dashboard'\n\nexport default function RootLayout() {\n  return (\n    <Providers>\n      <ServerDashboard />  {/* ✅ stays a Server Component */}\n    </Providers>\n  )\n}",
+    "code": "'use client'\n// providers.tsx\nimport { useState, createContext, type ReactNode } from 'react'\n\nconst ThemeContext = createContext('light')\n\nexport function Providers({ children }: { children: ReactNode }) {\n  const [theme, setTheme] = useState('light')\n  return (\n    <ThemeContext.Provider value={theme}>\n      {children}\n    </ThemeContext.Provider>\n  )\n}\n\n// layout.tsx — Server Component orchestrates composition\nimport { Providers } from './providers'\nimport { ServerDashboard } from './server-dashboard'\n\nexport default function RootLayout() {\n  return (\n    <Providers>\n      <ServerDashboard />  {/* ✅ stays a Server Component */}\n    </Providers>\n  )\n}",
     "language": "tsx",
     "description": "Server Component passed as children"
   },
@@ -883,7 +883,7 @@
     "ruleId": "",
     "ruleTitle": "Default to Server Components",
     "type": "good",
-    "code": "'use client'\n// search-input.tsx — only this component is sent to the browser\nimport { useState } from 'react'\n\nexport function SearchInput() {\n  const [search, setSearch] = useState('')\n  return <input value={search} onChange={e => setSearch(e.target.value)} />\n}",
+    "code": "// article-page.tsx — Server Component\nimport { SearchInput } from './search-input'\nimport { HeavyMarkdownRenderer } from './markdown'\nimport { StaticFooter } from './footer'\n\nexport default function ArticlePage({ article }: { article: Article }) {\n  return (\n    <div>\n      <SearchInput />\n      <HeavyMarkdownRenderer content={article.content} />  {/* ✅ stays on server */}\n      <StaticFooter />\n    </div>\n  )\n}\n\n// search-input.tsx — only this component is sent to the browser\n'use client'\nimport { useState } from 'react'\n\nexport function SearchInput() {\n  const [search, setSearch] = useState('')\n  return <input value={search} onChange={e => setSearch(e.target.value)} />\n}",
     "language": "tsx",
     "description": "push `'use client'` to the leaf — only SearchInput is client JS"
   },

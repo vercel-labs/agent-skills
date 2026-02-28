@@ -84,11 +84,9 @@ export default function ArticlePage({ article }: { article: Article }) {
     </div>
   )
 }
-```
 
-```tsx
-'use client'
 // search-input.tsx — only this component is sent to the browser
+'use client'
 import { useState } from 'react'
 
 export function SearchInput() {
