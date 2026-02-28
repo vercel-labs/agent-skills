@@ -36,10 +36,12 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 3.1 [Authenticate Server Actions Like API Routes](#31-authenticate-server-actions-like-api-routes)
    - 3.2 [Avoid Duplicate Serialization in RSC Props](#32-avoid-duplicate-serialization-in-rsc-props)
    - 3.3 [Cross-Request LRU Caching](#33-cross-request-lru-caching)
-   - 3.4 [Minimize Serialization at RSC Boundaries](#34-minimize-serialization-at-rsc-boundaries)
-   - 3.5 [Parallel Data Fetching with Component Composition](#35-parallel-data-fetching-with-component-composition)
-   - 3.6 [Per-Request Deduplication with React.cache()](#36-per-request-deduplication-with-reactcache)
-   - 3.7 [Use after() for Non-Blocking Operations](#37-use-after-for-non-blocking-operations)
+   - 3.4 [Default to Server Components](#34-default-to-server-components)
+   - 3.5 [Minimize Serialization at RSC Boundaries](#35-minimize-serialization-at-rsc-boundaries)
+   - 3.6 [Parallel Data Fetching with Component Composition](#36-parallel-data-fetching-with-component-composition)
+   - 3.7 [Pass Server Components as Children to Client Wrappers](#37-pass-server-components-as-children-to-client-wrappers)
+   - 3.8 [Per-Request Deduplication with React.cache()](#38-per-request-deduplication-with-reactcache)
+   - 3.9 [Use after() for Non-Blocking Operations](#39-use-after-for-non-blocking-operations)
 4. [Client-Side Data Fetching](#4-client-side-data-fetching) — **MEDIUM-HIGH**
    - 4.1 [Deduplicate Global Event Listeners](#41-deduplicate-global-event-listeners)
    - 4.2 [Use Passive Event Listeners for Scrolling Performance](#42-use-passive-event-listeners-for-scrolling-performance)
@@ -781,7 +783,99 @@ Use when sequential user actions hit multiple endpoints needing the same data wi
 
 Reference: [https://github.com/isaacs/node-lru-cache](https://github.com/isaacs/node-lru-cache)
 
-### 3.4 Minimize Serialization at RSC Boundaries
+### 3.4 Default to Server Components
+
+**Impact: HIGH (reduces client bundle size and improves Time to Interactive)**
+
+In Next.js App Router, components are Server Components by default. Only add `'use client'` when the component needs state, effects, event handlers, or browser-only APIs. Unnecessary `'use client'` pulls the component and all its imports into the client bundle.
+
+**Incorrect: unnecessary `'use client'` — no state, effects, or event handlers**
+
+```tsx
+'use client'
+
+import { formatDate } from '@/lib/utils'
+
+export function ArticleCard({ title, date, summary }: ArticleCardProps) {
+  return (
+    <article>
+      <h2>{title}</h2>
+      <time>{formatDate(date)}</time>
+      <p>{summary}</p>
+    </article>
+  )
+}
+```
+
+**Correct: Server Component — same output, zero client JS**
+
+```tsx
+import { formatDate } from '@/lib/utils'
+
+export function ArticleCard({ title, date, summary }: ArticleCardProps) {
+  return (
+    <article>
+      <h2>{title}</h2>
+      <time>{formatDate(date)}</time>
+      <p>{summary}</p>
+    </article>
+  )
+}
+```
+
+**Incorrect: `'use client'` too high — heavy dependencies bundled for one input**
+
+```tsx
+'use client'
+// article-page.tsx
+import { useState } from 'react'
+import { HeavyMarkdownRenderer } from './markdown'
+import { StaticFooter } from './footer'
+
+export default function ArticlePage({ article }: { article: Article }) {
+  const [search, setSearch] = useState('')
+  return (
+    <div>
+      <input value={search} onChange={e => setSearch(e.target.value)} />
+      {/* ❌ These don't need interactivity but are forced into the client bundle */}
+      <HeavyMarkdownRenderer content={article.content} />
+      <StaticFooter />
+    </div>
+  )
+}
+```
+
+**Correct: push `'use client'` to the leaf — only SearchInput is client JS**
+
+```tsx
+// article-page.tsx — Server Component
+import { SearchInput } from './search-input'
+import { HeavyMarkdownRenderer } from './markdown'
+import { StaticFooter } from './footer'
+
+export default function ArticlePage({ article }: { article: Article }) {
+  return (
+    <div>
+      <SearchInput />
+      <HeavyMarkdownRenderer content={article.content} />  {/* ✅ stays on server */}
+      <StaticFooter />
+    </div>
+  )
+}
+
+// search-input.tsx — only this component is sent to the browser
+'use client'
+import { useState } from 'react'
+
+export function SearchInput() {
+  const [search, setSearch] = useState('')
+  return <input value={search} onChange={e => setSearch(e.target.value)} />
+}
+```
+
+Reference: [https://nextjs.org/docs/app/building-your-application/rendering/server-components](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
+
+### 3.5 Minimize Serialization at RSC Boundaries
 
 **Impact: HIGH (reduces data transfer size)**
 
@@ -815,7 +909,7 @@ function Profile({ name }: { name: string }) {
 }
 ```
 
-### 3.5 Parallel Data Fetching with Component Composition
+### 3.6 Parallel Data Fetching with Component Composition
 
 **Impact: CRITICAL (eliminates server-side waterfalls)**
 
@@ -894,7 +988,68 @@ export default function Page() {
 }
 ```
 
-### 3.6 Per-Request Deduplication with React.cache()
+### 3.7 Pass Server Components as Children to Client Wrappers
+
+**Impact: HIGH (prevents unintended client-side bundling of server-rendered subtrees)**
+
+Importing a Server Component inside a `'use client'` file forces it — and everything it imports — into the client bundle. Instead, accept `children` and let a Server Component compose both.
+
+**Incorrect: Server Component imported inside Client Component**
+
+```tsx
+'use client'
+// providers.tsx
+import { useState, createContext } from 'react'
+import { ServerDashboard } from './server-dashboard'
+
+const ThemeContext = createContext('light')
+
+export function Providers() {
+  const [theme, setTheme] = useState('light')
+  return (
+    <ThemeContext.Provider value={theme}>
+      <ServerDashboard />  {/* ❌ forced into client bundle */}
+    </ThemeContext.Provider>
+  )
+}
+```
+
+**Correct: Server Component passed as children**
+
+```tsx
+'use client'
+// providers.tsx
+import { useState, createContext, type ReactNode } from 'react'
+
+const ThemeContext = createContext('light')
+
+export function Providers({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState('light')
+  return (
+    <ThemeContext.Provider value={theme}>
+      {children}
+    </ThemeContext.Provider>
+  )
+}
+
+// layout.tsx — Server Component orchestrates composition
+import { Providers } from './providers'
+import { ServerDashboard } from './server-dashboard'
+
+export default function RootLayout() {
+  return (
+    <Providers>
+      <ServerDashboard />  {/* ✅ stays a Server Component */}
+    </Providers>
+  )
+}
+```
+
+The Server Component is evaluated on the server and its output (RSC Payload) is passed through the `children` slot. The Client Component never sees the source — only the serialized result.
+
+Reference: [https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#supported-pattern-passing-server-components-to-client-components-as-props](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#supported-pattern-passing-server-components-to-client-components-as-props)
+
+### 3.8 Per-Request Deduplication with React.cache()
 
 **Impact: MEDIUM (deduplicates within request)**
 
@@ -960,7 +1115,7 @@ Use `React.cache()` to deduplicate these operations across your component tree.
 
 Reference: [https://react.dev/reference/react/cache](https://react.dev/reference/react/cache)
 
-### 3.7 Use after() for Non-Blocking Operations
+### 3.9 Use after() for Non-Blocking Operations
 
 **Impact: MEDIUM (faster response times)**
 
