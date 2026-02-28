@@ -11,7 +11,7 @@ description: >-
   structure", "audit my GitHub repos", "check my pushed repos", or mentions
   validating a project's files before pushing to Git. Also triggers on phrases
   like "what should I gitignore", "is my skill repo clean", "review my project layout",
-  clean", or "best practices for repo structure". Works for Python, Node.js,
+  "is my project clean", or "best practices for repo structure". Works for Python, Node.js,
   C#/.NET, Rust, Go, Java, Django, Flask, Next.js, React, Vue, Svelte, and any
   other tech stack.
 ---
