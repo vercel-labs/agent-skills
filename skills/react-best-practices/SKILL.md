@@ -9,7 +9,7 @@ metadata:
 
 # Vercel React Best Practices
 
-Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 57 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 59 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
 
 ## When to Apply
 
@@ -60,6 +60,8 @@ Reference these guidelines when:
 - `server-serialization` - Minimize data passed to client components
 - `server-parallel-fetching` - Restructure components to parallelize fetches
 - `server-after-nonblocking` - Use after() for non-blocking operations
+- `server-composition-boundary` - Pass Server Components as children to client wrappers
+- `server-prefer-server-components` - Default to Server Components, push 'use client' to leaves
 
 ### 4. Client-Side Data Fetching (MEDIUM-HIGH)
 
