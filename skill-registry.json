@@ -1,0 +1,185 @@
+{
+  "$schema": "./skill-registry.schema.json",
+  "skills": {
+    "composition-patterns": {
+      "version": "1.0.0",
+      "author": "vercel",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "react",
+        "composition",
+        "components"
+      ],
+      "description": "React composition patterns that scale"
+    },
+    "react-best-practices": {
+      "version": "1.0.0",
+      "author": "vercel",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "react",
+        "nextjs",
+        "performance"
+      ],
+      "description": "React/Next.js performance optimization guidelines"
+    },
+    "react-native-skills": {
+      "version": "1.0.0",
+      "author": "vercel",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "react-native",
+        "expo",
+        "mobile"
+      ],
+      "description": "React Native and Expo best practices"
+    },
+    "web-design-guidelines": {
+      "version": "1.0.0",
+      "author": "vercel",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "ui",
+        "ux",
+        "accessibility",
+        "web"
+      ],
+      "description": "Web Interface Guidelines compliance review"
+    },
+    "go-package-documentation": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "golang",
+        "documentation",
+        "godoc"
+      ],
+      "description": "Go package documentation (doc.go) following official conventions"
+    },
+    "tdd-classicist": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "testing",
+        "tdd",
+        "test-doubles",
+        "methodology"
+      ],
+      "description": "Classicist TDD methodology with Meszaros test-double taxonomy"
+    },
+    "esm-typescript": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "typescript",
+        "esm",
+        "modules"
+      ],
+      "description": "Diagnose and fix ESM errors in TypeScript projects"
+    },
+    "nx-monorepo": {
+      "version": "2.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "nx",
+        "monorepo",
+        "typescript"
+      ],
+      "description": "Nx TypeScript monorepo architecture guide"
+    },
+    "typescript-quality": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "typescript",
+        "quality",
+        "patterns"
+      ],
+      "description": "TypeScript quality patterns and best practices"
+    },
+    "typescript-testing-organization": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "typescript",
+        "testing",
+        "organization"
+      ],
+      "description": "TypeScript test file suffixes, layout, and tier-suffix policy"
+    },
+    "vitest-monorepo": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "vitest",
+        "testing",
+        "monorepo"
+      ],
+      "description": "Vitest configuration in monorepo environments"
+    },
+    "vercel-deploy-claimable": {
+      "version": "1.0.0",
+      "author": "vercel",
+      "scope": "global",
+      "targets": [
+        "claude"
+      ],
+      "path": "claude.ai/vercel-deploy-claimable",
+      "tags": [
+        "vercel",
+        "deploy"
+      ],
+      "description": "Deploy apps to Vercel with claimable ownership transfer"
+    }
+  },
+  "targetPaths": {
+    "cursor": "~/.cursor/skills",
+    "agents": "~/.agents/skills",
+    "claude": "~/.claude/skills"
+  }
+}
