@@ -1,0 +1,32 @@
+---
+globs: "skills/**"
+---
+# Skill Authoring
+
+## Required files
+Every skill directory MUST contain:
+- `SKILL.md` — with valid frontmatter (`name`, `description`)
+- `metadata.json` — with `version`, `author`, `date`, `abstract`
+
+## SKILL.md constraints
+- `name` field MUST match the directory name
+- `description` max 1024 chars, third-person, includes WHAT + WHEN
+- Body MUST be under 500 lines
+- References one level deep only (SKILL.md → ref file, never ref → ref)
+
+## metadata.json schema
+```json
+{
+  "version": "semver",
+  "author": "string",
+  "date": "Month Year",
+  "abstract": "One-line description",
+  "references": ["optional array of URLs"]
+}
+```
+
+## After any skill change
+1. Ensure `metadata.json` version matches `skill-registry.json`
+2. If adding a new skill: add entry to `skill-registry.json`
+3. If the skill has `rules/`: rebuild AGENTS.md
+4. Validate by running: `bash scripts/skill-sync.sh --list --skill=<name>`

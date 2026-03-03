@@ -1,0 +1,39 @@
+---
+description: >-
+  PR creation workflow for the agent-skills repo. Applied when creating
+  pull requests, opening PRs, or preparing PR descriptions.
+---
+# PR Workflow
+
+## Branch naming
+`feat/<skill-name>-<short-description>` or `fix/<skill-name>-<short-description>`
+
+Examples:
+- `feat/import-commit-hygiene`
+- `fix/tdd-classicist-tier-matrix`
+
+## PR title
+Conventional commit format: `feat(tdd-classicist): add regression-fix checklist`
+
+## PR body template
+
+```markdown
+## What
+Brief description of what changed.
+
+## Skills affected
+- `skill-name` (version X.Y.Z → A.B.C)
+
+## Checklist
+- [ ] `skill-registry.json` updated
+- [ ] `metadata.json` version matches registry
+- [ ] SKILL.md under 500 lines
+- [ ] `bash scripts/skill-sync.sh --list` shows correct state
+- [ ] No secrets or credentials in skill content
+```
+
+## When importing skills from other repos
+- Use `scripts/skill-import.sh` to ensure consistent structure
+- Verify the imported SKILL.md frontmatter is valid
+- Add meaningful tags in the registry entry
+- Single commit for import + registry update

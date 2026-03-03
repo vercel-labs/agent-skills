@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+# Commit Conventions
+
+## Format
+Conventional Commits: `<type>(<scope>): <description>`
+
+Allowed types: `feat`, `fix`, `refactor`, `docs`, `chore`, `build`, `ci`, `style`.
+
+## Scopes
+Use the skill name as scope when the change is skill-specific:
+- `feat(tdd-classicist): add regression-fix checklist`
+- `docs(react-best-practices): update bundle optimization rules`
+
+Use `registry` for changes to `skill-registry.json` or `scripts/`:
+- `feat(registry): add skill-import script`
+
+Use `build` for `packages/react-best-practices-build/`:
+- `fix(build): handle missing _sections.md gracefully`
+
+## Separation of concerns
+
+| Category | Files | Commit type |
+|----------|-------|-------------|
+| Skill content | `skills/**/*.md`, `skills/**/metadata.json` | `feat`, `fix`, `refactor`, `docs` |
+| Registry/scripts | `skill-registry.json`, `scripts/*.sh` | `feat`, `fix`, `chore` |
+| Build tooling | `packages/**` | `feat`, `fix`, `build` |
+| Repo config | `.cursor/`, `.gitignore`, `AGENTS.md`, `README.md` | `chore`, `docs` |
+
+## Rules
+1. A skill content change should NOT include unrelated registry or build changes.
+2. When importing a skill, the import + registry update is ONE commit.
+3. Version bumps are a separate commit: `chore(<skill>): bump to x.y.z`
+4. AGENTS.md regeneration (build output) goes with the rule changes that caused it.

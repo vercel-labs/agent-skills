@@ -1,0 +1,50 @@
+---
+alwaysApply: true
+---
+# Repo Map — agent-skills
+
+## Purpose
+Central registry for versioned Agent Skills. Skills are authored here,
+then deployed to `~/.cursor/skills/`, `~/.agents/skills/`, or
+`~/.claude/skills/` via `scripts/skill-sync.sh`.
+
+## Key paths
+
+| Path | Purpose |
+|------|---------|
+| `skills/<name>/` | Skill source — SKILL.md + metadata.json + optional refs/assets/scripts |
+| `skill-registry.json` | Central manifest — version, author, scope, targets per skill |
+| `scripts/skill-sync.sh` | Deploy skills to target paths |
+| `scripts/skill-version.sh` | Bump version across registry + metadata + SKILL.md |
+| `scripts/skill-import.sh` | Import a skill from an external project |
+| `packages/react-best-practices-build/` | Build tooling for rules-based skills (AGENTS.md compilation) |
+| `.cursor/skills/skill-registry/` | Meta-skill for registry management |
+
+## Skill directory structure
+
+Every skill MUST have `SKILL.md` and `metadata.json` at minimum.
+
+```
+skills/<name>/
+├── SKILL.md          # Required — agent instructions
+├── metadata.json     # Required — version, author, date, abstract
+├── README.md         # Optional — human-facing docs (excluded from deploy)
+├── AGENTS.md         # Optional — compiled output (for rules-based skills)
+├── references/       # Optional — on-demand docs
+├── assets/           # Optional — templates, checklists, quickref
+├── scripts/          # Optional — executable automation
+└── rules/            # Optional — individual rule files (compiled into AGENTS.md)
+```
+
+## Two skill archetypes
+
+1. **Rules-based** (react-best-practices, composition-patterns, react-native-skills):
+   Have `rules/` dir compiled into `AGENTS.md` by the build system.
+   Editing: add/modify files in `rules/`, then run the build.
+
+2. **Standard** (all others): Direct SKILL.md + references.
+   Editing: modify files directly.
+
+## Registry invariant
+`skill-registry.json` must always reflect the current state.
+When adding/removing/versioning a skill, update the registry.
