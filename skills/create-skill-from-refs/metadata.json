@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "author": "felipeblassioli",
+  "date": "March 2026",
+  "abstract": "Create Cursor Agent Skills from user-provided reference material (documents, code, examples, URLs). Guides through intake, archetype selection, scaffolding, and reference distillation into a well-structured skill package. Use when the user asks to create a skill, write a SKILL.md, or package domain knowledge into a reusable skill — especially when they provide reference documents or code as context. Invoke explicitly via /create-skill-from-refs."
+}
