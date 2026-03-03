@@ -114,6 +114,22 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+### learningx-telegram-self-heal
+
+Self-heal workflow for Telegram + LearningX bot regressions in `lx-agent`. Focuses on runtime failures, auth breakages, and course visibility bugs with deterministic validation.
+
+**Use when:**
+- Telegram shows `getUpdates` 409 conflict warnings
+- Bot replies with `Codex 응답 실패: Unauthorized.`
+- Codex integration fails with missing scope errors
+- `/assignments` or selector flows hide expected English course entries
+
+**Features:**
+- Signature-based diagnosis for known Telegram/Codex/LearningX failures
+- Minimal-fix policy and strict validation gates
+- Optional production API auth check for `/api/codex/chat`
+- Machine-readable readiness script output (JSON)
+
 ## Installation
 
 ```bash
