@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "author": "felipeblassioli",
+  "date": "March 2026",
+  "abstract": "Set up and use Google Cloud Error Reporting in Node.js applications. Covers automatic capture on Cloud Run / Cloud Run functions, the @google-cloud/error-reporting client library (configuration + middleware), and Cloud Logging log-entry formatting rules for Error Reporting ingestion."
+}
