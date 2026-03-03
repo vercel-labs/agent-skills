@@ -219,6 +219,21 @@
         "testing"
       ],
       "description": "Guide writing, configuring, testing, and migrating Firebase Cloud Functions for Node.js (JavaScript/TypeScript). Distinguish v1 (deprecated) from v2 functions by import path. Use when writing a new Cloud Function, adding a trigger (HTTP, PubSub, Firestore), configuring environment or secrets, testing functions locally or with firebase-functions-test, or migrating v1 functions to v2. Do NOT use for client-side Firebase SDK integration, GCP services unrelated to Cloud Functions, or test-tier selection methodology (see tdd-classicist). ---"
+    },
+    "gcloud-logging": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "gcp",
+        "logging",
+        "gcloud",
+        "observability"
+      ],
+      "description": "Query and extract Google Cloud Logging entries using the Logging query language DSL and gcloud CLI. Covers Cloud Run, Firebase Functions (1st gen), GKE, Compute Engine, and other GCP resource types. Use when the user asks to read logs, debug Cloud Run errors, tail Firebase Functions output, build Logging filters, parse log entries, or investigate GCP service behavior via logs."
     }
   },
   "targetPaths": {

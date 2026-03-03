@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "author": "felipeblassioli",
+  "date": "March 2026",
+  "abstract": "Query and extract Google Cloud Logging entries using the Logging query language DSL and gcloud CLI. Covers Cloud Run, Firebase Functions (1st gen), GKE, Compute Engine, and other GCP resource types. Use when the user asks to read logs, debug Cloud Run errors, tail Firebase Functions output, build Logging filters, parse log entries, or investigate GCP service behavior via logs."
+}
