@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "author": "felipeblassioli",
+  "date": "March 2026",
+  "abstract": "Create and update GitHub pull requests using gh CLI for turbiteam repositories. PRs are written in Brazilian Portuguese following the repo's pull_request_template.md with comment markers. Uses a .work/ staging directory for body files. Use when the user asks to create a PR, open a PR, update a PR description, or prepare a PR body."
+}

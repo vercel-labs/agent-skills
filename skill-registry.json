@@ -234,6 +234,20 @@
         "observability"
       ],
       "description": "Query and extract Google Cloud Logging entries using the Logging query language DSL and gcloud CLI. Covers Cloud Run, Firebase Functions (1st gen), GKE, Compute Engine, and other GCP resource types. Use when the user asks to read logs, debug Cloud Run errors, tail Firebase Functions output, build Logging filters, parse log entries, or investigate GCP service behavior via logs."
+    },
+    "gh-pr-creator": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor"
+      ],
+      "tags": [
+        "github",
+        "pr",
+        "turbiteam"
+      ],
+      "description": "Create and update GitHub pull requests using gh CLI for turbiteam repositories. PRs are written in Brazilian Portuguese following the repo's pull_request_template.md with comment markers. Uses a .work/ staging directory for body files. Use when the user asks to create a PR, open a PR, update a PR description, or prepare a PR body."
     }
   },
   "targetPaths": {
