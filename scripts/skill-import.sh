@@ -86,8 +86,8 @@ extract_description() {
   if [[ -f "$skill_md" ]]; then
     local desc
     desc=$(sed -n '/^---$/,/^---$/p' "$skill_md" | sed -n 's/^description:[[:space:]]*//p' | head -1)
-    if [[ -z "$desc" ]]; then
-      # Try multi-line description (>- or > syntax)
+    # If description is empty or a YAML block scalar indicator, parse continuation lines.
+    if [[ -z "$desc" || "$desc" == ">"* || "$desc" == "|"* ]]; then
       desc=$(sed -n '/^---$/,/^---$/p' "$skill_md" | sed -n '/^description:/,/^[a-z]/{/^description:/d;/^[a-z]/d;p;}' | tr '\n' ' ' | xargs)
     fi
     echo "$desc"
