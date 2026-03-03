@@ -83,6 +83,22 @@ chore(registry): <description>
 
 Separate skill content, registry/scripts, and build changes into distinct commits.
 
+## Pull Requests
+
+All PR content in **English**. PRs target `felipeblassioli/agent-skills` (never upstream).
+
+Use the template at `.github/pull_request_template.md`. Key expectations:
+
+- **Focused scope** — separate skill content from registry/script from build changes.
+- **Motivation section** — explain *why* before the reviewer reads the diff.
+- **Quality checklist** — tick all items; run `validate-skill.sh` for skill PRs.
+- **Validation section** — include actual commands and output.
+
+Branch naming: `<type>/<skill-name>-<short-description>`
+PR title: Conventional Commits format (`type(scope): description`)
+
+See `.cursor/rules/30-pr-workflow.mdc` for the full workflow.
+
 ## Required Files per Skill
 
 | File | Required | Notes |

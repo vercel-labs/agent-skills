@@ -5,6 +5,9 @@ description: >-
 ---
 # PR Workflow
 
+## Language
+All PR content MUST be written in **English**.
+
 ## Target repository
 PRs MUST target `felipeblassioli/agent-skills`. Always use:
 ```bash
@@ -13,30 +16,122 @@ gh pr create --repo felipeblassioli/agent-skills --base main ...
 NEVER open PRs against `vercel-labs/agent-skills` or any upstream repo.
 
 ## Branch naming
-`feat/<skill-name>-<short-description>` or `fix/<skill-name>-<short-description>`
+`<type>/<skill-name>-<short-description>` or `<type>/<short-description>`
 
 Examples:
 - `feat/import-commit-hygiene`
 - `fix/tdd-classicist-tier-matrix`
+- `chore/update-registry-schema`
 
 ## PR title
-Conventional commit format: `feat(tdd-classicist): add regression-fix checklist`
+Conventional Commits format: `type(scope): description`
 
-## PR body template
+Use the skill name as scope when the change is skill-specific.
+Use `registry`, `build`, or omit scope for cross-cutting changes.
 
-```markdown
-## What
-Brief description of what changed.
+Examples:
+- `feat(tdd-classicist): add regression-fix checklist`
+- `fix(registry): correct version drift in metadata`
+- `docs: update AGENTS.md with new skill paths`
 
-## Skills affected
-- `skill-name` (version X.Y.Z → A.B.C)
+## PR body
 
-## Checklist
-- [ ] `skill-registry.json` updated
-- [ ] `metadata.json` version matches registry
-- [ ] SKILL.md under 500 lines
-- [ ] `bash scripts/skill-sync.sh --list` shows correct state
-- [ ] No secrets or credentials in skill content
+Use the template at `.github/pull_request_template.md`. Key sections:
+
+### What
+One-paragraph summary of the change. Lead with intent, not mechanics.
+
+### Skills affected
+Table listing every skill touched, the nature of change, and version delta.
+Delete this section if no skills are affected.
+
+### Motivation
+**Why does this change exist?** This is the most important section.
+A reviewer should understand the goal before reading code.
+
+| PR size | Guideline |
+|---------|-----------|
+| Small / trivial | 1–3 sentences |
+| Medium | 1 paragraph + optional context |
+| Complex | Up to ~10 lines; reference ADRs or issues |
+
+### Quality checklist
+The template includes a checklist derived from the skill standard.
+Tick every applicable item before requesting review.
+
+Key checks (from `create-skill-from-refs/references/quality-checklist.md`):
+- `skill-registry.json` updated when skills are added/removed/versioned
+- `metadata.json` version matches the registry entry
+- SKILL.md frontmatter: `name` matches folder, `description` includes WHAT + WHEN
+- SKILL.md body under 500 lines
+- No empty directories in the skill tree
+- No secrets or credentials in content
+
+### Validation
+Include actual commands and results. Examples:
+```
+- `bash scripts/skill-sync.sh --dry-run` → OK
+- `bash skills/create-skill-from-refs/scripts/validate-skill.sh skills/<name>` → all pass
+```
+
+## What makes a good PR in this repo
+
+### Focused scope
+Keep PRs short. Separate skill content changes from registry/script changes
+from build tooling changes (see commit conventions in `10-commit-conventions.mdc`).
+
+### Explain intent, not just mechanics
+The **Motivation** section answers "why does this change exist?" so the
+reviewer understands the goal before reading code. A cryptic title and
+empty body is the fastest way to get a PR ignored.
+
+### Validate with the skill standard
+For PRs that add or substantially modify a skill, run the validation script:
+```bash
+bash skills/create-skill-from-refs/scripts/validate-skill.sh skills/<name>
+```
+Include the output in the Validation section.
+
+### Track follow-ups explicitly
+When deferring work, open an issue and reference it in **Additional context**.
+
+## Workflow steps
+
+### 1. Gather context
+```bash
+git log --oneline main..HEAD
+git diff main..HEAD --stat
+```
+
+### 2. Draft the body
+Fill in the `.github/pull_request_template.md` sections.
+For complex PRs, stage the body in `.work/body-pr-<slug>.md` and use `--body-file`.
+
+### 3. Create or update
+
+**Create:**
+```bash
+gh pr create \
+  --title "type(scope): description" \
+  --body-file .work/body-pr-<slug>.md \
+  --base main
+```
+
+**Update existing:**
+```bash
+gh pr edit <NUMBER> --body-file .work/body-pr-<slug>.md
+```
+
+### 4. Add proof comments (optional)
+Attach validation evidence as a PR comment:
+```bash
+gh pr comment <NUMBER> --body "$(cat <<'EOF'
+### Validation: skill-sync dry-run
+```
+<paste output>
+```
+EOF
+)"
 ```
 
 ## When importing skills from other repos
@@ -44,3 +139,15 @@ Brief description of what changed.
 - Verify the imported SKILL.md frontmatter is valid
 - Add meaningful tags in the registry entry
 - Single commit for import + registry update
+
+## Quick reference
+
+| Action | Command |
+|--------|---------|
+| List open PRs | `gh pr list --base main --state open` |
+| View PR body | `gh pr view <N> --json body -q .body` |
+| Create PR | `gh pr create --title "..." --body-file .work/body-pr-<slug>.md` |
+| Update PR body | `gh pr edit <N> --body-file .work/body-pr-<slug>.md` |
+| Add comment | `gh pr comment <N> --body "..."` |
+| Check CI status | `gh pr checks <N>` |
+| Validate skill | `bash skills/create-skill-from-refs/scripts/validate-skill.sh skills/<name>` |
