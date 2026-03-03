@@ -84,13 +84,51 @@ extract_version() {
 extract_description() {
   local skill_md="$1/SKILL.md"
   if [[ -f "$skill_md" ]]; then
-    local desc
-    desc=$(sed -n '/^---$/,/^---$/p' "$skill_md" | sed -n 's/^description:[[:space:]]*//p' | head -1)
-    if [[ -z "$desc" ]]; then
-      # Try multi-line description (>- or > syntax)
-      desc=$(sed -n '/^---$/,/^---$/p' "$skill_md" | sed -n '/^description:/,/^[a-z]/{/^description:/d;/^[a-z]/d;p;}' | tr '\n' ' ' | xargs)
-    fi
-    echo "$desc"
+    awk '
+      BEGIN { in_frontmatter = 0; frontmatter_seen = 0; capture_multiline = 0; out = ""; printed = 0 }
+
+      /^---$/ {
+        if (frontmatter_seen == 0) {
+          in_frontmatter = 1
+          frontmatter_seen = 1
+          next
+        }
+        if (in_frontmatter == 1) {
+          in_frontmatter = 0
+          exit
+        }
+      }
+
+      in_frontmatter == 1 && /^description:[[:space:]]*/ {
+        desc = $0
+        sub(/^description:[[:space:]]*/, "", desc)
+        if (desc == "" || desc ~ /^[>|]/) {
+          capture_multiline = 1
+          next
+        }
+        printed = 1
+        print desc
+        exit
+      }
+
+      in_frontmatter == 1 && capture_multiline == 1 {
+        if ($0 ~ /^[[:alpha:]_][[:alnum:]_-]*:[[:space:]]*/) {
+          printed = 1
+          print out
+          exit
+        }
+        line = $0
+        sub(/^[[:space:]]+/, "", line)
+        if (line != "") {
+          if (out != "") out = out " "
+          out = out line
+        }
+      }
+
+      END {
+        if (capture_multiline == 1 && out != "" && printed == 0) print out
+      }
+    ' "$skill_md"
   fi
 }
 
