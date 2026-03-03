@@ -235,6 +235,24 @@
       ],
       "description": "Query and extract Google Cloud Logging entries using the Logging query language DSL and gcloud CLI. Covers Cloud Run, Firebase Functions (1st gen), GKE, Compute Engine, and other GCP resource types. Use when the user asks to read logs, debug Cloud Run errors, tail Firebase Functions output, build Logging filters, parse log entries, or investigate GCP service behavior via logs."
     },
+    "gcp-error-reporting-nodejs": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "gcp",
+        "error-reporting",
+        "observability",
+        "nodejs",
+        "cloud-run",
+        "cloud-logging"
+      ],
+      "description": "Set up and use Google Cloud Error Reporting in Node.js applications. Covers automatic capture on Cloud Run / Cloud Run functions, the @google-cloud/error-reporting client library (configuration + middleware), and Cloud Logging log-entry formatting rules for Error Reporting ingestion."
+    },
     "gh-pr-creator": {
       "version": "1.0.0",
       "author": "felipeblassioli",
