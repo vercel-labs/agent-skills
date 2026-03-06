@@ -281,6 +281,22 @@
         "turbi"
       ],
       "description": ""
+    },
+    "hurl-testing": {
+      "version": "1.0.0",
+      "author": "felipeblassioli",
+      "scope": "global",
+      "targets": [
+        "cursor",
+        "agents"
+      ],
+      "tags": [
+        "hurl",
+        "testing",
+        "http",
+        "api"
+      ],
+      "description": "Write, execute, and assert HTTP requests safely using Hurl text files."
     }
   },
   "targetPaths": {
