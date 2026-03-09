@@ -14,7 +14,7 @@ January 2026
 
 ## Abstract
 
-Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 40+ rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 58 rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
 
 ---
 
@@ -32,6 +32,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 2.3 [Defer Non-Critical Third-Party Libraries](#23-defer-non-critical-third-party-libraries)
    - 2.4 [Dynamic Imports for Heavy Components](#24-dynamic-imports-for-heavy-components)
    - 2.5 [Preload Based on User Intent](#25-preload-based-on-user-intent)
+   - 2.6 [Use Wildcard Imports for Zod](#26-use-wildcard-imports-for-zod)
 3. [Server-Side Performance](#3-server-side-performance) — **HIGH**
    - 3.1 [Authenticate Server Actions Like API Routes](#31-authenticate-server-actions-like-api-routes)
    - 3.2 [Avoid Duplicate Serialization in RSC Props](#32-avoid-duplicate-serialization-in-rsc-props)
@@ -585,6 +586,47 @@ function FlagsProvider({ children, flags }: Props) {
 ```
 
 The `typeof window !== 'undefined'` check prevents bundling preloaded modules for SSR, optimizing server bundle size and build speed.
+
+### 2.6 Use Wildcard Imports for Zod
+
+**Impact: MEDIUM (better tree-shaking with Webpack/Next.js)**
+
+Use wildcard imports (`import * as z from "zod"`) instead of named imports for better tree-shaking with Webpack (Next.js) and esbuild. Named imports prevent proper tree-shaking in these bundlers, causing unused Zod code to be included in your bundle.
+
+**Incorrect: not tree-shakable by Webpack and esbuild**
+
+```tsx
+import { z } from 'zod'
+
+const userSchema = z.object({
+  name: z.string(),
+  email: z.string().email()
+})
+```
+
+**Correct: tree-shakable across all bundlers**
+
+```tsx
+import * as z from 'zod'
+
+const userSchema = z.object({
+  name: z.string(),
+  email: z.string().email()
+})
+```
+
+**Why it matters:**
+
+- Webpack (including Next.js) and esbuild cannot tree-shake named Zod imports effectively
+- Wildcard exports have wide support for tree-shaking across bundlers
+- Unused Zod validators, locales, and internal utilities are properly excluded from the bundle
+- Rollup handles both styles well, but Webpack/esbuild require the wildcard pattern
+
+**Additional context:**
+
+Zod has made internal improvements to improve tree-shaking (marking regexes as `@__PURE__`, restructuring locale loading), but the import style still matters. Using wildcard imports ensures you get the full benefit of these optimizations.
+
+Reference: [https://github.com/colinhacks/zod/pull/4569](https://github.com/colinhacks/zod/pull/4569)
 
 ---
 
