@@ -1,15 +1,21 @@
-export default async function Home() {
-  const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'http://localhost:3000'
+"use client"
 
-  const res = await fetch(`${baseUrl}/api/health`)
-  const data = await res.json()
+import { useEffect, useState } from "react"
+
+export default function Home() {
+  const [status, setStatus] = useState("loading...")
+
+  useEffect(() => {
+    fetch("/api/health")
+      .then((res) => res.json())
+      .then((data) => setStatus(data.status))
+      .catch(() => setStatus("error"))
+  }, [])
 
   return (
     <div>
       <h1>Next.js + FastAPI</h1>
-      <p>Backend status: {data.status}</p>
+      <p>Backend status: {status}</p>
     </div>
   )
 }
