@@ -3,7 +3,7 @@
     "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "bad",
-    "code": "function useWindowEvent(event: string, handler: () => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
+    "code": "function useWindowEvent(event: string, handler: (e) => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
     "language": "tsx",
     "description": "re-subscribes on every render"
   },
@@ -11,13 +11,29 @@
     "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "good",
-    "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: () => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
+    "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: (e) => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
     "language": "tsx",
     "description": "stable subscription"
   },
   {
     "ruleId": "",
-    "ruleTitle": "useLatest for Stable Callback Refs",
+    "ruleTitle": "Initialize App Once, Not Per Mount",
+    "type": "bad",
+    "code": "function Comp() {\n  useEffect(() => {\n    loadFromStorage()\n    checkAuthToken()\n  }, [])\n\n  // ...\n}",
+    "language": "tsx",
+    "description": "runs twice in dev, re-runs on remount"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Initialize App Once, Not Per Mount",
+    "type": "good",
+    "code": "let didInit = false\n\nfunction Comp() {\n  useEffect(() => {\n    if (didInit) return\n    didInit = true\n    loadFromStorage()\n    checkAuthToken()\n  }, [])\n\n  // ...\n}",
+    "language": "tsx",
+    "description": "once per app load"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "bad",
     "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearch(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query, onSearch])\n}",
     "language": "tsx",
@@ -25,11 +41,11 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "useLatest for Stable Callback Refs",
+    "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "good",
-    "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchRef = useLatest(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchRef.current(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
+    "code": "import { useEffectEvent } from 'react';\n\nfunction SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchEvent = useEffectEvent(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchEvent(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
     "language": "tsx",
-    "description": "stable effect, fresh callback"
+    "description": "using React's useEffectEvent"
   },
   {
     "ruleId": "",
@@ -225,27 +241,27 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
+    "ruleTitle": "Avoid Layout Thrashing",
     "type": "bad",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  // Each line triggers a reflow\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n}",
+    "code": "function layoutThrashing(element: HTMLElement) {\n  element.style.width = '100px'\n  const width = element.offsetWidth  // Forces reflow\n  element.style.height = '200px'\n  const height = element.offsetHeight  // Forces another reflow\n}",
     "language": "typescript",
-    "description": "multiple reflows"
+    "description": "interleaved reads and writes force reflows"
   },
   {
     "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
+    "ruleTitle": "Avoid Layout Thrashing",
     "type": "good",
-    "code": "// CSS file\n.highlighted-box {\n  width: 100px;\n  height: 200px;\n  background-color: blue;\n  border: 1px solid black;\n}\n\n// JavaScript\nfunction updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n}",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  // Batch all writes together\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n  \n  // Read after all writes are done (single reflow)\n  const { width, height } = element.getBoundingClientRect()\n}",
     "language": "typescript",
-    "description": "add class - single reflow"
+    "description": "batch writes, then read once"
   },
   {
     "ruleId": "",
-    "ruleTitle": "Batch DOM CSS Changes",
+    "ruleTitle": "Avoid Layout Thrashing",
     "type": "good",
-    "code": "function updateElementStyles(element: HTMLElement) {\n  element.style.cssText = `\n    width: 100px;\n    height: 200px;\n    background-color: blue;\n    border: 1px solid black;\n  `\n}",
+    "code": "function updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n  \n  const { width, height } = element.getBoundingClientRect()\n}",
     "language": "typescript",
-    "description": "change cssText - single reflow"
+    "description": "batch reads, then writes"
   },
   {
     "ruleId": "",
@@ -371,7 +387,7 @@
     "ruleId": "",
     "ruleTitle": "Early Length Check for Array Comparisons",
     "type": "good",
-    "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort/join when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
+    "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
     "language": "typescript",
     "description": "Correct (O(1) length check first) example for Early Length Check for Array Comparisons"
   },
@@ -505,6 +521,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Suppress Expected Hydration Mismatches",
+    "type": "bad",
+    "code": "function Timestamp() {\n  return <span>{new Date().toLocaleString()}</span>\n}",
+    "language": "tsx",
+    "description": "known mismatch warnings"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Suppress Expected Hydration Mismatches",
+    "type": "good",
+    "code": "function Timestamp() {\n  return (\n    <span suppressHydrationWarning>\n      {new Date().toLocaleString()}\n    </span>\n  )\n}",
+    "language": "tsx",
+    "description": "suppress expected mismatch only"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Optimize SVG Precision",
     "type": "bad",
     "code": "<path d=\"M 10.293847 20.847362 L 30.938472 40.192837\" />",
@@ -518,6 +550,22 @@
     "code": "<path d=\"M 10.3 20.8 L 30.9 40.2\" />",
     "language": "svg",
     "description": "1 decimal place"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useTransition Over Manual Loading States",
+    "type": "bad",
+    "code": "function SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isLoading, setIsLoading] = useState(false)\n\n  const handleSearch = async (value: string) => {\n    setIsLoading(true)\n    setQuery(value)\n    const data = await fetchResults(value)\n    setResults(data)\n    setIsLoading(false)\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isLoading && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "manual loading state"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useTransition Over Manual Loading States",
+    "type": "good",
+    "code": "import { useTransition, useState } from 'react'\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isPending, startTransition] = useTransition()\n\n  const handleSearch = (value: string) => {\n    setQuery(value) // Update input immediately\n    \n    startTransition(async () => {\n      // Fetch and update results\n      const data = await fetchResults(value)\n      setResults(data)\n    })\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isPending && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "useTransition with built-in pending state"
   },
   {
     "ruleId": "",
@@ -553,9 +601,25 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Calculate Derived State During Rendering",
+    "type": "bad",
+    "code": "function Form() {\n  const [firstName, setFirstName] = useState('First')\n  const [lastName, setLastName] = useState('Last')\n  const [fullName, setFullName] = useState('')\n\n  useEffect(() => {\n    setFullName(firstName + ' ' + lastName)\n  }, [firstName, lastName])\n\n  return <p>{fullName}</p>\n}",
+    "language": "tsx",
+    "description": "redundant state and effect"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Calculate Derived State During Rendering",
+    "type": "good",
+    "code": "function Form() {\n  const [firstName, setFirstName] = useState('First')\n  const [lastName, setLastName] = useState('Last')\n  const fullName = firstName + ' ' + lastName\n\n  return <p>{fullName}</p>\n}",
+    "language": "tsx",
+    "description": "derive during render"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Subscribe to Derived State",
     "type": "bad",
-    "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
     "language": "tsx",
     "description": "re-renders on every pixel change"
   },
@@ -563,7 +627,7 @@
     "ruleId": "",
     "ruleTitle": "Subscribe to Derived State",
     "type": "good",
-    "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'}>\n}",
+    "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
     "language": "tsx",
     "description": "re-renders only when boolean changes"
   },
@@ -601,6 +665,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
+    "type": "bad",
+    "code": "const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
+    "language": "tsx",
+    "description": "`onClick` has different values on every rerender"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
+    "type": "good",
+    "code": "const NOOP = () => {};\n\nconst UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
+    "language": "tsx",
+    "description": "stable default value"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Extract to Memoized Components",
     "type": "bad",
     "code": "function Profile({ user, loading }: Props) {\n  const avatar = useMemo(() => {\n    const id = computeAvatarId(user)\n    return <Avatar id={id} />\n  }, [user])\n\n  if (loading) return <Skeleton />\n  return <div>{avatar}</div>\n}",
@@ -614,6 +694,38 @@
     "code": "const UserAvatar = memo(function UserAvatar({ user }: { user: User }) {\n  const id = useMemo(() => computeAvatarId(user), [user])\n  return <Avatar id={id} />\n})\n\nfunction Profile({ user, loading }: Props) {\n  if (loading) return <Skeleton />\n  return (\n    <div>\n      <UserAvatar user={user} />\n    </div>\n  )\n}",
     "language": "tsx",
     "description": "skips computation when loading"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Put Interaction Logic in Event Handlers",
+    "type": "bad",
+    "code": "function Form() {\n  const [submitted, setSubmitted] = useState(false)\n  const theme = useContext(ThemeContext)\n\n  useEffect(() => {\n    if (submitted) {\n      post('/api/register')\n      showToast('Registered', theme)\n    }\n  }, [submitted, theme])\n\n  return <button onClick={() => setSubmitted(true)}>Submit</button>\n}",
+    "language": "tsx",
+    "description": "event modeled as state + effect"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Put Interaction Logic in Event Handlers",
+    "type": "good",
+    "code": "function Form() {\n  const theme = useContext(ThemeContext)\n\n  function handleSubmit() {\n    post('/api/register')\n    showToast('Registered', theme)\n  }\n\n  return <button onClick={handleSubmit}>Submit</button>\n}",
+    "language": "tsx",
+    "description": "do it in the handler"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
+    "type": "bad",
+    "code": "function Header({ user, notifications }: Props) {\n  const isLoading = useMemo(() => {\n    return user.isLoading || notifications.isLoading\n  }, [user.isLoading, notifications.isLoading])\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
+    "language": "tsx",
+    "description": "Incorrect example for Do not wrap a simple expression with a primitive result type in useMemo"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
+    "type": "good",
+    "code": "function Header({ user, notifications }: Props) {\n  const isLoading = user.isLoading || notifications.isLoading\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
+    "language": "tsx",
+    "description": "Correct example for Do not wrap a simple expression with a primitive result type in useMemo"
   },
   {
     "ruleId": "",
@@ -633,6 +745,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Use useRef for Transient Values",
+    "type": "bad",
+    "code": "function Tracker() {\n  const [lastX, setLastX] = useState(0)\n\n  useEffect(() => {\n    const onMove = (e: MouseEvent) => setLastX(e.clientX)\n    window.addEventListener('mousemove', onMove)\n    return () => window.removeEventListener('mousemove', onMove)\n  }, [])\n\n  return (\n    <div\n      style={{\n        position: 'fixed',\n        top: 0,\n        left: lastX,\n        width: 8,\n        height: 8,\n        background: 'black',\n      }}\n    />\n  )\n}",
+    "language": "tsx",
+    "description": "renders every update"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useRef for Transient Values",
+    "type": "good",
+    "code": "function Tracker() {\n  const lastXRef = useRef(0)\n  const dotRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const onMove = (e: MouseEvent) => {\n      lastXRef.current = e.clientX\n      const node = dotRef.current\n      if (node) {\n        node.style.transform = `translateX(${e.clientX}px)`\n      }\n    }\n    window.addEventListener('mousemove', onMove)\n    return () => window.removeEventListener('mousemove', onMove)\n  }, [])\n\n  return (\n    <div\n      ref={dotRef}\n      style={{\n        position: 'fixed',\n        top: 0,\n        left: 0,\n        width: 8,\n        height: 8,\n        background: 'black',\n        transform: 'translateX(0px)',\n      }}\n    />\n  )\n}",
+    "language": "tsx",
+    "description": "no re-render for tracking"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Use after() for Non-Blocking Operations",
     "type": "bad",
     "code": "import { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Logging blocks the response\n  const userAgent = request.headers.get('user-agent') || 'unknown'\n  await logUserAction({ userAgent })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
@@ -649,6 +777,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Authenticate Server Actions Like API Routes",
+    "type": "bad",
+    "code": "'use server'\n\nexport async function deleteUser(userId: string) {\n  // Anyone can call this! No auth check\n  await db.user.delete({ where: { id: userId } })\n  return { success: true }\n}",
+    "language": "typescript",
+    "description": "no authentication check"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Authenticate Server Actions Like API Routes",
+    "type": "good",
+    "code": "'use server'\n\nimport { verifySession } from '@/lib/auth'\nimport { unauthorized } from '@/lib/errors'\n\nexport async function deleteUser(userId: string) {\n  // Always check auth inside the action\n  const session = await verifySession()\n  \n  if (!session) {\n    throw unauthorized('Must be logged in')\n  }\n  \n  // Check authorization too\n  if (session.user.role !== 'admin' && session.user.id !== userId) {\n    throw unauthorized('Cannot delete other users')\n  }\n  \n  await db.user.delete({ where: { id: userId } })\n  return { success: true }\n}",
+    "language": "typescript",
+    "description": "authentication inside the action"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Per-Request Deduplication with React.cache()",
     "type": "bad",
     "code": "const getUser = cache(async (params: { uid: number }) => {\n  return await db.user.findUnique({ where: { id: params.uid } })\n})\n\n// Each call creates new object, never hits cache\ngetUser({ uid: 1 })\ngetUser({ uid: 1 })  // Cache miss, runs query again",
@@ -662,6 +806,22 @@
     "code": "const params = { uid: 1 }\ngetUser(params)  // Query runs\ngetUser(params)  // Cache hit (same reference)",
     "language": "typescript",
     "description": "cache hit"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Duplicate Serialization in RSC Props",
+    "type": "bad",
+    "code": "// RSC: sends 6 strings (2 arrays × 3 items)\n<ClientList usernames={usernames} usernamesOrdered={usernames.toSorted()} />",
+    "language": "tsx",
+    "description": "duplicates array"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Duplicate Serialization in RSC Props",
+    "type": "good",
+    "code": "// RSC: send once\n<ClientList usernames={usernames} />\n\n// Client: transform there\n'use client'\nconst sorted = useMemo(() => [...usernames].sort(), [usernames])",
+    "language": "tsx",
+    "description": "sends 3 strings"
   },
   {
     "ruleId": "",

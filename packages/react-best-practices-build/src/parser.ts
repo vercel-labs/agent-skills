@@ -3,6 +3,7 @@
  */
 
 import { readFile } from 'fs/promises'
+import { basename } from 'path'
 import { Rule, ImpactLevel } from './types.js'
 
 export interface RuleFile {
@@ -14,8 +15,13 @@ export interface RuleFile {
 /**
  * Parse a rule markdown file into a Rule object
  */
-export async function parseRuleFile(filePath: string): Promise<RuleFile> {
-  const content = await readFile(filePath, 'utf-8')
+export async function parseRuleFile(
+  filePath: string,
+  sectionMap?: Record<string, number>
+): Promise<RuleFile> {
+  const rawContent = await readFile(filePath, 'utf-8')
+  // Normalize Windows CRLF line endings to LF for consistent parsing
+  const content = rawContent.replace(/\r\n/g, '\n')
   const lines = content.split('\n')
 
   // Extract frontmatter if present
@@ -176,7 +182,10 @@ export async function parseRuleFile(filePath: string): Promise<RuleFile> {
       if (!currentExample && !inCodeBlock) {
         // Main explanation before any examples
         explanation += (explanation ? '\n\n' : '') + line
-      } else if (currentExample && (afterCodeBlock || !hasCodeBlockForCurrentExample)) {
+      } else if (
+        currentExample &&
+        (afterCodeBlock || !hasCodeBlockForCurrentExample)
+      ) {
         // Text after a code block, or text in a section without a code block
         // (e.g., "When NOT to use this pattern:" with bullet points instead of code)
         additionalText.push(line)
@@ -194,8 +203,10 @@ export async function parseRuleFile(filePath: string): Promise<RuleFile> {
 
   // Infer section from filename patterns
   // Pattern: area-description.md where area determines section
-  const filename = filePath.split('/').pop() || ''
-  const sectionMap: Record<string, number> = {
+  const filename = basename(filePath)
+
+  // Default section map (for backwards compatibility)
+  const defaultSectionMap: Record<string, number> = {
     async: 1,
     bundle: 2,
     server: 3,
@@ -206,9 +217,24 @@ export async function parseRuleFile(filePath: string): Promise<RuleFile> {
     advanced: 8,
   }
 
-  // Extract area from filename (first part before first dash)
-  const area = filename.split('-')[0]
-  const section = frontmatter.section || sectionMap[area] || 0
+  const effectiveSectionMap = sectionMap || defaultSectionMap
+
+  // Extract area from filename - try longest prefix match first
+  // This handles prefixes like "list-performance" vs "list"
+  const filenameParts = filename.replace('.md', '').split('-')
+  let section = 0
+
+  // Try progressively shorter prefixes to find the best match
+  for (let len = filenameParts.length; len > 0; len--) {
+    const prefix = filenameParts.slice(0, len).join('-')
+    if (effectiveSectionMap[prefix] !== undefined) {
+      section = effectiveSectionMap[prefix]
+      break
+    }
+  }
+
+  // Fall back to frontmatter section if specified
+  section = frontmatter.section || section || 0
 
   const rule: Rule = {
     id: '', // Will be assigned by build script based on sorted order
