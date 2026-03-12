@@ -1,7 +1,6 @@
 ---
 name: vercel-react-best-practices
 description: React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.
-user-invocable: false
 metadata:
   author: vercel
   version: "1.0.0"
@@ -119,4 +118,4 @@ Reference these guidelines when:
 
 ## How to Explore the Rules
 
-Detailed guidance lives under the `rules/` directory. Start with `rules/_sections.md` for the category index, then open any rule file you need (for example `rules/async-parallel.md`, `rules/server-hoist-static-io.md`, or `rules/rerender-dependencies.md`). Each rule document captures the impact, incorrect vs. correct examples, and links to references so you can apply the advice directly.
+Detailed guidance lives under the [`rules/`](rules/) directory. Start with [`rules/_sections.md`](rules/_sections.md) for the category index, then open any rule file you need (for example [`rules/async-parallel.md`](rules/async-parallel.md), [`rules/server-hoist-static-io.md`](rules/server-hoist-static-io.md), or [`rules/rerender-dependencies.md`](rules/rerender-dependencies.md)). Each rule document captures the impact, incorrect vs. correct examples, and links to references so you can apply the advice directly.
