@@ -120,6 +120,16 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 npx skills add vercel-labs/agent-skills
 ```
 
+### Install with `sk`
+
+Install via [sk](https://github.com/803/skills-supply), the universal package manager for AI agent skills (supports Claude Code, Amp, Codex, OpenCode, Factory, etc.).
+
+```bash
+# Add --global flag if you'd like to install in user-scope (defaults to project-scope)
+sk pkg add gh vercel-labs/agent-skills --path skills
+sk sync
+```
+
 ## Usage
 
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
