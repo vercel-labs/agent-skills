@@ -2,3 +2,5 @@
 .vercel
 .env*.local
 notes/
+# Zip artifacts — use git history or releases for distribution
+*.zip
