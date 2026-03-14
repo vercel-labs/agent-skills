@@ -35,12 +35,26 @@ Thank you for contributing! This guide covers how to add new skills and update e
 
 ## Skill Versioning
 
-Skills in this repo follow **date-based versioning** implicit in git history. There is no explicit version field — consumers pin to a commit SHA or use `main` for latest.
+Skills follow **semantic versioning** (`MAJOR.MINOR.PATCH`) tracked in each skill's `metadata.json`:
 
-If you need to signal a breaking change:
-1. Note it prominently in the PR description
-2. Add a `## Changelog` section to the skill's `README.md` (or create one)
-3. Tag the commit if appropriate: `git tag skills/<skill-name>/v2`
+| Change type | Version bump | Example |
+|---|---|---|
+| Bug fix, typo, clarification | `PATCH` | `1.0.0` → `1.0.1` |
+| New rules, expanded guidance | `MINOR` | `1.0.0` → `1.1.0` |
+| Restructured, removed rules, breaking | `MAJOR` | `1.0.0` → `2.0.0` |
+
+**Rules:**
+1. Every skill directory **must** have a `metadata.json` with a `version` field.
+2. If the `SKILL.md` frontmatter has a `version:` field, it must match `metadata.json`.
+3. CI enforces both of the above — PRs will fail if versions are missing or mismatched.
+
+**Releasing a new version:**
+1. Update the version in `metadata.json`
+2. If `SKILL.md` frontmatter has `version:`, update it too
+3. Add a `## Changelog` entry to the skill's `README.md`
+4. CI will validate the format on PR
+
+**Consumers** should pin to a commit SHA for stability, or use `main` for latest.
 
 ## PR Checklist
 
