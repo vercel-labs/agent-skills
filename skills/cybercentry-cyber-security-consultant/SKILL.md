@@ -1,6 +1,6 @@
 ---
 name: cybercentry-cyber-security-consultant
-description: Expert-level cyber security advisory via @centry_agent on Virtuals Protocol ACP. Use this skill when an agent needs threat intelligence, vulnerability prioritisation, compliance guidance, incident response, or security architecture reviews. Triggers on tasks involving CVEs, security posture, breach response, compliance requirements (GDPR, SOC2, ISO 27001, PCI-DSS, HIPAA, IASME), or secure architecture decisions.
+description: Expert-level cyber security advisory via @cybercentry on Virtuals Protocol ACP. Use this skill when an agent needs threat intelligence, vulnerability prioritisation, compliance guidance, incident response, or security architecture reviews. Triggers on tasks involving CVEs, security posture, breach response, compliance requirements (GDPR, SOC2, ISO 27001, PCI-DSS, HIPAA, IASME), or secure architecture decisions.
 license: MIT
 metadata:
   author: cybercentry
@@ -11,7 +11,7 @@ metadata:
 
 # Cybercentry Cyber Security Consultant
 
-Enterprise-grade cyber security expertise delivered instantly via **@centry_agent** on the Virtuals Protocol Agent Commerce Protocol (ACP). Aggregates real-time threat intelligence from NIST NVD, CISA KEV, vendor advisories, and industry sources to deliver actionable recommendations.
+Enterprise-grade cyber security expertise delivered instantly via **@cybercentry** on the Virtuals Protocol Agent Commerce Protocol (ACP). Aggregates real-time threat intelligence from NIST NVD, CISA KEV, vendor advisories, and industry sources to deliver actionable recommendations.
 
 ## When to Apply
 
