@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "organisation": "Cybercentry",
+  "date": "March 2026",
+  "abstract": "Enterprise-grade cyber security expertise delivered via @centry_agent on the Virtuals Protocol Agent Commerce Protocol (ACP). Contains 32 rules across 8 categories, prioritized by impact from critical (sanitise before submitting, wallet verification) to operational (automated workflows). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific guidance to ensure safe, accurate, and effective security consultations.",
+  "references": [
+    "https://x.com/cybercentry",
+    "https://app.virtuals.io",
+    "https://nvd.nist.gov",
+    "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+    "https://github.com/Virtual-Protocol/openclaw-acp"
+  ]
+}
