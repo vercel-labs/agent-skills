@@ -8,132 +8,176 @@ metadata:
 
 # Vercel CLI with Tokens
 
-Deploy and manage projects on Vercel using the CLI with token-based authentication. Use this skill when you have a Vercel access token and need to operate without interactive login.
+Deploy and manage projects on Vercel using the CLI with token-based authentication, without relying on `vercel login`.
 
-## Authentication
+## Step 1: Locate the Vercel Token
 
-**Never run `vercel login`.** Always use token-based auth via the `--token` flag or `VERCEL_TOKEN` environment variable. This ensures the correct account is used even if another Vercel account is logged in locally.
+Before running any Vercel CLI commands, identify where the token is coming from. Work through these scenarios in order:
 
-```bash
-vercel <command> --token "$VERCEL_TOKEN"
-```
-
-### Scoping to a Team
-
-Use `--scope` to target a specific team. Accepts a **team slug** or **team ID** (`team_...`):
+### A) `VERCEL_TOKEN` is already set in the environment
 
 ```bash
-vercel <command> --token "$VERCEL_TOKEN" --scope <team-slug-or-id>
+printenv VERCEL_TOKEN
 ```
 
-Not required if the project is already linked (`.vercel/project.json` provides the org context) or if `VERCEL_ORG_ID` is set.
+If this returns a value, you're ready. Skip to Step 2.
 
-### Targeting a Project
-
-Use `--project` to target a specific project **without needing `vercel link`**. Accepts a project **name** or **project ID** (`prj_...`):
+### B) Token is in a `.env` file under `VERCEL_TOKEN`
 
 ```bash
-vercel deploy --token "$VERCEL_TOKEN" --scope <team> --project <project-name-or-id>
+grep '^VERCEL_TOKEN=' .env 2>/dev/null
 ```
 
-This is the simplest path when you already have a project ID — no `.vercel/` directory needed.
+If found, export it:
 
-### Environment Variable Alternative
+```bash
+export VERCEL_TOKEN=$(grep '^VERCEL_TOKEN=' .env | cut -d= -f2-)
+```
 
-Instead of flags, you can set these environment variables. The CLI recognizes them natively:
+### C) Token is in a `.env` file under a different name
 
-| Variable | Purpose | Equivalent flag |
-|---|---|---|
-| `VERCEL_TOKEN` | Auth token | `--token` |
-| `VERCEL_ORG_ID` | Team/org ID | `--scope` |
-| `VERCEL_PROJECT_ID` | Project ID | `--project` |
+Look for any variable that looks like a Vercel token (Vercel tokens typically start with `vca_`):
 
-`VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` must be set **together** — setting only one causes an error. When both are set, the CLI skips `.vercel/project.json` entirely.
+```bash
+grep -i 'vercel' .env 2>/dev/null
+```
 
-### Resolution Precedence
+Inspect the output to identify which variable holds the token, then export it as `VERCEL_TOKEN`:
 
-**Token:** `--token` flag > `VERCEL_TOKEN` env var > stored auth in config.
+```bash
+export VERCEL_TOKEN=$(grep '^<VARIABLE_NAME>=' .env | cut -d= -f2-)
+```
 
-**Team/scope:** `--scope` flag > `scope` in `vercel.json` > `currentTeam` in global config > `VERCEL_ORG_ID`.
+### D) No token found — ask the user
 
-**Project:** `--project` flag > `VERCEL_PROJECT_ID` env var > `.vercel/project.json` > interactive prompt.
+If none of the above yield a token, ask the user to provide one. They can create a Vercel access token at vercel.com/account/tokens.
+
+---
+
+**Important:** Once `VERCEL_TOKEN` is exported as an environment variable, the Vercel CLI reads it natively — **do not pass it as a `--token` flag**. Putting secrets in command-line arguments exposes them in shell history and process listings.
+
+```bash
+# Bad — token visible in shell history and process listings
+vercel deploy --token "vca_abc123"
+
+# Good — CLI reads VERCEL_TOKEN from the environment
+export VERCEL_TOKEN="vca_abc123"
+vercel deploy
+```
+
+## Step 2: Locate the Project and Team
+
+Similarly, check for the project ID and team scope. These let the CLI target the right project without needing `vercel link`.
+
+```bash
+# Check environment
+printenv VERCEL_PROJECT_ID
+printenv VERCEL_ORG_ID
+
+# Or check .env
+grep -i 'vercel' .env 2>/dev/null
+```
+
+**If you have a project URL** (e.g. `https://vercel.com/my-team/my-project`), extract the team slug:
+
+```bash
+# e.g. "my-team" from "https://vercel.com/my-team/my-project"
+echo "$PROJECT_URL" | sed 's|https://vercel.com/||' | cut -d/ -f1
+```
+
+**If you have both `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` in your environment**, export them — the CLI will use these automatically and skip any `.vercel/` directory:
+
+```bash
+export VERCEL_ORG_ID="<org-id>"
+export VERCEL_PROJECT_ID="<project-id>"
+```
+
+Note: `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` must be set together — setting only one causes an error.
 
 ## CLI Setup
+
+Ensure the Vercel CLI is installed:
 
 ```bash
 npm install -g vercel
 vercel --version
 ```
 
-Or use `npx` for one-off commands:
-```bash
-npx vercel <command> --token "$VERCEL_TOKEN"
-```
-
 ## Deploying a Project
 
-Always deploy as **preview** unless the user explicitly requests production.
+Always deploy as **preview** unless the user explicitly requests production. Choose a method based on what you have available.
 
 ### Quick Deploy (have project ID — no linking needed)
 
-When you already have a project ID (e.g., `prj_...`), deploy directly:
+When `VERCEL_TOKEN` and `VERCEL_PROJECT_ID` are set in the environment, deploy directly:
 
 ```bash
-vercel deploy --token "$VERCEL_TOKEN" --scope <team> --project <project-id> -y --no-wait
+vercel deploy -y --no-wait
+```
+
+With a team scope (either via `VERCEL_ORG_ID` or `--scope`):
+
+```bash
+vercel deploy --scope <team-slug> -y --no-wait
+```
+
+Production (only when explicitly requested):
+
+```bash
+vercel deploy --prod --scope <team-slug> -y --no-wait
 ```
 
 Check status:
+
 ```bash
-vercel inspect <deployment-url> --token "$VERCEL_TOKEN"
+vercel inspect <deployment-url>
 ```
 
-Production deploy (only when explicitly requested):
-```bash
-vercel deploy --prod --token "$VERCEL_TOKEN" --scope <team> --project <project-id> -y --no-wait
-```
+### Full Deploy Flow (no project ID — need to link)
 
-### Full Deploy Flow (no project ID)
+Use this when you have a token and team but no pre-existing project ID.
 
-Use this when you have a token and team but need to create or find a project.
-
-#### Step 1: Determine Project State
+#### Check project state first
 
 ```bash
-# 1. Does the project have a git remote?
+# Does the project have a git remote?
 git remote get-url origin 2>/dev/null
 
-# 2. Is it already linked to a Vercel project?
+# Is it already linked to a Vercel project?
 cat .vercel/project.json 2>/dev/null || cat .vercel/repo.json 2>/dev/null
 ```
 
-#### Step 2: Link the Project
-
-If no `.vercel/project.json` or `.vercel/repo.json` exists, link first.
+#### Link the project
 
 **With git remote (preferred):**
+
 ```bash
-vercel link --repo --token "$VERCEL_TOKEN" --scope <team> -y
+vercel link --repo --scope <team-slug> -y
 ```
-Reads the git remote and connects to the matching Vercel project. Creates `.vercel/repo.json`. More reliable than `vercel link` without `--repo`, which matches by directory name.
+
+Reads the git remote and connects to the matching Vercel project. Creates `.vercel/repo.json`. More reliable than plain `vercel link`, which matches by directory name.
 
 **Without git remote:**
+
 ```bash
-vercel link --token "$VERCEL_TOKEN" --scope <team> -y
+vercel link --scope <team-slug> -y
 ```
+
 Creates `.vercel/project.json`.
 
-**Link to a specific existing project by name:**
+**Link to a specific project by name:**
+
 ```bash
-vercel link --project <project-name> --token "$VERCEL_TOKEN" --scope <team> -y
+vercel link --project <project-name> --scope <team-slug> -y
 ```
 
-If the project is already linked, check `orgId` in `.vercel/project.json` or `.vercel/repo.json` to verify it matches the intended team. If not, re-link with the correct `--scope`.
+If the project is already linked, check `orgId` in `.vercel/project.json` or `.vercel/repo.json` to verify it matches the intended team.
 
-#### Step 3: Deploy
+#### Deploy after linking
 
 **A) Git Push Deploy — has git remote (preferred)**
 
-The best long-term setup. Git pushes trigger automatic Vercel deployments.
+Git pushes trigger automatic Vercel deployments.
 
 1. **Ask the user before pushing.** Never push without explicit approval.
 2. Commit and push:
@@ -142,28 +186,27 @@ The best long-term setup. Git pushes trigger automatic Vercel deployments.
    git commit -m "deploy: <description of changes>"
    git push
    ```
-3. Vercel builds automatically. Non-production branches get preview deployments; the production branch (usually `main`) gets a production deployment.
+3. Vercel builds automatically. Non-production branches get preview deployments.
 4. Retrieve the deployment URL:
    ```bash
    sleep 5
-   vercel ls --format json --token "$VERCEL_TOKEN" --scope <team>
+   vercel ls --format json --scope <team-slug>
    ```
-   The latest entry in the `deployments` array has the preview URL.
+   Find the latest entry in the `deployments` array.
 
 **B) CLI Deploy — no git remote**
 
 ```bash
-vercel deploy --token "$VERCEL_TOKEN" --scope <team> -y --no-wait
+vercel deploy --scope <team-slug> -y --no-wait
 ```
 
-`--no-wait` returns immediately with the deployment URL. Check status:
+Check status:
+
 ```bash
-vercel inspect <deployment-url> --token "$VERCEL_TOKEN"
+vercel inspect <deployment-url>
 ```
 
-### Deploying from a Remote Repository
-
-If the user wants to deploy code from a remote that isn't cloned locally:
+### Deploying from a Remote Repository (code not cloned locally)
 
 1. Clone the repository:
    ```bash
@@ -172,7 +215,7 @@ If the user wants to deploy code from a remote that isn't cloned locally:
    ```
 2. Link to Vercel:
    ```bash
-   vercel link --repo --token "$VERCEL_TOKEN" --scope <team> -y
+   vercel link --repo --scope <team-slug> -y
    ```
 3. Deploy via git push (if you have push access) or CLI deploy.
 
@@ -182,95 +225,103 @@ A linked project has either:
 - `.vercel/project.json` — from `vercel link`. Contains `projectId` and `orgId`.
 - `.vercel/repo.json` — from `vercel link --repo`. Contains `orgId`, `remoteName`, and a `projects` map.
 
-Either file means the project is linked. Not needed when using `--project` flag or `VERCEL_ORG_ID` + `VERCEL_PROJECT_ID` env vars.
+Not needed when `VERCEL_ORG_ID` + `VERCEL_PROJECT_ID` are both set in the environment.
 
-**Do NOT** run `vercel project inspect`, `vercel ls`, or `vercel link` in an unlinked directory to detect state — without `.vercel/`, they will interactively prompt or silently link as a side-effect. Only `vercel whoami --token "$VERCEL_TOKEN"` is safe to run anywhere.
+**Do NOT** run `vercel ls`, `vercel project inspect`, or `vercel link` in an unlinked directory to detect state — they will interactively prompt or silently link as a side-effect. Only `vercel whoami` is safe to run anywhere.
 
 ## Managing Environment Variables
 
-Run from a linked project directory, or use `--project` to target a specific project.
-
 ```bash
 # Set for all environments
-echo "value" | vercel env add VAR_NAME --token "$VERCEL_TOKEN" --scope <team>
+echo "value" | vercel env add VAR_NAME --scope <team-slug>
 
 # Set for a specific environment (production, preview, development)
-echo "value" | vercel env add VAR_NAME production --token "$VERCEL_TOKEN" --scope <team>
+echo "value" | vercel env add VAR_NAME production --scope <team-slug>
 
 # List environment variables
-vercel env ls --token "$VERCEL_TOKEN" --scope <team>
+vercel env ls --scope <team-slug>
 
 # Pull env vars to local .env file
-vercel env pull --token "$VERCEL_TOKEN" --scope <team>
+vercel env pull --scope <team-slug>
 
 # Remove a variable
-vercel env rm VAR_NAME --token "$VERCEL_TOKEN" --scope <team> -y
+vercel env rm VAR_NAME --scope <team-slug> -y
 ```
 
 ## Inspecting Deployments
 
 ```bash
 # List recent deployments
-vercel ls --format json --token "$VERCEL_TOKEN" --scope <team>
+vercel ls --format json --scope <team-slug>
 
 # Inspect a specific deployment
-vercel inspect <deployment-url> --token "$VERCEL_TOKEN"
+vercel inspect <deployment-url>
 
 # View build logs
-vercel logs <deployment-url> --token "$VERCEL_TOKEN"
+vercel logs <deployment-url>
 ```
 
 ## Managing Domains
 
 ```bash
 # List domains
-vercel domains ls --token "$VERCEL_TOKEN" --scope <team>
+vercel domains ls --scope <team-slug>
 
 # Add a domain to the project
-vercel domains add <domain> --token "$VERCEL_TOKEN" --scope <team>
+vercel domains add <domain> --scope <team-slug>
 ```
 
 ## Working Agreement
 
-- **Always use `--token`** on every Vercel CLI command. Never rely on local login state.
-- **Use `--scope` and/or `--project`** to target the correct team and project.
-- **Do not run `vercel login`.** Authentication is handled entirely by the access token.
+- **Never pass `VERCEL_TOKEN` as a `--token` flag.** Export it as an environment variable and let the CLI read it natively.
+- **Check the environment for tokens before asking the user.** Look in the current env and `.env` files first.
 - **Default to preview deployments.** Only deploy to production when explicitly asked.
 - **Ask before pushing to git.** Never push commits without the user's approval.
 - **Do not read or modify `.vercel/` files directly.** The CLI manages this directory.
 - **Do not curl/fetch deployed URLs to verify.** Just return the link to the user.
-- **Use `--format json`** when structured output will help with follow-up steps (e.g., `vercel ls`).
+- **Use `--format json`** when structured output will help with follow-up steps.
 - **Use `-y`** on commands that prompt for confirmation to avoid interactive blocking.
 
 ## Troubleshooting
 
-### Authentication Error
+### Token not found
 
-If commands fail with `Authentication required` or similar:
-- The token may be expired or revoked. Ask the user for a fresh token or check the token source.
-- Verify the token is valid: `vercel whoami --token "$VERCEL_TOKEN"`
+Check the environment and any `.env` files present:
 
-### Wrong Team
-
-If deployments appear under the wrong team, verify `--scope` is correct:
 ```bash
-vercel whoami --token "$VERCEL_TOKEN" --scope <team>
+printenv | grep -i vercel
+grep -i vercel .env 2>/dev/null
 ```
 
-### Build Failure
+### Authentication error
+
+If the CLI fails with `Authentication required`:
+- The token may be expired or invalid.
+- Verify: `vercel whoami` (uses `VERCEL_TOKEN` from environment).
+- Ask the user for a fresh token.
+
+### Wrong team
+
+Verify the scope is correct:
+
+```bash
+vercel whoami --scope <team-slug>
+```
+
+### Build failure
 
 Check the build logs:
+
 ```bash
-vercel logs <deployment-url> --token "$VERCEL_TOKEN"
+vercel logs <deployment-url>
 ```
 
 Common causes:
 - Missing dependencies — ensure `package.json` is complete and committed.
-- Missing environment variables — add them with `vercel env add`.
-- Framework misconfiguration — check `vercel.json` or framework-specific settings.
-- Vercel auto-detects frameworks (Next.js, Remix, Vite, etc.) from `package.json`. Override with a `vercel.json` if detection is wrong.
+- Missing environment variables — add with `vercel env add`.
+- Framework misconfiguration — check `vercel.json`. Vercel auto-detects frameworks (Next.js, Remix, Vite, etc.) from `package.json`; override with `vercel.json` if detection is wrong.
 
-### CLI Not Installed
+### CLI not installed
 
 ```bash
 npm install -g vercel
