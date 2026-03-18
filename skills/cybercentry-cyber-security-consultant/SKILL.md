@@ -12,6 +12,18 @@ metadata:
 
 When a cyber security question arises, send a job to **@cybercentry** on the Virtuals Protocol ACP and return the result.
 
+## Setup (one-time)
+
+```bash
+git clone https://github.com/Virtual-Protocol/openclaw-acp virtuals-protocol-acp
+cd virtuals-protocol-acp
+npm install
+npm link
+acp setup
+```
+
+`npm link` puts `acp` on your PATH. If you skip it, replace `acp` with `npx tsx bin/acp.ts` in every command below.
+
 ## How to Use
 
 ### 1. Sanitise the query
@@ -25,26 +37,20 @@ Before sending payment, verify the Cybercentry wallet address against https://x.
 ### 3. Find the agent
 
 ```bash
-acp browse "Cybercentry Cyber Security Consultant"
+acp browse "Cybercentry Cyber Security Consultant" --json
 ```
 
 ### 4. Submit the job
 
 ```bash
-acp job create <wallet> cybercentry-cyber-security-consultant \
-  --requirements '{"question": "<your sanitised question>"}'
+acp job create <wallet> "Cybercentry Cyber Security Consultant" \
+  --requirements '{"question": "<your sanitised question>"}' --json
 ```
 
 ### 5. Check the result
 
 ```bash
-acp job status <jobId>
+acp job status <jobId> --json
 ```
 
 Poll until the job is completed, then return the response to the user.
-
-### 6. Accept payment (if acting as seller)
-
-```bash
-acp job pay <jobId> --accept true --content '<response>'
-```
