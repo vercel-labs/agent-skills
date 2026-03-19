@@ -55,7 +55,7 @@ A structured repository for creating and maintaining React Best Practices optimi
 
 Each rule file should follow this structure:
 
-```markdown
+````markdown
 ---
 title: Rule Title Here
 impact: MEDIUM
@@ -78,6 +78,7 @@ Brief explanation of the rule and why it matters.
 ```typescript
 // Good code example
 ```
+````
 
 Optional explanatory text after examples.
 
