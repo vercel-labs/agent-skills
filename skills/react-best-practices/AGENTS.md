@@ -1517,14 +1517,19 @@ function UserProfile({ user, theme }) {
 
 **Impact: MEDIUM (restores memoization by using a constant for default value)**
 
-When memoized component has a default value for some non-primitive optional parameter, such as an array, function, or object, calling the component without that parameter results in broken memoization. This is because new value instances are created on every rerender, and they do not pass strict equality comparison in `memo()`.
+`memo()` compares **incoming props**, not internal default parameter values. A default like `onClick = () => {}` is only evaluated inside the component body after `memo` has already decided whether to re-render — so it does not affect memoization on its own.
 
-To address this issue, extract the default value into a constant.
+However, when the component is called without that prop and the default value is used as a dependency in `useEffect`, `useCallback`, or `useMemo`, a new function instance is created on every render. This causes those hooks to re-run unnecessarily on every render.
 
-**Incorrect: `onClick` has different values on every rerender**
+To fix this, extract the default value into a constant at the module level.
 
+**Incorrect (`onClick` default creates a new instance on every render, causing `useEffect` to re-run):**
 ```tsx
 const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {
+  useEffect(() => {
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [onClick]) // ← new function instance on every render = effect re-runs constantly
   // ...
 })
 
@@ -1532,12 +1537,15 @@ const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: 
 <UserAvatar />
 ```
 
-**Correct: stable default value**
-
+**Correct (stable default value):**
 ```tsx
-const NOOP = () => {};
+const NOOP = () => {}
 
 const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {
+  useEffect(() => {
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [onClick]) // ← stable reference, effect only re-runs when onClick genuinely changes
   // ...
 })
 
