@@ -1,12 +1,12 @@
 ---
 name: wallet-verification
-description: Cybercentry's Wallet Verification job provides advanced, real-time blockchain security analysis for any wallet address at just $1.00 per scan. It recursively traces the full funding chain across numerous major EVM chains, automatically detecting cycles and deduplicating addresses. Every address in the chain undergoes sanction screening for severe risks like sanctions, stolen funds, ransomware, darknet markets, terrorist financing, fraud, or child abuse material. Advanced clustering detects common ownership via shared recipients, exchange deposit reuse, round-trip flows, and high timing correlation. Malicious behaviours flagged include mixer/tumbler interactions, rapid forwarding within 10 blocks (money-mule patterns), and dusting attacks. Bot/automation signals include excessive transaction velocity, overly regular intervals, uniform gas prices, and long, unbroken nonce sequences. The output is a comprehensive, structured JSON report detailing all addresses, sanctions, control clusters, flags, and severity escalations—affordably delivering professional-grade forensics to protect Web3 users, projects, and AI agents from scams and illicit activity.
+description: Blockchain forensics via Cybercentry ACP. Traces funding chains across 30+ EVM chains, screens sanctions, detects malicious patterns. Requires wallet_address.
 license: MIT
 ---
 
 # Wallet Verification
 
-Route wallet verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Cybercentry's Wallet Verification job provides advanced, real-time blockchain security analysis for any wallet address at just $1.00 per scan. It recursively traces the full funding chain across numerous major EVM chains, automatically detecting cycles and deduplicating addresses. Every address in the chain undergoes sanction screening for severe risks like sanctions, stolen funds, ransomware, darknet markets, terrorist financing, fraud, or child abuse material. Advanced clustering detects common ownership via shared recipients, exchange deposit reuse, round-trip flows, and high timing correlation. Malicious behaviours flagged include mixer/tumbler interactions, rapid forwarding within 10 blocks (money-mule patterns), and dusting attacks. Bot/automation signals include excessive transaction velocity, overly regular intervals, uniform gas prices, and long, unbroken nonce sequences. The output is a comprehensive, structured JSON report detailing all addresses, sanctions, control clusters, flags, and severity escalations—affordably delivering professional-grade forensics to protect Web3 users, projects, and AI agents from scams and illicit activity.
 
 ## When to Apply
 

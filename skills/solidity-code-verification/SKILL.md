@@ -1,12 +1,12 @@
 ---
 name: solidity-code-verification
-description: The Solidity Code Verification job delivers fast, reliable, and fully automated analysis of Solidity code, with a proven ability to parse 99.9% of publicly available code accurately. Each scan produces a clear overall risk-level assessment (High, Medium, Low, or Informational), which can be directly applied in transaction flows to decide whether to accept or decline a smart contract before execution. With an average execution time of under two minutes, Cybercentry proactively identifies vulnerabilities such as re-entrancy, access control weaknesses, and unsafe external calls. Priced at just $1.00 per scan, it makes enterprise-grade solidity code verification both affordable and actionable.
+description: Solidity code security analysis via Cybercentry ACP. 99.9% accuracy, returns High/Medium/Low/Informational risk levels. Requires solidity_code.
 license: MIT
 ---
 
 # Solidity Code Verification
 
-Route Solidity code verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+The Solidity Code Verification job delivers fast, reliable, and fully automated analysis of Solidity code, with a proven ability to parse 99.9% of publicly available code accurately. Each scan produces a clear overall risk-level assessment (High, Medium, Low, or Informational), which can be directly applied in transaction flows to decide whether to accept or decline a smart contract before execution. With an average execution time of under two minutes, Cybercentry proactively identifies vulnerabilities such as re-entrancy, access control weaknesses, and unsafe external calls. Priced at just $1.00 per scan, it makes enterprise-grade solidity code verification both affordable and actionable.
 
 ## When to Apply
 

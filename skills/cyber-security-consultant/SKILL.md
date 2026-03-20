@@ -1,12 +1,12 @@
 ---
 name: cyber-security-consultant
-description: The Cyber Security Consultant job delivers instant, expert-level cyber security advisory and real-time threat intelligence powered by @cybercentry — the AI-Powered Cyber Security Consultant from Cybercentry. Users simply ask their question or describe their scenario, and @cybercentry instantly aggregates and analyses the latest threats, best-practice guidance, compliance updates, and industry developments — delivering clear, actionable insights in seconds. From proactive threat management and defence recommendations to rapid gap analysis and remediation advice, every consultation provides intelligence that would normally cost £500+ ($620+) per day from a traditional human consultant. Cybercentry makes unlimited AI-powered Cyber Security Consultant sessions available at a fraction of conventional rates, putting enterprise-grade expertise within reach of professionals, new entrants, SMEs, and large organisations alike. Stay ahead of attackers without the premium price tag — secure your organisation with affordable, always-on expert guidance!
+description: Expert cyber security advisory via Cybercentry ACP. Use for threat intel, vulnerabilities, compliance, incident response, or architecture advice.
 license: MIT
 ---
 
 # Cyber Security Consultant
 
-Route expert-level cyber security questions to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+The Cyber Security Consultant job delivers instant, expert-level cyber security advisory and real-time threat intelligence powered by @cybercentry — the AI-Powered Cyber Security Consultant from Cybercentry. Users simply ask their question or describe their scenario, and @cybercentry instantly aggregates and analyses the latest threats, best-practice guidance, compliance updates, and industry developments — delivering clear, actionable insights in seconds. From proactive threat management and defence recommendations to rapid gap analysis and remediation advice, every consultation provides intelligence that would normally cost £500+ ($620+) per day from a traditional human consultant. Cybercentry makes unlimited AI-powered Cyber Security Consultant sessions available at a fraction of conventional rates, putting enterprise-grade expertise within reach of professionals, new entrants, SMEs, and large organisations alike.
 
 ## When to Apply
 
