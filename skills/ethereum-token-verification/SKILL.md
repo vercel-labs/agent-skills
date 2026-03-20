@@ -50,9 +50,59 @@ Trigger this workflow for any token verification query (e.g., "Verify this token
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `chain_id` | Number | Chain ID (Mainnet 1, Testnet 2, Kovan 4, Rinkeby 5, Ropsten 6) |
-| `platform_id` | Number | Platform ID (Ethereum 1, Base 17) |
-| `contract_address` | String | Contract Address (e.g., 0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b) |
+| `chain_id` | String | Chain ID for the network (e.g., `1` for Ethereum mainnet, or a BuildBear testnet name) |
+| `platform_id` | Number | Platform ID from the table below |
+| `contract_address` | String | Contract address (e.g., `0x4ee38aa8d7449a177119e983610D73e9ace932dA`) |
+
+### Platform IDs
+
+| Platform | `platform_id` |
+|----------|---------------|
+| etherscan.io | 1 |
+| bscscan.com | 2 |
+| polygonscan.com | 3 |
+| snowtrace.io | 4 |
+| cronoscan.com | 6 |
+| celoscan.io | 7 |
+| aurorascan.dev | 8 |
+| arbiscan.io | 9 |
+| buildbear | 10 |
+| optimism | 11 |
+| xdc | 12 |
+| reefscan.io | 13 |
+| explorer.fuse.io | 15 |
+| blockscout.com | 16 |
+| basescan | 17 |
+| routescan | 18 |
+| tronscan.org | 19 |
+| Lineascan | 21 |
+| 5irechain | 22 |
+| subscan | 23 |
+| opbnb | 24 |
+| sonicscan | 25 |
+| blastscan | 27 |
+| abstract | 28 |
+| apechain | 29 |
+| berachain | 30 |
+| bittorrent | 31 |
+| fraxtal | 32 |
+| gnosis | 33 |
+| hyperevm | 34 |
+| katana | 35 |
+| mantle | 36 |
+| memecore | 37 |
+| monad | 38 |
+| scroll | 39 |
+| sei | 40 |
+| stable | 41 |
+| swellchain | 42 |
+| taiko | 43 |
+| unichain | 44 |
+| world | 45 |
+| zksync | 47 |
+| moonscan | 48 |
+
+> **BuildBear note:** Use `platform_id: 10` and set `chain_id` to the unique testnet name from your BuildBear explorer URL (e.g., `Accepted_Mace_Windu_2561384`).
 
 ## Quick Reference Rules
 
