@@ -9,8 +9,10 @@ tags: scrollview, layout, contentInset, performance
 
 When adding space to the top or bottom of a ScrollView that may change
 (keyboard, toolbars, dynamic content), use `contentInset` instead of padding.
-Changing `contentInset` doesn't trigger layout recalculation—it adjusts the
+Changing `contentInset` doesn't trigger layout recalculation - it adjusts the
 scroll area without re-rendering content.
+
+> **Platform note:** `contentInset` and `scrollIndicatorInsets` are iOS-only props. On Android, use `contentContainerStyle` padding instead (see cross-platform example below).
 
 **Incorrect (padding causes layout recalculation):**
 
@@ -43,3 +45,31 @@ function Feed({ bottomOffset }: { bottomOffset: number }) {
 
 Use `scrollIndicatorInsets` alongside `contentInset` to keep the scroll
 indicator aligned. For static spacing that never changes, padding is fine.
+
+### Cross-platform alternative
+
+For cross-platform projects, use `Platform.select` to apply `contentInset` on iOS and `contentContainerStyle` padding on Android:
+
+```tsx
+import { Platform, ScrollView } from 'react-native'
+
+function Feed({ bottomOffset }: { bottomOffset: number }) {
+  return (
+    <ScrollView
+      {...Platform.select({
+        ios: {
+          contentInset: { bottom: bottomOffset },
+          scrollIndicatorInsets: { bottom: bottomOffset },
+        },
+        android: {
+          contentContainerStyle: { paddingBottom: bottomOffset },
+        },
+      })}
+    >
+      {children}
+    </ScrollView>
+  )
+}
+```
+
+On Android, `contentContainerStyle` padding is the standard approach for dynamic scroll spacing.
