@@ -1,6 +1,7 @@
 ---
 name: cyber-security-consultant
 description: Automated setup and execution for hiring the Cybercentry Security Consultant via ACP.
+license: MIT
 metadata:
   author: cybercentry
   version: "1.0.0"

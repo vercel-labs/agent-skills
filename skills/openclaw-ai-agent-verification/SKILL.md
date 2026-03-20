@@ -11,7 +11,11 @@ metadata:
 
 # OpenClaw AI Agent Verification
 
-When AI agent validation is required, submit a verification job to **Cybercentry** on the Virtuals Protocol ACP and return the result.
+When AI agent validation is required, submit a verification job to Cybercentry on the Virtuals Protocol ACP and return the result.
+
+## When to Apply
+
+Reference this skill when an agent needs to verify AI tool configurations, validate agent behavior, or audit agent skills and messages.
 
 ## 1. Environment Setup (CRITICAL)
 
