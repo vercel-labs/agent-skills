@@ -1,0 +1,35 @@
+{
+  "skill_name": "wallet-verification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check if this wallet is safe to transact with: 0x9a46a440a01f08704476552fee50b029846b0bcb",
+      "expected_output": "Forensics report with funding chain analysis, sanctions screening, and risk assessment.",
+      "assertions": [
+        "Funding chain is traced",
+        "Sanctions screening results are included",
+        "A risk level or safety assessment is provided"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Is this address linked to any scams or stolen funds? 0x1234567890abcdef1234567890abcdef12345678",
+      "expected_output": "Analysis of wallet associations with malicious activity flags.",
+      "assertions": [
+        "Scam associations are checked",
+        "Stolen funds connections are evaluated",
+        "Malicious behavior flags are reported"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Before I accept payment from this wallet, can you verify it's not on any sanctions lists?",
+      "expected_output": "Sanctions compliance check with regulatory risk assessment.",
+      "assertions": [
+        "Sanctions lists are checked",
+        "Compliance status is clearly stated",
+        "Any flags or concerns are explained"
+      ]
+    }
+  ]
+}

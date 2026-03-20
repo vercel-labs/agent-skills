@@ -1,0 +1,35 @@
+{
+  "skill_name": "web-application-verification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Scan my website for security vulnerabilities: https://example.com",
+      "expected_output": "OWASP security scan results with identified vulnerabilities and remediation guidance.",
+      "assertions": [
+        "XSS vulnerabilities are checked",
+        "API security is assessed",
+        "Findings include severity levels"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check if this dApp frontend is secure before we launch: https://mydapp.io",
+      "expected_output": "Security assessment of the dApp frontend with Web3-specific vulnerability analysis.",
+      "assertions": [
+        "Frontend vulnerabilities are identified",
+        "Web3-specific risks are evaluated",
+        "Launch readiness is assessed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Is this website vulnerable to XSS attacks? https://testsite.com",
+      "expected_output": "XSS vulnerability analysis with specific findings and mitigation steps.",
+      "assertions": [
+        "XSS testing is performed",
+        "Specific XSS vectors are checked",
+        "Remediation steps are provided if vulnerabilities found"
+      ]
+    }
+  ]
+}

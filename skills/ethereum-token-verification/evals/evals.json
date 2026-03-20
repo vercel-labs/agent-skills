@@ -1,0 +1,35 @@
+{
+  "skill_name": "ethereum-token-verification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you check if this token is safe to buy? Contract: 0x1234567890abcdef1234567890abcdef12345678 on Ethereum mainnet",
+      "expected_output": "Security analysis of the token contract including rug pull risk, tax analysis, and liquidity assessment.",
+      "assertions": [
+        "The response includes a risk level assessment",
+        "Rug pull indicators are analyzed",
+        "Hidden tax mechanisms are checked"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I found a new memecoin on Base chain, contract 0xabcdef1234567890abcdef1234567890abcdef12. Is it a scam?",
+      "expected_output": "Due diligence report on the Base chain token with scam indicators and holder distribution analysis.",
+      "assertions": [
+        "The response identifies the correct chain (Base)",
+        "Scam indicators are evaluated",
+        "Holder distribution is analyzed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Verify this BSC token for me: 0x9876543210fedcba9876543210fedcba98765432",
+      "expected_output": "Security scan of the BNB Chain token with vulnerability findings and liquidity legitimacy check.",
+      "assertions": [
+        "The response uses the correct chain (BSC/BNB Chain)",
+        "Contract vulnerabilities are assessed",
+        "Liquidity pool legitimacy is evaluated"
+      ]
+    }
+  ]
+}

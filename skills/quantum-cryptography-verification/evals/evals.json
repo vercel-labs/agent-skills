@@ -1,0 +1,35 @@
+{
+  "skill_name": "quantum-cryptography-verification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Encrypt this sensitive data with quantum-safe encryption: 'My API key is sk_live_abc123'",
+      "expected_output": "Encrypted data with record_id and decrypt_url for future retrieval.",
+      "assertions": [
+        "A record_id is returned",
+        "A decrypt_url is provided",
+        "The original data is not visible in the response"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need to store this password securely so it can survive quantum computer attacks: 'P@ssw0rd123!'",
+      "expected_output": "Quantum-resistant encrypted record with retrieval mechanism.",
+      "assertions": [
+        "AES-256-GCM or equivalent encryption is used",
+        "A record_id is provided for future access",
+        "The decrypt_url allows authorized retrieval"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Protect this wallet seed phrase with post-quantum cryptography",
+      "expected_output": "Encrypted seed phrase stored with quantum-safe algorithms and secure retrieval.",
+      "assertions": [
+        "The seed phrase is encrypted, not stored in plaintext",
+        "A record_id identifies the encrypted record",
+        "The decrypt_url is provided for retrieval"
+      ]
+    }
+  ]
+}

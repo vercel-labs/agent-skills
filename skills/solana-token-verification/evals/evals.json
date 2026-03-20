@@ -1,0 +1,35 @@
+{
+  "skill_name": "solana-token-verification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Is this Solana token safe? Address: Gx5dX1pM5aCQn8wtXEmEHSUia3W57Jq7qdu7kKsHvirt",
+      "expected_output": "Security analysis of the Solana token including rug pull risk and holder distribution.",
+      "assertions": [
+        "The response includes a risk assessment",
+        "Rug pull indicators are analyzed",
+        "Holder distribution is evaluated"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check this SPL token for scam indicators: 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+      "expected_output": "Due diligence report on the Solana token with scam risk analysis.",
+      "assertions": [
+        "The response identifies it as a Solana/SPL token",
+        "Scam indicators are checked",
+        "Liquidity legitimacy is assessed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Someone sent me a new Solana memecoin. Can you verify if it's legit before I invest?",
+      "expected_output": "Comprehensive token verification with investment risk assessment.",
+      "assertions": [
+        "The response requests or uses the contract address",
+        "Multiple risk factors are evaluated",
+        "A clear recommendation or risk level is provided"
+      ]
+    }
+  ]
+}

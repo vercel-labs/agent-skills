@@ -1,0 +1,35 @@
+{
+  "skill_name": "cyber-security-consultant",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What are the latest CVEs affecting Apache web servers and how should I prioritize patching?",
+      "expected_output": "A list of recent Apache CVEs with severity ratings and prioritized remediation guidance.",
+      "assertions": [
+        "The response includes specific CVE identifiers",
+        "Each CVE has a severity rating or CVSS score",
+        "Remediation steps are provided for high-severity issues"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We had a ransomware attack last night. What should our incident response team do first?",
+      "expected_output": "Step-by-step incident response guidance for ransomware, including containment, evidence preservation, and communication.",
+      "assertions": [
+        "The response includes immediate containment steps",
+        "Evidence preservation is addressed",
+        "Communication/notification guidance is provided"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Is our company compliant with SOC 2 if we store customer data in AWS S3 with default encryption?",
+      "expected_output": "Analysis of SOC 2 compliance requirements vs S3 default encryption, with gaps and recommendations.",
+      "assertions": [
+        "The response explains SOC 2 requirements",
+        "Specific gaps or compliance issues are identified",
+        "Recommendations for achieving compliance are provided"
+      ]
+    }
+  ]
+}
