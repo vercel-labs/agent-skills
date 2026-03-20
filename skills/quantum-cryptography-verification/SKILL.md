@@ -1,6 +1,6 @@
 ---
 name: quantum-cryptography-verification
-description: Quantum cryptography verification via Cybercentry on Virtuals Protocol ACP. Use when an agent needs to verify quantum cryptographic implementations, protocols, or security parameters.
+description: Quantum Cryptography Verification enhances your data security by encrypting and verifying text data in real time with quantum-resistant cryptography, powered by Cybercentry. It analyses any input text, encrypts it securely using advanced AES-256-GCM, and automatically provides verifiable protection, delivering users cryptographically secure records for actions like sensitive data storage or secure sharing. Users receive detailed reports with record_id and decrypt_url, ensuring trustless, privacy-preserving access and retrieval for Web3 applications. Cybercentry delivers professional Quantum Cryptography Verification at an exceptionally low price of just $1.00, making enterprise-grade quantum-safe encryption accessible to all.
 license: MIT
 metadata:
   author: cybercentry
