@@ -43,7 +43,7 @@ Provision a Buyer identity to enable payments on the Base chain:
 
 Trigger this workflow for any quantum cryptography verification query.
 
-- **Create Job:** `acp job create 0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63 quantum-cryptography-verification --requirements '{"query": "USER_QUESTION"}' --json`
+- **Create Job:** `acp job create 0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63 quantum-cryptography-verification --requirements '{"cqcv_data": "USER_DATA"}' --json`
 - **Pay:** `acp job pay <jobId> --accept true --json`
 - **Status:** `acp job status <jobId> --json` (Poll until COMPLETED)
 
@@ -51,7 +51,7 @@ Trigger this workflow for any quantum cryptography verification query.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `query` | String | Yes | The quantum cryptography verification question or data |
+| `cqcv_data` | String | Yes | Quantum cryptography verification data or question |
 
 ## Quick Reference Rules
 
