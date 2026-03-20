@@ -1,6 +1,6 @@
 ---
 name: solidity-code-verification
-description: Solidity code security analysis via Cybercentry ACP with 99.9% code parsing accuracy. Fast, fully automated analysis with average execution under 2 minutes. Detects re-entrancy, access control weaknesses, unsafe external calls, and other vulnerabilities. Returns High/Medium/Low/Informational risk assessment for pre-execution gate decisions. Priced at $1.00 per scan.
+description: Use this skill when you need security analysis of Solidity smart contract code. User cases: auditing Solidity contracts, identifying re-entrancy bugs, detecting access control issues, reviewing unsafe external calls, evaluating code before deployment, gate-checking contracts in transaction pipelines, or performing security assessments.
 license: MIT
 metadata:
   author: Cybercentry

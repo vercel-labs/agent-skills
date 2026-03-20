@@ -1,6 +1,6 @@
 ---
 name: solana-token-verification
-description: Solana smart contract security analysis via Cybercentry ACP with Rust Scan's AI-powered vulnerability detection. Analyzes contract code for security risks and legitimacy. Detects rug pulls, hidden taxes, liquidity legitimacy issues, and holder distribution anomalies. Threat audit and Token Due Diligence included. Returns clear risk assessments. Priced at $1.00 vs industry average ~$75.74 per scan.
+description: Use this skill when you need to verify Solana token contracts for security. User cases: checking Solana token legitimacy, scanning for rug pulls, detecting hidden taxes, assessing liquidity risks, analyzing holder distribution, evaluating tokens before investment, or gate-checking Solana tokens in automated pipelines.
 license: MIT
 metadata:
   author: Cybercentry

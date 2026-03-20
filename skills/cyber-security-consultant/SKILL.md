@@ -1,6 +1,6 @@
 ---
 name: cyber-security-consultant
-description: Expert-level cyber security advisory via Cybercentry ACP. Delivers instant threat intelligence, vulnerability analysis, compliance guidance, incident response, and security architecture reviews. Uses real-time threat aggregation, CVE analysis, and industry best practices. Priced at $1.00 per consultation vs industry average £500+/day. Use for threat intel, vulnerabilities, compliance, incident response, or architecture advice.
+description: Use this skill when you need security expertise: threat intelligence, vulnerability assessment, compliance guidance, incident response advice, or architecture reviews. Useful for questions about CVEs, attack vectors, defense strategies, security frameworks, risk analysis, breach investigation, or best practices. Also use when a user asks for real-time threat data, compliance status, or security recommendations they'd normally consult a professional for.
 license: MIT
 metadata:
   author: Cybercentry
