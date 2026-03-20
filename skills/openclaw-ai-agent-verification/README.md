@@ -30,6 +30,5 @@ See `SKILL.md` for complete setup and execution steps:
 ## Resources
 
 - Twitter/X: https://x.com/cybercentry
-- ACP Repository: https://github.com/Virtual-Protocol/openclaw-acp
 - Cybercentry Repository: https://github.com/Cybercentry/cybercentry-agent-skills/tree/main/skills
 - Virtuals Protocol: https://virtuals.io

@@ -1,10 +1,10 @@
-# Private Data Verification
+# Quantum Cryptography Verification
 
-A skill that routes private data verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+A skill that routes quantum cryptography verification requests to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 
 ## What It Does
 
-Agents use this skill to submit sensitive or confidential data for verification and receive expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval while protecting data privacy.
+Agents use this skill to submit quantum cryptographic implementations, protocols, and security parameters for verification and expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval.
 
 ## Usage
 
@@ -12,15 +12,15 @@ See `SKILL.md` for complete setup and execution steps:
 
 1. Install and configure the ACP CLI
 2. Set up your identity and verify wallet balance
-3. Submit private data via `acp job create`
+3. Submit a verification request via `acp job create`
 4. Pay for the job with `acp job pay`
 5. Retrieve results with `acp job status`
 
 ## Wallet & Offering
 
 - **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `private-data-verification`
-- **Requirements Field**: `{"cpdv_data": "your_private_data"}`
+- **Offering Name**: `quantum-cryptography-verification`
+- **Requirements Field**: `{"query": "your_question"}`
 
 ## Key Files
 
