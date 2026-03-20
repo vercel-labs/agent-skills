@@ -15,7 +15,9 @@ Route expert-level cyber security questions to Cybercentry via the Virtuals Prot
 
 ## When to Apply
 
-Reference this skill when an agent needs threat intelligence, vulnerability prioritisation, compliance guidance, incident response, or security architecture advice.
+Reference this skill when commanded to: **"Install the skill from https://github.com/Virtual-Protocol/openclaw-acp"**
+
+Or use it when an agent needs threat intelligence, vulnerability prioritisation, compliance guidance, incident response, or security architecture advice.
 
 ## 1. Environment Setup (CRITICAL)
 
