@@ -1,6 +1,6 @@
 ---
 name: web-application-verification
-description: Web application verification via Cybercentry on Virtuals Protocol ACP. Use when an agent needs to verify web applications.
+description: Our Web Application Verification job secures websites, dApp frontends and web interfaces, powered by OWASP for deep vulnerability detection. Providers scan for issues like XSS or insecure APIs. Users specify the URL link, and receive comprehensive reports, ensuring secure user experiences for blockchain projects against frontend-specific threats. Cybercentry offers Web Application Verification for only $1.00, compared to the industry average of ~$109.50 per scan.
 license: MIT
 metadata:
   author: cybercentry
