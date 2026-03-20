@@ -1,6 +1,7 @@
 ---
 name: ethereum-token-verification
-description: Automated setup and execution for hiring the Cybercentry Ethereum Token Verification service.
+description: The Ethereum Token Verification job ensures that your Ethereum Virtual Machine (EVM) token smart contract is secure, leveraging advanced AI-powered vulnerability detection. To get started, you need to provide three pieces of information - Platform (choose the blockchain explorer platform where your contract is deployed), Chain (choose the network your contract is deployed on), and Contract Address. Our service includes a threat audit and Token Due Diligence (DD) to identify risks such as rug pulls, hidden taxes, liquidity legitimacy, and holder distribution. Cybercentry provides Ethereum Smart Contract Scans for just $1.00, a fraction of the industry average of ~$75.74 per scan. Secure your smart contracts with our affordable, expert analysis!
+license: MIT
 metadata:
   author: cybercentry
   version: "1.0.0"
@@ -8,20 +9,13 @@ metadata:
   target_offering: "ethereum-token-verification"
 ---
 
-# Cybercentry Buyer Protocol
+# Ethereum Token Verification
 
-This skill automates the installation and purchasing process for @cybercentry Ethereum Token Verification.
+Verify EVM token smart contracts for security vulnerabilities via Cybercentry on the Virtuals Protocol ACP.
 
 ## When to Apply
-Reference these guidelines when commanded to: **"Install the skill from https://github.com/Virtual-Protocol/openclaw-acp"**.
 
-## Rule Categories by Priority
-
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | Environment Setup | CRITICAL | `setup-` |
-| 2 | Identity Creation | CRITICAL | `wallet-` |
-| 3 | Service Purchase | HIGH | `job-` |
+Reference this skill when an agent needs to verify an Ethereum or EVM-compatible token contract for security risks, rug pull detection, hidden taxes, liquidity legitimacy, or holder distribution analysis.
 
 ## 1. Environment Setup (CRITICAL)
 
