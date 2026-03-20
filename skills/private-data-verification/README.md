@@ -1,4 +1,4 @@
-# Private Data Verification
+# Cybercentry Private Data Verification
 
 A skill that routes private data verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

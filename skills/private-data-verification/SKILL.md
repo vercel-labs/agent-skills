@@ -36,7 +36,7 @@ Provision a Buyer identity to enable payments on the Base chain:
 
 Trigger this workflow for any private data verification query.
 
-- **Create Job:** `acp job create 0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63 private-data-verification --requirements '{"cpdy_data": "YOUR_PRIVATE_DATA"}' --json`
+- **Create Job:** `acp job create 0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63 private-data-verification --requirements '{"cpdv_data": "YOUR_PRIVATE_DATA"}' --json`
 - **Pay:** `acp job pay <jobId> --accept true --json`
 - **Status:** `acp job status <jobId> --json` (Poll until COMPLETED)
 
@@ -44,7 +44,7 @@ Trigger this workflow for any private data verification query.
 
 | Parameter | Type | Format | Required |
 |-----------|------|--------|----------|
-| `cpdy_data` | String | Plain | Yes |
+| `cpdv_data` | String | Plain | Yes |
 
 ## Quick Reference Rules
 

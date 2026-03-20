@@ -1,4 +1,4 @@
-# Quantum Cryptography Verification
+# Cybercentry Quantum Cryptography Verification
 
 A skill that routes quantum cryptography verification requests to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

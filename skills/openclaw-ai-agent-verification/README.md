@@ -1,4 +1,4 @@
-# OpenClaw AI Agent Verification
+# Cybercentry OpenClaw AI Agent Verification
 
 A skill that routes AI agent validation requests to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

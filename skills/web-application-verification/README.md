@@ -1,4 +1,4 @@
-# Web Application Verification
+# Cybercentry Web Application Verification
 
 A skill that routes web application verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

@@ -1,4 +1,4 @@
-# Wallet Verification
+# Cybercentry Wallet Verification
 
 A skill that routes wallet verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

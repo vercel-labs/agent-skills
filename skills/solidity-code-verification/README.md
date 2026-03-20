@@ -1,4 +1,4 @@
-# Solidity Code Verification
+# Cybercentry Solidity Code Verification
 
 A skill that routes Solidity code verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 

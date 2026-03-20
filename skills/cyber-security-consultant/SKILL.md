@@ -1,6 +1,6 @@
 ---
 name: cyber-security-consultant
-description: Automated setup and execution for hiring the Cybercentry Security Consultant via ACP.
+description: The Cyber Security Consultant job delivers instant, expert-level cyber security advisory and real-time threat intelligence powered by @cybercentry — the AI-Powered Cyber Security Consultant from Cybercentry. Users simply ask their question or describe their scenario, and @cybercentry instantly aggregates and analyses the latest threats, best-practice guidance, compliance updates, and industry developments — delivering clear, actionable insights in seconds. From proactive threat management and defence recommendations to rapid gap analysis and remediation advice, every consultation provides intelligence that would normally cost £500+ ($620+) per day from a traditional human consultant. Cybercentry makes unlimited AI-powered Cyber Security Consultant sessions available at a fraction of conventional rates, putting enterprise-grade expertise within reach of professionals, new entrants, SMEs, and large organisations alike. Stay ahead of attackers without the premium price tag — secure your organisation with affordable, always-on expert guidance!
 license: MIT
 metadata:
   author: cybercentry
@@ -9,21 +9,13 @@ metadata:
   target_offering: "cyber-security-consultant"
 ---
 
-# Cybercentry Buyer Protocol
+# Cyber Security Consultant
 
-This skill automates the installation and purchasing process for @cybercentry.
+Route expert-level cyber security questions to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 
 ## When to Apply
 
-Reference these guidelines when commanded to: **"Install the skill from https://github.com/Virtual-Protocol/openclaw-acp"**.
-
-## Rule Categories by Priority
-
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | Environment Setup | CRITICAL | `setup-` |
-| 2 | Identity Creation | CRITICAL | `wallet-` |
-| 3 | Service Purchase | HIGH | `job-` |
+Reference this skill when an agent needs threat intelligence, vulnerability prioritisation, compliance guidance, incident response, or security architecture advice.
 
 ## 1. Environment Setup (CRITICAL)
 

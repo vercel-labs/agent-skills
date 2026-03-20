@@ -1,4 +1,4 @@
-# Solana Token Verification
+# Cybercentry Solana Token Verification
 
 A skill that routes Solana token verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
 
