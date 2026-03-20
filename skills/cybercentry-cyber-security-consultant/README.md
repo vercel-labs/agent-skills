@@ -19,7 +19,7 @@ See `SKILL.md` for complete setup and execution steps:
 ## Wallet & Offering
 
 - **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `cybercentry-cyber-security-consultant`
+- **Offering Name**: `cyber-security-consultant`
 - **Requirements Field**: `{"query": "your_question"}`
 
 ## Key Files
@@ -31,5 +31,5 @@ See `SKILL.md` for complete setup and execution steps:
 ## Resources
 
 - Twitter/X: https://x.com/cybercentry
-- ACP Repository: https://github.com/Virtual-Protocol/openclaw-acp
+- Repository: https://github.com/Cybercentry/cybercentry-agent-skills/blob/main/skills/cybercentry-cyber-security-consultant/SKILL.md
 - Virtuals Protocol: https://virtuals.io
