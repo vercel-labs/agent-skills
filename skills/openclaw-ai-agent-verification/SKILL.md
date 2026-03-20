@@ -1,6 +1,6 @@
 ---
 name: openclaw-ai-agent-verification
-description: AI agent validation and verification via Cybercentry on the Virtuals Protocol ACP. Use when an agent needs to verify AI tool configurations, validate agent behavior, or audit agent skills and messages.
+description: The OpenClaw AI Agent Verification job delivers fast, reliable, and fully automated security audits of AI agent configurations, analysing OpenClaw settings against industry best practices. Each audit produces a clear overall risk-level assessment (Critical, High, Medium, or Low) that can be directly applied to agent orchestration pipelines to decide whether to allow or block an agent's operation before execution. The job proactively identifies vulnerabilities, including missing gateway authentication, disabled sandboxing, open DM policies, prompt-injection patterns, elevated tool permissions, and unsafe command execution. Priced at just $1.00 per audit, it makes enterprise-grade AI agent security verification both affordable and actionable.
 license: MIT
 metadata:
   author: cybercentry
