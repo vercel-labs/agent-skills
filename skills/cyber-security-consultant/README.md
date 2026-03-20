@@ -31,5 +31,5 @@ See `SKILL.md` for complete setup and execution steps:
 ## Resources
 
 - Twitter/X: https://x.com/cybercentry
-- Repository: https://github.com/Cybercentry/cybercentry-agent-skills/tree/main/skills
+- Cybercentry Repository: https://github.com/Cybercentry/cybercentry-agent-skills/tree/main/skills
 - Virtuals Protocol: https://virtuals.io
