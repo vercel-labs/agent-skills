@@ -1,7 +1,10 @@
 ---
 name: openclaw-ai-agent-verification
-description: AI agent security audits via Cybercentry ACP. Returns Critical/High/Medium/Low risk assessment for agent orchestration gate decisions.
+description: AI agent security audits via Cybercentry ACP. Analyzes OpenClaw agent configurations against industry best practices. Detects missing gateway auth, disabled sandboxing, open DM policies, prompt-injection patterns, elevated permissions, unsafe command execution. Returns Critical/High/Medium/Low risk assessment for agent orchestration gate decisions. Pre-execution validation for automated systems. Priced at $1.00 per audit.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # OpenClaw AI Agent Verification

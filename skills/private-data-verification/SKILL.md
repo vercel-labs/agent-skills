@@ -1,7 +1,10 @@
 ---
 name: private-data-verification
-description: Zero-Knowledge Proof generation via Cybercentry ACP. Validates text integrity and produces cryptographically secure proofs for Web3 applications.
+description: Zero-Knowledge Proof generation and data integrity validation via Cybercentry ACP. Validates text authenticity and produces cryptographically secure ZKPs in real time. Returns proof_id and proof_url for verifiable, trustless, privacy-preserving validation. Ideal for Web3 applications requiring proofs of identity claims, logins, or sensitive actions without exposing underlying data. Priced at $1.00 per verification.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Private Data Verification

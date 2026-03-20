@@ -1,7 +1,10 @@
 ---
 name: web-application-verification
-description: OWASP web security scanning via Cybercentry ACP. Detects XSS, insecure APIs, frontend vulnerabilities. Requires target_url.
+description: OWASP-powered web application security scanning via Cybercentry ACP. Secures websites, dApp frontends, and web interfaces. Detects XSS, insecure APIs, and frontend-specific vulnerabilities. Returns comprehensive reports for secure user experiences. Protects blockchain projects against attacks. Priced at $1.00 vs industry average ~$109.50 per scan.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Web Application Verification

@@ -1,7 +1,10 @@
 ---
 name: solidity-code-verification
-description: Solidity code security analysis via Cybercentry ACP. 99.9% accuracy, returns High/Medium/Low/Informational risk levels. Requires solidity_code.
+description: Solidity code security analysis via Cybercentry ACP with 99.9% code parsing accuracy. Fast, fully automated analysis with average execution under 2 minutes. Detects re-entrancy, access control weaknesses, unsafe external calls, and other vulnerabilities. Returns High/Medium/Low/Informational risk assessment for pre-execution gate decisions. Priced at $1.00 per scan.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Solidity Code Verification

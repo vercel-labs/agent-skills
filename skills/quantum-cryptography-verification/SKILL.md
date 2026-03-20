@@ -1,7 +1,10 @@
 ---
 name: quantum-cryptography-verification
-description: Quantum-resistant AES-256-GCM encryption via Cybercentry ACP. Returns record_id and decrypt_url for secure Web3 data storage and sharing.
+description: Quantum-resistant AES-256-GCM encryption and data verification via Cybercentry ACP. Encrypts text data securely in real time using advanced quantum-safe algorithms. Returns record_id and decrypt_url for secure storage and retrieval in Web3 applications. Ensures trustless, privacy-preserving access control for sensitive data sharing and archival. Priced at $1.00 per encryption.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Quantum Cryptography Verification

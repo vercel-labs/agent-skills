@@ -1,7 +1,10 @@
 ---
 name: wallet-verification
-description: Blockchain forensics via Cybercentry ACP. Traces funding chains across 30+ EVM chains, screens sanctions, detects malicious patterns. Requires wallet_address.
+description: Advanced blockchain forensics via Cybercentry ACP across 30+ EVM chains. Recursively traces funding chains, screens sanctions, detects money-mule patterns and bot automation. Returns comprehensive JSON report with addresses, sanctions screening, ownership clusters, malicious behavior flags, and severity escalations. Professional-grade forensics for Web3 security. Priced at $1.00 per scan.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Wallet Verification

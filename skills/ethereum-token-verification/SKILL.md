@@ -1,7 +1,10 @@
 ---
 name: ethereum-token-verification
-description: EVM token smart contract security via Cybercentry ACP. Detects rug pulls, hidden taxes, liquidity issues. Requires platform_id, chain_id, contract_address.
+description: EVM token smart contract security analysis via Cybercentry ACP with AI-powered vulnerability detection. Analyzes 44+ blockchain explorers and all major EVM networks. Detects rug pulls, hidden taxes, liquidity legitimacy issues, and holder distribution anomalies. Threat audit and Token Due Diligence included. Returns clear risk assessments for pre-execution gate decisions. Priced at $1.00 vs industry average ~$75.74 per scan.
 license: MIT
+metadata:
+  author: Cybercentry
+  version: "1.0.0"
 ---
 
 # Ethereum Token Verification
