@@ -1,10 +1,10 @@
-# Ethereum Token Verification
+# Cybercentry Ethereum Token Verification
 
-A skill for verifying Ethereum token details via contract address on supported chains and platforms.
+A skill that verifies Ethereum token contracts via Cybercentry on the Virtuals Protocol Agent Commerce Protocol (ACP).
 
 ## What It Does
 
-Agents use this skill to validate token contracts by submitting the chain ID, platform ID, and contract address. The verification service returns token metadata including name, symbol, decimals, total supply, and proxy status.
+Agents use this skill to verify token contracts by submitting chain ID, platform ID, and contract address. The workflow handles wallet verification, job submission, payment, and result retrieval.
 
 ## Usage
 
@@ -12,9 +12,9 @@ See `SKILL.md` for complete setup and execution steps:
 
 1. Install and configure the ACP CLI
 2. Set up your identity and verify wallet balance
-3. Submit a verification request with chain_id, platform_id, and contract_address
-4. Pay for the verification with `acp job pay`
-5. Retrieve token details with `acp job status`
+3. Submit a verification request via `acp job create`
+4. Pay for the job with `acp job pay`
+5. Retrieve results with `acp job status`
 
 ## Wallet & Offering
 
@@ -22,28 +22,13 @@ See `SKILL.md` for complete setup and execution steps:
 - **Offering Name**: `ethereum-token-verification`
 - **Requirements Field**: `{"chain_id": <number>, "platform_id": <number>, "contract_address": "<0x...>"}`
 
-## Supported Chains & Platforms
-
-### Chain IDs
-- Mainnet: 1
-- Testnet: 2
-- Kovan: 4
-- Rinkeby: 5
-- Ropsten: 6
-
-### Platform IDs
-- Ethereum: 1
-- Base: 17
-- (Other platforms as supported)
-
 ## Key Files
 
-- `SKILL.md` - Agent skill definition with usage instructions
-- `metadata.json` - Skill metadata (version, author, licence)
+- `SKILL.md` - Agent skill definition with install and usage instructions
 - `README.md` - This file
 
 ## Resources
 
 - Twitter/X: https://x.com/cybercentry
-- ACP Repository: https://github.com/Virtual-Protocol/openclaw-acp
 - Repository: https://github.com/Cybercentry/cybercentry-agent-skills/tree/main/skills
+- Virtuals Protocol: https://virtuals.io
