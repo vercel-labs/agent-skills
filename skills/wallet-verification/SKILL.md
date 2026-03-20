@@ -2,15 +2,6 @@
 name: wallet-verification
 description: Cybercentry's Wallet Verification job provides advanced, real-time blockchain security analysis for any wallet address at just $1.00 per scan. It recursively traces the full funding chain across numerous major EVM chains, automatically detecting cycles and deduplicating addresses. Every address in the chain undergoes sanction screening for severe risks like sanctions, stolen funds, ransomware, darknet markets, terrorist financing, fraud, or child abuse material. Advanced clustering detects common ownership via shared recipients, exchange deposit reuse, round-trip flows, and high timing correlation. Malicious behaviours flagged include mixer/tumbler interactions, rapid forwarding within 10 blocks (money-mule patterns), and dusting attacks. Bot/automation signals include excessive transaction velocity, overly regular intervals, uniform gas prices, and long, unbroken nonce sequences. The output is a comprehensive, structured JSON report detailing all addresses, sanctions, control clusters, flags, and severity escalations—affordably delivering professional-grade forensics to protect Web3 users, projects, and AI agents from scams and illicit activity.
 license: MIT
-metadata:
-  author: Cybercentry
-  version: "1.0.0"
-  target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
-  target_offering: "wallet-verification"
-  category: "Blockchain Forensics & Verification"
-  price: "$1.00"
-  avg_execution_time: "seconds"
-  chains_supported: "30+"
 ---
 
 # Wallet Verification
