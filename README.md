@@ -116,8 +116,18 @@ Claim URL:   https://vercel.com/claim-deployment?code=...
 
 ## Installation
 
+### Agent Skills CLI
+
 ```bash
 npx skills add vercel-labs/agent-skills
+```
+
+### Cursor plugin
+
+Install with:
+
+```bash
+/add-plugin vercel-agent-skills
 ```
 
 ## Usage
