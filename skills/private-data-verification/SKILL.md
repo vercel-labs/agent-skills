@@ -1,6 +1,6 @@
 ---
 name: private-data-verification
-description: Private data verification via Cybercentry on Virtuals Protocol ACP. Use when an agent needs to verify sensitive or confidential data without exposing it.
+description: Private Data Verification enhances your data security by validating text integrity and generating Zero-Knowledge Proofs (ZKPs) in real time, powered by Cybercentry. It analyses any input text to verify authenticity and automatically produces verifiable ZKPs, providing users with cryptographically secure proofs of actions such as logins or identity claims. Users receive detailed verification reports with proof_id and proof_url, ensuring trustless, privacy-preserving validation for Web3 applications. Cybercentry delivers professional Private Data Verification at an exceptionally low price of just $1.00, making enterprise-grade ZKP security accessible to all.
 license: MIT
 metadata:
   author: cybercentry
