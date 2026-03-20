@@ -44,7 +44,7 @@ Trigger this workflow for any private data verification query.
 
 | Parameter | Type | Format | Required |
 |-----------|------|--------|----------|
-| `cpdy_data` | String | Plain | Yes |
+| `cpdv_data` | String | Plain | Yes |
 
 ## Quick Reference Rules
 

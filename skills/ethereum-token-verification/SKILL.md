@@ -50,9 +50,41 @@ Trigger this workflow for any token verification query (e.g., "Verify this token
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `chain_id` | String | Chain ID for the network (e.g., `1` for Ethereum mainnet, or a BuildBear testnet name) |
+| `chain_id` | Number | Chain ID from the table below |
 | `platform_id` | Number | Platform ID from the table below |
 | `contract_address` | String | Contract address (e.g., `0x4ee38aa8d7449a177119e983610D73e9ace932dA`) |
+
+### Chain IDs (EVM Standard)
+
+| Blockchain | `chain_id` |
+|-----------|-----------|
+| Ethereum Mainnet | `1` |
+| BSC Mainnet | `56` |
+| Polygon Mainnet | `137` |
+| Avalanche C-Chain | `43114` |
+| Cronos Mainnet | `25` |
+| Celo Mainnet | `42220` |
+| Aurora Mainnet | `1313161554` |
+| Arbitrum One | `42161` |
+| OP Mainnet | `10` |
+| XDC Network | `50` |
+| Fuse Mainnet | `122` |
+| Base Mainnet | `8453` |
+| Linea | `59144` |
+| 5ire Chain | `995` |
+| opBNB | `204` |
+| Sonic | `250` |
+| Blast | `81457` |
+| Abstract | `2741` |
+| Ape Chain | `33139` |
+| Berachain | `80085` |
+| BitTorrent Chain | `199` |
+| Fraxtal | `252` |
+| Gnosis | `100` |
+| Mantle | `5000` |
+| Scroll | `534352` |
+| zkSync Era | `324` |
+| Moonbeam | `1284` |
 
 ### Platform IDs
 
@@ -101,38 +133,6 @@ Trigger this workflow for any token verification query (e.g., "Verify this token
 | world | 45 |
 | zksync | 47 |
 | moonscan | 48 |
-
-### Chain IDs (EVM Standard)
-
-| Blockchain | `chain_id` |
-|-----------|-----------|
-| Ethereum Mainnet | `1` |
-| BSC Mainnet | `56` |
-| Polygon Mainnet | `137` |
-| Avalanche C-Chain | `43114` |
-| Cronos Mainnet | `25` |
-| Celo Mainnet | `42220` |
-| Aurora Mainnet | `1313161554` |
-| Arbitrum One | `42161` |
-| OP Mainnet | `10` |
-| XDC Network | `50` |
-| Fuse Mainnet | `122` |
-| Base Mainnet | `8453` |
-| Linea | `59144` |
-| 5ire Chain | `995` |
-| opBNB | `204` |
-| Sonic | `250` |
-| Blast | `81457` |
-| Abstract | `2741` |
-| Ape Chain | `33139` |
-| Berachain | `80085` |
-| BitTorrent Chain | `199` |
-| Fraxtal | `252` |
-| Gnosis | `100` |
-| Mantle | `5000` |
-| Scroll | `534352` |
-| zkSync Era | `324` |
-| Moonbeam | `1284` |
 
 > **BuildBear note:** For BuildBear private testnets, use the unique testnet identifier from your explorer URL as `chain_id` (e.g., `Accepted_Mace_Windu_2561384` from `https://explorer.buildbear.io/Accepted_Mace_Windu_2561384`)
 
