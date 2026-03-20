@@ -3,10 +3,13 @@ name: solana-token-verification
 description: The Solana Token Verification job ensures that a Solana smart contract is secure, leveraging Rust Scan's advanced AI-powered vulnerability detection. Users specify a contract address (e.g., Gx5dX1pM5aCQn8wtXEmEHSUia3W57Jq7qdu7kKsHvirt). A threat audit and Token Due Diligence (DD) is also included to identify risks like detecting rug pulls, hidden taxes, liquidity legitimacy, and holder distribution. Cybercentry provides in-depth Solana Token Verification for just $1.00, a fraction of the industry average of ~$75.74 per scan.
 license: MIT
 metadata:
-  author: cybercentry
+  author: Cybercentry
   version: "1.0.0"
   target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
   target_offering: "solana-token-verification"
+  category: "Token & Smart Contract Security"
+  price: "$1.00"
+  avg_execution_time: "seconds"
 ---
 
 # Solana Token Verification

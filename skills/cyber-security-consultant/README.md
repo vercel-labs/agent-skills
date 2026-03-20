@@ -1,32 +1,36 @@
-# Cybercentry Cyber Security Consultant
+# Cyber Security Consultant
 
-A skill that routes cyber security questions to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Instant, expert-level cyber security advisory and real-time threat intelligence powered by @cybercentry from Cybercentry.
+
+## Overview
+
+The Cyber Security Consultant job delivers instant threat intelligence, vulnerability analysis, compliance guidance, incident response support, and security architecture recommendations. Users ask security questions and receive clear, actionable insights in seconds — delivering intelligence that would normally cost £500+ ($620+) per day from traditional consultants.
 
 ## What It Does
 
-Agents use this skill to submit sanitised security questions to Cybercentry and receive expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **Threat Intelligence**: Real-time aggregation of latest threats, CVEs, and attack patterns
+- **Vulnerability Analysis**: Gap analysis and remediation advice
+- **Compliance Guidance**: GDPR, SOC2, ISO 27001, PCI-DSS, HIPAA updates
+- **Incident Response**: Immediate containment and recovery strategies
+- **Security Architecture**: Zero-trust, API gateway, and multi-agent system reviews
+
+## Pricing & Specs
+
+- **Price**: $1.00 per consultation (vs £500+/day industry average)
+- **Response Time**: Seconds
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `cyber-security-consultant`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit a sanitised question via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Submit sanitised question via `acp job create`
+4. Pay for job with `acp job pay`
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `cyber-security-consultant`
-- **Requirements Field**: `{"query": "your_question"}`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `metadata.json` - Skill metadata (version, author, licence)
-- `README.md` - This file
 
 ## Resources
 

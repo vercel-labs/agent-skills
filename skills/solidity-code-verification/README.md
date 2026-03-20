@@ -1,31 +1,36 @@
-# Cybercentry Solidity Code Verification
+# Solidity Code Verification
 
-A skill that routes Solidity code verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Fast, automated analysis of Solidity code with 99.9% accuracy via Cybercentry.
+
+## Overview
+
+Fully automated analysis of Solidity smart contract code with proven 99.9% parsing accuracy. Produces clear risk-level assessments applicable to transaction flows for pre-execution contract decisions.
 
 ## What It Does
 
-Agents use this skill to submit Solidity smart contract code for verification and receive expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **High Accuracy**: 99.9% code parsing of publicly available Solidity
+- **Risk Assessment**: High, Medium, Low, or Informational risk levels
+- **Vulnerability Detection**: Re-entrancy, access control weaknesses, unsafe external calls
+- **Fast Execution**: Scans complete in under 2 minutes
+
+## Pricing & Specs
+
+- **Price**: $1.00 per scan
+- **Execution Time**: < 2 minutes
+- **Code Accuracy**: 99.9%
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `solidity-code-verification`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit Solidity code via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Specify Solidity code
+4. Submit via `acp job create` with `--requirements` JSON
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `solidity-code-verification`
-- **Requirements Field**: `{"solidity_code": "SOLIDITY_CODE"}`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `README.md` - This file
 
 ## Resources
 

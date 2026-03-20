@@ -3,10 +3,14 @@ name: ethereum-token-verification
 description: The Ethereum Token Verification job ensures that your Ethereum Virtual Machine (EVM) token smart contract is secure, leveraging advanced AI-powered vulnerability detection. To get started, you need to provide three pieces of information - Platform (choose the blockchain explorer platform where your contract is deployed), Chain (choose the network your contract is deployed on), and Contract Address. Our service includes a threat audit and Token Due Diligence (DD) to identify risks such as rug pulls, hidden taxes, liquidity legitimacy, and holder distribution. Cybercentry provides Ethereum Smart Contract Scans for just $1.00, a fraction of the industry average of ~$75.74 per scan. Secure your smart contracts with our affordable, expert analysis!
 license: MIT
 metadata:
-  author: cybercentry
+  author: Cybercentry
   version: "1.0.0"
   target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
   target_offering: "ethereum-token-verification"
+  category: "Token & Smart Contract Security"
+  price: "$1.00"
+  avg_execution_time: "seconds"
+  platforms_supported: 44
 ---
 
 # Ethereum Token Verification

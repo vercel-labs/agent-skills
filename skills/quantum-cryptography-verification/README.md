@@ -1,31 +1,36 @@
-# Cybercentry Quantum Cryptography Verification
+# Quantum Cryptography Verification
 
-A skill that routes quantum cryptography verification requests to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Quantum-resistant encryption and data verification for secure Web3 applications via Cybercentry.
+
+## Overview
+
+Encrypts and verifies text data in real time using quantum-resistant cryptography with AES-256-GCM. Provides cryptographically secure records for sensitive data storage and secure sharing in Web3 applications.
 
 ## What It Does
 
-Agents use this skill to submit quantum cryptographic implementations, protocols, and security parameters for verification and expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **Quantum-Safe Encryption**: AES-256-GCM encryption for data security
+- **Real-Time Processing**: Instant encryption and verification
+- **Web3 Integration**: Trustless, privacy-preserving access and retrieval
+- **Detailed Reports**: record_id and decrypt_url for future data access
+
+## Pricing & Specs
+
+- **Price**: $1.00 per verification
+- **Encryption**: AES-256-GCM
+- **Response Time**: Seconds
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `quantum-cryptography-verification`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit a verification request via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Submit data via `acp job create`
+4. Pay for job with `acp job pay`
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `quantum-cryptography-verification`
-- **Requirements Field**: `{"query": "your_question"}`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `README.md` - This file
 
 ## Resources
 

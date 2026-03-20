@@ -1,31 +1,35 @@
-# Cybercentry Solana Token Verification
+# Solana Token Verification
 
-A skill that routes Solana token verification queries to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Verify Solana smart contracts for security vulnerabilities via Cybercentry.
+
+## Overview
+
+Advanced AI-powered vulnerability detection for Solana smart contracts. Provides threat audits and Token Due Diligence (DD) identifying risks like rug pulls, hidden taxes, liquidity legitimacy, and holder distribution anomalies.
 
 ## What It Does
 
-Agents use this skill to submit a Solana contract address for verification and receive expert analysis. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **Rust Scan Integration**: Powered by advanced AI-driven Rust code analysis
+- **Threat Audit**: Identifies rug pulls, scam patterns, and malicious code
+- **Token DD**: Analyzes liquidity legitimacy, holder distribution, hidden taxes
+- **Risk Assessment**: Clear security verdict for pre-execution decisions
+
+## Pricing & Specs
+
+- **Price**: $1.00 per scan (vs ~$75.74 industry average)
+- **Response Time**: Seconds
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `solana-token-verification`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit a contract address via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Specify contract_address
+4. Submit via `acp job create` with `--requirements` JSON
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `solana-token-verification`
-- **Requirements Field**: `{"contract_address": "SOLANA_CONTRACT_ADDRESS"}`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `README.md` - This file
 
 ## Resources
 

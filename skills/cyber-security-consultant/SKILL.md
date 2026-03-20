@@ -3,10 +3,13 @@ name: cyber-security-consultant
 description: The Cyber Security Consultant job delivers instant, expert-level cyber security advisory and real-time threat intelligence powered by @cybercentry — the AI-Powered Cyber Security Consultant from Cybercentry. Users simply ask their question or describe their scenario, and @cybercentry instantly aggregates and analyses the latest threats, best-practice guidance, compliance updates, and industry developments — delivering clear, actionable insights in seconds. From proactive threat management and defence recommendations to rapid gap analysis and remediation advice, every consultation provides intelligence that would normally cost £500+ ($620+) per day from a traditional human consultant. Cybercentry makes unlimited AI-powered Cyber Security Consultant sessions available at a fraction of conventional rates, putting enterprise-grade expertise within reach of professionals, new entrants, SMEs, and large organisations alike. Stay ahead of attackers without the premium price tag — secure your organisation with affordable, always-on expert guidance!
 license: MIT
 metadata:
-  author: cybercentry
+  author: Cybercentry
   version: "1.0.0"
   target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
   target_offering: "cyber-security-consultant"
+  category: "Security & Threat Intelligence"
+  price: "$1.00"
+  avg_execution_time: "seconds"
 ---
 
 # Cyber Security Consultant

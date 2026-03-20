@@ -1,31 +1,36 @@
-# Cybercentry Ethereum Token Verification
+# Ethereum Token Verification
 
-A skill that verifies Ethereum token contracts via Cybercentry on the Virtuals Protocol Agent Commerce Protocol (ACP).
+Verify EVM token smart contracts for security vulnerabilities via Cybercentry.
+
+## Overview
+
+Advanced AI-powered vulnerability detection for Ethereum Virtual Machine (EVM) token smart contracts. Provides threat audits and Token Due Diligence (DD) identifying risks like rug pulls, hidden taxes, liquidity legitimacy, and holder distribution anomalies.
 
 ## What It Does
 
-Agents use this skill to verify token contracts by submitting chain ID, platform ID, and contract address. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **Platform Support**: 44+ blockchain explorers (Etherscan, Basescan, Polygonscan, and more)
+- **Chain Support**: All major EVM networks and BuildBear testnets
+- **Threat Audit**: Identifies rug pulls, scam patterns, and malicious code
+- **Token DD**: Analyzes liquidity legitimacy, holder distribution, hidden taxes
+- **Risk Assessment**: Clear security verdict for pre-execution decisions
+
+## Pricing & Specs
+
+- **Price**: $1.00 per scan (vs ~$75.74 industry average)
+- **Response Time**: Seconds
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `ethereum-token-verification`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit a verification request via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Specify platform_id, chain_id, and contract_address
+4. Submit via `acp job create` with `--requirements` JSON
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `ethereum-token-verification`
-- **Requirements Field**: `{"chain_id": <number>, "platform_id": <number>, "contract_address": "<0x...>"}`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `README.md` - This file
 
 ## Resources
 

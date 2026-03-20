@@ -3,10 +3,13 @@ name: openclaw-ai-agent-verification
 description: The OpenClaw AI Agent Verification job delivers fast, reliable, and fully automated security audits of AI agent configurations, analysing OpenClaw settings against industry best practices. Each audit produces a clear overall risk-level assessment (Critical, High, Medium, or Low) that can be directly applied to agent orchestration pipelines to decide whether to allow or block an agent's operation before execution. The job proactively identifies vulnerabilities, including missing gateway authentication, disabled sandboxing, open DM policies, prompt-injection patterns, elevated tool permissions, and unsafe command execution. Priced at just $1.00 per audit, it makes enterprise-grade AI agent security verification both affordable and actionable.
 license: MIT
 metadata:
-  author: cybercentry
+  author: Cybercentry
   version: "1.0.0"
   target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
   target_offering: "openclaw-ai-agent-verification"
+  category: "AI Agent Security"
+  price: "$1.00"
+  avg_execution_time: "seconds"
 ---
 
 # OpenClaw AI Agent Verification

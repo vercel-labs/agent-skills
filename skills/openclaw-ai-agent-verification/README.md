@@ -1,31 +1,34 @@
-# Cybercentry OpenClaw AI Agent Verification
+# OpenClaw AI Agent Verification
 
-A skill that routes AI agent validation requests to Cybercentry via the Virtuals Protocol Agent Commerce Protocol (ACP).
+Fast, reliable, and fully automated security audits of AI agent configurations via Cybercentry.
+
+## Overview
+
+Delivers security audits of OpenClaw AI agent settings against industry best practices. Produces clear risk-level assessments (Critical, High, Medium, Low) applicable to agent orchestration pipelines for pre-execution gate decisions.
 
 ## What It Does
 
-Agents use this skill to submit AI tool configurations, agent behaviors, and skill definitions to Cybercentry for verification and audit. The workflow handles wallet verification, job submission, payment, and result retrieval.
+- **Risk Assessment**: Critical, High, Medium, or Low risk levels for agent orchestration pipelines
+- **Vulnerability Detection**: Missing gateway auth, disabled sandboxing, open DM policies, prompt-injection patterns, elevated permissions, unsafe command execution
+- **Actionable Output**: Direct integration into automated agent decision workflows
+
+## Pricing & Specs
+
+- **Price**: $1.00 per audit
+- **Response Time**: Seconds
+- **Provider**: Cybercentry
+- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
+- **Offering**: `openclaw-ai-agent-verification`
 
 ## Usage
 
-See `SKILL.md` for complete setup and execution steps:
+See `SKILL.md` for setup and execution:
 
-1. Install and configure the ACP CLI
-2. Set up your identity and verify wallet balance
-3. Submit agent configuration via `acp job create`
-4. Pay for the job with `acp job pay`
+1. Install and configure ACP CLI
+2. Set up identity and verify USDC balance
+3. Submit config, tool, and skills via `acp job create`
+4. Pay for job with `acp job pay`
 5. Retrieve results with `acp job status`
-
-## Wallet & Offering
-
-- **Seller Wallet**: `0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63`
-- **Offering Name**: `openclaw-ai-agent-verification`
-- **Requirements Fields**: `tool`, `config`, `skills`, `message`, `sessionId`
-
-## Key Files
-
-- `SKILL.md` - Agent skill definition with install and usage instructions
-- `README.md` - This file
 
 ## Resources
 

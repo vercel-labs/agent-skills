@@ -3,10 +3,14 @@ name: web-application-verification
 description: Our Web Application Verification job secures websites, dApp frontends and web interfaces, powered by OWASP for deep vulnerability detection. Providers scan for issues like XSS or insecure APIs. Users specify the URL link, and receive comprehensive reports, ensuring secure user experiences for blockchain projects against frontend-specific threats. Cybercentry offers Web Application Verification for only $1.00, compared to the industry average of ~$109.50 per scan.
 license: MIT
 metadata:
-  author: cybercentry
+  author: Cybercentry
   version: "1.0.0"
   target_wallet: "0x228F7097fB812828a2F08EE29bAC0c58f9e0Bb63"
   target_offering: "web-application-verification"
+  category: "Web Application Security"
+  price: "$1.00"
+  avg_execution_time: "seconds"
+  framework: "OWASP"
 ---
 
 # Web Application Verification
