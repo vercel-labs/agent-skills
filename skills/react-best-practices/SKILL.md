@@ -9,7 +9,7 @@ metadata:
 
 # Vercel React Best Practices
 
-Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 64 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 69 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
 
 ## When to Apply
 
@@ -62,6 +62,10 @@ Reference these guidelines when:
 - `server-parallel-fetching` - Restructure components to parallelize fetches
 - `server-parallel-nested-fetching` - Chain nested fetches per item in Promise.all
 - `server-after-nonblocking` - Use after() for non-blocking operations
+- `server-useoptimistic` - Use useOptimistic for instant UI feedback
+- `server-action-revalidation` - Granular cache revalidation after mutations
+- `server-action-error-handling` - Return error state instead of throwing
+- `server-progressive-enhancement` - Forms that work without JavaScript
 
 ### 4. Client-Side Data Fetching (MEDIUM-HIGH)
 
@@ -87,6 +91,7 @@ Reference these guidelines when:
 - `rerender-use-deferred-value` - Defer expensive renders to keep input responsive
 - `rerender-use-ref-transient-values` - Use refs for transient frequent values
 - `rerender-no-inline-components` - Don't define components inside components
+- `rerender-useformstatus` - Use useFormStatus for pending state without prop drilling
 
 ### 6. Rendering Performance (MEDIUM)
 
