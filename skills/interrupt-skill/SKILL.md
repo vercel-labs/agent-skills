@@ -33,8 +33,8 @@ cp commands/*.md ~/.claude/commands/
 ### Step 2: Copy the init script
 
 ```bash
-mkdir -p ~/.claude/skills/interrupt-record/scripts
-cp resources/init-repo.sh ~/.claude/skills/interrupt-record/scripts/
+mkdir -p ~/.claude/skills/interrupt-skill/scripts
+cp resources/init-repo.sh ~/.claude/skills/interrupt-skill/scripts/
 ```
 
 ### Step 3: Initialize the storage repo (run once in Claude Code)

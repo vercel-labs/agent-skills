@@ -21,7 +21,7 @@ description: |
 
 3. **执行初始化脚本**:
 ```bash
-bash ~/.claude/skills/interrupt-record/scripts/init-repo.sh "<仓库路径>" "<remote_url>"
+bash ~/.claude/skills/interrupt-skill/scripts/init-repo.sh "<仓库路径>" "<remote_url>"
 ```
 
 4. **报告结果**: 简洁输出仓库状态（路径、是否有 remote、目录结构）
