@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "organization": "Vercel Engineering",
+  "date": "February 2026",
+  "abstract": "Analyze Vercel billing data, identify primary cost drivers, map them to your code, and provide scored optimization recommendations. Uses a 6-step workflow: collect billing → detect stack → map costs to code → identify optimizations → score/rank → present report. Covers Function Invocations, Duration, Edge Requests, Image Optimization, Bandwidth, ISR/Data Cache, Cron, and Web Analytics.",
+  "references": [
+    "https://vercel.com/docs/pricing",
+    "https://vercel.com/docs/cli/usage",
+    "https://nextjs.org/docs",
+    "https://vercel.com/docs/functions/fluid-compute",
+    "https://vercel.com/docs/image-optimization",
+    "https://vercel.com/docs/cron-jobs"
+  ]
+}
