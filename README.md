@@ -114,6 +114,28 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+### bulkcut-coach
+
+AI-powered fitness and diet tracking. Analyze food photos for calories, log workouts, calculate metabolism, and generate personalized training/diet plans using Gemini 3 Flash via OpenRouter.
+
+**Use when:**
+- "Analyze this food photo"
+- "I ate rice and chicken for lunch"
+- "I did 4x4 squats at 112.5kg"
+- "Calculate my BMR"
+- "Generate a training plan for cutting"
+
+**Features:**
+- Food photo calorie & macro analysis (multimodal vision)
+- Text-based meal logging
+- Workout logging with calorie burn estimation
+- BMR/TDEE calculation (Mifflin-St Jeor & Katch-McArdle)
+- Goal setting (cut/bulk/maintain)
+- AI-generated weekly training & diet plans
+- Daily calorie balance summary
+
+**Repo:** [Juggernaut0825/bulkcut-coach](https://github.com/Juggernaut0825/bulkcut-coach)
+
 ## Installation
 
 ```bash
