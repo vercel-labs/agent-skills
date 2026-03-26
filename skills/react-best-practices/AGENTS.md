@@ -247,12 +247,11 @@ export async function GET(request: Request) {
 
 ```typescript
 export async function GET(request: Request) {
-  const sessionPromise = auth()
   const configPromise = fetchConfig()
-  const session = await sessionPromise
+  const dataPromise = auth().then(session => fetchData(session.user.id))
   const [config, data] = await Promise.all([
     configPromise,
-    fetchData(session.user.id)
+    dataPromise
   ])
   return Response.json({ data, config })
 }
