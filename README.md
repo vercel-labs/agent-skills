@@ -84,6 +84,22 @@ React composition patterns that scale. Helps avoid boolean prop proliferation th
 - Composing internals for flexibility
 - Avoiding prop drilling
 
+### getcli
+
+Discover, install, and verify developer CLI tools with `getcli`. Helps agents avoid guessing package managers or vendor-specific install commands when they need tools like GitHub CLI, Vercel CLI, Wrangler, Docker, kubectl, or Terraform.
+
+**Use when:**
+- A task needs a CLI tool that may not be installed
+- The package manager is unclear
+- You want a single command flow for search, install, and verification
+
+**Workflow covered:**
+- Bootstrap `getcli`
+- Search the registry with `getcli search`
+- Inspect metadata with `getcli info`
+- Install with `getcli install --yes --json`
+- Verify with `getcli doctor --json`
+
 ### vercel-deploy-claimable
 
 Deploy applications and websites to Vercel instantly. Designed for use with claude.ai and Claude Desktop to enable deployments directly from conversations. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
