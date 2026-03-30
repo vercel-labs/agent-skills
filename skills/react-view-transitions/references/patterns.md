@@ -127,6 +127,93 @@ These wrappers enforce that only valid transition IDs and animation classes are 
 
 See `nextjs.md` (Shared Elements Across Routes) for complete examples using `transitionTypes` on `next/link` combined with shared element `<ViewTransition name={...}>` for list-to-detail image morph animations.
 
+## Isolate Floating Elements from Parent Animations
+
+Popovers, tooltips, and dropdowns can get captured in a parent's view transition snapshot, causing them to ghost or animate unexpectedly. Give them their own `viewTransitionName` to isolate them into a separate transition group:
+
+```jsx
+<SelectPopover style={{ viewTransitionName: 'popover' }}>
+  {options}
+</SelectPopover>
+```
+
+```css
+::view-transition-group(popover) {
+  z-index: 100;
+}
+```
+
+This creates an independent transition group that renders above other transitioning elements. The element won't be included in its parent's old/new snapshot.
+
+## Reusable Animated Collapse
+
+For apps with many expand/collapse interactions, extract a reusable wrapper instead of repeating the conditional-render-with-`<ViewTransition>` pattern:
+
+```jsx
+import { ViewTransition } from 'react';
+
+function AnimatedCollapse({ open, children }) {
+  if (!open) return null;
+  return (
+    <ViewTransition enter="expand-in" exit="collapse-out">
+      {children}
+    </ViewTransition>
+  );
+}
+```
+
+Use it with `startTransition` on the toggle:
+
+```jsx
+<button onClick={() => startTransition(() => setOpen(o => !o))}>Toggle</button>
+<AnimatedCollapse open={open}>
+  <SectionContent />
+</AnimatedCollapse>
+```
+
+## Preserve State with Activity
+
+Use `<Activity>` with `<ViewTransition>` to animate show/hide while preserving component state:
+
+```jsx
+import { Activity, ViewTransition, startTransition } from 'react';
+
+<Activity mode={isVisible ? 'visible' : 'hidden'}>
+  <ViewTransition enter="slide-in" exit="slide-out">
+    <Sidebar />
+  </ViewTransition>
+</Activity>
+```
+
+## Exclude Elements from a Transition with `useOptimistic`
+
+When a `startTransition` changes both a control (e.g. a button label) and content (e.g. list order), use `useOptimistic` for the control. The optimistic value updates before React's transition snapshot, so it won't animate. The committed state drives the content, which changes within the transition and animates:
+
+```tsx
+const [sort, setSort] = useState('newest');
+const [optimisticSort, setOptimisticSort] = useOptimistic(sort);
+
+function cycleSort() {
+  const nextSort = getNextSort(optimisticSort);
+  startTransition(() => {
+    setOptimisticSort(nextSort);  // updates before snapshot — no animation
+    setSort(nextSort);            // changes within transition — animates
+  });
+}
+
+// Button uses optimisticSort (instant, excluded from animation)
+<button>Sort: {LABELS[optimisticSort]}</button>
+
+// List uses committed sort (changes between snapshots, animates)
+{items.sort(comparators[sort]).map(item => (
+  <ViewTransition key={item.id}>
+    <ItemCard item={item} />
+  </ViewTransition>
+))}
+```
+
+`useOptimistic` values resolve before the transition snapshot. Any DOM driven by optimistic state is already in its final form when the "before" snapshot is taken, so it doesn't participate in the `<ViewTransition>`. Only DOM driven by committed state (via `setState`) changes between snapshots and animates.
+
 ---
 
 ## Animation Timing Guidelines

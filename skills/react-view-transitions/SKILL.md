@@ -9,9 +9,7 @@ metadata:
 
 # React View Transitions
 
-React's View Transition API lets you animate between UI states using the browser's native `document.startViewTransition` under the hood. React manages the lifecycle automatically — you declare *what* to animate with `<ViewTransition>`, trigger *when* to animate through `startTransition` / `useDeferredValue` / `Suspense`, and control *how* to animate with CSS classes or JavaScript via the Web Animations API.
-
-The API adds ~3KB to your bundle, runs on the browser's compositor thread for 60fps animations, and gracefully falls back to instant state changes in unsupported browsers.
+React's View Transition API lets you animate between UI states using the browser's native `document.startViewTransition` under the hood. Declare *what* to animate with `<ViewTransition>`, trigger *when* with `startTransition` / `useDeferredValue` / `Suspense`, and control *how* with CSS classes or the Web Animations API. Unsupported browsers skip the animation and apply the DOM change instantly.
 
 ## When to Animate (and When Not To)
 
@@ -37,9 +35,8 @@ Route-level transitions (#5) are the lowest priority because the URL change alre
 
 ## Availability
 
-- `<ViewTransition>` and `addTransitionType` are currently available in `react@canary` and `react@experimental` only — they are **not yet in a stable release**.
-- Install with `npm install react@canary react-dom@canary` (or `@experimental`).
-- Browser support: Chromium-based browsers have full support. Firefox and Safari are adding support. The API gracefully degrades — unsupported browsers skip the animation and apply the DOM change instantly.
+- `<ViewTransition>` and `addTransitionType` require `react@canary` or `react@experimental`. Check `react --version` — if these APIs are not available, install canary: `npm install react@canary react-dom@canary`.
+- Browser support: Chromium 111+, with Firefox and Safari adding support. The API gracefully degrades — unsupported browsers skip the animation and apply the DOM change instantly.
 
 ---
 
@@ -102,11 +99,9 @@ function Item() {
 
 ## Styling Animations with View Transition Classes
 
-Rather than using `view-transition-name` in CSS directly, React recommends providing a **View Transition Class** to the activation props. React applies this class to the child elements when the animation activates.
-
 ### Props
 
-Each prop controls a different trigger. Values can be:
+Each prop controls a different animation trigger. Values can be:
 
 - `"auto"` — use the browser default cross-fade
 - `"none"` — disable this animation type
@@ -357,7 +352,7 @@ Wrap `<Suspense>` in `<ViewTransition>` to cross-fade from fallback to loaded co
 </ViewTransition>
 ```
 
-For directional motion, give the fallback and content separate VTs with explicit triggers. Use `default="none"` on the content VT to prevent it from re-animating on unrelated transitions:
+For directional motion, give the fallback and content separate `<ViewTransition>`s with explicit triggers. Use `default="none"` on the content one to prevent it from re-animating on unrelated transitions:
 
 ```jsx
 <Suspense
@@ -387,102 +382,15 @@ Wrap children in `<ViewTransition update="none">` to prevent them from animating
 </ViewTransition>
 ```
 
-### Isolate Floating Elements from Parent Animations
-
-Popovers, tooltips, and dropdowns can get captured in a parent's view transition snapshot, causing them to ghost or animate unexpectedly. Give them their own `viewTransitionName` to isolate them into a separate transition group:
-
-```jsx
-<SelectPopover style={{ viewTransitionName: 'popover' }}>
-  {options}
-</SelectPopover>
-```
-
-```css
-::view-transition-group(popover) {
-  z-index: 100;
-}
-```
-
-This creates an independent transition group that renders above other transitioning elements. The element won't be included in its parent's old/new snapshot.
-
-### Reusable Animated Collapse
-
-For apps with many expand/collapse interactions, extract a reusable wrapper instead of repeating the conditional-render-with-VT pattern:
-
-```jsx
-import { ViewTransition } from 'react';
-
-function AnimatedCollapse({ open, children }) {
-  if (!open) return null;
-  return (
-    <ViewTransition enter="expand-in" exit="collapse-out">
-      {children}
-    </ViewTransition>
-  );
-}
-```
-
-Use it with `startTransition` on the toggle:
-
-```jsx
-<button onClick={() => startTransition(() => setOpen(o => !o))}>Toggle</button>
-<AnimatedCollapse open={open}>
-  <SectionContent />
-</AnimatedCollapse>
-```
-
-### Preserve State with Activity
-
-Use `<Activity>` with `<ViewTransition>` to animate show/hide while preserving component state:
-
-```jsx
-import { Activity, ViewTransition, startTransition } from 'react';
-
-<Activity mode={isVisible ? 'visible' : 'hidden'}>
-  <ViewTransition enter="slide-in" exit="slide-out">
-    <Sidebar />
-  </ViewTransition>
-</Activity>
-```
-
-### Exclude Elements from a Transition with `useOptimistic`
-
-When a `startTransition` changes both a control (e.g. a button label) and content (e.g. list order), use `useOptimistic` for the control. The optimistic value updates before React's transition snapshot, so it won't animate. The committed state drives the content, which changes within the transition and animates:
-
-```tsx
-const [sort, setSort] = useState('newest');
-const [optimisticSort, setOptimisticSort] = useOptimistic(sort);
-
-function cycleSort() {
-  const nextSort = getNextSort(optimisticSort);
-  startTransition(() => {
-    setOptimisticSort(nextSort);  // updates before snapshot — no animation
-    setSort(nextSort);            // changes within transition — animates
-  });
-}
-
-// Button uses optimisticSort (instant, excluded from animation)
-<button>Sort: {LABELS[optimisticSort]}</button>
-
-// List uses committed sort (changes between snapshots, animates)
-{items.sort(comparators[sort]).map(item => (
-  <ViewTransition key={item.id}>
-    <ItemCard item={item} />
-  </ViewTransition>
-))}
-```
-
-`useOptimistic` values resolve before the transition snapshot. Any DOM driven by optimistic state is already in its final form when the "before" snapshot is taken, so it doesn't participate in the ViewTransition. Only DOM driven by committed state (via `setState`) changes between snapshots and animates.
-
-**Note:** Always add `prefers-reduced-motion` handling to your global CSS — see the Accessibility section below.
+For more patterns (isolate floating elements, reusable animated collapse, preserve state with `<Activity>`, exclude elements with `useOptimistic`), see `references/patterns.md`.
 
 ---
 
-## How Multiple ViewTransitions Interact
+## How Multiple `<ViewTransition>`s Interact
 
 When a transition fires, **every** `<ViewTransition>` in the tree that matches the trigger participates simultaneously. Each gets its own `view-transition-name`, and the browser animates all of them inside a single `document.startViewTransition` call. They run in parallel, not sequentially.
 
-This means a layout-level VT (whole-page cross-fade) + a page-level VT (Suspense slide-up) + per-item VTs (list reorder) all fire at once. The result is usually competing animations that look broken.
+This means a layout-level `<ViewTransition>` (whole-page cross-fade) + a page-level one (Suspense slide-up) + per-item ones (list reorder) all fire at once. The result is usually competing animations that look broken.
 
 ### Use `default="none"` Liberally
 
@@ -516,8 +424,8 @@ Without `default="none"`, a `<ViewTransition>` with `default="auto"` (the implic
 
 Pick the level that carries the most meaning for your app:
 
-- **App with per-page Suspense reveals and shared elements:** Don't add a layout-level VT on `{children}`. The pages already manage their own transitions. A layout-level cross-fade on top will double-animate.
-- **Simple app with no per-page animations:** A layout-level VT with `default="auto"` on `{children}` gives you free cross-fades between routes.
+- **App with per-page Suspense reveals and shared elements:** Don't add a layout-level `<ViewTransition>` on `{children}`. The pages already manage their own transitions. A layout-level cross-fade on top will double-animate.
+- **Simple app with no per-page animations:** A layout-level `<ViewTransition>` with `default="auto"` on `{children}` gives you free cross-fades between routes.
 - **Mixed:** Use `default="none"` at the layout level and only activate it for specific `transitionTypes` (e.g., directional navigation). This way it stays silent during per-page Suspense transitions.
 
 The exception is **shared element transitions** — these intentionally span levels (one side unmounts while the other mounts) and don't conflict with other VTs because the `share` trigger takes precedence over `enter`/`exit`.
@@ -537,15 +445,9 @@ const nextConfig = {
 module.exports = nextConfig;
 ```
 
-**What this flag does:** It wraps every `<Link>` navigation in `document.startViewTransition`, which means all mounted `<ViewTransition>` components in the tree participate in every link navigation — not just ones triggered by `startTransition` or Suspense. This is important:
+**What this flag does:** It wraps every `<Link>` navigation in `document.startViewTransition`, so all mounted `<ViewTransition>` components participate in every link click — not just `startTransition`/Suspense-triggered ones. This makes the composition rules in "How Multiple `<ViewTransition>`s Interact" especially important: use `default="none"` on layout-level `<ViewTransition>`s to avoid competing animations.
 
-- If you have a layout-level VT with `default: "auto"`, it fires on **every** `<Link>` navigation — even ones you didn't intend to animate.
-- Combined with per-page VTs (Suspense reveals, item animations), you get competing animations.
-- Without this flag, only `Suspense`-triggered and `startTransition`-triggered transitions fire.
-
-If your pages manage their own per-page transitions, either (a) don't use a layout-level `<ViewTransition>` on `{children}`, or (b) set `default="none"` on it so it only activates for explicit `transitionTypes`.
-
-For a detailed guide on Next.js integration, including App Router patterns and Server Component considerations, read `references/nextjs.md`.
+For a detailed guide including App Router patterns and Server Component considerations, see `references/nextjs.md`.
 
 Key points:
 - The `<ViewTransition>` component is imported from `react` directly — no Next.js-specific import.
@@ -553,7 +455,7 @@ Key points:
 
 ### The `transitionTypes` prop on `next/link`
 
-As of Next.js 16.2+, `next/link` supports a native `transitionTypes` prop that eliminates the need for custom `TransitionLink` wrapper components. Instead of intercepting navigation with `onNavigate`, `startTransition`, and `addTransitionType`, you pass transition types directly:
+`next/link` supports a native `transitionTypes` prop that eliminates the need for custom `TransitionLink` wrapper components. Instead of intercepting navigation with `onNavigate`, `startTransition`, and `addTransitionType`, you pass transition types directly:
 
 ```tsx
 import Link from 'next/link';
@@ -569,11 +471,9 @@ import Link from 'next/link';
 </Link>
 ```
 
-The `transitionTypes` prop accepts an array of strings — the same types you would pass to `addTransitionType`. This removes the need for `'use client'`, `useRouter`, and custom link components when all you need is to tag a navigation with a transition type. The `<ViewTransition>` components in the tree respond to these types the same way they respond to manual `addTransitionType` calls.
+The `transitionTypes` prop accepts an array of strings — the same types you would pass to `addTransitionType`. This removes the need for `'use client'`, `useRouter`, and custom link components when all you need is to tag a navigation with a transition type.
 
-**Composition note:** `transitionTypes` on `<Link>` works best when you have a single `<ViewTransition>` at the layout level with `default="none"` (so it only fires for your specific types) and no per-page Suspense VTs competing. If your pages have their own Suspense transitions, use `transitionTypes` at the page level (e.g., to distinguish sources of `startTransition` within a client component) rather than at the layout level, or the layout slide and the page's Suspense reveal will both fire simultaneously.
-
-For full examples of `transitionTypes` with shared element transitions and directional animations across routes, see `references/nextjs.md`.
+For full examples with shared element transitions and directional animations, see `references/nextjs.md`.
 
 ---
 
@@ -619,7 +519,7 @@ Or disable specific animations conditionally in JavaScript events by checking th
 - `startTransition(() => setState(...))` triggers a Transition, but if the new content isn't behind a `<Suspense>` boundary, React treats the swap as an **update** to the existing tree — not an enter/exit. The `<ViewTransition>` sees its children change but never fully unmounts/remounts, so only `update` animations fire. To get true enter/exit, either conditionally render the `<ViewTransition>` itself (so it mounts/unmounts with the content), or wrap the async content in `<Suspense>` so React can treat the reveal as an insertion.
 
 **Competing / double animations on navigation:**
-- Multiple `<ViewTransition>` components at different tree levels (layout + page + items) all fire simultaneously inside a single `document.startViewTransition`. If a layout-level VT cross-fades the whole page while a page-level VT slides up content, both run at once and fight for attention. Fix: use `default="none"` on the layout-level VT, or remove it entirely if pages manage their own animations. See "How Multiple ViewTransitions Interact" above.
+- Multiple `<ViewTransition>` components at different tree levels (layout + page + items) all fire simultaneously inside a single `document.startViewTransition`. If a layout-level one cross-fades the whole page while a page-level one slides up content, both run at once and fight for attention. Fix: use `default="none"` on the layout-level `<ViewTransition>`, or remove it entirely if pages manage their own animations. See "How Multiple `<ViewTransition>`s Interact" above.
 
 **List reorder not animating with `useOptimistic`:**
 - If the optimistic value drives the list sort order, items are already in their final positions before the transition snapshot — there's nothing to animate. Use the optimistic value only for controls (labels, icons) and the committed state (`useState`) for the list sort order.
