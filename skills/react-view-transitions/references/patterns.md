@@ -126,6 +126,19 @@ For tab switches within a persistent layout, omitting `key` keeps the `<ViewTran
 
 Use `key` when content identity changes and you want a full re-enter animation (component state resets). Omit `key` for cross-fades within a persistent container (tabs, panels, carousel slides).
 
+## Fade-Out Exit Conflicts with Shared Element Morphs
+
+A fade-out exit on a page with shared element morphs causes a flash — the page dissolves while the element tries to morph. Fix: use a directional slide exit so the morph can visually detach from the exiting page:
+
+```css
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-exit) ease-in both fade reverse,
+    var(--duration-move) ease-in-out both slide reverse;
+}
+```
+
 ## Shared Elements Across Routes in Next.js
 
 See `nextjs.md` (Shared Elements Across Routes) for complete examples using `transitionTypes` on `next/link` combined with shared element `<ViewTransition name={...}>` for list-to-detail image morph animations.
@@ -339,6 +352,15 @@ These are starting points. Test on low-end devices — animations that feel smoo
 **ViewTransition not activating:**
 - Ensure the `<ViewTransition>` comes before any DOM node in the component (not wrapped in a `<div>`).
 - Ensure the state update is inside `startTransition`, not a plain `setState`.
+
+**Nested `<ViewTransition>` steals update from parent:**
+- Inner `<ViewTransition>` wrappers capture mutations, so `update="auto"` on a parent never fires. Fix: use `key` + `share` to force exit/enter, or `default="none"` on inner VTs.
+
+**Enter/exit not firing on list items inside a grid wrapper:**
+- `<ViewTransition key={id}>` inside a `<div className="grid">` suppresses enter/exit. Per-item VTs inside a wrapper only work for `update` (reorder) and `share` (morph). Restructure so the VT isn't below a DOM node.
+
+**Fade-out exit breaks shared element morph:**
+- Page dissolving conflicts with the morph animation. Use a directional slide exit instead. See "Fade-Out Exit Conflicts with Shared Element Morphs" above.
 
 **"Two ViewTransition components with the same name" error:**
 - Each `name` must be globally unique across the entire app at any point in time. Add item IDs: `` name={`hero-${item.id}`} ``.

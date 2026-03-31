@@ -8,8 +8,9 @@
 4. [Programmatic Navigation with Transitions](#programmatic-navigation-with-transitions)
 5. [Transition Types for Navigation Direction](#transition-types-for-navigation-direction)
 6. [Shared Elements Across Routes](#shared-elements-across-routes)
-7. [Combining with Suspense and Loading States](#combining-with-suspense-and-loading-states)
-8. [Server Components Considerations](#server-components-considerations)
+7. [Same-Route Dynamic Segment Transitions](#same-route-dynamic-segment-transitions)
+8. [Combining with Suspense and Loading States](#combining-with-suspense-and-loading-states)
+9. [Server Components Considerations](#server-components-considerations)
 
 ---
 
@@ -35,12 +36,6 @@ Implications:
 - Any `<ViewTransition>` with `default="auto"` (the implicit default) fires the browser's cross-fade on **every** `<Link>` navigation.
 - Combined with per-page `<ViewTransition>` components (Suspense reveals, item animations), this produces competing animations.
 - Without this flag, `<ViewTransition>` still works for all `startTransition`- and `Suspense`-triggered updates — only `<Link>` navigations won't participate.
-
-The `<ViewTransition>` component is currently available in `react@canary` and `react@experimental` only:
-
-```bash
-npm install react@canary react-dom@canary
-```
 
 ---
 
@@ -344,6 +339,28 @@ export default function ProductDetail({ product }) {
 ```
 
 Only one `<ViewTransition>` with a given name can be mounted at a time. Since Next.js unmounts the old page and mounts the new page within the same transition, the two `product-${product.id}` boundaries form a shared element pair and the image morphs from its thumbnail size to its full size.
+
+---
+
+## Same-Route Dynamic Segment Transitions
+
+When navigating between dynamic segments of the same route (e.g., `/collection/[slug]`), the page component stays mounted — enter/exit never fire. The `key` + `name` + `share` pattern forces a shared element transition between old and new content:
+
+```tsx
+<Suspense fallback={<Skeleton />}>
+  <ViewTransition key={slug} name={`content-${slug}`} share="auto" default="none">
+    <Content slug={slug} />
+  </ViewTransition>
+</Suspense>
+```
+
+How it works:
+- `key={slug}` forces unmount/remount on segment change, triggering exit + enter
+- `name` + `share="auto"` pairs old and new into a shared element transition (cross-fade)
+- `default="none"` prevents animation on Suspense reveals and other unrelated transitions
+- Placing the `<ViewTransition>` inside `<Suspense>` (without keying `Suspense`) lets React keep old content visible during loading, then cross-fade directly to new content — no skeleton flash
+
+Compare with `Suspense key={slug}` (keying Suspense instead), which remounts the Suspense boundary and shows the skeleton fallback on every segment change. Use that approach when a loading state is acceptable.
 
 ---
 

@@ -201,13 +201,7 @@ Usage with transition types:
 </ViewTransition>
 ```
 
-Triggering with `transitionTypes` on `next/link`:
-```jsx
-<Link href="/products/1" transitionTypes={['nav-forward']}>Next</Link>
-<Link href="/products" transitionTypes={['nav-back']}>Back</Link>
-```
-
-Or programmatically:
+Triggering programmatically with `addTransitionType`:
 ```jsx
 startTransition(() => {
   addTransitionType('nav-forward');

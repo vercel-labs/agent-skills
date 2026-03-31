@@ -86,31 +86,27 @@ React decides which type of animation to run based on what changed:
 
 Only updates wrapped in `startTransition`, `useDeferredValue`, or `Suspense` activate `<ViewTransition>`. Regular `setState` updates immediately and does not animate.
 
+**Nested mutation capture:** Nested `<ViewTransition>` components steal mutations from parents — `update="auto"` on a parent wrapping a Suspense boundary never fires if the resolved content has per-item `<ViewTransition>` wrappers. Use `key` + `share` to force exit/enter instead, or `default="none"` on inner VTs.
+
 ### Critical Placement Rule
 
 `<ViewTransition>` only activates enter/exit if it appears **before any DOM nodes** in the component tree:
 
 ```jsx
 // Works — ViewTransition is before the DOM node
-function Item() {
-  return (
-    <ViewTransition enter="auto" exit="auto">
-      <div>Content</div>
-    </ViewTransition>
-  );
-}
+<ViewTransition enter="auto" exit="auto">
+  <div>Content</div>
+</ViewTransition>
 
 // Broken — a <div> wraps the ViewTransition, preventing enter/exit
-function Item() {
-  return (
-    <div>
-      <ViewTransition enter="auto" exit="auto">
-        <div>Content</div>
-      </ViewTransition>
-    </div>
-  );
-}
+<div>
+  <ViewTransition enter="auto" exit="auto">
+    <div>Content</div>
+  </ViewTransition>
+</div>
 ```
+
+**Common mistake:** `<ViewTransition key={id}>` inside a `<div className="grid">` won't trigger enter/exit — the grid wrapper suppresses it. Worse, these nested VTs capture mutations from parent VTs. Per-item VTs inside a wrapper only work for `update` (reorder) and `share` (morph).
 
 ---
 
@@ -214,7 +210,7 @@ React adds transition types as browser view transition types, enabling CSS scopi
 
 ### Types and Suspense: When Types Are Available
 
-When a `<Link>` with `transitionTypes` triggers navigation, the transition type is available to **all `<ViewTransition>`s that enter/exit during that navigation**. An outer page-level `<ViewTransition>` with a type map sees the type and responds. Inner `<ViewTransition>`s with simple string props also enter — the type is irrelevant to them because simple strings fire regardless of type.
+When a navigation with `addTransitionType` triggers, the transition type is available to **all `<ViewTransition>`s that enter/exit during that navigation**. An outer page-level `<ViewTransition>` with a type map sees the type and responds. Inner `<ViewTransition>`s with simple string props also enter — the type is irrelevant to them because simple strings fire regardless of type.
 
 Subsequent Suspense reveals — when streamed data loads after navigation completes — are **separate transitions with no type**. This means type-keyed props on Suspense content don't work:
 
@@ -260,6 +256,7 @@ Rules for shared element transitions:
 - The "share" trigger takes precedence over "enter"/"exit".
 - If either side is outside the viewport, no pair forms and each side animates independently as enter/exit.
 - If a Suspense fallback appears between unmounting one side and mounting the other, no shared element pair forms.
+- **Never use a fade-out exit on pages with shared element morphs** — the page dissolving conflicts with the morph, causing a flash. Use a directional slide exit instead. See `references/patterns.md`.
 - Use a constant defined in a shared module to avoid name collisions.
 
 ---
@@ -267,8 +264,6 @@ Rules for shared element transitions:
 ## View Transition Events (JavaScript Animations)
 
 For imperative control with `onEnter`, `onExit`, `onUpdate`, `onShare` callbacks and the `instance` object, see `references/patterns.md`. Always return a cleanup function. `onShare` takes precedence over `onEnter`/`onExit`.
-
----
 
 ## Common Patterns
 
@@ -368,38 +363,16 @@ When a transition fires, **every** `<ViewTransition>` in the tree that matches t
 
 ### Use `default="none"` Liberally
 
-Prevent unintended animations by disabling the default trigger on ViewTransitions that should only fire for specific types:
-
-```jsx
-// Only animates when 'navigation-forward' or 'navigation-back' types are present.
-// Silent on all other transitions (Suspense reveals, state changes, etc.)
-<ViewTransition
-  default="none"
-  enter={{
-    'navigation-forward': 'slide-in-from-right',
-    'navigation-back': 'slide-in-from-left',
-    default: 'none',
-  }}
-  exit={{
-    'navigation-forward': 'slide-out-to-left',
-    'navigation-back': 'slide-out-to-right',
-    default: 'none',
-  }}
->
-  {children}
-</ViewTransition>
-```
+Without `default="none"`, a `<ViewTransition>` fires the browser's cross-fade on **every** transition — including Suspense resolves, `useDeferredValue` updates, and background data revalidations. Always use `default="none"` on content `<ViewTransition>`s and only enable specific triggers explicitly. Compare the type-keyed example in "Using Types with View Transition Classes" above — change `default: 'fade-in'` / `'fade-out'` to `default: 'none'` and add `default="none"` on the component to make it silent on all non-typed transitions.
 
 **TypeScript note:** When passing an object to `enter`/`exit`, `ViewTransitionClassPerType` requires a `default` key — omitting it causes a type error even if the component-level `default` prop is set.
-
-Without `default="none"`, a `<ViewTransition>` fires the browser's cross-fade on **every** transition — including Suspense resolves, `useDeferredValue` updates, and `revalidateTag()` re-renders in Next.js. Always use `default="none"` on content `<ViewTransition>`s and only enable specific triggers explicitly.
 
 ### Two Patterns — Can Coexist with Proper Isolation
 
 There are two distinct view transition patterns:
 
 **Pattern A — Directional page slides** (e.g., left/right navigation):
-- Uses `transitionTypes` on `<Link>` or `addTransitionType` to tag navigation direction
+- Uses `addTransitionType` (or `transitionTypes` prop on router links) to tag navigation direction
 - An outer `<ViewTransition>` on the page maps types to slide classes with `default="none"`
 - Fires during the navigation transition (when the type is present)
 
@@ -409,7 +382,7 @@ There are two distinct view transition patterns:
 - `default="none"` prevents re-animation on revalidation
 - Fires later when data loads (a separate transition with no type)
 
-**These coexist when they fire at different moments.** The nav slide fires during the navigation transition (with the type); the Suspense reveal fires later when data streams in (no type). `default="none"` on both layers prevents cross-interference — the nav VT ignores Suspense resolves, and the Suspense VT ignores navigations:
+**These coexist when they fire at different moments.** The nav slide fires during navigation (with the type); the Suspense reveal fires later when data streams in (no type). `default="none"` on both layers prevents cross-interference:
 
 ```jsx
 <ViewTransition
@@ -431,7 +404,7 @@ There are two distinct view transition patterns:
 
 **Always pair `enter` with `exit` on directional transitions.** Without an exit animation, the old page disappears instantly while the new one slides in — a jarring jump.
 
-**When they DO conflict:** If both layers use `default="auto"`, they animate simultaneously and fight for attention. The conflict is about **same-moment** animations, not about using both patterns on the same page. Place the outer directional `<ViewTransition>` in each **page component** — not in a layout (layouts persist and don't trigger enter/exit).
+**When they DO conflict:** If both layers use `default="auto"`, they animate simultaneously and fight. Place the outer directional `<ViewTransition>` in each **page component** — not in a layout (layouts persist and don't trigger enter/exit).
 
 Shared element transitions (`name` prop) work alongside either pattern because `share` takes precedence over `enter`/`exit`.
 
@@ -470,26 +443,13 @@ Key points:
 <Link href="/products/1" transitionTypes={['transition-to-detail']}>View Product</Link>
 ```
 
-For full examples with shared element transitions and directional animations, see `references/nextjs.md`.
+For full examples with shared element transitions, directional animations, and same-route dynamic segment transitions (`key` + `name` + `share`), see `references/nextjs.md`.
 
 ---
 
 ## Accessibility
 
-Always respect `prefers-reduced-motion`. React does not disable animations automatically for this preference. Add this to your global CSS:
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(*),
-  ::view-transition-new(*),
-  ::view-transition-group(*) {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-  }
-}
-```
-
-Or disable specific animations conditionally in JavaScript events by checking the media query.
+Always respect `prefers-reduced-motion`. React does not disable animations automatically for this preference. Add the reduced motion CSS from `references/css-recipes.md` to your global stylesheet, or disable specific animations conditionally in JavaScript events by checking the media query.
 
 ---
 
