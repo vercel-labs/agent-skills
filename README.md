@@ -136,6 +136,25 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+
+### clicks-protocol
+
+Integrate autonomous USDC yield into AI agent projects on Base. Helps agents turn idle USDC into yield while keeping most funds liquid for operations, and supports referral-based agent monetization.
+
+**Use when:**
+- Building agents that hold or receive USDC
+- Adding treasury management to agent systems
+- Optimizing x402 payment flows on Base
+- Setting up MCP tools for DeFi-aware agents
+- Implementing on-chain agent referrals or agent monetization
+
+**Features:**
+- `quickStart()` flow for register + approve + split in one call
+- 80% liquid / 20% yield pattern for agent operations
+- MCP server support for read and write treasury tools
+- On-chain referral system with 3-level fee sharing
+- Discovery endpoints for llms.txt, OpenAPI, agent.json, and x402
+
 ## Installation
 
 ```bash
