@@ -63,7 +63,9 @@ Custom hooks and named effects solve different problems — use both:
 
 ```tsx
 function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 0
+  );
 
   useEffect(function trackWindowWidth() {
     const handleResize = () => setWidth(window.innerWidth);
