@@ -60,8 +60,10 @@ Name every effect by default. It costs nothing and the benefits compound. Especi
 | `fetch` / `load` | Data retrieval | `fetchInitialStock` |
 | `initialize` / `setup` | One-time setup | `initializeMapSDK` |
 | `synchronize` / `apply` | External system sync | `synchronizeMapViewport` |
+| `reset` / `clear` | State cleanup on change | `resetStockOnLocationChange` |
+| `track` / `observe` | Monitoring | `trackWindowWidth` |
 
-For the full naming vocabulary including cleanup functions, other hooks, custom hook patterns, and ESLint enforcement, see `references/conventions.md`.
+For cleanup function naming, custom hook patterns, ESLint enforcement, and technical notes, see `references/conventions.md`.
 
 ## Deeper Guidance
 

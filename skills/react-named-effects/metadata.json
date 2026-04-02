@@ -1,5 +1,7 @@
 {
+  "name": "react-named-effects",
   "version": "1.0.0",
+  "license": "MIT",
   "organization": "Community",
   "date": "April 2026",
   "abstract": "Guide for naming useEffect, useCallback, and useMemo callbacks with function expressions instead of anonymous arrows. Improves stack traces, makes component data flow scannable, and acts as a diagnostic surface for identifying effects that should be split, eliminated, or extracted into custom hooks.",

@@ -7,8 +7,15 @@ Naming effects isn't just style — it's a diagnostic tool. When an effect resis
 If the best name contains "and," the effect handles two concerns:
 
 ```tsx
-// Name requires "and" — split it
-useEffect(function syncWidthAndApplyTheme() { /* ... */ }, [theme]);
+// Name requires "and" — two unrelated concerns
+useEffect(function syncWidthAndApplyTheme() {
+  const handleResize = () => setWidth(window.innerWidth);
+  window.addEventListener('resize', handleResize);
+  if (user?.preferences?.theme) {
+    document.body.className = user.preferences.theme;
+  }
+  return () => window.removeEventListener('resize', handleResize);
+}, [user?.preferences?.theme]);
 ```
 
 ```tsx

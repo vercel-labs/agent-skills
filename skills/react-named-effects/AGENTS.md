@@ -1,6 +1,11 @@
 # Named Effects — Complete Guide
 
-> This is the compiled version of the react-named-effects skill with all reference content expanded inline. For the progressive-disclosure version, start with `SKILL.md`.
+**Version 1.0.0**
+Community
+April 2026
+
+> **Note:**
+> This document is the compiled version of the react-named-effects skill with all reference content expanded inline. It is generated from `SKILL.md`, `references/diagnostics.md`, and `references/conventions.md`. Edit the source files, not this document. For the progressive-disclosure version, start with `SKILL.md`.
 
 ## Core Pattern
 
@@ -58,8 +63,15 @@ Naming effects isn't just style — it's a diagnostic tool. When an effect resis
 If the best name contains "and," the effect handles two concerns:
 
 ```tsx
-// Name requires "and" — split it
-useEffect(function syncWidthAndApplyTheme() { /* ... */ }, [theme]);
+// Name requires "and" — two unrelated concerns
+useEffect(function syncWidthAndApplyTheme() {
+  const handleResize = () => setWidth(window.innerWidth);
+  window.addEventListener('resize', handleResize);
+  if (user?.preferences?.theme) {
+    document.body.className = user.preferences.theme;
+  }
+  return () => window.removeEventListener('resize', handleResize);
+}, [user?.preferences?.theme]);
 ```
 
 ```tsx
