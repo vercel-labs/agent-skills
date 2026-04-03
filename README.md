@@ -6,6 +6,39 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
+### agent-learnings
+
+Extract agent self-improvement insights from session history. Creates dated changelogs of mistakes, corrections, and behavioral improvements for future agent instances.
+
+**Use when:**
+- Reflecting on agent failures
+- Updating agent behaviors systematically
+- Building agent self-improvement logs
+- "What have I done wrong?"
+- "Create a learning changelog"
+
+**Pattern extraction:**
+- Corrections received (what human had to fix)
+- Repeated mistakes (patterns that keep failing)
+- Explicit rules ("Always do X" / "Never do Y")
+- Failure counts (tracked failures with numbers)
+
+### human-agent-collaboration
+
+Analyze interaction patterns to produce guides for humans on working effectively with AI agents. Documents what works, what doesn't, and how to set agents up for success.
+
+**Use when:**
+- "How do I work better with agents?"
+- "What have we learned about collaboration?"
+- Onboarding team members on agent interaction
+- Documenting collaboration patterns
+
+**Insights covered:**
+- Agent cognition (context windows, memory limitations)
+- Effective communication patterns
+- Common agent limitations and workarounds
+- Techniques for improving agent performance
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
