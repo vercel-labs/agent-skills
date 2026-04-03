@@ -6,6 +6,27 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
+### vap-media
+
+AI-powered media generation and editing. Generate images, videos, and music with state-of-the-art models. Edit media with inpainting, upscaling, background removal, and more.
+
+**Use when:**
+- Generating AI images from text descriptions
+- Creating AI videos for content/social media
+- Composing AI music tracks
+- Editing images (remove background, upscale, inpaint)
+- Editing videos (trim, merge clips)
+
+**Features:**
+- **Image Generation**: Flux-based text-to-image with 9 aspect ratios
+- **Video Generation**: Veo 3.1 videos (4-8 seconds, 720p/1080p)
+- **Music Generation**: Suno V5 composition (MP3/WAV, 30-480 seconds)
+- **Image Editing**: Inpaint, AI edit, upscale (2x/4x), background removal
+- **Video Editing**: Trim and merge operations
+- **Production Presets**: Multi-asset campaigns (video + music + thumbnail)
+- **Free Mode**: 3 images/day without API key
+- **Full Mode**: Unlimited access with VAP_API_KEY
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
