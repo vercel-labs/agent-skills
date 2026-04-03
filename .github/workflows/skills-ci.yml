@@ -1,0 +1,126 @@
+name: Skills CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - '.github/workflows/skills-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - '.github/workflows/skills-ci.yml'
+
+jobs:
+  validate-skills:
+    name: Validate All Skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SKILL.md exists in every skill directory
+        run: |
+          failed=0
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            if [ ! -f "$skill_dir/SKILL.md" ]; then
+              echo "❌ Missing SKILL.md in skills/$skill/"
+              failed=1
+            else
+              echo "✅ skills/$skill/SKILL.md exists"
+            fi
+          done
+          exit $failed
+
+      - name: Check SKILL.md frontmatter (name + description)
+        run: |
+          failed=0
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            skillmd="$skill_dir/SKILL.md"
+            [ ! -f "$skillmd" ] && continue
+
+            # Extract YAML frontmatter block (between --- markers)
+            frontmatter=$(awk '/^---/{p=!p; next} p' "$skillmd" | head -20)
+
+            if ! echo "$frontmatter" | grep -q "^name:"; then
+              echo "❌ skills/$skill/SKILL.md missing 'name:' in frontmatter"
+              failed=1
+            fi
+            if ! echo "$frontmatter" | grep -q "^description:"; then
+              echo "❌ skills/$skill/SKILL.md missing 'description:' in frontmatter"
+              failed=1
+            fi
+          done
+          [ $failed -eq 0 ] && echo "✅ All SKILL.md files have required frontmatter"
+          exit $failed
+
+      - name: Check metadata.json version format (if present)
+        run: |
+          failed=0
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            meta="$skill_dir/metadata.json"
+            [ ! -f "$meta" ] && continue
+
+            # Validate JSON parses
+            if ! python3 -c "import json; json.load(open('$meta'))" 2>/dev/null; then
+              echo "❌ skills/$skill/metadata.json is invalid JSON"
+              failed=1
+              continue
+            fi
+
+            # Check version field exists and is semver-ish
+            version=$(python3 -c "import json; d=json.load(open('$meta')); print(d.get('version',''))" 2>/dev/null)
+            if [ -z "$version" ]; then
+              echo "⚠️  skills/$skill/metadata.json missing 'version' field"
+            elif ! echo "$version" | grep -qE "^[0-9]+\.[0-9]+\.[0-9]+"; then
+              echo "❌ skills/$skill/metadata.json version '$version' is not semver (X.Y.Z)"
+              failed=1
+            else
+              echo "✅ skills/$skill version $version"
+            fi
+          done
+          exit $failed
+
+      - name: Check SKILL.md version in frontmatter matches metadata.json (if both exist)
+        run: |
+          failed=0
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            skillmd="$skill_dir/SKILL.md"
+            meta="$skill_dir/metadata.json"
+            [ ! -f "$skillmd" ] || [ ! -f "$meta" ] && continue
+
+            md_version=$(awk '/^---/{p=!p; next} p' "$skillmd" | grep "version:" | sed 's/.*version:[[:space:]]*//' | tr -d '"' | head -1)
+            meta_version=$(python3 -c "import json; d=json.load(open('$meta')); print(d.get('version',''))" 2>/dev/null)
+
+            if [ -n "$md_version" ] && [ -n "$meta_version" ] && [ "$md_version" != "$meta_version" ]; then
+              echo "⚠️  skills/$skill: SKILL.md version ($md_version) != metadata.json version ($meta_version)"
+            fi
+          done
+          exit $failed
+
+      - name: No zip artifacts in skill directories
+        run: |
+          found=$(find skills/ -name "*.zip" 2>/dev/null)
+          if [ -n "$found" ]; then
+            echo "❌ Zip artifacts found (should not be committed):"
+            echo "$found"
+            exit 1
+          fi
+          echo "✅ No zip artifacts found"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo ""
+          echo "=== Skills Directory Summary ==="
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            has_meta=$([ -f "$skill_dir/metadata.json" ] && echo "metadata.json ✅" || echo "metadata.json ❌")
+            has_skill=$([ -f "$skill_dir/SKILL.md" ] && echo "SKILL.md ✅" || echo "SKILL.md ❌")
+            has_readme=$([ -f "$skill_dir/README.md" ] && echo "README.md ✅" || echo "README.md ⚠️ (optional)")
+            echo "  $skill: $has_skill | $has_meta | $has_readme"
+          done
