@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "author": "nurfarazi",
+  "date": "April 2026",
+  "abstract": "Generates comprehensive, structured PR descriptions by analyzing git diffs and commit history. Produces sections covering the problem context, impacted areas, data flow diagrams, code quality/architecture/test coverage scores, testing scenarios, and out-of-scope improvement suggestions.",
+  "references": [
+    "https://github.com/nurfarazi/pr-description-generator"
+  ]
+}
