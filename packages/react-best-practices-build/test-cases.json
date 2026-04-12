@@ -1,6 +1,22 @@
 [
   {
     "ruleId": "",
+    "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
+    "type": "bad",
+    "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId, handleConnected])\n}",
+    "language": "tsx",
+    "description": "Effect Event added as a dependency"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
+    "type": "good",
+    "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId])\n}",
+    "language": "tsx",
+    "description": "depend on reactive values, not the Effect Event"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "bad",
     "code": "function useWindowEvent(event: string, handler: (e) => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
@@ -62,6 +78,22 @@
     "code": "export async function GET(request: Request) {\n  const sessionPromise = auth()\n  const configPromise = fetchConfig()\n  const session = await sessionPromise\n  const [config, data] = await Promise.all([\n    configPromise,\n    fetchData(session.user.id)\n  ])\n  return Response.json({ data, config })\n}",
     "language": "typescript",
     "description": "auth and config start immediately"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Check Cheap Conditions Before Async Flags",
+    "type": "bad",
+    "code": "const someFlag = await getFlag()\n\nif (someFlag && someCondition) {\n  // ...\n}",
+    "language": "typescript",
+    "description": "Incorrect example for Check Cheap Conditions Before Async Flags"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Check Cheap Conditions Before Async Flags",
+    "type": "good",
+    "code": "if (someCondition) {\n  const someFlag = await getFlag()\n  if (someFlag) {\n    // ...\n  }\n}",
+    "language": "typescript",
+    "description": "Correct example for Check Cheap Conditions Before Async Flags"
   },
   {
     "ruleId": "",
@@ -139,9 +171,17 @@
     "ruleId": "",
     "ruleTitle": "Avoid Barrel File Imports",
     "type": "good",
-    "code": "import Check from 'lucide-react/dist/esm/icons/check'\nimport X from 'lucide-react/dist/esm/icons/x'\nimport Menu from 'lucide-react/dist/esm/icons/menu'\n// Loads only 3 modules (~2KB vs ~1MB)\n\nimport Button from '@mui/material/Button'\nimport TextField from '@mui/material/TextField'\n// Loads only what you use",
+    "code": "// Keep the standard imports - Next.js transforms them to direct imports\nimport { Check, X, Menu } from 'lucide-react'\n// Full TypeScript support, no manual path wrangling",
     "language": "tsx",
-    "description": "imports only what you need"
+    "description": "Correct - Next.js 13.5+ (recommended) example for Avoid Barrel File Imports"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Barrel File Imports",
+    "type": "good",
+    "code": "import Button from '@mui/material/Button'\nimport TextField from '@mui/material/TextField'\n// Loads only what you use",
+    "language": "tsx",
+    "description": "Correct - Direct imports (non-Next.js projects) example for Avoid Barrel File Imports"
   },
   {
     "ruleId": "",
@@ -345,6 +385,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Use flatMap to Map and Filter in One Pass",
+    "type": "bad",
+    "code": "const userNames = users\n  .map(user => user.isActive ? user.name : null)\n  .filter(Boolean)",
+    "language": "typescript",
+    "description": "2 iterations, intermediate array"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use flatMap to Map and Filter in One Pass",
+    "type": "good",
+    "code": "const userNames = users.flatMap(user =>\n  user.isActive ? [user.name] : []\n)",
+    "language": "typescript",
+    "description": "1 iteration, no intermediate array"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Hoist RegExp Creation",
     "type": "bad",
     "code": "function Highlighter({ text, query }: Props) {\n  const regex = new RegExp(`(${query})`, 'gi')\n  const parts = text.split(regex)\n  return <>{parts.map((part, i) => ...)}</>\n}",
@@ -414,6 +470,22 @@
     "code": "function getLatestProject(projects: Project[]) {\n  if (projects.length === 0) return null\n  \n  let latest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt > latest.updatedAt) {\n      latest = projects[i]\n    }\n  }\n  \n  return latest\n}\n\nfunction getOldestAndNewest(projects: Project[]) {\n  if (projects.length === 0) return { oldest: null, newest: null }\n  \n  let oldest = projects[0]\n  let newest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt < oldest.updatedAt) oldest = projects[i]\n    if (projects[i].updatedAt > newest.updatedAt) newest = projects[i]\n  }\n  \n  return { oldest, newest }\n}",
     "language": "typescript",
     "description": "Correct (O(n) - single loop) example for Use Loop for Min/Max Instead of Sort"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Non-Critical Work with requestIdleCallback",
+    "type": "bad",
+    "code": "function handleSearch(query: string) {\n  const results = searchItems(query)\n  setResults(results)\n\n  // These block the main thread immediately\n  analytics.track('search', { query })\n  saveToRecentSearches(query)\n  prefetchTopResults(results.slice(0, 3))\n}",
+    "language": "typescript",
+    "description": "blocks main thread during user interaction"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Defer Non-Critical Work with requestIdleCallback",
+    "type": "good",
+    "code": "function handleSearch(query: string) {\n  const results = searchItems(query)\n  setResults(results)\n\n  // Defer non-critical work to idle periods\n  requestIdleCallback(() => {\n    analytics.track('search', { query })\n  })\n\n  requestIdleCallback(() => {\n    saveToRecentSearches(query)\n  })\n\n  requestIdleCallback(() => {\n    prefetchTopResults(results.slice(0, 3))\n  })\n}",
+    "language": "typescript",
+    "description": "defers non-critical work to idle time"
   },
   {
     "ruleId": "",
@@ -534,6 +606,22 @@
     "code": "function Timestamp() {\n  return (\n    <span suppressHydrationWarning>\n      {new Date().toLocaleString()}\n    </span>\n  )\n}",
     "language": "tsx",
     "description": "suppress expected mismatch only"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use defer or async on Script Tags",
+    "type": "bad",
+    "code": "export default function Document() {\n  return (\n    <html>\n      <head>\n        <script src=\"https://example.com/analytics.js\" />\n        <script src=\"/scripts/utils.js\" />\n      </head>\n      <body>{/* content */}</body>\n    </html>\n  )\n}",
+    "language": "tsx",
+    "description": "blocks rendering"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use defer or async on Script Tags",
+    "type": "good",
+    "code": "import Script from 'next/script'\n\nexport default function Page() {\n  return (\n    <>\n      <Script src=\"https://example.com/analytics.js\" strategy=\"afterInteractive\" />\n      <Script src=\"/scripts/utils.js\" strategy=\"beforeInteractive\" />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "non-blocking"
   },
   {
     "ruleId": "",
@@ -713,6 +801,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Don't Define Components Inside Components",
+    "type": "bad",
+    "code": "function UserProfile({ user, theme }) {\n  // Defined inside to access `theme` - BAD\n  const Avatar = () => (\n    <img\n      src={user.avatarUrl}\n      className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}\n    />\n  )\n\n  // Defined inside to access `user` - BAD\n  const Stats = () => (\n    <div>\n      <span>{user.followers} followers</span>\n      <span>{user.posts} posts</span>\n    </div>\n  )\n\n  return (\n    <div>\n      <Avatar />\n      <Stats />\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "remounts on every render"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Don't Define Components Inside Components",
+    "type": "good",
+    "code": "function Avatar({ src, theme }: { src: string; theme: string }) {\n  return (\n    <img\n      src={src}\n      className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}\n    />\n  )\n}\n\nfunction Stats({ followers, posts }: { followers: number; posts: number }) {\n  return (\n    <div>\n      <span>{followers} followers</span>\n      <span>{posts} posts</span>\n    </div>\n  )\n}\n\nfunction UserProfile({ user, theme }) {\n  return (\n    <div>\n      <Avatar src={user.avatarUrl} theme={theme} />\n      <Stats followers={user.followers} posts={user.posts} />\n    </div>\n  )\n}",
+    "language": "tsx",
+    "description": "pass props instead"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
     "type": "bad",
     "code": "function Header({ user, notifications }: Props) {\n  const isLoading = useMemo(() => {\n    return user.isLoading || notifications.isLoading\n  }, [user.isLoading, notifications.isLoading])\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
@@ -729,6 +833,38 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Split Combined Hook Computations",
+    "type": "bad",
+    "code": "const sortedProducts = useMemo(() => {\n  const filtered = products.filter((p) => p.category === category)\n  const sorted = filtered.toSorted((a, b) =>\n    sortOrder === \"asc\" ? a.price - b.price : b.price - a.price\n  )\n  return sorted\n}, [products, category, sortOrder])",
+    "language": "tsx",
+    "description": "changing `sortOrder` recomputes filtering"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Split Combined Hook Computations",
+    "type": "good",
+    "code": "const filteredProducts = useMemo(\n  () => products.filter((p) => p.category === category),\n  [products, category]\n)\n\nconst sortedProducts = useMemo(\n  () =>\n    filteredProducts.toSorted((a, b) =>\n      sortOrder === \"asc\" ? a.price - b.price : b.price - a.price\n    ),\n  [filteredProducts, sortOrder]\n)",
+    "language": "tsx",
+    "description": "filtering only recomputes when products or category change"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Split Combined Hook Computations",
+    "type": "bad",
+    "code": "useEffect(() => {\n  analytics.trackPageView(pathname)\n  document.title = `${pageTitle} | My App`\n}, [pathname, pageTitle])",
+    "language": "tsx",
+    "description": "both effects run when either dependency changes"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Split Combined Hook Computations",
+    "type": "good",
+    "code": "useEffect(() => {\n  analytics.trackPageView(pathname)\n}, [pathname])\n\nuseEffect(() => {\n  document.title = `${pageTitle} | My App`\n}, [pageTitle])",
+    "language": "tsx",
+    "description": "effects run independently"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Use Transitions for Non-Urgent Updates",
     "type": "bad",
     "code": "function ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => setScrollY(window.scrollY)\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
@@ -742,6 +878,22 @@
     "code": "import { startTransition } from 'react'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => {\n      startTransition(() => setScrollY(window.scrollY))\n    }\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
     "language": "tsx",
     "description": "non-blocking updates"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useDeferredValue for Expensive Derived Renders",
+    "type": "bad",
+    "code": "function Search({ items }: { items: Item[] }) {\n  const [query, setQuery] = useState('')\n  const filtered = items.filter(item => fuzzyMatch(item, query))\n\n  return (\n    <>\n      <input value={query} onChange={e => setQuery(e.target.value)} />\n      <ResultsList results={filtered} />\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "input feels laggy while filtering"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Use useDeferredValue for Expensive Derived Renders",
+    "type": "good",
+    "code": "function Search({ items }: { items: Item[] }) {\n  const [query, setQuery] = useState('')\n  const deferredQuery = useDeferredValue(query)\n  const filtered = useMemo(\n    () => items.filter(item => fuzzyMatch(item, deferredQuery)),\n    [items, deferredQuery]\n  )\n  const isStale = query !== deferredQuery\n\n  return (\n    <>\n      <input value={query} onChange={e => setQuery(e.target.value)} />\n      <div style={{ opacity: isStale ? 0.7 : 1 }}>\n        <ResultsList results={filtered} />\n      </div>\n    </>\n  )\n}",
+    "language": "tsx",
+    "description": "input stays snappy, results render when ready"
   },
   {
     "ruleId": "",
@@ -825,6 +977,62 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "bad",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\nexport async function GET(request: Request) {\n  // Runs on EVERY request - expensive!\n  const fontData = await fetch(\n    new URL('./fonts/Inter.ttf', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  const logoData = await fetch(\n    new URL('./images/logo.png', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
+    "language": "typescript",
+    "description": "reads font file on every request"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\n// Module-level: runs ONCE when module is first imported\nconst fontData = fetch(\n  new URL('./fonts/Inter.ttf', import.meta.url)\n).then(res => res.arrayBuffer())\n\nconst logoData = fetch(\n  new URL('./images/logo.png', import.meta.url)\n).then(res => res.arrayBuffer())\n\nexport async function GET(request: Request) {\n  // Await the already-started promises\n  const [font, logo] = await Promise.all([fontData, logoData])\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logo} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: font }] }\n  )\n}",
+    "language": "typescript",
+    "description": "loads once at module initialization"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\nimport { readFileSync } from 'fs'\nimport { join } from 'path'\n\n// Synchronous read at module level - blocks only during module init\nconst fontData = readFileSync(\n  join(process.cwd(), 'public/fonts/Inter.ttf')\n)\n\nconst logoData = readFileSync(\n  join(process.cwd(), 'public/images/logo.png')\n)\n\nexport async function GET(request: Request) {\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
+    "language": "typescript",
+    "description": "synchronous fs at module level"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "bad",
+    "code": "import fs from 'node:fs/promises'\n\nexport async function processRequest(data: Data) {\n  const config = JSON.parse(\n    await fs.readFile('./config.json', 'utf-8')\n  )\n  const template = await fs.readFile('./template.html', 'utf-8')\n\n  return render(template, data, config)\n}",
+    "language": "typescript",
+    "description": "reads config on every call"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "import fs from 'node:fs/promises'\n\nconst configPromise = fs\n  .readFile('./config.json', 'utf-8')\n  .then(JSON.parse)\nconst templatePromise = fs.readFile('./template.html', 'utf-8')\n\nexport async function processRequest(data: Data) {\n  const [config, template] = await Promise.all([\n    configPromise,\n    templatePromise,\n  ])\n\n  return render(template, data, config)\n}",
+    "language": "typescript",
+    "description": "hoists config and template to module level"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Shared Module State for Request Data",
+    "type": "bad",
+    "code": "let currentUser: User | null = null\n\nexport default async function Page() {\n  currentUser = await auth()\n  return <Dashboard />\n}\n\nasync function Dashboard() {\n  return <div>{currentUser?.name}</div>\n}",
+    "language": "tsx",
+    "description": "request data leaks across concurrent renders"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Shared Module State for Request Data",
+    "type": "good",
+    "code": "export default async function Page() {\n  const user = await auth()\n  return <Dashboard user={user} />\n}\n\nfunction Dashboard({ user }: { user: User | null }) {\n  return <div>{user?.name}</div>\n}",
+    "language": "tsx",
+    "description": "keep request data local to the render tree"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Parallel Data Fetching with Component Composition",
     "type": "bad",
     "code": "export default async function Page() {\n  const header = await fetchHeader()\n  return (\n    <div>\n      <div>{header}</div>\n      <Sidebar />\n    </div>\n  )\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}",
@@ -838,6 +1046,22 @@
     "code": "async function Header() {\n  const data = await fetchHeader()\n  return <div>{data}</div>\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}\n\nexport default function Page() {\n  return (\n    <div>\n      <Header />\n      <Sidebar />\n    </div>\n  )\n}",
     "language": "tsx",
     "description": "both fetch simultaneously"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Parallel Nested Data Fetching",
+    "type": "bad",
+    "code": "const chats = await Promise.all(\n  chatIds.map(id => getChat(id))\n)\n\nconst chatAuthors = await Promise.all(\n  chats.map(chat => getUser(chat.author))\n)",
+    "language": "tsx",
+    "description": "a single slow item blocks all nested fetches"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Parallel Nested Data Fetching",
+    "type": "good",
+    "code": "const chatAuthors = await Promise.all(\n  chatIds.map(id => getChat(id).then(chat => getUser(chat.author)))\n)",
+    "language": "tsx",
+    "description": "each item chains its own nested fetch"
   },
   {
     "ruleId": "",
