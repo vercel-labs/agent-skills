@@ -106,6 +106,25 @@ React composition patterns that scale. Helps avoid boolean prop proliferation th
 - Composing internals for flexibility
 - Avoiding prop drilling
 
+### pr-description-generator
+
+Generate thorough, reviewer-friendly PR descriptions that surface the full context of a change. Analyzes git diffs and commit history to produce structured descriptions with impacted areas, data flow diagrams, quality scores, and testing scenarios.
+
+**Use when:**
+- "Generate a PR description"
+- "Write PR notes"
+- "Document this pull request"
+- "Create a PR summary"
+- Describing or documenting a code change for review
+
+**Sections produced:**
+- Issue / context and problem statement
+- Impacted areas table (by layer: UI, API, service, DB, tests)
+- Data flow before/after the change
+- Code quality, architecture, and test coverage scores (1-10)
+- Testing scenarios checklist
+- Out-of-scope improvement suggestions
+
 ### vercel-deploy-claimable
 
 Deploy applications and websites to Vercel instantly. Designed for use with claude.ai and Claude Desktop to enable deployments directly from conversations. Deployments are "claimable" - users can transfer ownership to their own Vercel account.
