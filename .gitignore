@@ -1,3 +1,5 @@
 .DS_Store
 .vercel
 .env*.local
+config.bat
+node_modules
