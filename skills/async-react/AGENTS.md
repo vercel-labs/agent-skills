@@ -281,7 +281,7 @@ For every `useState` + `useEffect` pair that fetches server-derived data:
 3. Pass the data from a server component as a prop — **but first check if the data is actually server-only.** Constants (enums, option lists, static arrays) can often be imported directly in client components.
 4. Add `useOptimistic` for instant feedback on mutations
 5. Where suitable, use form `action` instead of `onClick` (e.g., submit buttons, toggles, delete actions). Don't force everything into forms — `startTransition` with `onClick` is fine for interactions that aren't naturally form submissions.
-6. **Ensure the server action invalidates** — call `updateTag()` or `refresh()` after mutating data. See [Server Actions + Cache Invalidation](#server-actions--cache-invalidation).
+6. **Ensure the server action invalidates** — call `updateTag()` or `refresh()` after mutating data. See [Invalidation After Mutations](#invalidation-after-mutations).
 7. **Remove `key` props used to force remounts on data changes** — `useOptimistic` tracks the base value automatically; `key`-based remounting is only needed for `useState`.
 
 For every `useState(prop)` / `useState(initialProp)` that stores server-derived data:
