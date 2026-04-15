@@ -1,6 +1,6 @@
 # Async React Patterns
 
-Code reference for each primitive. See `implementation.md` for the step-by-step workflow. For framework-specific patterns (Next.js server actions, router, background polling), see `nextjs.md`.
+Code reference for each primitive. See `implementation.md` for the step-by-step workflow. For framework-specific patterns (Next.js server actions, router behavior), see `nextjs.md`.
 
 ---
 
@@ -117,7 +117,7 @@ export function TabList({ tabs, activeTab, changeAction, onChange }: TabListProp
 }
 ```
 
-`isPending` is derived by comparing the optimistic value to the server value — no `useTransition` needed. `onChange` fires synchronously before the transition starts — useful for validation or `event.preventDefault()`. The action prop handles the async coordination. For animating the tab switch itself, see the `vercel-react-view-transitions` skill.
+`isPending` is derived by comparing the optimistic value to the server value — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`. `onChange` fires synchronously before the transition starts — useful for validation or `event.preventDefault()`. The action prop handles the async coordination. For animating the tab switch itself, see the `vercel-react-view-transitions` skill.
 
 ### Consumer Usage
 
@@ -269,7 +269,7 @@ export function SubmitButton({ children, disabled, ...props }: React.ComponentPr
 | `useOptimistic(false)` | Self-contained in the button | Any form, `formAction` on button |
 | `formAction` on button | Button overrides form's action | Composable — consumer keeps plain `<form>` |
 
-Use `useFormStatus` when the form's `action` is already set and you want a simple child button. Use `useOptimistic(false)` + `formAction` when the button needs to own the action (design component pattern).
+All three work — choose based on your component structure. See the [useFormStatus docs](https://react.dev/reference/react-dom/hooks/useFormStatus) for details.
 
 ---
 

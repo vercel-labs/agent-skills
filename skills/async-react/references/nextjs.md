@@ -1,6 +1,14 @@
 # Async React in Next.js
 
-How `useOptimistic` and transitions coordinate with Next.js server actions, router, and caching. For the primitives themselves, see `SKILL.md` and `patterns.md`. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
+Coordination gotchas specific to Next.js. For the primitives themselves, see `SKILL.md` and `patterns.md`. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
+
+---
+
+## Page Structure
+
+Keep `page.tsx` non-async when possible. Push `await` calls into async server components inside `<Suspense>` so the static shell renders instantly and dynamic parts stream in.
+
+See: [`cacheComponents`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents), [`use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache), [`cacheTag`](https://nextjs.org/docs/app/api-reference/functions/cacheTag), [`cacheLife`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheLife)
 
 ---
 
@@ -10,27 +18,34 @@ How `useOptimistic` and transitions coordinate with Next.js server actions, rout
 
 The flow: user submits → `useOptimistic` shows instant result → server action runs → invalidation → optimistic value settles to real data.
 
-Choose your invalidation based on the app's caching strategy:
+Choose invalidation based on the app's caching strategy:
 
 - **No `'use cache'`**: [`refresh()`](https://nextjs.org/docs/app/api-reference/functions/refresh) alone is sufficient.
-- **With `'use cache'` + `cacheTag`**: [`updateTag(tag)`](https://nextjs.org/docs/app/api-reference/functions/updateTag) to expire cache, plus `refresh()` if the current page needs to re-render immediately.
-- **Route Handlers / webhooks**: [`revalidateTag(tag, 'max')`](https://nextjs.org/docs/app/api-reference/functions/revalidateTag) — `updateTag` is not available outside Server Actions.
+- **With `'use cache'` + `cacheTag`**: [`updateTag()`](https://nextjs.org/docs/app/api-reference/functions/updateTag) — expires cache and ensures the next request sees fresh data immediately (read-your-own-writes).
+- **Route Handlers / webhooks**: [`revalidateTag()`](https://nextjs.org/docs/app/api-reference/functions/revalidateTag) — `updateTag` is not available outside Server Actions.
 
 ```tsx
 'use server';
 
-import { refresh, updateTag } from 'next/cache';
+import { refresh } from 'next/cache';
 
+// No 'use cache' — refresh() re-renders server components
 export async function toggleStar(taskId: string) {
   await db.star.toggle({ where: { taskId, userId } });
   refresh();
 }
+```
 
+```tsx
+'use server';
+
+import { updateTag } from 'next/cache';
+
+// With 'use cache' + cacheTag — updateTag() expires and re-fetches
 export async function updatePost(slug: string, formData: FormData) {
   await db.post.update({ where: { slug }, data: { ... } });
   updateTag('posts');
   updateTag(`post-${slug}`);
-  refresh();
 }
 ```
 
@@ -38,40 +53,101 @@ export async function updatePost(slug: string, formData: FormData) {
 
 ---
 
+## Shared Constants
+
+[`"use server"`](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) files can only export async functions. If the client needs to predict a server result (e.g., cycling enum values like `PRIORITY_CYCLE`), put the shared constant in a separate file and import from both.
+
+---
+
 ## `router.push()` in Transitions
 
-When called inside a `startTransition`, `router.push()` coordinates with `useOptimistic` in the same transition — both commit together:
+When called inside `startTransition`, [`router.push()`](https://nextjs.org/docs/app/api-reference/functions/use-router) coordinates with `useOptimistic` in the same transition — both commit together.
+
+### Search params / filter navigation
+
+A common pattern: update `searchParams` via `router.push()` and pass the callback as an action prop to a design component. The design component wraps it in `startTransition` with `useOptimistic`, so the chip/tab highlights instantly while the page re-renders with filtered data.
+
+```tsx
+// Consumer — passes router.push as an action prop
+function LabelFilter() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const current = searchParams.get("label") ?? null;
+
+  function filterAction(value: string | null) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set("label", value);
+    } else {
+      params.delete("label");
+    }
+    router.push(`/?${params.toString()}`);
+  }
+
+  return <ChipGroup items={labels} value={current} changeAction={filterAction} />;
+}
+```
+
+```tsx
+// Design component — wraps action in transition with optimistic state
+function ChipGroup({ items, value, changeAction }: ChipGroupProps) {
+  const [optimisticValue, setOptimisticValue] = useOptimistic(value);
+
+  function handleClick(newValue: string | null) {
+    startTransition(async () => {
+      setOptimisticValue(newValue);
+      await changeAction(newValue);
+    });
+  }
+
+  return /* chips using optimisticValue for active state */;
+}
+```
+
+### Tab / index navigation
+
+Same pattern for tab-like navigation — the action prop receives a URL, and the design component handles the optimistic index:
 
 ```tsx
 startTransition(async () => {
   setOptimisticIndex(newIndex);
-  await router.push(newUrl);
+  await action(href); // action = (href) => router.push(href)
 });
 ```
 
-This is what makes action props work with Next.js navigation — the design component calls `startTransition`, sets optimistic state, and `await`s the `router.push()` passed via the action prop.
-
 ---
 
-## Promise-Passing from Server Components
+## Promise-Passing and Streaming
 
-Server components can start a fetch without awaiting it, passing the **promise** as a prop to a client component. The client uses `use()` to unwrap it — enabling streaming without blocking the server render:
+Server components can start a fetch without awaiting it, passing the **promise** as a prop to a client component. The client uses `use()` to unwrap it — the server renders instantly and data streams in via `<Suspense>`. The `.then()` pattern on `params` avoids making the page `async`:
 
 ```tsx
-async function ChartWrapper({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
-  const { filter } = await searchParams;
-  const dataPromise = getChartData(filter);
-  return <Chart data={dataPromise} />;
+function TaskPage({ params }: { params: Promise<{ id: string }> }) {
+  const taskPromise = params.then(({ id }) => getTask(id));
+  const commentsPromise = commentsFromTask(taskPromise);
+
+  return (
+    <div>
+      <Suspense fallback={<TaskSkeleton />}>
+        <TaskDetail taskPromise={taskPromise} />
+      </Suspense>
+      <Suspense fallback={<CommentListSkeleton />}>
+        <CommentList commentsPromise={commentsPromise} />
+      </Suspense>
+    </div>
+  );
 }
 ```
 
-The client component suspends (showing the nearest `<Suspense>` fallback) until the promise resolves.
+Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chaining promises (e.g., `commentsFromTask(taskPromise)`) lets you derive dependent data without `await`.
+
+See: [Streaming guide](https://nextjs.org/docs/app/guides/streaming), [Suspense](https://nextjs.org/docs/app/guides/streaming#streaming-with-suspense), [Data fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
 
 ---
 
-## Background Polling
+## Background Polling (Simple Approach)
 
-For live data (Q&A feeds, collaborative features), use `startTransition` + `router.refresh()` on an interval:
+For quick prototyping or low-frequency updates, `startTransition` + [`router.refresh()`](https://nextjs.org/docs/app/api-reference/functions/use-router) on an interval is a simple option. Prefer server-sent events, WebSockets, or a real-time data layer for production live data.
 
 ```tsx
 'use client';
@@ -91,4 +167,4 @@ export function usePolling(intervalMs = 5000) {
 }
 ```
 
-Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state. If using a reducer, React re-runs it with the latest base value so optimistic additions sit on top of fresh data.
+Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.

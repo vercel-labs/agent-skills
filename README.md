@@ -87,7 +87,7 @@ Fix React UX issues (frozen UI, missing loading states, stale data, uncoordinate
 - `<Suspense>` boundaries with co-located skeleton fallbacks
 - `useDeferredValue` with `useSuspenseQuery` for async search
 - Action props pattern (TabList, EditableText, SubmitButton)
-- Next.js integration (server actions, `updateTag()`/`refresh()`, router behavior, background polling)
+- Next.js integration (server actions, `updateTag()`/`refresh()`, router behavior, promise-passing)
 
 ### react-view-transitions
 

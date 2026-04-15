@@ -54,20 +54,20 @@ This is an implementation order, not a "pick one" list. Implement every pattern 
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 
-For framework-specific integration (Next.js server actions, `updateTag()`/`refresh()` invalidation, router behavior, background polling), see `references/nextjs.md`. **Every server action that mutates data must call `updateTag()` or `refresh()`** — without this, optimistic updates settle to stale data.
+For framework-specific integration (Next.js server actions, `updateTag()`/`refresh()` invalidation, router behavior), see `references/nextjs.md`. **Every server action that mutates data must call `updateTag()` or `refresh()`** — without this, optimistic updates settle to stale data.
 
 ---
 
 ## Two Migration Paths
 
-- **Fix legacy patterns** — Replace `useState` + `useEffect` client-side fetching with server data as props + `useOptimistic` + form actions. These are actively broken: mutations and navigation compete because state lives in two places.
+- **Fix legacy patterns** — Replace `useState` + `useEffect` client-side fetching and `useState(prop)` for server-derived data with server data as props + `useOptimistic`. These are actively broken: mutations and navigation compete because state lives in two places. Leave `useState` alone for local UI concerns (form inputs, modals, controlled selects) — only target server-derived data.
 - **Add coordination** — Take a working but non-interactive app (no feedback, frozen UI during async work) and add `<Suspense>` boundaries, action props, optimistic updates, and pending indicators.
 
 Most apps have a mix of both.
 
 ## Implementation Workflow
 
-When adding async coordination to an existing app, **follow `references/implementation.md` step by step.** Start with the audit — do not skip it.
+When adding async coordination to an existing app, **follow `references/implementation.md` step by step.** Start with the audit — do not skip it. Present findings to the user before making changes. If unsure whether a pattern is causing issues, ask.
 
 ---
 
@@ -93,7 +93,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 - **Updater** (`setOptimistic(current => ...)`) — For single-value calculations where the setter naturally describes the update. Similar to `setState(prev => ...)`.
 - **Reducer** (`useOptimistic(value, (current, action) => ...)`) — When you need to pass data to the update (which item to add/remove), handle multiple action types, or when the base state might change during pending actions.
 
-`useOptimistic(false)` can also serve as a **pending indicator** — showing "Submitting..." without `useTransition`. Alternatively, derive `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue`.
+`useOptimistic(false)` can also serve as a **pending indicator** — showing "Submitting..." without `useTransition`. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
 
 See `references/patterns.md` for toggle, reducer, updater, list add, delete, move, multi-value, and pending indicator examples.
 
@@ -117,7 +117,7 @@ See `references/patterns.md` for the full search combobox pattern with `useSuspe
 
 ### Form Actions
 
-A form's `action` prop wraps the callback in a transition automatically — same coordination as `startTransition`, but declarative. Prefer form actions over `onClick` for mutations. `formAction` on a button works the same way — useful for reusable submit button design components where the consumer keeps a plain `<form>` and the button handles pending state internally.
+A form's `action` prop wraps the callback in a transition automatically — same coordination as `startTransition`, but declarative. Form actions are a natural fit for submissions, toggles, and delete actions. For interactions that aren't naturally forms (drag-and-drop, inline edits, navigation), `startTransition` with `onClick` is fine. `formAction` on a button works the same way — useful for reusable submit button design components where the consumer keeps a plain `<form>` and the button handles pending state internally.
 
 See `references/patterns.md` for SubmitButton implementations using `formAction` and `useFormStatus`.
 
@@ -149,7 +149,6 @@ Key design decisions:
 - Support both `onChange` (synchronous, fires before the transition) and the action prop
 - Include a built-in spinner with a `hideSpinner` opt-out for custom pending UI via `data-pending`
 - Accept `displayValue` as `ReactNode | (value) => ReactNode` for formatted optimistic state
-- Action props aren't needed when the navigation target has `<Suspense>` boundaries — the router handles that
 
 See `references/patterns.md` for TabList, EditableText, and SubmitButton implementations.
 
@@ -186,7 +185,7 @@ For animating between these states — page transitions, enter/exit animations, 
 - **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the server action succeeds, but without `updateTag()` or `refresh()`, the server never re-renders. The optimistic value settles to stale data. Every server action that mutates data must invalidate. See `references/nextjs.md`.
 - **`useState` + `useEffect` for server-derived state** — Creates the coordination problem. Fetch state client-side, manage it locally, and now mutations and navigation don't talk to each other. Fix: server data as props, `useOptimistic` for instant feedback.
 - **`useState(prop)` instead of `useOptimistic(prop)`** — `useState` only reads the initial value on mount. After `refresh()` delivers fresh server data, the prop updates but `useState` ignores it — the component shows stale values. `useOptimistic(prop)` re-evaluates every render, automatically tracking server updates. This is the most common subtle bug: the component works on first render but goes stale after mutations.
-- **`onClick` instead of form `action`** — Form actions get transition wrapping for free. Use `<form action={...}>` for mutations.
+- **`onClick` with raw `await` instead of form `action` or `startTransition`** — Both form actions and `startTransition` provide transition wrapping. Use whichever fits the interaction — forms for submissions/toggles, `startTransition` for everything else. The mistake is doing neither.
 - **Calling `useOptimistic` setter outside an Action** — The setter must be called inside `startTransition` or a form `action`. Outside, React warns and the optimistic value briefly renders then reverts.
 - **Reading optimistic value in setter instead of using updater** — `setOptimistic(CYCLE[optimisticValue])` captures a stale closure if rapid clicks queue multiple transitions. Use an updater: `setOptimistic(current => CYCLE[current])`.
 - **Competing data layers** — Don't mix `useOptimistic` with separate `useState` for the same data. One source of truth (server props), one overlay (`useOptimistic`).
@@ -194,7 +193,7 @@ For animating between these states — page transitions, enter/exit animations, 
 - **Wrong boundary structure** — One big `<Suspense>` means nothing renders until everything loads. But blindly splitting into siblings can cause layout shift (CLS) if a component above has unknown height. Choose boundaries based on the loading state you want for the page.
 - **Using updater instead of reducer when base state can change** — If the base data might change during your Action (e.g., from polling), use a reducer. Updaters only see state from when the transition started; reducers re-run with the latest base value.
 - **Raw `await` on server actions bypasses error boundaries** — `await serverAction()` inside an `onClick` handler is not in a transition. Errors are unhandled. Wrap in `startTransition` or use form `action`.
-- **Exporting constants from `"use server"` files** — Only async functions can be exported. Shared constants must live in a separate file.
+- **Exporting constants from `"use server"` files** (Next.js) — Only async functions can be exported. Shared constants must live in a separate file. See `references/nextjs.md`.
 - **`data-pending` without a parent reacting to it** — Setting `data-pending` does nothing by itself. A parent must have `has-data-pending:` styles.
 - **Silent optimistic rollback** — `useOptimistic` auto-reverts on failure, but the user sees no explanation. Pair with `toast.error()` inside a `try/catch`, or an error boundary for unexpected failures.
 - **State updates after `await` fall outside the transition** — Post-`await` cleanup (closing dialogs, resetting forms) runs immediately instead of batching with the re-render. Use a double-transition: wrap post-`await` updates in another `startTransition`. See `references/patterns.md`.
@@ -206,7 +205,7 @@ For animating between these states — page transitions, enter/exit animations, 
 
 - **`references/implementation.md`** — Step-by-step audit and implementation workflow. Start here.
 - **`references/patterns.md`** — Detailed code patterns for each primitive.
-- **`references/nextjs.md`** — Next.js App Router integration: server actions, `updateTag()`, router behavior, background polling, error boundaries.
+- **`references/nextjs.md`** — Next.js App Router integration: server actions, `updateTag()`, router behavior, promise-passing.
 
 ## When in Doubt
 

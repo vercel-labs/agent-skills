@@ -11,7 +11,7 @@ An agent skill for implementing async coordination patterns using React 19's pri
 - **Action props pattern** — Design components that handle async coordination internally
 - **Form actions** — Declarative mutation handling with automatic transition wrapping
 - **`data-pending` CSS pattern** — Zero-JS pending states via CSS `:has()`
-- **Next.js integration** — Server actions, `updateTag()`, router behavior, background polling, error boundaries
+- **Next.js integration** — Server actions, `updateTag()`, router behavior, promise-passing
 
 ## Skill Structure
 
