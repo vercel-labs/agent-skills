@@ -58,16 +58,9 @@ For framework-specific integration (Next.js server actions, `updateTag()`/`refre
 
 ---
 
-## Two Migration Paths
+## Audit & Review Workflow
 
-- **Fix legacy patterns** — Replace `useState` + `useEffect` client-side fetching and `useState(prop)` for server-derived data with server data as props + `useOptimistic`. These are actively broken: mutations and navigation compete because state lives in two places. Leave `useState` alone for local UI concerns (form inputs, modals, controlled selects) — only target server-derived data.
-- **Add coordination** — Take a working but non-interactive app (no feedback, frozen UI during async work) and add `<Suspense>` boundaries, action props, optimistic updates, and pending indicators.
-
-Most apps have a mix of both.
-
-## Workflow
-
-**Start with the audit in `references/implementation.md`.** Scan the codebase, classify interactions, and present findings to the user before making any changes. The user decides what to fix and in what order. If unsure whether something is broken or just different, ask — don't assume.
+When reviewing an app's async patterns, **follow `references/implementation.md` step by step.** Start with the audit — do not skip it. Present findings to the user before making any changes. The user decides what to fix and in what order.
 
 ---
 
@@ -179,27 +172,7 @@ Transitions create a shared coordination pipeline. Every async operation goes th
 
 For animating between these states — page transitions, enter/exit animations, shared element animations during navigation — see the `vercel-react-view-transitions` skill.
 
----
-
-## Common Mistakes
-
-- **Skipping the audit** — Without classifying interactions first, you'll miss coordination gaps or apply the wrong pattern. See `references/implementation.md` Step 1.
-- **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the server action succeeds, but without `updateTag()` or `refresh()`, the server never re-renders. The optimistic value settles to stale data. Every server action that mutates data must invalidate. See `references/nextjs.md`.
-- **`useState` + `useEffect` for server-derived state** — Creates the coordination problem. Fetch state client-side, manage it locally, and now mutations and navigation don't talk to each other. Fix: server data as props, `useOptimistic` for instant feedback.
-- **`useState(prop)` instead of `useOptimistic(prop)`** — `useState` only reads the initial value on mount. After `refresh()` delivers fresh server data, the prop updates but `useState` ignores it — the component shows stale values. `useOptimistic(prop)` re-evaluates every render, automatically tracking server updates. This is the most common subtle bug: the component works on first render but goes stale after mutations.
-- **`onClick` with raw `await` instead of form `action` or `startTransition`** — Both form actions and `startTransition` provide transition wrapping. Use whichever fits the interaction — forms for submissions/toggles, `startTransition` for everything else. The mistake is doing neither.
-- **Calling `useOptimistic` setter outside an Action** — The setter must be called inside `startTransition` or a form `action`. Outside, React warns and the optimistic value briefly renders then reverts.
-- **Reading optimistic value in setter instead of using updater** — `setOptimistic(CYCLE[optimisticValue])` captures a stale closure if rapid clicks queue multiple transitions. Use an updater: `setOptimistic(current => CYCLE[current])`.
-- **Competing data layers** — Don't mix `useOptimistic` with separate `useState` for the same data. One source of truth (server props), one overlay (`useOptimistic`).
-- **`handleFooAction` naming** — Don't combine `handle` prefix with `Action` suffix. `handle` is for direct event handlers (`handleClick`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
-- **Wrong boundary structure** — One big `<Suspense>` means nothing renders until everything loads. But blindly splitting into siblings can cause layout shift (CLS) if a component above has unknown height. Choose boundaries based on the loading state you want for the page.
-- **Using updater instead of reducer when base state can change** — If the base data might change during your Action (e.g., from polling), use a reducer. Updaters only see state from when the transition started; reducers re-run with the latest base value.
-- **Raw `await` on server actions bypasses error boundaries** — `await serverAction()` inside an `onClick` handler is not in a transition. Errors are unhandled. Wrap in `startTransition` or use form `action`.
-- **Exporting constants from `"use server"` files** (Next.js) — Only async functions can be exported. Shared constants must live in a separate file. See `references/nextjs.md`.
-- **`data-pending` without a parent reacting to it** — Setting `data-pending` does nothing by itself. A parent must have `has-data-pending:` styles.
-- **Silent optimistic rollback** — `useOptimistic` auto-reverts on failure, but the user sees no explanation. Pair with `toast.error()` inside a `try/catch`, or an error boundary for unexpected failures.
-- **State updates after `await` fall outside the transition** — Post-`await` cleanup (closing dialogs, resetting forms) runs immediately instead of batching with the re-render. Use a double-transition: wrap post-`await` updates in another `startTransition`. See `references/patterns.md`.
-- **`useState` setters don't clear immediately in transitions** — Unlike `useOptimistic`, `useState` updates are deferred until the transition commits. For immediate form clearing in chat/comment UIs, use `formRef.current?.reset()` (uncontrolled) instead of `setContent('')` (controlled). See `references/patterns.md`.
+If unsure about the behavior or API of any React primitive, consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect. For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
 
 ---
 
@@ -208,12 +181,7 @@ For animating between these states — page transitions, enter/exit animations, 
 - **`references/implementation.md`** — Audit and review workflow. Start here.
 - **`references/patterns.md`** — Detailed code patterns for each primitive.
 - **`references/nextjs.md`** — Next.js App Router integration: server actions, `updateTag()`, router behavior, promise-passing.
-
-## When in Doubt
-
-If unsure about the behavior or API of any React primitive (`useOptimistic`, `useActionState`, `useTransition`, `useDeferredValue`, `use`, `Suspense`), consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect.
-
-For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
+- **`references/common-mistakes.md`** — Common pitfalls and how to avoid them.
 
 ## Full Compiled Document
 

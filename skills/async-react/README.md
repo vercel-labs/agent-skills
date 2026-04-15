@@ -30,7 +30,8 @@ async-react/
 └── references/
     ├── implementation.md         # Audit and review workflow
     ├── patterns.md               # Detailed code patterns for each primitive
-    └── nextjs.md                 # Next.js App Router integration
+    ├── nextjs.md                 # Next.js App Router integration
+    └── common-mistakes.md        # Common pitfalls and how to avoid them
 ```
 
 ## Installation
