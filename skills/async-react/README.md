@@ -1,8 +1,16 @@
 # Async React Skill
 
-An agent skill for implementing async coordination patterns using React 19's primitives.
+An agent skill for auditing and reviewing React async patterns. Scans for coordination issues — frozen UI, stale data, missing loading states, uncoordinated mutations — and suggests fixes using React 19's primitives. Collaborative by design: surfaces findings, lets you prioritize, then implements what you choose.
 
-## What This Skill Covers
+## How It Works
+
+1. **Audit** — Scans the codebase for legacy patterns (`useState` + `useEffect` fetching, `useState(prop)`) and missing coordination (no loading states, frozen navigation, no mutation feedback)
+2. **Present** — Produces an interaction map classifying every async interaction and suggests patterns for each
+3. **Prioritize** — You decide what to fix and in what order
+4. **Implement** — Applies the approved changes using the patterns below
+5. **Review** — Walks through changes with you to verify coordination works
+
+## What It Knows
 
 - **Transitions** — `startTransition`, `useTransition` for coordinating async work and pending states
 - **`useOptimistic`** — Instant feedback for mutations (toggles, counters, list adds, deletes with rollback)
@@ -20,7 +28,7 @@ async-react/
 ├── SKILL.md                      # Core skill (always loaded)
 ├── AGENTS.md                     # Full compiled document (all references expanded)
 └── references/
-    ├── implementation.md         # Step-by-step audit and implementation workflow
+    ├── implementation.md         # Audit and review workflow
     ├── patterns.md               # Detailed code patterns for each primitive
     └── nextjs.md                 # Next.js App Router integration
 ```
