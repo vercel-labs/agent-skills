@@ -81,6 +81,8 @@ For every async component the user wants addressed, decide: should this block th
 - Sibling `<Suspense>` boundaries resolve independently and stream in parallel. Use siblings when components have independent data and predictable sizes.
 - If a component above has an unknown height, wrap both in a single boundary to avoid CLS.
 
+For deeper streaming patterns (parallel data fetching, promise-passing, static shells), consult the framework's streaming docs — e.g., the [Next.js Streaming guide](https://nextjs.org/docs/app/guides/streaming). If the audit surfaces many streaming-related improvements beyond basic Suspense boundaries, present them to the user as a separate category.
+
 ## Step 3: Convert Design Components to Action Props
 
 For approved design components that use `onChange` and trigger a navigation or state update, add the action props pattern. See `patterns.md` for the full TabList, EditableText, and SubmitButton implementations.
