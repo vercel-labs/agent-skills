@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "organization": "Vercel Engineering",
+  "date": "April 2026",
+  "abstract": "Guide for implementing async coordination patterns using React's primitives — transitions, useOptimistic, Suspense, useDeferredValue, form actions, and the action props pattern. Covers the three async layers (design, router, data), optimistic updates, pending states, loading boundaries, stale-while-revalidate search, and coordination between mutations, navigation, and data loading. Works with any Suspense-enabled data source (server components, useSuspenseQuery, use()). Includes Next.js App Router integration with server actions, updateTag(), router behavior, and background polling.",
+  "references": [
+    "https://github.com/rickhanlonii/async-react",
+    "https://github.com/reactwg/async-react/discussions",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/blog/2024/12/05/react-19",
+    "https://aurorascharff.no/posts/building-reusable-components-with-react19-actions/",
+    "https://aurorascharff.no/posts/building-design-components-with-action-props-using-async-react/",
+    "https://aurorascharff.no/posts/building-an-async-combobox-with-usesuspensequery-and-usedeferredvalue/",
+    "https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations"
+  ]
+}
