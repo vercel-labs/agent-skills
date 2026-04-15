@@ -74,7 +74,9 @@ When adding async coordination to an existing app, **follow the [Implementation 
 
 Any function run inside `startTransition` is called an **Action**. React tracks `isPending` automatically. The transition keeps the current UI visible and interactive until the action completes. Multiple updates inside a transition commit together — no intermediate flickers. Errors thrown inside transitions bubble to error boundaries.
 
-**Naming convention:** Suffix callback props and functions with "Action" (e.g., `submitAction`, `deleteAction`, `filterAction`) to signal they run inside a transition. Do **not** combine `handle` with `Action` — `handle` is reserved for direct event handlers (e.g., `handleClick`, `handleDragStart`). An `Action`-suffixed function wraps async work in a transition; a `handle`-prefixed function responds to a DOM event directly.
+**Standalone vs hook:** The standalone `startTransition` (imported from `react`) doesn't provide `isPending` and doesn't catch errors — errors thrown inside it will propagate as uncaught event handler errors. Use it for background work that shouldn't affect UI pending state — like polling. The `useTransition` hook's `startTransition` sets `isPending` on that component and bubbles errors to the nearest error boundary, so use it when you want visible pending feedback and error handling.
+
+**Naming convention:** Suffix callback props and functions with "Action" (e.g., `submitAction`, `deleteAction`, `filterAction`) to signal they run inside a transition. Do **not** combine `handle` with `Action` — `handle` is reserved for direct event handlers (e.g., `handleClick`, `handleDragStart`), even if they internally wrap `startTransition`. An `Action`-suffixed function is a callback passed as a prop that will be wrapped in a transition by the receiving component.
 
 ### Optimistic Updates
 
@@ -90,7 +92,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 - **Updater** (`setOptimistic(current => ...)`) — For single-value calculations where the setter naturally describes the update. Similar to `setState(prev => ...)`.
 - **Reducer** (`useOptimistic(value, (current, action) => ...)`) — When you need to pass data to the update (which item to add/remove), handle multiple action types, or when the base state might change during pending actions.
 
-`useOptimistic(false)` can also serve as a **pending indicator** — showing "Submitting..." without `useTransition`. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
+`useOptimistic(false)` can also serve as a **pending indicator** — call `setIsPending(true)` inside the action, and it automatically reverts to `false` when the transition completes. No manual reset needed. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
 
 See [Optimistic Mutations](#optimistic-mutations) for toggle, reducer, updater, list add, delete, move, multi-value, and pending indicator examples.
 
@@ -203,6 +205,8 @@ For animating between these states — page transitions, enter/exit animations, 
 
 If unsure about the behavior or API of any React primitive (`useOptimistic`, `useActionState`, `useTransition`, `useDeferredValue`, `use`, `Suspense`), consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect.
 
+For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 below.
+
 ---
 ---
 
@@ -218,6 +222,16 @@ There are two kinds of work:
 **Important:** Only fix what's actually broken or causing UX issues. Don't convert working code just to match a pattern. `useState` for local UI state (form inputs, modals, controlled selects) is completely fine — the anti-pattern is `useState` for **server-derived data** that should track server updates. If you're unsure whether something is broken or just different, **ask the user** — confirm what issues they're seeing before refactoring.
 
 The audit identifies both. Steps 2–3 are "add coordination." Step 4 is "fix legacy." Steps 5–6 are "add coordination." Most apps have a mix.
+
+## Step 0: Verify Framework APIs
+
+Before implementing any pattern, check the project's framework version. Next.js invalidation APIs change between major versions (e.g., `revalidatePath` in 14, `revalidateTag` in 14–15, `updateTag`/`refresh()` in 16). Using the wrong API will cause build errors or silent failures.
+
+1. Check the installed version (e.g., `package.json` or `next --version`).
+2. Read the bundled docs at `node_modules/next/dist/docs/` or the framework's API reference.
+3. Confirm which invalidation, caching, and routing APIs are available before writing code.
+
+The patterns in the Next.js section below target Next.js 16. For older versions, adapt the API calls based on the docs.
 
 ## Step 1: Audit the App
 
@@ -238,8 +252,8 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 
 **Look for legacy patterns to fix:**
 
-- **Every `useState` + `useEffect` pair** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places.
-- **Every `useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. After `refresh()` delivers fresh data, `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates every render.
+- **Every `useState` + `useEffect` pair** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places. **Exception:** streaming responses via `fetch` + `ReadableStream` are not this anti-pattern — client-side streaming is legitimate.
+- **Every `useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. After `refresh()` delivers fresh data, `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates every render. **Exception:** components that need both `useOptimistic(prop)` for display and `useState` for an edit draft — here `useState` is for the local draft, not the server value.
 - **Every `onClick` that calls an async function without `startTransition`** — These bypass error boundaries and provide no pending state. Wrap in `startTransition`, or use a form `action` if the interaction is naturally a submission.
 - **Every API route created just for client-side fetching** — Often a sign of the `useEffect` anti-pattern. The data should come from the server component and flow as props.
 - **Every `handleFooAction` function name** — `handle` prefix and `Action` suffix should not be combined. `handle` is for direct event handlers (`handleClick`, `handleDragStart`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
@@ -253,7 +267,7 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 - **Every custom design component** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
 - **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see [Background Polling](#background-polling-simple-approach).
 
-Then produce an interaction map and **present it to the user before making changes.** Ask which issues they're actually experiencing and what they'd like to prioritize. Not every finding needs to be fixed — let the user decide scope.
+Then produce an interaction map and **STOP. Present the table to the user and ask what to prioritize before writing any code.** Do not proceed to Step 2 until the user confirms scope. The audit often surfaces more work than needed — the user may only care about a subset.
 
 ```
 | Component      | Interaction     | Current Behavior       | Category     | Pattern              |
@@ -283,7 +297,7 @@ For every design component that uses `onChange` and triggers a navigation or sta
 
 **Rules:**
 
-- Support both `action` and `onChange` for backward compatibility.
+- **Keep `onChange` when adding `action`** — don't replace it. `onChange` fires synchronously before the transition and is needed for validation, `event.preventDefault()`, or consumers that don't use transitions. Add the `action` prop alongside it.
 - Consider setting `data-pending` on the component root when the transition has a visible delay (e.g., filtering a list, switching tabs with async data). Not every action prop needs it — skip it for instant-feeling interactions.
 - Name callback props with "Action" to signal they'll run inside a transition.
 - For animating async state changes (enter/exit, navigation, tab switches, list reorder), see the `vercel-react-view-transitions` skill.
@@ -291,6 +305,8 @@ For every design component that uses `onChange` and triggers a navigation or sta
 ## Step 4: Fix Legacy State Patterns
 
 **Only target `useState` that manages server-derived data or mutation results.** Leave `useState` alone for local UI concerns — form inputs, modals, multi-selects, dependent selects, drag state. These are not anti-patterns.
+
+**Dual-state components:** Some components legitimately need both — `useOptimistic(prop)` for display and `useState` for an edit draft (e.g., an editable text field). Don't flag `useState` as an anti-pattern when a component also needs `useOptimistic` alongside it. The fix is adding `useOptimistic` for the display/committed value, not removing `useState` for the draft.
 
 For every `useState` + `useEffect` pair that fetches server-derived data:
 
@@ -354,7 +370,7 @@ For every mutation where the user expects instant feedback, apply the appropriat
 - Use **updater functions** (`setOptimistic(current => ...)`) for relative updates (cycling, incrementing, toggling) — prevents stale closures on rapid interactions.
 - Use **reducers** (not updaters) when the base state might change during the Action (e.g., from polling), or when handling multiple action types.
 - A component can have **multiple `useOptimistic` calls** for independent values.
-- Pair rollback with user-visible feedback (`toast.error()` or error boundary).
+- **Every optimistic update must have error feedback.** `useOptimistic` silently reverts on failure — the user sees the value snap back with no explanation. Add `try/catch` around the server action with `toast.error()` for expected failures. Don't leave catch blocks empty.
 - For list adds, generate a UUID on the client and pass it to the server.
 - Every server action that mutates data must call `updateTag()` or `refresh()`.
 
@@ -377,7 +393,7 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 
 ## Step 7: Verify
 
-Walk through every row in the interaction map from Step 1:
+**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every row in the interaction map from Step 1 and test each interaction manually:
 
 - Does loading avoid layout shift? (Skeleton matches content)
 - Does the mutation provide feedback? (Optimistic or pending indicator)
@@ -1149,6 +1165,8 @@ A background data refresh arrives mid-action. If using a reducer, React re-runs 
 # Async React in Next.js
 
 Coordination gotchas specific to Next.js. For the primitives themselves, see the sections above. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
+
+**Important:** The patterns below target Next.js 16. APIs change between versions — see Step 0 in the implementation workflow above to verify your version's APIs before using anything here.
 
 ---
 

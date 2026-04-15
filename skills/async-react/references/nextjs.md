@@ -2,6 +2,8 @@
 
 Coordination gotchas specific to Next.js. For the primitives themselves, see `SKILL.md` and `patterns.md`. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
 
+**Important:** The patterns below target Next.js 16. APIs change between versions — run Step 0 from the implementation workflow to verify your version's APIs before using anything here.
+
 ---
 
 ## Page Structure

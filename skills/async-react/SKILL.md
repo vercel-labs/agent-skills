@@ -77,7 +77,9 @@ When adding async coordination to an existing app, **follow `references/implemen
 
 Any function run inside `startTransition` is called an **Action**. React tracks `isPending` automatically. The transition keeps the current UI visible and interactive until the action completes. Multiple updates inside a transition commit together — no intermediate flickers. Errors thrown inside transitions bubble to error boundaries.
 
-**Naming convention:** Suffix callback props and functions with "Action" (e.g., `submitAction`, `deleteAction`, `filterAction`) to signal they run inside a transition. Do **not** combine `handle` with `Action` — `handle` is reserved for direct event handlers (e.g., `handleClick`, `handleDragStart`). An `Action`-suffixed function wraps async work in a transition; a `handle`-prefixed function responds to a DOM event directly.
+**Standalone vs hook:** The standalone `startTransition` (imported from `react`) doesn't provide `isPending` and doesn't catch errors — errors thrown inside it will propagate as uncaught event handler errors. Use it for background work that shouldn't affect UI pending state — like polling. The `useTransition` hook's `startTransition` sets `isPending` on that component and bubbles errors to the nearest error boundary, so use it when you want visible pending feedback and error handling.
+
+**Naming convention:** Suffix callback props and functions with "Action" (e.g., `submitAction`, `deleteAction`, `filterAction`) to signal they run inside a transition. Do **not** combine `handle` with `Action` — `handle` is reserved for direct event handlers (e.g., `handleClick`, `handleDragStart`), even if they internally wrap `startTransition`. An `Action`-suffixed function is a callback passed as a prop that will be wrapped in a transition by the receiving component.
 
 ### Optimistic Updates
 
@@ -93,7 +95,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 - **Updater** (`setOptimistic(current => ...)`) — For single-value calculations where the setter naturally describes the update. Similar to `setState(prev => ...)`.
 - **Reducer** (`useOptimistic(value, (current, action) => ...)`) — When you need to pass data to the update (which item to add/remove), handle multiple action types, or when the base state might change during pending actions.
 
-`useOptimistic(false)` can also serve as a **pending indicator** — showing "Submitting..." without `useTransition`. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
+`useOptimistic(false)` can also serve as a **pending indicator** — call `setIsPending(true)` inside the action, and it automatically reverts to `false` when the transition completes. No manual reset needed. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
 
 See `references/patterns.md` for toggle, reducer, updater, list add, delete, move, multi-value, and pending indicator examples.
 
@@ -210,6 +212,8 @@ For animating between these states — page transitions, enter/exit animations, 
 ## When in Doubt
 
 If unsure about the behavior or API of any React primitive (`useOptimistic`, `useActionState`, `useTransition`, `useDeferredValue`, `use`, `Suspense`), consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect.
+
+For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
 
 ## Full Compiled Document
 

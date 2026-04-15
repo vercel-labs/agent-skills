@@ -11,6 +11,16 @@ There are two kinds of work:
 
 The audit identifies both. Steps 2–3 are "add coordination." Step 4 is "fix legacy." Steps 5–6 are "add coordination." Most apps have a mix.
 
+## Step 0: Verify Framework APIs
+
+Before implementing any pattern, check the project's framework version. Next.js invalidation APIs change between major versions (e.g., `revalidatePath` in 14, `revalidateTag` in 14–15, `updateTag`/`refresh()` in 16). Using the wrong API will cause build errors or silent failures.
+
+1. Check the installed version (e.g., `package.json` or `next --version`).
+2. Read the bundled docs at `node_modules/next/dist/docs/` or the framework's API reference.
+3. Confirm which invalidation, caching, and routing APIs are available before writing code.
+
+The patterns in `nextjs.md` target Next.js 16. For older versions, adapt the API calls based on the docs.
+
 ## Step 1: Audit the App
 
 Before writing any code, scan the codebase and classify every async interaction.
@@ -30,8 +40,8 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 
 **Look for legacy patterns to fix:**
 
-- **Every `useState` + `useEffect` pair** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places.
-- **Every `useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. After `refresh()` delivers fresh data, `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates every render.
+- **Every `useState` + `useEffect` pair** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places. **Exception:** streaming responses via `fetch` + `ReadableStream` are not this anti-pattern — client-side streaming is legitimate.
+- **Every `useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. After `refresh()` delivers fresh data, `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates every render. **Exception:** components that need both `useOptimistic(prop)` for display and `useState` for an edit draft — here `useState` is for the local draft, not the server value.
 - **Every `onClick` that calls an async function without `startTransition`** — These bypass error boundaries and provide no pending state. Wrap in `startTransition`, or use a form `action` if the interaction is naturally a submission.
 - **Every API route created just for client-side fetching** — Often a sign of the `useEffect` anti-pattern. The data should come from the server component and flow as props.
 - **Every `handleFooAction` function name** — `handle` prefix and `Action` suffix should not be combined. `handle` is for direct event handlers (`handleClick`, `handleDragStart`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
@@ -45,7 +55,7 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 - **Every custom design component** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
 - **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see the polling example in `nextjs.md`.
 
-Then produce an interaction map and **present it to the user before making changes.** Ask which issues they're actually experiencing and what they'd like to prioritize. Not every finding needs to be fixed — let the user decide scope.
+Then produce an interaction map and **STOP. Present the table to the user and ask what to prioritize before writing any code.** Do not proceed to Step 2 until the user confirms scope. The audit often surfaces more work than needed — the user may only care about a subset.
 
 ```
 | Component      | Interaction     | Current Behavior       | Category     | Pattern              |
@@ -75,7 +85,7 @@ For every design component that uses `onChange` and triggers a navigation or sta
 
 **Rules:**
 
-- Support both `action` and `onChange` for backward compatibility.
+- **Keep `onChange` when adding `action`** — don't replace it. `onChange` fires synchronously before the transition and is needed for validation, `event.preventDefault()`, or consumers that don't use transitions. Add the `action` prop alongside it.
 - Consider setting `data-pending` on the component root when the transition has a visible delay (e.g., filtering a list, switching tabs with async data). Not every action prop needs it — skip it for instant-feeling interactions.
 - Name callback props with "Action" to signal they'll run inside a transition.
 - For animating async state changes (enter/exit, navigation, tab switches, list reorder), see the `vercel-react-view-transitions` skill.
@@ -83,6 +93,8 @@ For every design component that uses `onChange` and triggers a navigation or sta
 ## Step 4: Fix Legacy State Patterns
 
 **Only target `useState` that manages server-derived data or mutation results.** Leave `useState` alone for local UI concerns — form inputs, modals, multi-selects, dependent selects, drag state. These are not anti-patterns.
+
+**Dual-state components:** Some components legitimately need both — `useOptimistic(prop)` for display and `useState` for an edit draft (e.g., an editable text field). Don't flag `useState` as an anti-pattern when a component also needs `useOptimistic` alongside it. The fix is adding `useOptimistic` for the display/committed value, not removing `useState` for the draft.
 
 For every `useState` + `useEffect` pair that fetches server-derived data:
 
@@ -146,7 +158,7 @@ For every mutation where the user expects instant feedback, apply the appropriat
 - Use **updater functions** (`setOptimistic(current => ...)`) for relative updates (cycling, incrementing, toggling) — prevents stale closures on rapid interactions.
 - Use **reducers** (not updaters) when the base state might change during the Action (e.g., from polling), or when handling multiple action types.
 - A component can have **multiple `useOptimistic` calls** for independent values.
-- Pair rollback with user-visible feedback (`toast.error()` or error boundary).
+- **Every optimistic update must have error feedback.** `useOptimistic` silently reverts on failure — the user sees the value snap back with no explanation. Add `try/catch` around the server action with `toast.error()` for expected failures. Don't leave catch blocks empty.
 - For list adds, generate a UUID on the client and pass it to the server.
 - Every server action that mutates data must call `updateTag()` or `refresh()`.
 
@@ -169,7 +181,7 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 
 ## Step 7: Verify
 
-Walk through every row in the interaction map from Step 1:
+**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every row in the interaction map from Step 1 and test each interaction manually:
 
 - Does loading avoid layout shift? (Skeleton matches content)
 - Does the mutation provide feedback? (Optimistic or pending indicator)
