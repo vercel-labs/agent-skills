@@ -182,7 +182,7 @@ For animating between these states — page transitions, enter/exit animations, 
 ## Common Mistakes
 
 - **Skipping the audit** — Without classifying interactions first, you'll miss coordination gaps or apply the wrong pattern. See [Step 1: Audit](#step-1-audit-the-app).
-- **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the server action succeeds, but without `updateTag()` or `refresh()`, the server never re-renders. The optimistic value settles to stale data. Every server action that mutates data must invalidate. See [Server Actions + Cache Invalidation](#server-actions--cache-invalidation).
+- **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the server action succeeds, but without `updateTag()` or `refresh()`, the server never re-renders. The optimistic value settles to stale data. Every server action that mutates data must invalidate. See [Invalidation After Mutations](#invalidation-after-mutations).
 - **`useState` + `useEffect` for server-derived state** — Creates the coordination problem. Fetch state client-side, manage it locally, and now mutations and navigation don't talk to each other. Fix: server data as props, `useOptimistic` for instant feedback.
 - **`useState(prop)` instead of `useOptimistic(prop)`** — `useState` only reads the initial value on mount. After `refresh()` delivers fresh server data, the prop updates but `useState` ignores it — the component shows stale values. `useOptimistic(prop)` re-evaluates every render, automatically tracking server updates. This is the most common subtle bug: the component works on first render but goes stale after mutations.
 - **`onClick` with raw `await` instead of form `action` or `startTransition`** — Both form actions and `startTransition` provide transition wrapping. Use whichever fits the interaction — forms for submissions/toggles, `startTransition` for everything else. The mistake is doing neither.
@@ -315,7 +315,7 @@ For every `useState` + `useEffect` pair that fetches server-derived data:
 3. Pass the data from a server component as a prop — **but first check if the data is actually server-only.** Constants (enums, option lists, static arrays) can often be imported directly in client components.
 4. Add `useOptimistic` for instant feedback on mutations
 5. Where suitable, use form `action` instead of `onClick` (e.g., submit buttons, toggles, delete actions). Don't force everything into forms — `startTransition` with `onClick` is fine for interactions that aren't naturally form submissions.
-6. **Ensure the server action invalidates** — call `updateTag()` or `refresh()` after mutating data. See [Server Actions + Cache Invalidation](#server-actions--cache-invalidation).
+6. **Ensure the server action invalidates** — call `updateTag()` or `refresh()` after mutating data. See [Invalidation After Mutations](#invalidation-after-mutations).
 7. **Remove `key` props used to force remounts on data changes** — `useOptimistic` tracks the base value automatically; `key`-based remounting is only needed for `useState`.
 
 For every `useState(prop)` / `useState(initialProp)` that stores server-derived data:
