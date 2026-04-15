@@ -6,7 +6,7 @@ April 2026
 
 ---
 
-Use this skill when adding optimistic updates, loading states, pending indicators, or async coordination to a React app — or when fixing frozen UI, stale data, and uncoordinated mutations.
+Use this skill to review a React app's async patterns and suggest improvements — fixing frozen UI, stale data, uncoordinated mutations, missing loading states, or lack of feedback. This is a collaborative audit tool: scan the codebase, surface issues, present findings to the user, and implement what they prioritize.
 
 Coordinate async UI states using React's built-in primitives. The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
 
@@ -31,7 +31,7 @@ Every async interaction creates an in-between state. Each has a primitive:
 | 5 | **Action props** | "Control responded instantly" | Design component with `action` prop |
 | 6 | **Stale-while-revalidate** | "Searching (old results visible)" | `useDeferredValue` + Suspense-enabled source |
 
-This is an implementation order, not a "pick one" list. Implement every pattern that fits the app. Only skip a pattern if the app has no use case for it.
+This is a reference for what's possible, not a checklist to apply blindly. Review the app, identify which patterns are relevant, and present your findings to the user. They decide what to prioritize.
 
 ### Choosing the Right Pattern
 
@@ -62,9 +62,9 @@ For framework-specific integration (Next.js server actions, `updateTag()`/`refre
 
 Most apps have a mix of both.
 
-## Implementation Workflow
+## Workflow
 
-When adding async coordination to an existing app, **follow the [Implementation Workflow](#implementation-workflow-1) step by step.** Start with the audit — do not skip it.
+**Start with the audit in the [Audit & Review Workflow](#audit--review-workflow).** Scan the codebase, classify interactions, and present findings to the user before making any changes. The user decides what to fix and in what order. If unsure whether something is broken or just different, ask — don't assume.
 
 ---
 
@@ -210,18 +210,18 @@ For framework-specific APIs (Next.js invalidation, routing, caching), always ver
 ---
 ---
 
-# Implementation Workflow
+# Audit & Review Workflow
 
-Follow these steps in order when adding async coordination to an app. Each step builds on the previous one.
+This is a collaborative workflow. Audit the codebase, present findings, and implement what the user prioritizes. Don't apply patterns blindly — surface issues and let the user decide.
 
-There are two kinds of work:
+There are two kinds of findings:
 
-- **Fix legacy patterns** — Replace `useState` + `useEffect` client-side fetching and `useState(prop)` for server-derived data. These are actively broken — mutations and navigation compete because state lives in two places.
-- **Add coordination** — Take a working but non-interactive app (no feedback, no loading states, frozen UI during async work) and add transitions, optimistic updates, pending indicators, and Suspense boundaries.
+- **Legacy patterns** — `useState` + `useEffect` client-side fetching, `useState(prop)` for server-derived data. These are actively broken — mutations and navigation compete because state lives in two places.
+- **Missing coordination** — Working but non-interactive: no feedback, no loading states, frozen UI during async work. These are improvement opportunities, not bugs.
 
 **Important:** Only fix what's actually broken or causing UX issues. Don't convert working code just to match a pattern. `useState` for local UI state (form inputs, modals, controlled selects) is completely fine — the anti-pattern is `useState` for **server-derived data** that should track server updates. If you're unsure whether something is broken or just different, **ask the user** — confirm what issues they're seeing before refactoring.
 
-The audit identifies both. Steps 2–3 are "add coordination." Step 4 is "fix legacy." Steps 5–6 are "add coordination." Most apps have a mix.
+The audit surfaces both. Present the full picture, then work on what the user cares about.
 
 ## Step 0: Verify Framework APIs
 
@@ -281,7 +281,9 @@ Then produce an interaction map and **STOP. Present the table to the user and as
 
 ## Step 2: Add Suspense Boundaries
 
-For every async component, decide: should this block the page, or stream in? See [Suspense Boundaries](#suspense-boundaries-1) for skeleton co-location and boundary structure examples.
+*Only implement items the user approved from the audit.*
+
+For every async component the user wants addressed, decide: should this block the page, or stream in? See [Suspense Boundaries](#suspense-boundaries-1) for skeleton co-location and boundary structure examples.
 
 **Rules:**
 
@@ -293,7 +295,7 @@ For every async component, decide: should this block the page, or stream in? See
 
 ## Step 3: Convert Design Components to Action Props
 
-For every design component that uses `onChange` and triggers a navigation or state update, add the action props pattern. See [Action Props](#action-props-design-components) for the full TabList, EditableText, and SubmitButton implementations.
+For approved design components that use `onChange` and trigger a navigation or state update, add the action props pattern. See [Action Props](#action-props-design-components) for the full TabList, EditableText, and SubmitButton implementations.
 
 **Rules:**
 
@@ -354,7 +356,7 @@ Server component passes `hasFavorited` as a prop. `useOptimistic` provides insta
 
 ## Step 5: Add Optimistic Updates
 
-For every mutation where the user expects instant feedback, apply the appropriate pattern from [Optimistic Mutations](#optimistic-mutations):
+For approved mutations where the user expects instant feedback, apply the appropriate pattern from [Optimistic Mutations](#optimistic-mutations):
 
 - **Toggle** (favorite, like) — Boolean `useOptimistic` with form `action`
 - **Multi-value** (follow with count) — Reducer form of `useOptimistic`
@@ -391,9 +393,9 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 - `data-pending` requires a parent with `has-data-pending:` styles to create a visible effect. Always add both parts.
 - For grouped regions, use `group-has-data-pending:`.
 
-## Step 7: Verify
+## Step 7: Review Together
 
-**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every row in the interaction map from Step 1 and test each interaction manually:
+**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every item you changed with the user and verify each interaction:
 
 - Does loading avoid layout shift? (Skeleton matches content)
 - Does the mutation provide feedback? (Optimistic or pending indicator)
@@ -413,7 +415,7 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 
 # Async React Patterns
 
-Code reference for each primitive. See [Implementation Workflow](#implementation-workflow-1) for the step-by-step workflow. For framework-specific patterns (Next.js server actions, router behavior), see [Async React in Next.js](#async-react-in-nextjs).
+Code reference for each primitive. See [Audit & Review Workflow](#audit--review-workflow) for the step-by-step workflow. For framework-specific patterns (Next.js server actions, router behavior), see [Async React in Next.js](#async-react-in-nextjs).
 
 ---
 

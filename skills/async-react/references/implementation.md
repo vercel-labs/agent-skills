@@ -1,15 +1,15 @@
-# Implementation Workflow
+# Audit & Review Workflow
 
-Follow these steps in order when adding async coordination to an app. Each step builds on the previous one.
+This is a collaborative workflow. Audit the codebase, present findings, and implement what the user prioritizes. Don't apply patterns blindly — surface issues and let the user decide.
 
-There are two kinds of work:
+There are two kinds of findings:
 
-- **Fix legacy patterns** — Replace `useState` + `useEffect` client-side fetching and `useState(prop)` for server-derived data. These are actively broken — mutations and navigation compete because state lives in two places.
-- **Add coordination** — Take a working but non-interactive app (no feedback, no loading states, frozen UI during async work) and add transitions, optimistic updates, pending indicators, and Suspense boundaries.
+- **Legacy patterns** — `useState` + `useEffect` client-side fetching, `useState(prop)` for server-derived data. These are actively broken — mutations and navigation compete because state lives in two places.
+- **Missing coordination** — Working but non-interactive: no feedback, no loading states, frozen UI during async work. These are improvement opportunities, not bugs.
 
 **Important:** Only fix what's actually broken or causing UX issues. Don't convert working code just to match a pattern. `useState` for local UI state (form inputs, modals, controlled selects) is completely fine — the anti-pattern is `useState` for **server-derived data** that should track server updates. If you're unsure whether something is broken or just different, **ask the user** — confirm what issues they're seeing before refactoring.
 
-The audit identifies both. Steps 2–3 are "add coordination." Step 4 is "fix legacy." Steps 5–6 are "add coordination." Most apps have a mix.
+The audit surfaces both. Present the full picture, then work on what the user cares about.
 
 ## Step 0: Verify Framework APIs
 
@@ -69,7 +69,9 @@ Then produce an interaction map and **STOP. Present the table to the user and as
 
 ## Step 2: Add Suspense Boundaries
 
-For every async component, decide: should this block the page, or stream in? See `patterns.md` for skeleton co-location and boundary structure examples.
+*Only implement items the user approved from the audit.*
+
+For every async component the user wants addressed, decide: should this block the page, or stream in? See `patterns.md` for skeleton co-location and boundary structure examples.
 
 **Rules:**
 
@@ -81,7 +83,7 @@ For every async component, decide: should this block the page, or stream in? See
 
 ## Step 3: Convert Design Components to Action Props
 
-For every design component that uses `onChange` and triggers a navigation or state update, add the action props pattern. See `patterns.md` for the full TabList, EditableText, and SubmitButton implementations.
+For approved design components that use `onChange` and trigger a navigation or state update, add the action props pattern. See `patterns.md` for the full TabList, EditableText, and SubmitButton implementations.
 
 **Rules:**
 
@@ -142,7 +144,7 @@ Server component passes `hasFavorited` as a prop. `useOptimistic` provides insta
 
 ## Step 5: Add Optimistic Updates
 
-For every mutation where the user expects instant feedback, apply the appropriate pattern from `patterns.md`:
+For approved mutations where the user expects instant feedback, apply the appropriate pattern from `patterns.md`:
 
 - **Toggle** (favorite, like) — Boolean `useOptimistic` with form `action`
 - **Multi-value** (follow with count) — Reducer form of `useOptimistic`
@@ -179,9 +181,9 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 - `data-pending` requires a parent with `has-data-pending:` styles to create a visible effect. Always add both parts.
 - For grouped regions, use `group-has-data-pending:`.
 
-## Step 7: Verify
+## Step 7: Review Together
 
-**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every row in the interaction map from Step 1 and test each interaction manually:
+**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every item you changed with the user and verify each interaction:
 
 - Does loading avoid layout shift? (Skeleton matches content)
 - Does the mutation provide feedback? (Optimistic or pending indicator)

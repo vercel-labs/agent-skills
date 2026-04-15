@@ -1,6 +1,6 @@
 ---
 name: vercel-async-react
-description: Fix React UX issues (frozen UI, missing loading states, stale data, uncoordinated mutations) using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Replaces useState/useEffect fetch patterns, onClick mutations, and manual loading management. Use when the user reports UI freezing, no async feedback, data out of sync after navigation, layout shift on load, sluggish search/filter, or wants optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
+description: Audit and review React async patterns — surface frozen UI, missing loading states, stale data, and uncoordinated mutations. Suggests fixes using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Use when the user wants to review their async patterns, reports UI freezing, no async feedback, data out of sync after navigation, layout shift on load, or wants suggestions for optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
 license: MIT
 metadata:
   author: vercel
@@ -9,9 +9,9 @@ metadata:
 
 # Async React
 
-Use this skill when adding optimistic updates, loading states, pending indicators, or async coordination to a React app — or when fixing frozen UI, stale data, and uncoordinated mutations.
+Use this skill to review a React app's async patterns and suggest improvements — fixing frozen UI, stale data, uncoordinated mutations, missing loading states, or lack of feedback. This is a collaborative audit tool: scan the codebase, surface issues, present findings to the user, and implement what they prioritize.
 
-Coordinate async UI states using React's built-in primitives. The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
+The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
 
 This is the combination of React 18's concurrent features and React 19's coordination APIs. The React team calls this "Async React" — a complete system for building responsive async applications through composable primitives. Based on [Ricky Hanlon's React Conf 2025 demo](https://github.com/rickhanlonii/async-react), the vision is that product code becomes simple and declarative because three infrastructure layers handle async coordination internally:
 
@@ -34,7 +34,7 @@ Every async interaction creates an in-between state. Each has a primitive:
 | 5 | **Action props** | "Control responded instantly" | Design component with `action` prop |
 | 6 | **Stale-while-revalidate** | "Searching (old results visible)" | `useDeferredValue` + Suspense-enabled source |
 
-This is an implementation order, not a "pick one" list. Implement every pattern that fits the app. Only skip a pattern if the app has no use case for it.
+This is a reference for what's possible, not a checklist to apply blindly. Review the app, identify which patterns are relevant, and present your findings to the user. They decide what to prioritize.
 
 ### Choosing the Right Pattern
 
@@ -65,9 +65,9 @@ For framework-specific integration (Next.js server actions, `updateTag()`/`refre
 
 Most apps have a mix of both.
 
-## Implementation Workflow
+## Workflow
 
-When adding async coordination to an existing app, **follow `references/implementation.md` step by step.** Start with the audit — do not skip it. Present findings to the user before making changes. If unsure whether a pattern is causing issues, ask.
+**Start with the audit in `references/implementation.md`.** Scan the codebase, classify interactions, and present findings to the user before making any changes. The user decides what to fix and in what order. If unsure whether something is broken or just different, ask — don't assume.
 
 ---
 
@@ -205,7 +205,7 @@ For animating between these states — page transitions, enter/exit animations, 
 
 ## Reference Files
 
-- **`references/implementation.md`** — Step-by-step audit and implementation workflow. Start here.
+- **`references/implementation.md`** — Audit and review workflow. Start here.
 - **`references/patterns.md`** — Detailed code patterns for each primitive.
 - **`references/nextjs.md`** — Next.js App Router integration: server actions, `updateTag()`, router behavior, promise-passing.
 
