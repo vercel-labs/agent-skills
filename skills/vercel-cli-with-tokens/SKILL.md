@@ -94,6 +94,32 @@ export VERCEL_PROJECT_ID="<project-id>"
 
 Note: `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` must be set together — setting only one causes an error.
 
+### Resolving `VERCEL_ORG_ID` from a team slug
+
+Some integrations (e.g. Stripe Projects / Fabric) provision `VERCEL_TOKEN` and `VERCEL_PROJECT_ID` but do not emit `VERCEL_ORG_ID`. If you have a team slug (from a project URL or a `--scope` value) but not the org ID, resolve it by walking `vercel teams ls` with pagination — the CLI returns 20 teams per page, so a slug on a later page must be fetched via `--next`:
+
+```bash
+export VERCEL_TOKEN="<your-token>"   # required for the teams call
+
+TEAM_SLUG="<team-slug>"               # e.g. extracted from project_url
+
+export VERCEL_ORG_ID=$(
+  NEXT=""
+  while :; do
+    PAGE=$(vercel teams ls --format json ${NEXT:+--next "$NEXT"})
+    HIT=$(echo "$PAGE" | jq -r --arg s "$TEAM_SLUG" '.teams[] | select(.slug==$s) | .id')
+    if [ -n "$HIT" ]; then echo "$HIT"; break; fi
+    NEXT=$(echo "$PAGE" | jq -r '.pagination.next // empty')
+    [ -z "$NEXT" ] && break
+  done
+)
+
+# Verify (empty means the slug was not found for this token)
+echo "$VERCEL_ORG_ID"
+```
+
+Once both `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` are exported, the CLI will use them directly — no `vercel link` needed.
+
 ## CLI Setup
 
 Ensure the Vercel CLI is installed and up to date:
