@@ -325,6 +325,39 @@ If the CLI fails with `Authentication required`:
 - Verify: `vercel whoami` (uses `VERCEL_TOKEN` from environment).
 - Ask the user for a fresh token.
 
+### Stripe Projects vca_ token rejected
+
+Tokens provisioned by Stripe Projects for CLI/runtime use (`vca_` prefix) are
+**short-lived** (1 hour by default) and get revoked when the Stripe Projects
+integration re-provisions or rotates credentials. If the CLI reports "The token
+provided via VERCEL_TOKEN environment variable is not valid" and the token was
+sourced from a Stripe Projects workflow:
+
+- The token has likely expired. Rotate credentials via the Stripe CLI to get a
+  fresh token, then re-pull env vars:
+
+  ```bash
+  # Find the Vercel project resource name
+  NAME=$(stripe projects status --json | jq -r '.data.services[] | select(.provider=="Vercel") | .name' | head -1)
+
+  # Rotate credentials (mints a fresh vca_ token, revokes the old one)
+  stripe projects rotate "$NAME" --json --yes
+
+  # Re-pull env so VERCEL_TOKEN updates in .env
+  stripe projects env --pull
+  ```
+
+  Note: `stripe projects rotate` only works for project resources (services),
+  not plan resources. If `.data.services` is empty but `.data.plans` has
+  entries, there's no rotatable project token — the token rejection is
+  unrelated to this flow.
+- Do NOT suggest `vercel login` as an alternative — that issues a different
+  (Vercel CLI app) token that won't be associated with the Stripe Projects
+  resource.
+- If the user needs a long-lived token for CI/automation outside of Stripe
+  Projects, suggest creating a personal access token at
+  vercel.com/account/tokens instead.
+
 ### Wrong team
 
 Verify the scope is correct:
