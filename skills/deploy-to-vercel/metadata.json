@@ -1,0 +1,6 @@
+{
+  "version": "3.0.0",
+  "organization": "Vercel",
+  "date": "January 2026",
+  "abstract": "Deploy applications and websites to Vercel. Handles preview and production deployments, git integration, environment variables, and domain configuration via the Vercel CLI."
+}
