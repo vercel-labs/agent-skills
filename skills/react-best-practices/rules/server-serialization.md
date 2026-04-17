@@ -17,6 +17,7 @@ async function Page() {
   return <Profile user={user} />
 }
 
+// In a separate file (Profile.tsx):
 'use client'
 function Profile({ user }: { user: User }) {
   return <div>{user.name}</div>  // uses 1 field
@@ -31,6 +32,7 @@ async function Page() {
   return <Profile name={user.name} />
 }
 
+// In a separate file (Profile.tsx):
 'use client'
 function Profile({ name }: { name: string }) {
   return <div>{name}</div>
