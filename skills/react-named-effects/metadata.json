@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "organization": "Community",
+  "date": "April 2026",
+  "abstract": "Guide for naming useEffect, useCallback, and useMemo callbacks with function expressions instead of anonymous arrows. Improves stack traces, makes component data flow scannable, and acts as a diagnostic surface for identifying effects that should be split, eliminated, or extracted into custom hooks.",
+  "references": [
+    "https://neciudan.dev/name-your-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://kyleshevlin.com/use-encapsulation/",
+    "https://sergiodxa.com/articles/pro-tip-name-your-useeffect-functions"
+  ]
+}
