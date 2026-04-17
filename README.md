@@ -4,6 +4,8 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 
 Skills follow the [Agent Skills](https://agentskills.io/) format.
 
+**Compatible with:** Claude Code, AdaL, Codex, Cursor, and other AI coding agents that support the Agent Skills format.
+
 ## Available Skills
 
 ### react-best-practices
