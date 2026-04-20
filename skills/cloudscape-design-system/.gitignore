@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+crawled_data/
+.pytest_cache/
+node_modules/
+.DS_Store
