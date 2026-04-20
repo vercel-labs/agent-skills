@@ -68,6 +68,27 @@ React Native best practices optimized for AI agents. Contains 16 rules across 7 
 - Architecture (Medium) - monorepo structure, imports
 - Platform (Medium) - iOS/Android specific patterns
 
+### async-react
+
+Fix React UX issues (frozen UI, missing loading states, stale data, uncoordinated mutations) using React's async coordination primitives. Covers `useOptimistic`, `useTransition`, `useActionState`, `Suspense`, `useDeferredValue`, form actions, and the action props pattern.
+
+**Use when:**
+- Adding optimistic updates, pending indicators, or loading skeletons
+- Fixing frozen UI during async work or stale data after navigation
+- Replacing `useState`/`useEffect` fetch patterns with server data + `useOptimistic`
+- Converting `onClick` mutations to form actions
+- Building design components with action props (tabs, chips, selects)
+- Implementing stale-while-revalidate search with `useDeferredValue`
+
+**Topics covered:**
+- `useOptimistic` (toggles, reducers, updater functions, multi-value, list add/delete)
+- `useTransition` + `data-pending` CSS pattern for pending feedback
+- `useActionState` for form submission with server response
+- `<Suspense>` boundaries with co-located skeleton fallbacks
+- `useDeferredValue` with `useSuspenseQuery` for async search
+- Action props pattern (TabList, EditableText, SubmitButton)
+- Next.js integration (server actions, `updateTag()`/`refresh()`, router behavior, promise-passing)
+
 ### react-view-transitions
 
 Implement smooth, native-feeling animations using React's View Transition API. Covers the `<ViewTransition>` component, `addTransitionType`, transition types, and Next.js integration including the `transitionTypes` prop on `next/link`.
