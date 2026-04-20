@@ -1,6 +1,6 @@
 ---
 name: vercel-async-react
-description: Audit and review React async patterns — surface frozen UI, missing loading states, stale data, and uncoordinated mutations. Suggests fixes using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Use when the user wants to review their async patterns, reports UI freezing, no async feedback, data out of sync after navigation, layout shift on load, or wants suggestions for optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
+description: Audit and review React async patterns — surface frozen UI, missing loading states, stale data, and uncoordinated mutations. Suggests fixes using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Use when the user wants to review their async patterns, reports UI freezing, no async feedback, data out of sync after navigation, or wants suggestions for optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
 license: MIT
 metadata:
   author: vercel
@@ -51,6 +51,7 @@ This is a reference for what's possible, not a checklist to apply blindly. Revie
 | Tab / filter switch | `action` prop on design component | Instant highlight, old content stays |
 | Search / filter with async results | `useDeferredValue` + `useSuspenseQuery` | Stale results stay visible while fresh data loads |
 | Streaming data to client components | Promise prop + `use()` | Server starts fetch, client unwraps — enables streaming |
+| Pagination / nav link loading (Next.js) | `useLinkStatus` inside `<Link>` child | Per-link spinner shows which link is loading |
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 

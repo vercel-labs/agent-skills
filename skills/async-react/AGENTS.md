@@ -48,6 +48,7 @@ This is a reference for what's possible, not a checklist to apply blindly. Revie
 | Tab / filter switch | `action` prop on design component | Instant highlight, old content stays |
 | Search / filter with async results | `useDeferredValue` + `useSuspenseQuery` | Stale results stay visible while fresh data loads |
 | Streaming data to client components | Promise prop + `use()` | Server starts fetch, client unwraps — enables streaming |
+| Pagination / nav link loading (Next.js) | `useLinkStatus` inside `<Link>` child | Per-link spinner shows which link is loading |
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 
@@ -225,9 +226,9 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 **Look for missing coordination:**
 
 - **Every async component** — Any component with `await`. Candidates for `<Suspense>` boundaries.
-- **Every `<Suspense>` boundary** — Check if fallbacks match the content layout. Missing or spinner-only fallbacks cause layout shift.
 - **Every mutation** — Form submissions, button clicks that call server actions. Classify each: does the user expect instant feedback (optimistic), or is confirmation important (pessimistic)?
 - **Every navigation trigger** — Check if the control provides instant visual feedback (tab highlight, filter selection).
+- **Every `<Suspense>` boundary** — Check if fallbacks match the content layout. Flag missing fallbacks on visible content, generic spinners instead of skeletons, and fallbacks that don't reserve the same dimensions as the real content.
 - **Every custom design component** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
 - **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see [Background Polling](#background-polling-simple-approach).
 
@@ -1298,6 +1299,44 @@ function TaskPage({ params }: { params: Promise<{ id: string }> }) {
 Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chaining promises (e.g., `commentsFromTask(taskPromise)`) lets you derive dependent data without `await`.
 
 See: [Streaming guide](https://nextjs.org/docs/app/guides/streaming), [Suspense](https://nextjs.org/docs/app/guides/streaming#streaming-with-suspense), [Data fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
+
+---
+
+## Link Pending Indicators (useLinkStatus)
+
+[`useLinkStatus`](https://nextjs.org/docs/app/api-reference/functions/use-link-status) is a Next.js hook that reads the pending state of a parent `<Link>`. Use it inside a child of `next/link` to show per-link loading indicators during navigation — useful for pagination, nav items, or any list of links where the user needs to know which one is loading.
+
+```tsx
+'use client';
+
+import Link from 'next/link';
+import { useLinkStatus } from 'next/link';
+
+function PageLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href}>
+      <PageLinkContent>{children}</PageLinkContent>
+    </Link>
+  );
+}
+
+function PageLinkContent({ children }: { children: React.ReactNode }) {
+  const { pending } = useLinkStatus();
+
+  return (
+    <span className={pending ? 'opacity-50' : ''}>
+      {children}
+      {pending && <Spinner className="ml-1 inline w-3 h-3" />}
+    </span>
+  );
+}
+```
+
+**Key rules:**
+
+- `useLinkStatus` must be called in a **child** component of `<Link>`, not in the same component that renders the `<Link>`.
+- It reads the pending state of the parent link's navigation transition, not the page's transition.
+- Works well alongside `useTransition` for filter/tab navigation — use `useLinkStatus` for per-link indicators, `useTransition` for page-level pending state.
 
 ---
 

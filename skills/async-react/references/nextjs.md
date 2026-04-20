@@ -147,6 +147,44 @@ See: [Streaming guide](https://nextjs.org/docs/app/guides/streaming), [Suspense]
 
 ---
 
+## Link Pending Indicators (useLinkStatus)
+
+[`useLinkStatus`](https://nextjs.org/docs/app/api-reference/functions/use-link-status) is a Next.js hook that reads the pending state of a parent `<Link>`. Use it inside a child of `next/link` to show per-link loading indicators during navigation — useful for pagination, nav items, or any list of links where the user needs to know which one is loading.
+
+```tsx
+'use client';
+
+import Link from 'next/link';
+import { useLinkStatus } from 'next/link';
+
+function PageLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href}>
+      <PageLinkContent>{children}</PageLinkContent>
+    </Link>
+  );
+}
+
+function PageLinkContent({ children }: { children: React.ReactNode }) {
+  const { pending } = useLinkStatus();
+
+  return (
+    <span className={pending ? 'opacity-50' : ''}>
+      {children}
+      {pending && <Spinner className="ml-1 inline w-3 h-3" />}
+    </span>
+  );
+}
+```
+
+**Key rules:**
+
+- `useLinkStatus` must be called in a **child** component of `<Link>`, not in the same component that renders the `<Link>`.
+- It reads the pending state of the parent link's navigation transition, not the page's transition.
+- Works well alongside `useTransition` for filter/tab navigation — use `useLinkStatus` for per-link indicators, `useTransition` for page-level pending state.
+
+---
+
 ## Background Polling (Simple Approach)
 
 For quick prototyping or low-frequency updates, `startTransition` + [`router.refresh()`](https://nextjs.org/docs/app/api-reference/functions/use-router) on an interval is a simple option. Prefer server-sent events, WebSockets, or a real-time data layer for production live data.

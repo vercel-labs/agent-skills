@@ -49,9 +49,9 @@ grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use
 **Look for missing coordination:**
 
 - **Every async component** — Any component with `await`. Candidates for `<Suspense>` boundaries.
-- **Every `<Suspense>` boundary** — Check if fallbacks match the content layout. Missing or spinner-only fallbacks cause layout shift.
 - **Every mutation** — Form submissions, button clicks that call server actions. Classify each: does the user expect instant feedback (optimistic), or is confirmation important (pessimistic)?
 - **Every navigation trigger** — Check if the control provides instant visual feedback (tab highlight, filter selection).
+- **Every `<Suspense>` boundary** — Check if fallbacks match the content layout. Flag missing fallbacks on visible content, generic spinners instead of skeletons, and fallbacks that don't reserve the same dimensions as the real content.
 - **Every custom design component** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
 - **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see the polling example in `nextjs.md`.
 
