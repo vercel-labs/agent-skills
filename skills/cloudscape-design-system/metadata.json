@@ -1,0 +1,10 @@
+{
+  "version": "0.1.0",
+  "organization": "Community",
+  "abstract": "Installable agent skill that ships the full AWS Cloudscape Design System documentation (components, patterns, foundation, get-started, guidelines) as markdown, ingested from cloudscape.design's own LLM-oriented index. Agents use it to ground answers about Cloudscape React components and design patterns in the authoritative source.",
+  "references": [
+    "https://cloudscape.design/",
+    "https://cloudscape.design/llms.txt",
+    "https://github.com/cloudscape-design/components"
+  ]
+}
