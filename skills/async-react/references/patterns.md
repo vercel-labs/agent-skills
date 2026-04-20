@@ -1,6 +1,6 @@
 # Async React Patterns
 
-Code reference for each primitive. See `implementation.md` for the step-by-step workflow. For framework-specific patterns (Next.js server actions, router behavior), see `nextjs.md`.
+Code reference for each primitive. See `implementation.md` for the step-by-step workflow. For framework-specific integration (invalidation APIs, router behavior), see `nextjs.md`.
 
 ---
 
@@ -68,13 +68,17 @@ Use siblings when components have independent data **and predictable sizes**. If
 
 Choose the boundary structure that produces the best loading state for the page — there's no single rule.
 
+### Fallback Quality
+
+Fallbacks should match the content's layout to prevent layout shift. Use skeletons for data, static markup for interactive controls (tabs, filters), and omit `fallback` only when the child renders nothing (side-effect components, conditional guards).
+
 ---
 
 ## Action Props (Design Components)
 
 ### TabList — Full Implementation
 
-Support both `changeAction` and `onChange`. The "Action" suffix signals the callback runs inside a transition. The action prop accepts `void | Promise<void>`, so consumers don't need their own `startTransition`:
+Support both `action` and `onChange`. The action prop accepts `void | Promise<void>`, so consumers don't need their own `startTransition`:
 
 ```tsx
 'use client';
@@ -84,24 +88,23 @@ import { startTransition, useOptimistic } from 'react';
 type TabListProps = {
   tabs: { label: string; value: string }[];
   activeTab: string;
-  changeAction?: (value: string) => void | Promise<void>;
+  action?: (value: string) => void | Promise<void>;
   onChange?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export function TabList({ tabs, activeTab, changeAction, onChange }: TabListProps) {
+export function TabList({ tabs, activeTab, action, onChange }: TabListProps) {
   const [optimisticTab, setOptimisticTab] = useOptimistic(activeTab);
-  const isPending = optimisticTab !== activeTab;
 
   function handleTabChange(e: React.MouseEvent<HTMLButtonElement>, value: string) {
     onChange?.(e);
     startTransition(async () => {
       setOptimisticTab(value);
-      await changeAction?.(value);
+      await action?.(value);
     });
   }
 
   return (
-    <div data-pending={isPending ? '' : undefined}>
+    <div>
       {tabs.map(tab => (
         <button
           key={tab.value}
@@ -111,13 +114,14 @@ export function TabList({ tabs, activeTab, changeAction, onChange }: TabListProp
           {tab.label}
         </button>
       ))}
-      {isPending && <Spinner />}
     </div>
   );
 }
 ```
 
-`isPending` is derived by comparing the optimistic value to the server value — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`. `onChange` fires synchronously before the transition starts — useful for validation or `event.preventDefault()`. The action prop handles the async coordination. For animating the tab switch itself, see the `vercel-react-view-transitions` skill.
+The design component handles the optimistic switch and transition internally. `onChange` fires synchronously before the transition starts — useful for validation or `event.preventDefault()`. For animating the tab switch itself, see the `vercel-react-view-transitions` skill.
+
+**Pending feedback tradeoff:** This example omits `data-pending` and a built-in spinner, leaving pending feedback to the consumer (see Consumer-Driven Pending UI below). Alternatively, the design component can include a built-in spinner and set `data-pending` on its root — this is simpler for consumers but less flexible. Derive `isPending` from `optimisticTab !== activeTab` to avoid a separate `useTransition`.
 
 ### Consumer Usage
 
@@ -125,30 +129,32 @@ export function TabList({ tabs, activeTab, changeAction, onChange }: TabListProp
 // Before — freezes until navigation completes
 <TabList tabs={tabs} activeTab={current} onChange={() => navigate(value)} />
 
-// After — tab highlights instantly, spinner shows during async work
-<TabList tabs={tabs} activeTab={current} changeAction={value => navigate(value)} />
+// After — tab highlights instantly, old content stays visible during async work
+<TabList tabs={tabs} activeTab={current} action={value => navigate(value)} />
 ```
 
-### Customizing Pending UI (hideSpinner + data-pending)
+### Consumer-Driven Pending UI (data-pending)
 
-When the consumer wants custom pending treatment instead of the built-in spinner, they add their own `useTransition` and use `data-pending` for CSS-based feedback:
+When the consumer wants pending feedback on surrounding content (e.g., fading a list while filtering), they add their own `useTransition` and `data-pending` wrapper:
 
 ```tsx
-function PostTabs() {
+function FilteredView() {
   const [isPending, startTransition] = useTransition();
 
   return (
-    <div data-pending={isPending ? '' : undefined}>
+    <div className="group" data-pending={isPending ? '' : undefined}>
       <TabList
-        hideSpinner
         tabs={tabs}
         activeTab={current}
-        changeAction={value => {
+        action={value => {
           startTransition(() => {
             navigate(value);
           });
         }}
       />
+      <div className="group-has-data-pending:opacity-50 transition-opacity">
+        <ContentGrid />
+      </div>
     </div>
   );
 }
@@ -300,6 +306,19 @@ export function LikeButton({ isLiked, toggleAction }) {
 
 No `startTransition` needed — form `action` already wraps in a transition. The setter is called inside an Action prop.
 
+**Alternative — updater function** for robustness against rapid double-taps:
+
+```tsx
+const [optimistic, setOptimistic] = useOptimistic(isLiked);
+
+<form action={async () => {
+  setOptimistic(current => !current);
+  await toggleAction();
+}}>
+```
+
+The updater function computes from the latest optimistic state, so rapid double-taps toggle correctly instead of reading a stale closure value. Both approaches work for typical single-tap toggles — use the updater form when rapid interactions are expected.
+
 ### Updater Function (Cycle / Relative)
 
 When computing the next value from the current value, use an updater function instead of reading from the optimistic variable. This prevents stale closures when rapid interactions queue multiple transitions:
@@ -356,23 +375,23 @@ export function TaskCard({ id, priority, assignee }) {
 }
 ```
 
-Each optimistic value settles independently when its transition completes. Both track fresh server data after `refresh()`.
+Each optimistic value settles independently when its transition completes. Both track fresh server data when the framework re-renders with new props.
 
 ### `useState(prop)` Anti-Pattern
 
-`useState(initialValue)` only reads the initial value on mount. After `refresh()` delivers new server data, the prop updates but `useState` ignores it:
+`useState(initialValue)` only reads the initial value on mount. When new server data arrives (via invalidation, revalidation, or navigation), the prop updates but `useState` ignores it:
 
 ```tsx
 // ❌ Stale after refresh — useState ignores prop updates
 function Card({ priority: initialPriority }) {
   const [priority, setPriority] = useState(initialPriority);
-  // After refresh(), initialPriority changes but priority stays stale
+  // After re-render with new data, initialPriority changes but priority stays stale
 }
 
 // ✅ Tracks server data — useOptimistic re-evaluates every render
 function Card({ priority }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
-  // After refresh(), priority changes and optimisticPriority follows
+  // After re-render with new data, priority changes and optimisticPriority follows
 }
 ```
 
@@ -401,19 +420,22 @@ function toggleAction() {
 
 ### One-Way (Counter)
 
+Two hooks — one for each value:
+
 ```tsx
-const [optimistic, setOptimistic] = useOptimistic(
-  { count: voteCount, hasVoted },
-  (state) => ({ count: state.count + 1, hasVoted: true })
-);
+const [optimisticVotes, setOptimisticVotes] = useOptimistic(votes);
+const [optimisticHasVoted, setOptimisticHasVoted] = useOptimistic(hasVoted);
 
 <form action={async () => {
-  setOptimistic(null);
+  setOptimisticVotes(current => current + 1);
+  setOptimisticHasVoted(true);
   await upvote(id);
 }}>
-  <button disabled={optimistic.hasVoted}>👍 {optimistic.count}</button>
+  <button disabled={optimisticHasVoted}>👍 {optimisticVotes}</button>
 </form>
 ```
+
+Use an updater function for the count (`current => current + 1`) to handle rapid clicks correctly. For tightly coupled multi-value updates, see the Multi-Value (Reducer) pattern below.
 
 ### Optimistic Delete (with Error Recovery)
 
@@ -483,7 +505,75 @@ async function submitAction(formData: FormData) {
 }
 ```
 
-Pass the client-generated ID to the server action so the optimistic item and real response share the same key. Use a reducer (not an updater) so that if the base list changes during the Action (e.g., from polling), React re-runs the reducer with the latest data.
+Pass the client-generated ID to the mutation so the optimistic item and real response share the same key. Use a reducer (not an updater) so that if the base list changes during the Action (e.g., from polling), React re-runs the reducer with the latest data.
+
+### Pending-Only List (Empty Initial)
+
+When a server component renders the authoritative list, the client component only needs to track **pending** items. Start with an empty array and reuse the same item component for both real and pending items via a `pending` prop:
+
+```tsx
+'use client';
+
+import { useOptimistic, useRef } from 'react';
+
+export function OptimisticItems({ parentId }: { parentId: string }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [pending, setPending] = useOptimistic<Item[]>([]);
+
+  return (
+    <>
+      {pending.map(item => (
+        <ItemCard key={item.id} item={item} pending />
+      ))}
+      <form
+        ref={formRef}
+        action={async (formData) => {
+          const text = (formData.get('text') as string)?.trim();
+          if (!text) return;
+          formRef.current?.reset();
+
+          const id = crypto.randomUUID();
+          setPending(current => [...current, { id, text, pending: true }]);
+          await createItem(parentId, id, text);
+        }}
+      >
+        <input name="text" required />
+        <button type="submit">Add</button>
+      </form>
+    </>
+  );
+}
+```
+
+The server component renders the real list alongside. The page passes a promise; the server component awaits it inside `<Suspense>`:
+
+```tsx
+// Page (non-async — keeps the static shell)
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const parentIdPromise = params.then(({ id }) => id);
+  return (
+    <Suspense fallback={<ItemSectionSkeleton />}>
+      <ItemSection parentIdPromise={parentIdPromise} />
+    </Suspense>
+  );
+}
+
+// Server component — awaits the promise inside Suspense
+async function ItemSection({ parentIdPromise }: { parentIdPromise: Promise<string> }) {
+  const parentId = await parentIdPromise;
+  const items = await getItems(parentId);
+  return (
+    <div>
+      <OptimisticItems parentId={parentId} />
+      {items.map(item => <ItemCard key={item.id} item={item} />)}
+    </div>
+  );
+}
+```
+
+The server component owns the real list. When the framework delivers fresh data (after invalidation), the pending array resets to `[]` — no dedup reducer needed since the real and pending lists are separate DOM trees. The client-generated UUID is passed to the mutation so the real item uses the same ID, preventing a duplicate flash.
+
+**When to use this vs the full-list approach:** Use the empty-initial pattern when a server component renders the list and the client only handles creation. Use the full-list reducer (above) when the client owns the entire list — e.g., when using `use()` to unwrap a promise, or when the client also handles optimistic deletes and reorders.
 
 ### Immediate Form Clearing
 
@@ -522,9 +612,34 @@ export function CommentForm({ addAction }: { addAction: (content: string) => Pro
 
 ---
 
-## Pessimistic Mutations (data-pending)
+## Pessimistic Mutations
 
 When you don't want to show the result optimistically but still need feedback:
+
+```tsx
+'use client';
+
+import { useOptimistic } from 'react';
+
+export function DeleteButton({ id, deleteAction }) {
+  const [isPending, setIsPending] = useOptimistic(false);
+
+  return (
+    <form action={async () => {
+      setIsPending(true);
+      await deleteAction(id);
+    }}>
+      <button type="submit" disabled={isPending}>
+        Delete
+      </button>
+    </form>
+  );
+}
+```
+
+The `disabled` state on the button provides feedback. If the consumer wants the surrounding card to dim, the `DeleteButton` can also set `data-pending` on itself as a CSS hook for parent `has-data-pending:` styles.
+
+**Alternative — `useTransition` + `onClick`:**
 
 ```tsx
 'use client';
@@ -546,7 +661,7 @@ export function DeleteButton({ id, deleteAction }) {
 }
 ```
 
-Parent (can be a server component):
+Both work. The form `action` version uses `useOptimistic(false)` and gets automatic form coordination. The `useTransition` + `onClick` version is more explicit and sets `data-pending` directly, which can be useful when parent components react via `has-data-pending:` styles:
 
 ```tsx
 <div className="has-data-pending:opacity-50 transition-opacity">
@@ -555,13 +670,24 @@ Parent (can be a server component):
 </div>
 ```
 
-### Grouped Pending (data-pending + group)
+### Grouped Pending
 
-For sibling elements, use `group` on a common ancestor:
+For sibling elements, use `group` on a common ancestor. The component that owns the transition sets `data-pending`:
 
 ```tsx
 <div className="group">
   <FilterBar />   {/* sets data-pending internally */}
+  <div className="group-has-data-pending:opacity-50 transition-opacity">
+    <ContentGrid />
+  </div>
+</div>
+```
+
+Alternatively, the consumer can own the transition and set `data-pending` on the wrapper:
+
+```tsx
+<div className="group" data-pending={isPending ? '' : undefined}>
+  <FilterChips action={filterAction} />
   <div className="group-has-data-pending:opacity-50 transition-opacity">
     <ContentGrid />
   </div>
@@ -705,7 +831,7 @@ function addAction() {
 
 ## Double-Transition Pattern
 
-State updates after `await` inside an async `startTransition` fall outside the transition scope. This matters when you need to close a dialog, reset a form, or update UI after a mutation completes — those updates run immediately instead of being batched with the re-render from `refresh()`.
+State updates after `await` inside an async `startTransition` fall outside the transition scope. This matters when you need to close a dialog, reset a form, or update UI after a mutation completes — those updates run immediately instead of being batched with the re-render triggered by invalidation.
 
 ```tsx
 function CreateDialog({ action }) {
@@ -732,7 +858,7 @@ function CreateDialog({ action }) {
 }
 ```
 
-The outer transition (from `<form action>`) wraps the `await`. The inner `startTransition` batches the dialog close with the re-render triggered by `refresh()` inside the server action. Without it, the dialog closes instantly while the page still shows stale data.
+The outer transition (from `<form action>`) wraps the `await`. The inner `startTransition` batches the dialog close with the re-render triggered by invalidation inside the mutation. Without it, the dialog closes instantly while the page still shows stale data.
 
 ---
 

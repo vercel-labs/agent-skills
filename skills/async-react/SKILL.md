@@ -1,6 +1,6 @@
 ---
 name: vercel-async-react
-description: Audit and review React async patterns — surface frozen UI, missing loading states, stale data, and uncoordinated mutations. Suggests fixes using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Use when the user wants to review their async patterns, reports UI freezing, no async feedback, data out of sync after navigation, or wants suggestions for optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
+description: Audit and review React async patterns — surface frozen UI, missing loading states, stale data, and uncoordinated mutations. Suggests fixes using async primitives (useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, action props). Use when the user wants to review their async patterns, reports UI freezing, no async feedback, data out of sync after navigation, layout shift on load, or wants suggestions for optimistic updates, pending indicators, loading skeletons, or instant-feeling interactions. Also use when mentioning useOptimistic, useTransition, useActionState, startTransition, Suspense, useDeferredValue, action props, data-pending, or async in-between states.
 license: MIT
 metadata:
   author: vercel
@@ -43,19 +43,20 @@ This is a reference for what's possible, not a checklist to apply blindly. Revie
 | Page load / data fetching | `<Suspense>` with skeleton | Show structure instantly, stream data |
 | Toggle (favorite, like) | Form `action` + `useOptimistic` | Instant visual toggle, auto-rollback on failure |
 | One-way action (upvote) | Form `action` + `useOptimistic` with reducer | Increment-only, disable after |
-| Adding to a list | `useOptimistic` + `crypto.randomUUID()` | Shared ID prevents duplicate flash |
+| Adding to a list (client owns list) | `useOptimistic(items, reducer)` + `crypto.randomUUID()` | Shared ID prevents duplicate flash |
+| Adding to a list (server owns list) | `useOptimistic([])` + `crypto.randomUUID()` | Pending-only; server list is separate |
 | Move between groups (Kanban, categories) | `useOptimistic` with reducer + `useTransition` | Instant move, auto-revert on failure |
-| Destructive action (delete) | `useOptimistic` or `useTransition` + `data-pending` | Optimistic delete with rollback, or pending feedback |
+| Destructive action (delete) | `useOptimistic` or `useTransition` | Optimistic delete with rollback, or pending feedback via `disabled` |
 | Form submission (create, edit) | `useActionState` | Server response state, `isPending`, key-based reset |
 | Chat / comment input | `useOptimistic` + immediate form clear | Input clears instantly, optimistic list add |
 | Tab / filter switch | `action` prop on design component | Instant highlight, old content stays |
 | Search / filter with async results | `useDeferredValue` + `useSuspenseQuery` | Stale results stay visible while fresh data loads |
 | Streaming data to client components | Promise prop + `use()` | Server starts fetch, client unwraps — enables streaming |
-| Pagination / nav link loading (Next.js) | `useLinkStatus` inside `<Link>` child | Per-link spinner shows which link is loading |
+| Pagination / nav link loading | Framework link pending hook (e.g., `useLinkStatus`) | Per-link spinner shows which link is loading |
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 
-For framework-specific integration (Next.js server actions, `updateTag()`/`refresh()` invalidation, router behavior), see `references/nextjs.md`. **Every server action that mutates data must call `updateTag()` or `refresh()`** — without this, optimistic updates settle to stale data.
+**Every mutation must invalidate** — without it, optimistic updates settle to stale data. For framework-specific invalidation APIs, see `references/nextjs.md`.
 
 ---
 
@@ -71,7 +72,7 @@ When reviewing an app's async patterns, **follow `references/implementation.md` 
 
 Any function run inside `startTransition` is called an **Action**. React tracks `isPending` automatically. The transition keeps the current UI visible and interactive until the action completes. Multiple updates inside a transition commit together — no intermediate flickers. Errors thrown inside transitions bubble to error boundaries.
 
-**Standalone vs hook:** The standalone `startTransition` (imported from `react`) doesn't provide `isPending` and doesn't catch errors — errors thrown inside it will propagate as uncaught event handler errors. Use it for background work that shouldn't affect UI pending state — like polling. The `useTransition` hook's `startTransition` sets `isPending` on that component and bubbles errors to the nearest error boundary, so use it when you want visible pending feedback and error handling.
+**Standalone vs hook:** The standalone `startTransition` (imported from `react`) doesn't provide `isPending` and doesn't bubble errors to error boundaries — errors propagate as uncaught errors. Use it for background work that shouldn't affect UI pending state — like polling. The `useTransition` hook's `startTransition` provides `isPending` and bubbles errors to the nearest error boundary, so use it when you want visible pending feedback and error handling.
 
 **Naming convention:** Suffix callback props and functions with "Action" (e.g., `submitAction`, `deleteAction`, `filterAction`) to signal they run inside a transition. Do **not** combine `handle` with `Action` — `handle` is reserved for direct event handlers (e.g., `handleClick`, `handleDragStart`), even if they internally wrap `startTransition`. An `Action`-suffixed function is a callback passed as a prop that will be wrapped in a transition by the receiving component.
 
@@ -79,7 +80,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 
 `useOptimistic` shows instant updates while an Action runs in the background. Unlike `useState` (which defers updates inside transitions), `useOptimistic` updates **immediately**. The optimistic value persists while the Action is pending, then settles to the source of truth (props or state) when the transition completes. On failure, it automatically reverts. The setter must be called inside an Action (`startTransition` or form `action`).
 
-**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates `value` every render — when the server sends fresh data (via `refresh()`), the component automatically shows it. `useState(initialValue)` only reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug: `useState(prop)` works on first render, but after a server refresh the component shows stale data. Always use `useOptimistic(prop)` for server-derived values that the user can mutate. You can have **multiple `useOptimistic` calls** in one component for independent values (e.g., priority and assignee on a card).
+**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates `value` every render — when the server sends fresh data (via invalidation or navigation), the component automatically shows it. `useState(initialValue)` only reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug: `useState(prop)` works on first render, but after fresh data arrives the component shows stale data. Always use `useOptimistic(prop)` for server-derived values that the user can mutate. You can have **multiple `useOptimistic` calls** in one component for independent values (e.g., priority and assignee on a card).
 
 **Updater functions:** Pass a function to the setter for state-relative updates: `setOptimistic(current => PRIORITY_CYCLE[current])`. This is essential when rapid interactions queue multiple transitions — each updater computes from the latest optimistic state, not a stale closure. Without an updater, rapid clicks can compute the wrong next value.
 
@@ -138,28 +139,14 @@ See `references/patterns.md` for form with server response, key-based reset, and
 
 ### Action Props Pattern
 
-Design components (tabs, chips, selects, toggles) expose an `action` or `changeAction` prop. Internally, the component wraps the callback in `startTransition` with `useOptimistic`. Consumers swap one prop name — the component handles async coordination. The naming convention matters: **suffixing with "Action"** signals the callback runs inside a transition. The action prop accepts `void | Promise<void>`, so consumers don't need their own `startTransition`.
+Design components (tabs, chips, selects, toggles) expose an `action` prop. Internally, the component wraps the callback in `startTransition` with `useOptimistic`. Consumers pass one prop — the component handles async coordination. The action prop accepts `void | Promise<void>`, so consumers don't need their own `startTransition`.
 
-Key design decisions:
+When reviewing a design component, consider:
 
-- Support both `onChange` (synchronous, fires before the transition) and the action prop
-- Include a built-in spinner with a `hideSpinner` opt-out for custom pending UI via `data-pending`
-- Accept `displayValue` as `ReactNode | (value) => ReactNode` for formatted optimistic state
+- Does it support both `onChange` (synchronous, fires before the transition) and the action prop?
+- Does it include built-in pending feedback (spinner, highlight)? Or does the consumer own pending feedback on surrounding content?
 
 See `references/patterns.md` for TabList, EditableText, and SubmitButton implementations.
-
-### The `data-pending` CSS Pattern
-
-Show pending states without client component wrappers. Set `data-pending` on the transitioning element, **and add `has-data-pending:` styles on a parent** — both parts are required:
-
-```tsx
-<button data-pending={isPending ? '' : undefined}>Delete</button>
-
-// Any ancestor (even a server component) reacts via CSS
-<div className="has-data-pending:opacity-50">
-```
-
-For sibling elements, use `group` on a common ancestor with `group-has-data-pending:` styles. For animating these state changes beyond opacity/pulse, see the `vercel-react-view-transitions` skill.
 
 ---
 
@@ -181,7 +168,7 @@ If unsure about the behavior or API of any React primitive, consult the official
 
 - **`references/implementation.md`** — Audit and review workflow. Start here.
 - **`references/patterns.md`** — Detailed code patterns for each primitive.
-- **`references/nextjs.md`** — Next.js App Router integration: server actions, `updateTag()`, router behavior, promise-passing.
+- **`references/nextjs.md`** — Next.js App Router integration: invalidation, router behavior, promise-passing.
 - **`references/common-mistakes.md`** — Common pitfalls and how to avoid them.
 
 ## Full Compiled Document

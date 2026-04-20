@@ -86,19 +86,19 @@ function LabelFilter() {
     router.push(`/?${params.toString()}`);
   }
 
-  return <ChipGroup items={labels} value={current} changeAction={filterAction} />;
+  return <ChipGroup items={labels} value={current} action={filterAction} />;
 }
 ```
 
 ```tsx
 // Design component — wraps action in transition with optimistic state
-function ChipGroup({ items, value, changeAction }: ChipGroupProps) {
+function ChipGroup({ items, value, action }: ChipGroupProps) {
   const [optimisticValue, setOptimisticValue] = useOptimistic(value);
 
   function handleClick(newValue: string | null) {
     startTransition(async () => {
       setOptimisticValue(newValue);
-      await changeAction(newValue);
+      await action(newValue);
     });
   }
 
@@ -202,9 +202,18 @@ export function usePolling(intervalMs = 5000) {
     const id = setInterval(() => {
       startTransition(() => router.refresh());
     }, intervalMs);
-    return () => clearInterval(id);
+
+    const onFocus = () => {
+      startTransition(() => router.refresh());
+    };
+    window.addEventListener('focus', onFocus);
+
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('focus', onFocus);
+    };
   }, [router, intervalMs]);
 }
 ```
 
-Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.
+The focus listener ensures fresh data when the user returns to the tab. Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.
