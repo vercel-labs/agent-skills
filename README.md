@@ -136,6 +136,29 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+### openweb
+
+Typed JSON access to 90+ real websites including Google, Amazon, Reddit, YouTube, GitHub, Instagram, Bloomberg, and Zillow. Backed by the openweb CLI which calls the same APIs the websites call internally — no browser automation, no vision API.
+
+**Use when:**
+- "Look up the price of X on Amazon"
+- "Search Reddit for posts about Y"
+- "Get my Bloomberg watchlist"
+- "Post a comment on Hacker News"
+- "Find flights from SFO to NRT"
+- Reading user-private data behind a login (Reddit feed, GitHub issues, watchlists)
+- Adding agent web access without browser-automation overhead
+
+**Categories covered:**
+- Search (Google, DuckDuckGo, Bing, Brave, Kagi)
+- Shopping (Amazon, Walmart, eBay, Target, Costco, Home Depot)
+- Travel (Booking, Google Flights, Airbnb, Expedia, Tripadvisor)
+- Finance (Bloomberg, Yahoo Finance, Robinhood, Coinbase, Xueqiu)
+- Social (Reddit, X, Instagram, Hacker News, Threads)
+- News & content (YouTube, Wikipedia, Medium, Substack)
+- Dev tools (GitHub, GitLab, Stack Overflow, npm)
+- Real estate (Zillow, Redfin, Realtor)
+
 ## Installation
 
 ```bash
