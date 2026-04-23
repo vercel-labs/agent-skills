@@ -36,7 +36,7 @@ function EditorButton({ onClick }: { onClick: () => void }) {
 ```tsx
 function FlagsProvider({ children, flags }: Props) {
   useEffect(() => {
-    if (flags.editorEnabled && typeof window !== 'undefined') {
+    if (flags.editorEnabled) {
       void import('./monaco-editor').then(mod => mod.init())
     }
   }, [flags.editorEnabled])

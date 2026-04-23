@@ -489,7 +489,7 @@ function AnimationPlayer({ enabled, setEnabled }: { enabled: boolean; setEnabled
   const [frames, setFrames] = useState<Frame[] | null>(null)
 
   useEffect(() => {
-    if (enabled && !frames && typeof window !== 'undefined') {
+    if (enabled && !frames) {
       import('./animation-frames.js')
         .then(mod => setFrames(mod.frames))
         .catch(() => setEnabled(false))
@@ -500,8 +500,6 @@ function AnimationPlayer({ enabled, setEnabled }: { enabled: boolean; setEnabled
   return <Canvas frames={frames} />
 }
 ```
-
-The `typeof window !== 'undefined'` check prevents bundling this module for SSR, optimizing server bundle size and build speed.
 
 ### 2.3 Defer Non-Critical Third-Party Libraries
 
@@ -671,7 +669,7 @@ function EditorButton({ onClick }: { onClick: () => void }) {
 ```tsx
 function FlagsProvider({ children, flags }: Props) {
   useEffect(() => {
-    if (flags.editorEnabled && typeof window !== 'undefined') {
+    if (flags.editorEnabled) {
       void import('./monaco-editor').then(mod => mod.init())
     }
   }, [flags.editorEnabled])
@@ -681,8 +679,6 @@ function FlagsProvider({ children, flags }: Props) {
   </FlagsContext.Provider>
 }
 ```
-
-The `typeof window !== 'undefined'` check prevents bundling preloaded modules for SSR, optimizing server bundle size and build speed.
 
 ---
 
