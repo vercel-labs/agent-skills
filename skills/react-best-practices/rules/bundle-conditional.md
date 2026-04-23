@@ -16,7 +16,7 @@ function AnimationPlayer({ enabled, setEnabled }: { enabled: boolean; setEnabled
   const [frames, setFrames] = useState<Frame[] | null>(null)
 
   useEffect(() => {
-    if (enabled && !frames && typeof window !== 'undefined') {
+    if (enabled && !frames) {
       import('./animation-frames.js')
         .then(mod => setFrames(mod.frames))
         .catch(() => setEnabled(false))
@@ -27,5 +27,3 @@ function AnimationPlayer({ enabled, setEnabled }: { enabled: boolean; setEnabled
   return <Canvas frames={frames} />
 }
 ```
-
-The `typeof window !== 'undefined'` check prevents bundling this module for SSR, optimizing server bundle size and build speed.
