@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "organization": "Open Source",
+  "date": "April 2026",
+  "abstract": "Open comedy writing AI that generates stand-up, sketches, manzai, scripts, satire, parody, and absurdist theater using structured comedy theory. Core workflow: diagnose material → match techniques → produce output. Knowledge base includes comedy theory, psychological mechanisms of laughter, and output templates for 7 comedy genres.",
+  "references": [
+    "https://github.com/kreator666/Cclaw"
+  ]
+}
