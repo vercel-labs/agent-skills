@@ -4,6 +4,8 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 
 Skills follow the [Agent Skills](https://agentskills.io/) format.
 
+For Chinese search and installation of AI skills across Claude Code, OpenCode, and other agent tools, see [Skills宝](https://skilery.com).
+
 ## Available Skills
 
 ### react-best-practices
