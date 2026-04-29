@@ -152,7 +152,7 @@ function FilteredView() {
           });
         }}
       />
-      <div className="group-has-data-pending:opacity-50 transition-opacity">
+      <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
         <ContentGrid />
       </div>
     </div>
@@ -160,7 +160,7 @@ function FilteredView() {
 }
 ```
 
-The optimistic tab switch still happens inside `TabList`. The consumer's `isPending` drives `data-pending` on a wrapper, and descendants use `group-has-data-pending:` to style themselves.
+The optimistic tab switch still happens inside `TabList`. The consumer's `isPending` drives `data-pending` on a wrapper, and descendants use `group-has-[[data-pending]]:` to style themselves.
 
 ### EditableText — displayValue Pattern
 
@@ -294,7 +294,11 @@ export function LikeButton({ isLiked, toggleAction }) {
   return (
     <form action={async () => {
       setOptimistic(!optimistic);
-      await toggleAction();
+      try {
+        await toggleAction();
+      } catch (e) {
+        toast.error('Failed to update — please try again');
+      }
     }}>
       <button type="submit">
         {optimistic ? '❤️' : '🤍'}
@@ -304,7 +308,7 @@ export function LikeButton({ isLiked, toggleAction }) {
 }
 ```
 
-No `startTransition` needed — form `action` already wraps in a transition. The setter is called inside an Action prop.
+No `startTransition` needed — form `action` already wraps in a transition. The setter is called inside an Action prop. The `try/catch` here handles an **expected** failure (e.g., rate limit, permission denied) with inline feedback. For **unexpected** errors, skip the `try/catch` and use `useTransition`'s `startTransition` instead of form `action` — errors bubble to the nearest error boundary (`error.tsx`). Don't add blanket `try/catch` to mutations.
 
 **Alternative — updater function** for robustness against rapid double-taps:
 
@@ -327,7 +331,7 @@ When computing the next value from the current value, use an updater function in
 'use client';
 
 import { useOptimistic } from 'react';
-import { PRIORITY_CYCLE } from '@/lib/data';
+import { PRIORITY_CYCLE } from '../lib/data';
 
 export function PriorityButton({ taskId, priority }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
@@ -388,7 +392,7 @@ function Card({ priority: initialPriority }) {
   // After re-render with new data, initialPriority changes but priority stays stale
 }
 
-// ✅ Tracks server data — useOptimistic re-evaluates every render
+// ✅ Tracks server data — useOptimistic re-evaluates on each render
 function Card({ priority }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
   // After re-render with new data, priority changes and optimisticPriority follows
@@ -545,22 +549,10 @@ export function OptimisticItems({ parentId }: { parentId: string }) {
 }
 ```
 
-The server component renders the real list alongside. The page passes a promise; the server component awaits it inside `<Suspense>`:
+The server component renders the real list alongside. The page wraps it in `<Suspense>`:
 
 ```tsx
-// Page (non-async — keeps the static shell)
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const parentIdPromise = params.then(({ id }) => id);
-  return (
-    <Suspense fallback={<ItemSectionSkeleton />}>
-      <ItemSection parentIdPromise={parentIdPromise} />
-    </Suspense>
-  );
-}
-
-// Server component — awaits the promise inside Suspense
-async function ItemSection({ parentIdPromise }: { parentIdPromise: Promise<string> }) {
-  const parentId = await parentIdPromise;
+async function ItemSection({ parentId }: { parentId: string }) {
   const items = await getItems(parentId);
   return (
     <div>
@@ -637,7 +629,7 @@ export function DeleteButton({ id, deleteAction }) {
 }
 ```
 
-The `disabled` state on the button provides feedback. If the consumer wants the surrounding card to dim, the `DeleteButton` can also set `data-pending` on itself as a CSS hook for parent `has-data-pending:` styles.
+The `disabled` state on the button provides feedback. If the consumer wants the surrounding card to dim, the `DeleteButton` can also set `data-pending` on itself as a CSS hook for parent `has-[[data-pending]]:` styles.
 
 **Alternative — `useTransition` + `onClick`:**
 
@@ -661,10 +653,10 @@ export function DeleteButton({ id, deleteAction }) {
 }
 ```
 
-Both work. The form `action` version uses `useOptimistic(false)` and gets automatic form coordination. The `useTransition` + `onClick` version is more explicit and sets `data-pending` directly, which can be useful when parent components react via `has-data-pending:` styles:
+Both work. The form `action` version uses `useOptimistic(false)` and gets automatic form coordination. The `useTransition` + `onClick` version is more explicit and sets `data-pending` directly, which can be useful when parent components react via `has-[[data-pending]]:` styles:
 
 ```tsx
-<div className="has-data-pending:opacity-50 transition-opacity">
+<div className="has-[[data-pending]]:opacity-50 transition-opacity">
   <CardContent />
   <DeleteButton id={item.id} deleteAction={deleteItem} />
 </div>
@@ -677,7 +669,7 @@ For sibling elements, use `group` on a common ancestor. The component that owns 
 ```tsx
 <div className="group">
   <FilterBar />   {/* sets data-pending internally */}
-  <div className="group-has-data-pending:opacity-50 transition-opacity">
+  <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
     <ContentGrid />
   </div>
 </div>
@@ -688,7 +680,7 @@ Alternatively, the consumer can own the transition and set `data-pending` on the
 ```tsx
 <div className="group" data-pending={isPending ? '' : undefined}>
   <FilterChips action={filterAction} />
-  <div className="group-has-data-pending:opacity-50 transition-opacity">
+  <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
     <ContentGrid />
   </div>
 </div>
@@ -773,7 +765,7 @@ This pattern works with any Suspense-enabled data source, not just TanStack Quer
 'use client';
 
 import { useActionState, startTransition } from 'react';
-import { saveItem } from '@/lib/actions';
+import { saveItem } from '../actions';
 
 export function CreateForm({ onSuccess }: { onSuccess?: () => void }) {
   const [{ error, key }, formAction, isPending] = useActionState(

@@ -4,7 +4,7 @@ An agent skill for auditing and reviewing React async patterns. Scans for coordi
 
 ## How It Works
 
-1. **Audit** — Scans the codebase for legacy patterns (`useState` + `useEffect` fetching, `useState(prop)`) and missing coordination (no loading states, frozen navigation, no mutation feedback)
+1. **Audit** — Scans the codebase for uncoordinated patterns (`useState` + `useEffect` fetching, `useState(prop)`, missing loading states, frozen navigation, no mutation feedback)
 2. **Present** — Produces an interaction map classifying every async interaction and suggests patterns for each
 3. **Prioritize** — You decide what to fix and in what order
 4. **Implement** — Applies the approved changes using the patterns below

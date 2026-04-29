@@ -10,13 +10,35 @@ Coordination gotchas specific to Next.js. For the primitives themselves, see `SK
 
 Keep `page.tsx` non-async when possible. Push `await` calls into async server components inside `<Suspense>` so the static shell renders instantly and dynamic parts stream in.
 
+```tsx
+// ✅ Shell renders instantly, Board streams in
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ label?: string }>;
+}) {
+  const { label } = await searchParams;
+
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<BoardSkeleton />}>
+        <Board label={label} />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+The `await searchParams` is lightweight — the expensive work is inside `<Board>` (an async server component), which streams in independently via `<Suspense>`.
+
 See: [`cacheComponents`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents), [`use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache), [`cacheTag`](https://nextjs.org/docs/app/api-reference/functions/cacheTag), [`cacheLife`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheLife)
 
 ---
 
 ## Invalidation After Mutations
 
-**Every server action that mutates data must invalidate.** Without it, `useOptimistic` shows the instant result but the server never re-renders — the optimistic value settles to stale data.
+**Server actions that mutate data must invalidate.** Without it, `useOptimistic` shows the instant result but the server never re-renders — the optimistic value settles to stale data.
 
 The flow: user submits → `useOptimistic` shows instant result → server action runs → invalidation → optimistic value settles to real data.
 
@@ -61,6 +83,63 @@ export async function updatePost(slug: string, formData: FormData) {
 
 ---
 
+## Push Dynamic Hooks Into Leaf Components
+
+Hooks like `useSearchParams()`, `usePathname()`, and `useRouter()` make their component dynamic. When used in a layout or page, the entire subtree becomes dynamic and cannot be statically prerendered — the layout shell won't appear until the dynamic data is ready. Push these hooks into the smallest possible child component and wrap in `<Suspense>`.
+
+**With `cacheComponents: true`, this is enforced as a hard error:** placing a component that uses `useSearchParams()` outside `<Suspense>` throws `Uncached data was accessed outside of <Suspense>`. Without `cacheComponents`, the same pattern silently degrades performance.
+
+**Incorrect (entire layout is dynamic):**
+
+```tsx
+'use client'
+
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q') ?? ''
+
+  return (
+    <div>
+      <nav>Dashboard</nav>
+      <SearchInput defaultValue={query} />
+      {children}
+    </div>
+  )
+}
+```
+
+**Correct (layout is a server component, hooks isolated in leaf components):**
+
+```tsx
+// layout.tsx — server component, statically prerenderable
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  return (
+    <div>
+      <nav>Dashboard</nav>
+      <Suspense>
+        <SearchInput />
+      </Suspense>
+      {children}
+    </div>
+  )
+}
+```
+
+```tsx
+// search-input.tsx — client component with the dynamic hook
+'use client'
+
+export function SearchInput() {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q') ?? ''
+  return <input defaultValue={query} ... />
+}
+```
+
+This applies to `useSearchParams()`, `usePathname()`, `useRouter()`, `cookies()`, `headers()`, and `await params`/`await searchParams`.
+
+---
+
 ## `router.push()` in Transitions
 
 When called inside `startTransition`, [`router.push()`](https://nextjs.org/docs/app/api-reference/functions/use-router) coordinates with `useOptimistic` in the same transition — both commit together.
@@ -71,6 +150,8 @@ A common pattern: update `searchParams` via `router.push()` and pass the callbac
 
 ```tsx
 // Consumer — passes router.push as an action prop
+// Note: useSearchParams() makes this component dynamic.
+// Wrap <LabelFilter /> in <Suspense> at the call site (see Push Dynamic Hooks above).
 function LabelFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -88,6 +169,11 @@ function LabelFilter() {
 
   return <ChipGroup items={labels} value={current} action={filterAction} />;
 }
+
+// Call site — wrap in Suspense because LabelFilter uses useSearchParams()
+<Suspense>
+  <LabelFilter />
+</Suspense>
 ```
 
 ```tsx
@@ -121,12 +207,14 @@ startTransition(async () => {
 
 ## Promise-Passing and Streaming
 
-Server components can start a fetch without awaiting it, passing the **promise** as a prop to a client component. The client uses `use()` to unwrap it — the server renders instantly and data streams in via `<Suspense>`. The `.then()` pattern on `params` avoids making the page `async`:
+Server components can start a fetch without awaiting it, passing the **promise** as a prop to a child component inside `<Suspense>`. The child awaits it — the page shell renders instantly and dynamic parts stream in. The `.then()` pattern on `params` avoids making the page `async`:
+
+**Prerequisite:** This pattern requires `cacheComponents: true` in `next.config.ts` (see [Page Structure](#page-structure)).
 
 ```tsx
 function TaskPage({ params }: { params: Promise<{ id: string }> }) {
   const taskPromise = params.then(({ id }) => getTask(id));
-  const commentsPromise = commentsFromTask(taskPromise);
+  const commentsPromise = params.then(({ id }) => getComments(id));
 
   return (
     <div>
@@ -141,7 +229,7 @@ function TaskPage({ params }: { params: Promise<{ id: string }> }) {
 }
 ```
 
-Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chaining promises (e.g., `commentsFromTask(taskPromise)`) lets you derive dependent data without `await`.
+Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chain `.then()` calls to derive dependent data without `await`.
 
 See: [Streaming guide](https://nextjs.org/docs/app/guides/streaming), [Suspense](https://nextjs.org/docs/app/guides/streaming#streaming-with-suspense), [Data fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
 
@@ -217,3 +305,14 @@ export function usePolling(intervalMs = 5000) {
 ```
 
 The focus listener ensures fresh data when the user returns to the tab. Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.
+
+---
+
+## Common Next.js Pitfalls
+
+These are framework-specific mistakes. For general React coordination mistakes, see `common-mistakes.md`.
+
+- **Making `page.tsx` async for expensive data** — `async` pages block the entire shell until all `await` calls complete. Keep `page.tsx` non-async when possible: use `.then()` on `params`/`searchParams`, pass promises to child server components inside `<Suspense>`. See [Page Structure](#page-structure).
+- **Missing `cacheComponents: true` in `next.config.ts`** (Next.js 16) — Without it, combining `<Suspense>` with dynamic data can throw `React.unstable_postpone is not defined` or silently disable streaming. Enable it before any other work.
+- **Exporting constants from `"use server"` files** — Only async functions can be exported. Shared constants must live in a separate file. See [Shared Constants](#shared-constants).
+- **Dynamic hooks in layouts** — `useSearchParams()`, `usePathname()`, `useRouter()` make their component dynamic. When used in a layout, the entire subtree becomes dynamic. Push these hooks into the smallest possible child component and wrap in `<Suspense>`. See [Push Dynamic Hooks](#push-dynamic-hooks-into-leaf-components).

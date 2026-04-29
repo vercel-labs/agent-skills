@@ -23,7 +23,7 @@ On fast networks (<150ms), the app feels synchronous — no visible loading stat
 
 ## When to Add Coordination
 
-Every async interaction creates an in-between state. Each has a primitive:
+Async interactions create in-between states. Each has a primitive:
 
 | Priority | Pattern | What it communicates | Primitive |
 |----------|---------|---------------------|-----------|
@@ -45,18 +45,17 @@ This is a reference for what's possible, not a checklist to apply blindly. Revie
 | One-way action (upvote) | Form `action` + `useOptimistic` with reducer | Increment-only, disable after |
 | Adding to a list (client owns list) | `useOptimistic(items, reducer)` + `crypto.randomUUID()` | Shared ID prevents duplicate flash |
 | Adding to a list (server owns list) | `useOptimistic([])` + `crypto.randomUUID()` | Pending-only; server list is separate |
-| Move between groups (Kanban, categories) | `useOptimistic` with reducer + `useTransition` | Instant move, auto-revert on failure |
+| Move between groups (Kanban, categories) | `useOptimistic` with reducer + `startTransition` | Instant move, auto-revert on failure |
 | Destructive action (delete) | `useOptimistic` or `useTransition` | Optimistic delete with rollback, or pending feedback via `disabled` |
 | Form submission (create, edit) | `useActionState` | Server response state, `isPending`, key-based reset |
 | Chat / comment input | `useOptimistic` + immediate form clear | Input clears instantly, optimistic list add |
 | Tab / filter switch | `action` prop on design component | Instant highlight, old content stays |
 | Search / filter with async results | `useDeferredValue` + `useSuspenseQuery` | Stale results stay visible while fresh data loads |
-| Streaming data to client components | Promise prop + `use()` | Server starts fetch, client unwraps — enables streaming |
-| Pagination / nav link loading | Framework link pending hook (e.g., `useLinkStatus`) | Per-link spinner shows which link is loading |
+| Pagination / nav link loading | Framework link pending hook | Per-link spinner shows which link is loading |
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 
-**Every mutation must invalidate** — without it, optimistic updates settle to stale data. For framework-specific invalidation APIs, see `references/nextjs.md`.
+**Mutations must invalidate** — without it, optimistic updates settle to stale data. Call the framework's invalidation API after each mutation (e.g., Next.js `refresh()` or `updateTag()` — see `references/nextjs.md`).
 
 ---
 
@@ -80,7 +79,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 
 `useOptimistic` shows instant updates while an Action runs in the background. Unlike `useState` (which defers updates inside transitions), `useOptimistic` updates **immediately**. The optimistic value persists while the Action is pending, then settles to the source of truth (props or state) when the transition completes. On failure, it automatically reverts. The setter must be called inside an Action (`startTransition` or form `action`).
 
-**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates `value` every render — when the server sends fresh data (via invalidation or navigation), the component automatically shows it. `useState(initialValue)` only reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug: `useState(prop)` works on first render, but after fresh data arrives the component shows stale data. Always use `useOptimistic(prop)` for server-derived values that the user can mutate. You can have **multiple `useOptimistic` calls** in one component for independent values (e.g., priority and assignee on a card).
+**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates on each render, tracking fresh server data automatically. `useState(initialValue)` reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug. See `references/patterns.md` → `useState(prop)` Anti-Pattern for the full explanation and code examples. You can have **multiple `useOptimistic` calls** in one component for independent values.
 
 **Updater functions:** Pass a function to the setter for state-relative updates: `setOptimistic(current => PRIORITY_CYCLE[current])`. This is essential when rapid interactions queue multiple transitions — each updater computes from the latest optimistic state, not a stale closure. Without an updater, rapid clicks can compute the wrong next value.
 
@@ -100,7 +99,7 @@ Declarative loading boundaries. Place them around any component using a **Suspen
 
 Transitions interact with Suspense: updates inside `startTransition` that cause a component to suspend keep the old content visible instead of re-showing the fallback.
 
-See `references/patterns.md` for skeleton co-location and boundary structure guidance. For deeper streaming patterns (parallel data fetching, promise-passing, static shells), consult the framework's streaming docs — e.g., the [Next.js Streaming guide](https://nextjs.org/docs/app/guides/streaming). If the audit surfaces many streaming opportunities, present them to the user as a separate category of improvements.
+See `references/patterns.md` for skeleton co-location and boundary structure guidance. For deeper streaming patterns (parallel data fetching, static shells), consult the framework's streaming docs. If the audit surfaces many streaming opportunities, present them to the user as a separate category of improvements.
 
 ### `use()` — Unwrapping Promises and Context
 
@@ -152,7 +151,7 @@ See `references/patterns.md` for TabList, EditableText, and SubmitButton impleme
 
 ## How It All Connects
 
-Transitions create a shared coordination pipeline. Every async operation goes through `startTransition`:
+Transitions create a shared coordination pipeline. Async operations go through `startTransition`:
 
 - **Navigation + Mutations**: Optimistic updates survive tab switches. The optimistic value persists while the framework fetches new data for the destination.
 - **Mutations + Background Refresh**: A mid-action refresh doesn't clobber optimistic state. Reducers re-run with the latest base value.
@@ -160,7 +159,7 @@ Transitions create a shared coordination pipeline. Every async operation goes th
 
 For animating between these states — page transitions, enter/exit animations, shared element animations during navigation — see the `vercel-react-view-transitions` skill.
 
-If unsure about the behavior or API of any React primitive, consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect. For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
+If unsure about the behavior or API of any React primitive, consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect. For framework-specific APIs (invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
 
 ---
 
@@ -168,7 +167,7 @@ If unsure about the behavior or API of any React primitive, consult the official
 
 - **`references/implementation.md`** — Audit and review workflow. Start here.
 - **`references/patterns.md`** — Detailed code patterns for each primitive.
-- **`references/nextjs.md`** — Next.js App Router integration: invalidation, router behavior, promise-passing.
+- **`references/nextjs.md`** — Next.js App Router integration: invalidation, router behavior, streaming.
 - **`references/common-mistakes.md`** — Common pitfalls and how to avoid them.
 
 ## Full Compiled Document

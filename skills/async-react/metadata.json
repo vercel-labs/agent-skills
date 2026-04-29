@@ -2,18 +2,15 @@
   "version": "1.0.0",
   "organization": "Vercel Engineering",
   "date": "April 2026",
-  "abstract": "Audit and review tool for React async patterns. Scans for coordination issues — frozen UI, stale data, uncoordinated mutations, missing loading states — and suggests fixes using React's primitives (transitions, useOptimistic, Suspense, useDeferredValue, form actions, action props). Collaborative workflow: surface findings, let the user prioritize, then implement. Covers optimistic updates, pending states, loading boundaries, and coordination between mutations, navigation, and data loading. Includes Next.js App Router integration.",
+  "abstract": "Audit and review tool for React async patterns. Surfaces frozen UI, stale data, missing loading states, and uncoordinated mutations, then suggests fixes using React 19's coordination primitives: useOptimistic, useTransition, useActionState, Suspense, useDeferredValue, form actions, and action props. Includes a step-by-step audit workflow, code patterns for each primitive, and Next.js App Router integration.",
   "references": [
-    "https://github.com/rickhanlonii/async-react",
-    "https://github.com/reactwg/async-react/discussions",
     "https://react.dev/reference/react/useOptimistic",
     "https://react.dev/reference/react/useTransition",
-    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/useActionState",
     "https://react.dev/reference/react/Suspense",
-    "https://react.dev/blog/2024/12/05/react-19",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://github.com/rickhanlonii/async-react",
     "https://aurorascharff.no/posts/building-reusable-components-with-react19-actions/",
-    "https://aurorascharff.no/posts/building-design-components-with-action-props-using-async-react/",
-    "https://aurorascharff.no/posts/building-an-async-combobox-with-usesuspensequery-and-usedeferredvalue/",
-    "https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations"
+    "https://aurorascharff.no/posts/building-design-components-with-action-props-using-async-react/"
   ]
 }

@@ -1,14 +1,8 @@
 # Async React
 
-**Version 1.0.0**
-Vercel Engineering
-April 2026
-
----
-
 Use this skill to review a React app's async patterns and suggest improvements — fixing frozen UI, stale data, uncoordinated mutations, missing loading states, or lack of feedback. This is a collaborative audit tool: scan the codebase, surface issues, present findings to the user, and implement what they prioritize.
 
-Coordinate async UI states using React's built-in primitives. The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
+The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
 
 This is the combination of React 18's concurrent features and React 19's coordination APIs. The React team calls this "Async React" — a complete system for building responsive async applications through composable primitives. Based on [Ricky Hanlon's React Conf 2025 demo](https://github.com/rickhanlonii/async-react), the vision is that product code becomes simple and declarative because three infrastructure layers handle async coordination internally:
 
@@ -20,7 +14,7 @@ On fast networks (<150ms), the app feels synchronous — no visible loading stat
 
 ## When to Add Coordination
 
-Every async interaction creates an in-between state. Each has a primitive:
+Async interactions create in-between states. Each has a primitive:
 
 | Priority | Pattern | What it communicates | Primitive |
 |----------|---------|---------------------|-----------|
@@ -42,26 +36,23 @@ This is a reference for what's possible, not a checklist to apply blindly. Revie
 | One-way action (upvote) | Form `action` + `useOptimistic` with reducer | Increment-only, disable after |
 | Adding to a list (client owns list) | `useOptimistic(items, reducer)` + `crypto.randomUUID()` | Shared ID prevents duplicate flash |
 | Adding to a list (server owns list) | `useOptimistic([])` + `crypto.randomUUID()` | Pending-only; server list is separate |
-| Move between groups (Kanban, categories) | `useOptimistic` with reducer + `useTransition` | Instant move, auto-revert on failure |
+| Move between groups (Kanban, categories) | `useOptimistic` with reducer + `startTransition` | Instant move, auto-revert on failure |
 | Destructive action (delete) | `useOptimistic` or `useTransition` | Optimistic delete with rollback, or pending feedback via `disabled` |
 | Form submission (create, edit) | `useActionState` | Server response state, `isPending`, key-based reset |
 | Chat / comment input | `useOptimistic` + immediate form clear | Input clears instantly, optimistic list add |
 | Tab / filter switch | `action` prop on design component | Instant highlight, old content stays |
 | Search / filter with async results | `useDeferredValue` + `useSuspenseQuery` | Stale results stay visible while fresh data loads |
-| Streaming data to client components | Promise prop + `use()` | Server starts fetch, client unwraps — enables streaming |
-| Pagination / nav link loading | Framework link pending hook (e.g., `useLinkStatus`) | Per-link spinner shows which link is loading |
+| Pagination / nav link loading | Framework link pending hook | Per-link spinner shows which link is loading |
 
 For animations on these state changes, see the `vercel-react-view-transitions` skill.
 
-**Every mutation must invalidate** — without it, optimistic updates settle to stale data. For framework-specific invalidation APIs, see [Async React in Next.js](#async-react-in-nextjs).
+**Mutations must invalidate** — without it, optimistic updates settle to stale data. Call the framework's invalidation API after each mutation (e.g., Next.js `refresh()` or `updateTag()` — see `references/nextjs.md`).
 
----
 
 ## Audit & Review Workflow
 
-When reviewing an app's async patterns, **follow the [Audit & Review Workflow](#audit--review-workflow-1) step by step.** Start with the audit — do not skip it. Present findings to the user before making any changes. The user decides what to fix and in what order.
+When reviewing an app's async patterns, **follow `references/implementation.md` step by step.** Start with the audit — do not skip it. Present findings to the user before making any changes. The user decides what to fix and in what order.
 
----
 
 ## Core Concepts
 
@@ -77,7 +68,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 
 `useOptimistic` shows instant updates while an Action runs in the background. Unlike `useState` (which defers updates inside transitions), `useOptimistic` updates **immediately**. The optimistic value persists while the Action is pending, then settles to the source of truth (props or state) when the transition completes. On failure, it automatically reverts. The setter must be called inside an Action (`startTransition` or form `action`).
 
-**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates `value` every render — when the server sends fresh data (via invalidation or navigation), the component automatically shows it. `useState(initialValue)` only reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug: `useState(prop)` works on first render, but after fresh data arrives the component shows stale data. Always use `useOptimistic(prop)` for server-derived values that the user can mutate. You can have **multiple `useOptimistic` calls** in one component for independent values (e.g., priority and assignee on a card).
+**Why `useOptimistic`, not `useState`, for server-derived data:** `useOptimistic(value)` re-evaluates on each render, tracking fresh server data automatically. `useState(initialValue)` reads the initial value on mount and ignores subsequent prop changes. This is the most common coordination bug. See `references/patterns.md` → `useState(prop)` Anti-Pattern for the full explanation and code examples. You can have **multiple `useOptimistic` calls** in one component for independent values.
 
 **Updater functions:** Pass a function to the setter for state-relative updates: `setOptimistic(current => PRIORITY_CYCLE[current])`. This is essential when rapid interactions queue multiple transitions — each updater computes from the latest optimistic state, not a stale closure. Without an updater, rapid clicks can compute the wrong next value.
 
@@ -89,7 +80,7 @@ Any function run inside `startTransition` is called an **Action**. React tracks 
 
 `useOptimistic(false)` can also serve as a **pending indicator** — call `setIsPending(true)` inside the action, and it automatically reverts to `false` when the transition completes. No manual reset needed. Another option is deriving `isPending` by comparing the optimistic value to the server value: `const isPending = optimisticValue !== serverValue` — useful when you already have `useOptimistic` and don't want to add a separate `useTransition`.
 
-See [Optimistic Mutations](#optimistic-mutations) for toggle, reducer, updater, list add, delete, move, multi-value, and pending indicator examples.
+See `references/patterns.md` for toggle, reducer, updater, list add, delete, move, multi-value, and pending indicator examples.
 
 ### Suspense Boundaries
 
@@ -97,7 +88,7 @@ Declarative loading boundaries. Place them around any component using a **Suspen
 
 Transitions interact with Suspense: updates inside `startTransition` that cause a component to suspend keep the old content visible instead of re-showing the fallback.
 
-See [Suspense Boundaries](#suspense-boundaries-1) for skeleton co-location and boundary structure guidance. For deeper streaming patterns (parallel data fetching, promise-passing, static shells), consult your framework's streaming docs. If the audit surfaces many streaming opportunities, present them to the user as a separate category of improvements.
+See `references/patterns.md` for skeleton co-location and boundary structure guidance. For deeper streaming patterns (parallel data fetching, static shells), consult the framework's streaming docs. If the audit surfaces many streaming opportunities, present them to the user as a separate category of improvements.
 
 ### `use()` — Unwrapping Promises and Context
 
@@ -107,13 +98,13 @@ See [Suspense Boundaries](#suspense-boundaries-1) for skeleton co-location and b
 
 `useDeferredValue` keeps old content visible while fresh data loads. Combined with a Suspense-enabled data source, it creates a stale-while-revalidate pattern: the input stays responsive, old results remain visible with a stale indicator (`filterText !== deferredFilter`), and fresh data replaces them when ready.
 
-See [Deferred Values](#deferred-values-stale-while-revalidate) for the full search combobox pattern with `useSuspenseQuery`.
+See `references/patterns.md` for the full search combobox pattern with `useSuspenseQuery`.
 
 ### Form Actions
 
 A form's `action` prop wraps the callback in a transition automatically — same coordination as `startTransition`, but declarative. Form actions are a natural fit for submissions, toggles, and delete actions. For interactions that aren't naturally forms (drag-and-drop, inline edits, navigation), `startTransition` with `onClick` is fine. `formAction` on a button works the same way — useful for reusable submit button design components where the consumer keeps a plain `<form>` and the button handles pending state internally.
 
-See [Action Props](#action-props-design-components) for SubmitButton implementations using `formAction` and `useFormStatus`.
+See `references/patterns.md` for SubmitButton implementations using `formAction` and `useFormStatus`.
 
 ### Action State
 
@@ -132,7 +123,7 @@ const [state, formAction, isPending] = useActionState(reducer, initialState);
 | Just `isPending` for a one-off action | `useTransition` or `useOptimistic(false)` |
 | All of the above | `useActionState` + `useOptimistic` on top |
 
-See [Action State](#action-state-useactionstate) for form with server response, key-based reset, and combining with `useOptimistic`.
+See `references/patterns.md` for form with server response, key-based reset, and combining with `useOptimistic`.
 
 ### Action Props Pattern
 
@@ -143,13 +134,12 @@ When reviewing a design component, consider:
 - Does it support both `onChange` (synchronous, fires before the transition) and the action prop?
 - Does it include built-in pending feedback (spinner, highlight)? Or does the consumer own pending feedback on surrounding content?
 
-See [Action Props](#action-props-design-components) for TabList, EditableText, and SubmitButton implementations.
+See `references/patterns.md` for TabList, EditableText, and SubmitButton implementations.
 
----
 
 ## How It All Connects
 
-Transitions create a shared coordination pipeline. Every async operation goes through `startTransition`:
+Transitions create a shared coordination pipeline. Async operations go through `startTransition`:
 
 - **Navigation + Mutations**: Optimistic updates survive tab switches. The optimistic value persists while the framework fetches new data for the destination.
 - **Mutations + Background Refresh**: A mid-action refresh doesn't clobber optimistic state. Reducers re-run with the latest base value.
@@ -157,7 +147,19 @@ Transitions create a shared coordination pipeline. Every async operation goes th
 
 For animating between these states — page transitions, enter/exit animations, shared element animations during navigation — see the `vercel-react-view-transitions` skill.
 
-If unsure about the behavior or API of any React primitive, consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect. For framework-specific APIs (Next.js invalidation, routing, caching), always verify against the project's installed version first — see Step 0 below.
+If unsure about the behavior or API of any React primitive, consult the official React docs at `https://react.dev/reference/react/<hook-name>` before guessing. These APIs are new and training data may be outdated or incorrect. For framework-specific APIs (invalidation, routing, caching), always verify against the project's installed version first — see Step 0 in `references/implementation.md`.
+
+
+## Reference Files
+
+- **`references/implementation.md`** — Audit and review workflow. Start here.
+- **`references/patterns.md`** — Detailed code patterns for each primitive.
+- **`references/nextjs.md`** — Next.js App Router integration: invalidation, router behavior, streaming.
+- **`references/common-mistakes.md`** — Common pitfalls and how to avoid them.
+
+## Full Compiled Document
+
+For the complete guide with all reference files expanded: `AGENTS.md`
 
 ---
 
@@ -165,33 +167,27 @@ If unsure about the behavior or API of any React primitive, consult the official
 
 This is a collaborative workflow. Audit the codebase, present findings, and implement what the user prioritizes. Don't apply patterns blindly — surface issues and let the user decide.
 
-There are two kinds of findings:
+**Important:** Only fix what's actually broken or causing UX issues. Don't convert working code just to match a pattern. `useState` for local UI state (form inputs, modals, controlled selects) is completely fine — the issue is `useState` for **server-derived data** that should track server updates. If you're unsure whether something is broken or just different, **ask the user** — confirm what issues they're seeing before refactoring.
 
-- **Legacy patterns** — `useState` + `useEffect` client-side fetching, `useState(prop)` for server-derived data. These are actively broken — mutations and navigation compete because state lives in two places.
-- **Missing coordination** — Working but non-interactive: no feedback, no loading states, frozen UI during async work. These are improvement opportunities, not bugs.
-
-**Important:** Only fix what's actually broken or causing UX issues. Don't convert working code just to match a pattern. `useState` for local UI state (form inputs, modals, controlled selects) is completely fine — the anti-pattern is `useState` for **server-derived data** that should track server updates. If you're unsure whether something is broken or just different, **ask the user** — confirm what issues they're seeing before refactoring.
-
-The audit surfaces both. Present the full picture, then work on what the user cares about.
+Present the full picture, then work on what the user cares about.
 
 ## Step 0: Verify Framework APIs
 
 Before implementing any pattern, check the project's framework version. Invalidation APIs change between major versions. Using the wrong API will cause build errors or silent failures.
 
-1. Check the installed version (e.g., `package.json` or `next --version`).
-2. Read the bundled docs at `node_modules/next/dist/docs/` or the framework's API reference.
+1. Check the installed version (e.g., `package.json`).
+2. Read the framework's API reference or bundled docs.
 3. Confirm which invalidation, caching, and routing APIs are available before writing code.
-
-The patterns in the Next.js section below target Next.js 16. For older versions, adapt the API calls based on the docs.
+4. For framework-specific setup requirements, see `nextjs.md` (Next.js) or your framework's docs.
 
 ## Step 1: Audit the App
 
-Before writing any code, scan the codebase and classify every async interaction.
+Before writing any code, scan the codebase and classify async interactions.
 
 **Quick scan — run these searches to find candidates:**
 
 ```
-grep -r "useState.*useEffect" --include="*.tsx"   # Legacy fetch patterns
+grep -r "useState.*useEffect" --include="*.tsx"   # Client-side fetch patterns
 grep -r "useState.*initial\|useState.*prop" --include="*.tsx"  # useState(prop) → useOptimistic(prop)
 grep -r "onClick.*await" --include="*.tsx"         # Async onClick handlers → form actions
 grep -r "router\.refresh" --include="*.tsx"        # Client-side invalidation — check if it should be server-side
@@ -201,23 +197,20 @@ grep -r "window\.location" --include="*.tsx"       # Hard refreshes → framewor
 grep -r "handleAction\|handle.*Action" --include="*.tsx"  # Wrong naming — use Action suffix without handle
 ```
 
-**Look for legacy patterns to fix:**
+**Look for uncoordinated patterns (ranked by impact):**
 
-- **Every `useState` + `useEffect` pair** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places. **Exception:** streaming responses via `fetch` + `ReadableStream` are not this anti-pattern — client-side streaming is legitimate.
-- **Every `useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. When fresh data arrives (via invalidation or navigation), `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates every render. **Exception:** components that need both `useOptimistic(prop)` for display and `useState` for an edit draft — here `useState` is for the local draft, not the server value.
-- **Every `onClick` that calls an async function without `startTransition`** — These bypass error boundaries and provide no pending state. Wrap in `startTransition`, or use a form `action` if the interaction is naturally a submission.
-- **Every API route created just for client-side fetching** — Often a sign of the `useEffect` anti-pattern. The data should come from the server component and flow as props.
-- **Every `handleFooAction` function name** — `handle` prefix and `Action` suffix should not be combined. `handle` is for direct event handlers (`handleClick`, `handleDragStart`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
-
-**Look for missing coordination:**
-
-- **Every async component** — Any component with `await`. Candidates for `<Suspense>` boundaries.
-- **Every `<Suspense>` boundary** — Check if fallbacks match the content layout. Missing or omitted fallbacks cause layout shift. Use skeletons for data, static markup for interactive controls, omit fallback only for side-effect components that render nothing. See [Fallback Quality](#fallback-quality).
-- **Every mutation** — Form submissions, button clicks that trigger async work. Classify each: does the user expect instant feedback (optimistic), or is confirmation important (pessimistic)?
-- **Every navigation trigger** — Check if the control provides instant visual feedback (tab highlight, filter selection).
-- **Every custom design component** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
-- **Framework-specific rendering concerns** — Check for dynamic hooks in layouts, `Date.now()` in server components, and similar framework-specific patterns that affect caching or static rendering. See [Async React in Next.js](#async-react-in-nextjs) for details.
-- **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see [Background Polling](#background-polling-simple-approach).
+- **`useState` + `useEffect` pairs** — Client-side data fetching that should be server data passed as props. This is the #1 source of coordination bugs: mutations and navigation don't talk to each other because state lives in two places. **Exception:** streaming responses via `fetch` + `ReadableStream` are not this anti-pattern — client-side streaming is legitimate.
+- **`useState(prop)` / `useState(initialProp)`** — Components receiving server data as a prop and storing it in `useState`. When fresh data arrives (via invalidation or navigation), `useState` ignores the new prop value. Replace with `useOptimistic(prop)` which re-evaluates on each render. **Exception:** components that need both `useOptimistic(prop)` for display and `useState` for an edit draft — here `useState` is for the local draft, not the server value.
+- **`onClick` handlers calling async functions without `startTransition`** — These bypass error boundaries and provide no pending state. Wrap in `startTransition`, or use a form `action` if the interaction is naturally a submission.
+- **API routes created just for client-side fetching** — Often a sign of the `useEffect` anti-pattern. The data should come from the server component and flow as props.
+- **Async components** — Any component with `await`. Candidates for `<Suspense>` boundaries.
+- **`<Suspense>` boundaries** — Check if fallbacks match the content layout. Missing or omitted fallbacks cause layout shift. Use skeletons for data, static markup for interactive controls, omit fallback only for side-effect components that render nothing. See `patterns.md` → Fallback Quality.
+- **Mutations** — Form submissions, button clicks that trigger async work. Classify each: does the user expect instant feedback (optimistic), or is confirmation important (pessimistic)?
+- **Navigation triggers** — Check if the control provides instant visual feedback (tab highlight, filter selection).
+- **Custom design components** (tabs, chips, toggles) — Check if they support an `action` prop. If they have `onChange` but not `action`, they're candidates. Only modify your own components — don't patch third-party library code.
+- **Framework-specific rendering concerns** — Check for dynamic hooks in layouts, non-deterministic values in server components, and similar patterns that affect caching or static rendering. See `nextjs.md` for Next.js specifics.
+- **Data that updates without user action** — Live feeds, collaborative features. Consider a real-time data layer; for simple cases, see the polling example in `nextjs.md` (Next.js) or use `startTransition` + your framework's refresh API on an interval.
+- **`handleFooAction` function names** — `handle` prefix and `Action` suffix should not be combined. `handle` is for direct event handlers (`handleClick`, `handleDragStart`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
 
 Then produce an interaction map and **STOP. Present the table to the user and ask what to prioritize before writing any code.** Do not proceed to Step 2 until the user confirms scope. The audit often surfaces more work than needed — the user may only care about a subset.
 
@@ -225,7 +218,7 @@ Then produce an interaction map and **STOP. Present the table to the user and as
 | Component      | Interaction     | Current Behavior       | Category     | Pattern              |
 |----------------|-----------------|------------------------|--------------|----------------------|
 | DataGrid       | Page load       | Global spinner         | Add coord.   | Suspense + skeleton  |
-| LikeButton     | Toggle          | useEffect + useState   | Fix legacy   | useOptimistic + form |
+| LikeButton     | Toggle          | useEffect + useState   | Fix          | useOptimistic + form |
 | DeleteButton   | Destructive     | No feedback            | Add coord.   | useOptimistic or useTransition |
 | TabNav         | Tab switch      | onChange (freezes)      | Add coord.   | action prop          |
 | VoteButton     | One-way vote    | onSubmit (freezes)     | Add coord.   | useOptimistic + form |
@@ -235,21 +228,23 @@ Then produce an interaction map and **STOP. Present the table to the user and as
 
 *Only implement items the user approved from the audit.*
 
-For every async component the user wants addressed, decide: should this block the page, or stream in? See [Suspense Boundaries](#suspense-boundaries-1) for skeleton co-location and boundary structure examples.
+For async components the user wants addressed, decide: should this block the page, or stream in? See `patterns.md` for skeleton co-location and boundary structure examples.
 
 **Rules:**
 
-- Push data fetching into child components wrapped in `<Suspense>` — the shell renders instantly and async parts stream in. Works with async server components, `useSuspenseQuery`, `use()`, or any Suspense-enabled data source.
+- Push data fetching into child components wrapped in `<Suspense>` — works with async server components, `useSuspenseQuery`, `use()`, or any Suspense-enabled data source.
 - Co-locate skeletons with their components — export both from the same file.
 - Skeleton fallbacks must match the content layout (same heights, same grid). Otherwise you get CLS.
 - Sibling `<Suspense>` boundaries resolve independently and stream in parallel. Use siblings when components have independent data and predictable sizes.
 - If a component above has an unknown height, wrap both in a single boundary to avoid CLS.
+- **Add `data-pending` feedback on regions surrounding Suspense boundaries** — when a filter or navigation triggers a re-render, the old content should dim or pulse while new data loads. Use `group-has-[[data-pending]]:opacity-60 transition-opacity` on the wrapper. See Step 6 and `patterns.md` for details.
+- For framework-specific page structure (e.g., keeping `page.tsx` non-async in Next.js), see `nextjs.md`.
 
-For deeper streaming patterns (parallel data fetching, promise-passing, static shells), consult your framework's streaming docs. If the audit surfaces many streaming-related improvements beyond basic Suspense boundaries, present them to the user as a separate category.
+For deeper streaming patterns, consult your framework's streaming docs. If the audit surfaces many streaming-related improvements beyond basic Suspense boundaries, present them to the user as a separate category.
 
 ## Step 3: Convert Design Components to Action Props
 
-For approved design components that use `onChange` and trigger a navigation or state update, add the action props pattern. See [Action Props](#action-props-design-components) for the full TabList, EditableText, and SubmitButton implementations.
+For approved design components that use `onChange` and trigger a navigation or state update, add the action props pattern. See `patterns.md` for the full TabList, EditableText, and SubmitButton implementations.
 
 **Rules:**
 
@@ -258,59 +253,34 @@ For approved design components that use `onChange` and trigger a navigation or s
 - Name callback props with "Action" to signal they'll run inside a transition.
 - For animating async state changes (enter/exit, navigation, tab switches, list reorder), see the `vercel-react-view-transitions` skill.
 
-## Step 4: Fix Legacy State Patterns
+## Step 4: Fix Uncoordinated State
 
 **Only target `useState` that manages server-derived data or mutation results.** Leave `useState` alone for local UI concerns — form inputs, modals, multi-selects, dependent selects, drag state. These are not anti-patterns.
 
 **Dual-state components:** Some components legitimately need both — `useOptimistic(prop)` for display and `useState` for an edit draft (e.g., an editable text field). Don't flag `useState` as an anti-pattern when a component also needs `useOptimistic` alongside it. The fix is adding `useOptimistic` for the display/committed value, not removing `useState` for the draft.
 
-For every `useState` + `useEffect` pair that fetches server-derived data:
+For `useState` + `useEffect` pairs that fetch server-derived data:
 
 1. Delete the API endpoint (if created just for this)
 2. Delete the `useEffect` fetch and local `useState`
 3. Pass the data from a server component as a prop — **but first check if the data is actually server-only.** Constants (enums, option lists, static arrays) can often be imported directly in client components.
 4. Add `useOptimistic` for instant feedback on mutations
 5. Where suitable, use form `action` instead of `onClick` (e.g., submit buttons, toggles, delete actions). Don't force everything into forms — `startTransition` with `onClick` is fine for interactions that aren't naturally form submissions.
-6. **Ensure the mutation invalidates** — call the framework's invalidation API after mutating data. See [Invalidation After Mutations](#invalidation-after-mutations).
+6. **Ensure the mutation invalidates** — call the framework's invalidation API after mutating data.
 7. **Remove `key` props used to force remounts on data changes** — `useOptimistic` tracks the base value automatically; `key`-based remounting is only needed for `useState`.
 
-For every `useState(prop)` / `useState(initialProp)` that stores server-derived data:
+For `useState(prop)` / `useState(initialProp)` storing server-derived data:
 
 1. Replace `useState(prop)` with `useOptimistic(prop)` — this ensures the component tracks server updates after invalidation
 2. Replace the `setState` calls with the optimistic setter inside `startTransition` or a form `action`
 3. For relative updates (cycling, incrementing), use an updater function: `setOptimistic(current => next(current))`
 4. Remove any `useEffect` syncing props to state — `useOptimistic` handles this automatically
 
-**Before (broken coordination):**
-```tsx
-const [isFavorited, setIsFavorited] = useState(false);
-useEffect(() => {
-  fetch(`/api/favorites/${id}`).then(r => r.json()).then(d => setIsFavorited(d.value));
-}, [id]);
-
-async function handleClick() {
-  setIsFavorited(!isFavorited);
-  await toggleFavorite(id);
-}
-```
-
-Problems: values flash stale after navigation, mutations and tab switches don't coordinate, initial render shows wrong state.
-
-**After (coordinated):**
-```tsx
-const [optimistic, setOptimistic] = useOptimistic(hasFavorited);
-
-<form action={async () => {
-  setOptimistic(!optimistic);
-  await toggleFavorite(id);
-}}>
-```
-
-Server component passes `hasFavorited` as a prop. `useOptimistic` provides instant toggle. Form action wraps in a transition. Mutations and navigation now coordinate through the same system. **The mutation must invalidate** — without calling the framework's invalidation API, the optimistic value settles but server data stays stale.
+See `patterns.md` → `useState(prop)` Anti-Pattern for before/after code examples.
 
 ## Step 5: Add Optimistic Updates
 
-For approved mutations where the user expects instant feedback, apply the appropriate pattern from [Optimistic Mutations](#optimistic-mutations):
+For approved mutations where the user expects instant feedback, apply the appropriate pattern from `patterns.md`:
 
 - **Toggle** (favorite, like) — Boolean `useOptimistic` with form `action`
 - **Multi-value** (follow with count) — Reducer form of `useOptimistic`
@@ -326,31 +296,31 @@ For approved mutations where the user expects instant feedback, apply the approp
 - Use **updater functions** (`setOptimistic(current => ...)`) for relative updates (cycling, incrementing, toggling) — prevents stale closures on rapid interactions.
 - Use **reducers** (not updaters) when the base state might change during the Action (e.g., from polling), or when handling multiple action types.
 - A component can have **multiple `useOptimistic` calls** for independent values.
-- **Every optimistic update must have error feedback.** `useOptimistic` silently reverts on failure — the user sees the value snap back with no explanation. Add `try/catch` around the mutation with `toast.error()` for expected failures. Don't leave catch blocks empty.
+- **Unexpected errors bubble to error boundaries** — use `useTransition`'s `startTransition` (not the standalone import) so thrown errors reach `error.tsx`. Don't wrap mutations in `try/catch` unless handling an **expected** failure (e.g., validation, conflict) with inline feedback like `toast.error()`. Blanket `try/catch` swallows errors that should crash visibly.
 - For list adds, generate a UUID on the client and pass it to the server.
-- Every mutation must call the framework's invalidation API. See [Invalidation After Mutations](#invalidation-after-mutations) for specifics.
+- Mutations that change displayed data must call the framework's invalidation API.
 
 ### Shared mutation logic
 
-When the client needs to predict the server result (e.g., cycling enum values), extract the logic into a shared constant importable by both the client component and the mutation handler. For framework-specific export constraints, see [Async React in Next.js](#async-react-in-nextjs).
+When the client needs to predict the server result (e.g., cycling enum values), extract the logic into a shared constant importable by both the client component and the mutation handler.
 
 ### Post-await state updates
 
-State updates after `await` inside `startTransition` fall outside the transition scope. Wrap post-`await` updates in another `startTransition`. See [Double-Transition Pattern](#double-transition-pattern).
+State updates after `await` inside `startTransition` fall outside the transition scope. Wrap post-`await` updates in another `startTransition`. See `patterns.md` for the double-transition pattern.
 
 ## Step 6: Add Pending Feedback
 
-Use `useTransition` + `data-pending` for "working" feedback. This works on its own for pessimistic mutations (e.g., delete with no optimistic result), or as an addition alongside `useOptimistic` to show both instant feedback and a subtle pending indicator. See [Pessimistic Mutations](#pessimistic-mutations) for the DeleteButton and grouped pending examples.
+Use `useTransition` + `data-pending` for "working" feedback. This works on its own for pessimistic mutations (e.g., delete with no optimistic result), or as an addition alongside `useOptimistic` to show both instant feedback and a subtle pending indicator. See `patterns.md` for the DeleteButton and grouped pending examples.
 
 **Rules:**
 
-- `data-pending` requires a parent with `has-data-pending:` styles to create a visible effect. Always add both parts.
-- For grouped regions, use `group-has-data-pending:`.
-- For design components, there are two valid approaches: the component can set `data-pending` internally (simpler for consumers), or the consumer can own `data-pending` on a wrapper (more flexible). See [Grouped Pending](#grouped-pending) for both patterns.
+- `data-pending` requires a parent with `has-[[data-pending]]:` styles to create a visible effect. Always add both parts.
+- For grouped regions, use `group-has-[[data-pending]]:`.
+- For design components, there are two valid approaches: the component can set `data-pending` internally (simpler for consumers), or the consumer can own `data-pending` on a wrapper (more flexible). See `patterns.md` for both patterns.
 
 ## Step 7: Review Together
 
-**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through every item you changed with the user and verify each interaction:
+**Do not skip this step.** A successful build doesn't mean the coordination works — most async bugs are behavioral, not type errors. Walk through the items you changed with the user and verify each interaction:
 
 - Does loading avoid layout shift? (Skeleton matches content)
 - Does the mutation provide feedback? (Optimistic or pending indicator)
@@ -358,7 +328,7 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 - Do mutations persist after navigation? (Mutate, navigate away, navigate back — fresh data shows)
 - Do mutations survive navigation? (Toggle, then switch tabs — no stale data)
 - Does background refresh coordinate with user actions? (Action mid-poll — no clobber)
-- Does every mutation invalidate? (See [Invalidation After Mutations](#invalidation-after-mutations) for specific APIs)
+- Do mutations invalidate? (Call your framework's invalidation API)
 - Are all server-derived values using `useOptimistic(prop)`, not `useState(prop)`?
 - Are Action-suffixed functions named without `handle` prefix?
 - Do relative updates use updater functions (`current => ...`)?
@@ -369,7 +339,7 @@ Use `useTransition` + `data-pending` for "working" feedback. This works on its o
 
 # Async React Patterns
 
-Code reference for each primitive. See [Audit & Review Workflow](#audit--review-workflow) for the step-by-step workflow. For framework-specific integration (invalidation APIs, router behavior), see [Async React in Next.js](#async-react-in-nextjs).
+Code reference for each primitive. See `implementation.md` for the step-by-step workflow. For framework-specific integration (invalidation APIs, router behavior), see `nextjs.md`.
 
 ---
 
@@ -521,7 +491,7 @@ function FilteredView() {
           });
         }}
       />
-      <div className="group-has-data-pending:opacity-50 transition-opacity">
+      <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
         <ContentGrid />
       </div>
     </div>
@@ -529,7 +499,7 @@ function FilteredView() {
 }
 ```
 
-The optimistic tab switch still happens inside `TabList`. The consumer's `isPending` drives `data-pending` on a wrapper, and descendants use `group-has-data-pending:` to style themselves.
+The optimistic tab switch still happens inside `TabList`. The consumer's `isPending` drives `data-pending` on a wrapper, and descendants use `group-has-[[data-pending]]:` to style themselves.
 
 ### EditableText — displayValue Pattern
 
@@ -663,7 +633,11 @@ export function LikeButton({ isLiked, toggleAction }) {
   return (
     <form action={async () => {
       setOptimistic(!optimistic);
-      await toggleAction();
+      try {
+        await toggleAction();
+      } catch (e) {
+        toast.error('Failed to update — please try again');
+      }
     }}>
       <button type="submit">
         {optimistic ? '❤️' : '🤍'}
@@ -673,7 +647,7 @@ export function LikeButton({ isLiked, toggleAction }) {
 }
 ```
 
-No `startTransition` needed — form `action` already wraps in a transition. The setter is called inside an Action prop.
+No `startTransition` needed — form `action` already wraps in a transition. The setter is called inside an Action prop. The `try/catch` here handles an **expected** failure (e.g., rate limit, permission denied) with inline feedback. For **unexpected** errors, skip the `try/catch` and use `useTransition`'s `startTransition` instead of form `action` — errors bubble to the nearest error boundary (`error.tsx`). Don't add blanket `try/catch` to mutations.
 
 **Alternative — updater function** for robustness against rapid double-taps:
 
@@ -696,7 +670,7 @@ When computing the next value from the current value, use an updater function in
 'use client';
 
 import { useOptimistic } from 'react';
-import { PRIORITY_CYCLE } from '@/lib/data';
+import { PRIORITY_CYCLE } from '../lib/data';
 
 export function PriorityButton({ taskId, priority }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
@@ -751,13 +725,13 @@ Each optimistic value settles independently when its transition completes. Both 
 `useState(initialValue)` only reads the initial value on mount. When new server data arrives (via invalidation, revalidation, or navigation), the prop updates but `useState` ignores it:
 
 ```tsx
-// ❌ Stale after re-render — useState ignores prop updates
+// ❌ Stale after refresh — useState ignores prop updates
 function Card({ priority: initialPriority }) {
   const [priority, setPriority] = useState(initialPriority);
   // After re-render with new data, initialPriority changes but priority stays stale
 }
 
-// ✅ Tracks server data — useOptimistic re-evaluates every render
+// ✅ Tracks server data — useOptimistic re-evaluates on each render
 function Card({ priority }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
   // After re-render with new data, priority changes and optimisticPriority follows
@@ -914,22 +888,10 @@ export function OptimisticItems({ parentId }: { parentId: string }) {
 }
 ```
 
-The server component renders the real list alongside. The page passes a promise; the server component awaits it inside `<Suspense>`:
+The server component renders the real list alongside. The page wraps it in `<Suspense>`:
 
 ```tsx
-// Page (non-async — keeps the static shell)
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const parentIdPromise = params.then(({ id }) => id);
-  return (
-    <Suspense fallback={<ItemSectionSkeleton />}>
-      <ItemSection parentIdPromise={parentIdPromise} />
-    </Suspense>
-  );
-}
-
-// Server component — awaits the promise inside Suspense
-async function ItemSection({ parentIdPromise }: { parentIdPromise: Promise<string> }) {
-  const parentId = await parentIdPromise;
+async function ItemSection({ parentId }: { parentId: string }) {
   const items = await getItems(parentId);
   return (
     <div>
@@ -1006,7 +968,7 @@ export function DeleteButton({ id, deleteAction }) {
 }
 ```
 
-The `disabled` state on the button provides feedback. If the consumer wants the surrounding card to dim, the `DeleteButton` can also set `data-pending` on itself as a CSS hook for parent `has-data-pending:` styles.
+The `disabled` state on the button provides feedback. If the consumer wants the surrounding card to dim, the `DeleteButton` can also set `data-pending` on itself as a CSS hook for parent `has-[[data-pending]]:` styles.
 
 **Alternative — `useTransition` + `onClick`:**
 
@@ -1030,10 +992,10 @@ export function DeleteButton({ id, deleteAction }) {
 }
 ```
 
-Both work. The form `action` version uses `useOptimistic(false)` and gets automatic form coordination. The `useTransition` + `onClick` version is more explicit and sets `data-pending` directly, which can be useful when parent components react via `has-data-pending:` styles:
+Both work. The form `action` version uses `useOptimistic(false)` and gets automatic form coordination. The `useTransition` + `onClick` version is more explicit and sets `data-pending` directly, which can be useful when parent components react via `has-[[data-pending]]:` styles:
 
 ```tsx
-<div className="has-data-pending:opacity-50 transition-opacity">
+<div className="has-[[data-pending]]:opacity-50 transition-opacity">
   <CardContent />
   <DeleteButton id={item.id} deleteAction={deleteItem} />
 </div>
@@ -1046,7 +1008,7 @@ For sibling elements, use `group` on a common ancestor. The component that owns 
 ```tsx
 <div className="group">
   <FilterBar />   {/* sets data-pending internally */}
-  <div className="group-has-data-pending:opacity-50 transition-opacity">
+  <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
     <ContentGrid />
   </div>
 </div>
@@ -1057,7 +1019,7 @@ Alternatively, the consumer can own the transition and set `data-pending` on the
 ```tsx
 <div className="group" data-pending={isPending ? '' : undefined}>
   <FilterChips action={filterAction} />
-  <div className="group-has-data-pending:opacity-50 transition-opacity">
+  <div className="group-has-[[data-pending]]:opacity-50 transition-opacity">
     <ContentGrid />
   </div>
 </div>
@@ -1142,7 +1104,7 @@ This pattern works with any Suspense-enabled data source, not just TanStack Quer
 'use client';
 
 import { useActionState, startTransition } from 'react';
-import { saveItem } from '@/lib/actions';
+import { saveItem } from '../actions';
 
 export function CreateForm({ onSuccess }: { onSuccess?: () => void }) {
   const [{ error, key }, formAction, isPending] = useActionState(
@@ -1247,33 +1209,34 @@ A background data refresh arrives mid-action. If using a reducer, React re-runs 
 
 Pitfalls to watch for during the audit. Many of these are the patterns Step 1 scans for.
 
-- **Skipping the audit** — Without classifying interactions first, you'll miss coordination gaps or apply the wrong pattern. See [Step 1: Audit](#step-1-audit-the-app).
-- **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the mutation succeeds, but without calling the framework's invalidation API, the server never re-renders. The optimistic value settles to stale data. Every mutation must invalidate.
+---
+
+- **Skipping the audit** — Without classifying interactions first, you'll miss coordination gaps or apply the wrong pattern. See `implementation.md` Step 1.
+- **Forgetting to invalidate after mutations** — `useOptimistic` shows the instant result, the mutation succeeds, but without calling the framework's invalidation API, the server never re-renders. The optimistic value settles to stale data.
 - **`useState` + `useEffect` for server-derived state** — Creates the coordination problem. Fetch state client-side, manage it locally, and now mutations and navigation don't talk to each other. Fix: server data as props, `useOptimistic` for instant feedback.
-- **`useState(prop)` instead of `useOptimistic(prop)`** — `useState` only reads the initial value on mount. When fresh server data arrives (via invalidation or navigation), the prop updates but `useState` ignores it — the component shows stale values. `useOptimistic(prop)` re-evaluates every render, automatically tracking server updates.
+- **`useState(prop)` instead of `useOptimistic(prop)`** — `useState` only reads the initial value on mount. When fresh server data arrives, the prop updates but `useState` ignores it. `useOptimistic(prop)` re-evaluates on each render, automatically tracking server updates. See `patterns.md` → `useState(prop)` Anti-Pattern.
 - **`onClick` with raw `await` instead of form `action` or `startTransition`** — Both form actions and `startTransition` provide transition wrapping. Use whichever fits the interaction. The mistake is doing neither.
 - **Calling `useOptimistic` setter outside an Action** — The setter must be called inside `startTransition` or a form `action`. Outside, React warns and the optimistic value briefly renders then reverts.
 - **Reading optimistic value in setter instead of using updater** — `setOptimistic(CYCLE[optimisticValue])` captures a stale closure if rapid clicks queue multiple transitions. Use an updater: `setOptimistic(current => CYCLE[current])`.
 - **Competing data layers** — Don't mix `useOptimistic` with separate `useState` for the same data. One source of truth (server props), one overlay (`useOptimistic`).
 - **`handleFooAction` naming** — Don't combine `handle` prefix with `Action` suffix. `handle` is for direct event handlers (`handleClick`); `Action` suffix replaces it (`filterAction`, `deleteAction`).
-- **Wrong boundary structure** — One big `<Suspense>` means nothing renders until everything loads. But blindly splitting into siblings can cause layout shift (CLS) if a component above has unknown height.
+- **Wrong boundary structure** — One big `<Suspense>` means nothing renders until everything loads. But blindly splitting into siblings can cause layout shift (CLS) if a component above has unknown height. Choose boundaries based on the loading state you want for the page.
 - **Using updater instead of reducer when base state can change** — If the base data might change during your Action (e.g., from polling), use a reducer. Updaters only see state from when the transition started; reducers re-run with the latest base value.
-- **Raw `await` on async functions bypasses error boundaries** — `await doSomething()` inside an `onClick` handler is not in a transition. Errors are unhandled. Wrap in `startTransition` or use form `action`.
-- **Exporting constants from `"use server"` files** (Next.js) — Only async functions can be exported. Shared constants must live in a separate file.
-- **`data-pending` without a parent reacting to it** — Setting `data-pending` does nothing by itself. A parent must have `has-data-pending:` styles.
-- **Silent optimistic rollback** — `useOptimistic` auto-reverts on failure, but the user sees no explanation. Pair with `toast.error()` inside a `try/catch`, or an error boundary for unexpected failures.
-- **State updates after `await` fall outside the transition** — Post-`await` cleanup runs immediately instead of batching with the re-render. Use a double-transition: wrap post-`await` updates in another `startTransition`.
-- **`useState` setters don't clear immediately in transitions** — Unlike `useOptimistic`, `useState` updates are deferred until the transition commits. For immediate form clearing, use `formRef.current?.reset()` (uncontrolled) instead of `setContent('')` (controlled).
-- **Framework-specific rendering pitfalls** — Dynamic hooks in layouts, `Date.now()` in server components, hydration mismatches from browser API detection — these are framework-specific concerns that affect caching and static rendering. See [Async React in Next.js](#async-react-in-nextjs) for details.
-- **Omitting Suspense fallback on visible components causes layout shift** — Only omit the fallback when the child renders nothing (side-effect components, conditional guards). For visible content, use skeleton or static markup fallbacks — see [Fallback Quality](#fallback-quality).
+- **`data-pending` without a parent reacting to it** — Setting `data-pending` does nothing by itself. A parent must have `has-[[data-pending]]:` styles.
+- **Silent optimistic rollback without error boundary** — `useOptimistic` auto-reverts on failure, but the user sees no explanation. Use `useTransition`'s `startTransition` so unexpected errors bubble to the error boundary. Only use `try/catch` + `toast.error()` for **expected** failures (validation, conflicts) where you want inline feedback instead of a full error boundary.
+- **Manual state for create/edit forms instead of `useActionState`** — If a form has error handling, auto-reset on success, and pending state, use `useActionState` — it manages all three with built-in key-based reset. See `patterns.md` → Action State.
+- **State updates after `await` fall outside the transition** — Post-`await` cleanup (closing dialogs, resetting forms) runs immediately instead of batching with the re-render. Use a double-transition: wrap post-`await` updates in another `startTransition`. See `patterns.md`.
+- **`useState` setters don't clear immediately in transitions** — Unlike `useOptimistic`, `useState` updates are deferred until the transition commits. For immediate form clearing in chat/comment UIs, use `formRef.current?.reset()` (uncontrolled) instead of `setContent('')` (controlled). See `patterns.md`.
+- **Omitting Suspense fallback on visible components causes layout shift** — Only omit the fallback when the child renders nothing (side-effect components, conditional guards). For visible content, use skeleton fallbacks (data) or static markup (interactive controls) — see `patterns.md` → Fallback Quality.
+- For framework-specific pitfalls (async page components, `"use server"` export constraints, dynamic hooks in layouts), see `nextjs.md`.
 
 ---
 
 # Async React in Next.js
 
-Coordination gotchas specific to Next.js. For the primitives themselves, see the sections above. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
+Coordination gotchas specific to Next.js. For the primitives themselves, see `SKILL.md` and `patterns.md`. For general Next.js APIs, see the [Next.js docs](https://nextjs.org/docs).
 
-**Important:** The patterns below target Next.js 16. APIs change between versions — see Step 0 in the implementation workflow above to verify your version's APIs before using anything here.
+**Important:** The patterns below target Next.js 16. APIs change between versions — run Step 0 from the implementation workflow to verify your version's APIs before using anything here.
 
 ---
 
@@ -1281,125 +1244,35 @@ Coordination gotchas specific to Next.js. For the primitives themselves, see the
 
 Keep `page.tsx` non-async when possible. Push `await` calls into async server components inside `<Suspense>` so the static shell renders instantly and dynamic parts stream in.
 
+```tsx
+// ✅ Shell renders instantly, Board streams in
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ label?: string }>;
+}) {
+  const { label } = await searchParams;
+
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<BoardSkeleton />}>
+        <Board label={label} />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+The `await searchParams` is lightweight — the expensive work is inside `<Board>` (an async server component), which streams in independently via `<Suspense>`.
+
 See: [`cacheComponents`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents), [`use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache), [`cacheTag`](https://nextjs.org/docs/app/api-reference/functions/cacheTag), [`cacheLife`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheLife)
-
----
-
-## Push Dynamic Hooks Into Leaf Components
-
-Hooks like `useSearchParams()`, `usePathname()`, and `useRouter()` make their component dynamic. When used in a layout or page, the entire subtree becomes dynamic and cannot be statically prerendered — the layout shell won't appear until the dynamic data is ready. Push these hooks into the smallest possible child component and wrap in `<Suspense>`.
-
-**Incorrect (entire layout is dynamic):**
-
-```tsx
-'use client'
-
-export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const searchParams = useSearchParams()
-  const query = searchParams.get('q') ?? ''
-
-  return (
-    <div>
-      <nav>Dashboard</nav>
-      <SearchInput defaultValue={query} />
-      <UserMenu />
-      {children}
-    </div>
-  )
-}
-```
-
-**Correct (layout is a server component, hooks isolated in leaf components):**
-
-```tsx
-// layout.tsx — server component, statically prerenderable
-export default function DashboardLayout({ children }: { children: ReactNode }) {
-  return (
-    <div>
-      <nav>Dashboard</nav>
-      <Suspense fallback={<SearchSkeleton />}>
-        <SearchInput />
-      </Suspense>
-      <Suspense fallback={<UserMenuSkeleton />}>
-        <UserMenu />
-      </Suspense>
-      {children}
-    </div>
-  )
-}
-```
-
-```tsx
-// search-input.tsx — client component with the dynamic hook
-'use client'
-
-export function SearchInput() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get('q') ?? ''
-  return <input defaultValue={query} ... />
-}
-```
-
-This applies to `useSearchParams()`, `usePathname()`, `useRouter()`, `cookies()`, `headers()`, and `await params`/`await searchParams`.
-
----
-
-## Avoid Dynamic Values in Server Components
-
-`Date.now()`, `Math.random()`, and similar runtime-dependent values must not be called directly in server components. This makes the component dynamic, defeating static prerendering and cache reuse.
-
-**Incorrect (server component becomes dynamic):**
-
-```tsx
-import { timeAgo } from '@/utils/format'
-
-export function RunCard({ run }: { run: Run }) {
-  return (
-    <div>
-      <h3>{run.title}</h3>
-      <span>{timeAgo(run.createdAt)}</span> {/* timeAgo calls Date.now() */}
-    </div>
-  )
-}
-```
-
-**Correct (client component wraps the dynamic call):**
-
-```tsx
-// time-ago.tsx — client component
-'use client'
-import { timeAgo, formatDate } from '@/utils/format'
-
-export function TimeAgo({ date }: { date: string }) {
-  return (
-    <span title={formatDate(date)} suppressHydrationWarning>
-      {timeAgo(date)}
-    </span>
-  )
-}
-```
-
-```tsx
-// run-card.tsx — stays a server component
-import { TimeAgo } from '@/components/time-ago'
-
-export function RunCard({ run }: { run: Run }) {
-  return (
-    <div>
-      <h3>{run.title}</h3>
-      <TimeAgo date={run.createdAt} />
-    </div>
-  )
-}
-```
-
-`suppressHydrationWarning` is necessary because relative time ("5m ago") differs between server render and client hydration.
 
 ---
 
 ## Invalidation After Mutations
 
-**Every server action that mutates data must invalidate.** Without it, `useOptimistic` shows the instant result but the server never re-renders — the optimistic value settles to stale data.
+**Server actions that mutate data must invalidate.** Without it, `useOptimistic` shows the instant result but the server never re-renders — the optimistic value settles to stale data.
 
 The flow: user submits → `useOptimistic` shows instant result → server action runs → invalidation → optimistic value settles to real data.
 
@@ -1444,6 +1317,63 @@ export async function updatePost(slug: string, formData: FormData) {
 
 ---
 
+## Push Dynamic Hooks Into Leaf Components
+
+Hooks like `useSearchParams()`, `usePathname()`, and `useRouter()` make their component dynamic. When used in a layout or page, the entire subtree becomes dynamic and cannot be statically prerendered — the layout shell won't appear until the dynamic data is ready. Push these hooks into the smallest possible child component and wrap in `<Suspense>`.
+
+**With `cacheComponents: true`, this is enforced as a hard error:** placing a component that uses `useSearchParams()` outside `<Suspense>` throws `Uncached data was accessed outside of <Suspense>`. Without `cacheComponents`, the same pattern silently degrades performance.
+
+**Incorrect (entire layout is dynamic):**
+
+```tsx
+'use client'
+
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q') ?? ''
+
+  return (
+    <div>
+      <nav>Dashboard</nav>
+      <SearchInput defaultValue={query} />
+      {children}
+    </div>
+  )
+}
+```
+
+**Correct (layout is a server component, hooks isolated in leaf components):**
+
+```tsx
+// layout.tsx — server component, statically prerenderable
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  return (
+    <div>
+      <nav>Dashboard</nav>
+      <Suspense>
+        <SearchInput />
+      </Suspense>
+      {children}
+    </div>
+  )
+}
+```
+
+```tsx
+// search-input.tsx — client component with the dynamic hook
+'use client'
+
+export function SearchInput() {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('q') ?? ''
+  return <input defaultValue={query} ... />
+}
+```
+
+This applies to `useSearchParams()`, `usePathname()`, `useRouter()`, `cookies()`, `headers()`, and `await params`/`await searchParams`.
+
+---
+
 ## `router.push()` in Transitions
 
 When called inside `startTransition`, [`router.push()`](https://nextjs.org/docs/app/api-reference/functions/use-router) coordinates with `useOptimistic` in the same transition — both commit together.
@@ -1454,6 +1384,8 @@ A common pattern: update `searchParams` via `router.push()` and pass the callbac
 
 ```tsx
 // Consumer — passes router.push as an action prop
+// Note: useSearchParams() makes this component dynamic.
+// Wrap <LabelFilter /> in <Suspense> at the call site (see Push Dynamic Hooks above).
 function LabelFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1471,6 +1403,11 @@ function LabelFilter() {
 
   return <ChipGroup items={labels} value={current} action={filterAction} />;
 }
+
+// Call site — wrap in Suspense because LabelFilter uses useSearchParams()
+<Suspense>
+  <LabelFilter />
+</Suspense>
 ```
 
 ```tsx
@@ -1504,12 +1441,14 @@ startTransition(async () => {
 
 ## Promise-Passing and Streaming
 
-Server components can start a fetch without awaiting it, passing the **promise** as a prop to a client component. The client uses `use()` (see [Core Concepts](#use--unwrapping-promises-and-context)) to unwrap it — the server renders instantly and data streams in via `<Suspense>`. The `.then()` pattern on `params` avoids making the page `async`:
+Server components can start a fetch without awaiting it, passing the **promise** as a prop to a child component inside `<Suspense>`. The child awaits it — the page shell renders instantly and dynamic parts stream in. The `.then()` pattern on `params` avoids making the page `async`:
+
+**Prerequisite:** This pattern requires `cacheComponents: true` in `next.config.ts` (see [Page Structure](#page-structure)).
 
 ```tsx
 function TaskPage({ params }: { params: Promise<{ id: string }> }) {
   const taskPromise = params.then(({ id }) => getTask(id));
-  const commentsPromise = commentsFromTask(taskPromise);
+  const commentsPromise = params.then(({ id }) => getComments(id));
 
   return (
     <div>
@@ -1524,7 +1463,7 @@ function TaskPage({ params }: { params: Promise<{ id: string }> }) {
 }
 ```
 
-Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chaining promises (e.g., `commentsFromTask(taskPromise)`) lets you derive dependent data without `await`.
+Each `<Suspense>` boundary streams independently — the task detail can appear before comments finish loading. Chain `.then()` calls to derive dependent data without `await`.
 
 See: [Streaming guide](https://nextjs.org/docs/app/guides/streaming), [Suspense](https://nextjs.org/docs/app/guides/streaming#streaming-with-suspense), [Data fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
 
@@ -1599,4 +1538,15 @@ export function usePolling(intervalMs = 5000) {
 }
 ```
 
-The focus listener ensures fresh data when the user returns to the tab — important for collaborative features where updates may have arrived while the tab was backgrounded. Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.
+The focus listener ensures fresh data when the user returns to the tab. Because the refresh runs inside `startTransition`, it coordinates with `useOptimistic` — a mid-action refresh updates the base data without clobbering optimistic state.
+
+---
+
+## Common Next.js Pitfalls
+
+These are framework-specific mistakes. For general React coordination mistakes, see `common-mistakes.md`.
+
+- **Making `page.tsx` async for expensive data** — `async` pages block the entire shell until all `await` calls complete. Keep `page.tsx` non-async when possible: use `.then()` on `params`/`searchParams`, pass promises to child server components inside `<Suspense>`. See [Page Structure](#page-structure).
+- **Missing `cacheComponents: true` in `next.config.ts`** (Next.js 16) — Without it, combining `<Suspense>` with dynamic data can throw `React.unstable_postpone is not defined` or silently disable streaming. Enable it before any other work.
+- **Exporting constants from `"use server"` files** — Only async functions can be exported. Shared constants must live in a separate file. See [Shared Constants](#shared-constants).
+- **Dynamic hooks in layouts** — `useSearchParams()`, `usePathname()`, `useRouter()` make their component dynamic. When used in a layout, the entire subtree becomes dynamic. Push these hooks into the smallest possible child component and wrap in `<Suspense>`. See [Push Dynamic Hooks](#push-dynamic-hooks-into-leaf-components).
