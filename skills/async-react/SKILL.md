@@ -11,6 +11,8 @@ metadata:
 
 Use this skill to review a React app's async patterns and suggest improvements — fixing frozen UI, stale data, uncoordinated mutations, missing loading states, or lack of feedback. This is a collaborative audit tool: scan the codebase, surface issues, present findings to the user, and implement what they prioritize.
 
+**Do not edit files until the user selects priorities.** Present your audit findings first. The user decides what to fix and in what order.
+
 The core idea: wrap async work in **transitions**, and React tracks pending state, batches updates, and coordinates everything — loading, mutations, navigation — through a single pipeline. No competing state layers, no race conditions.
 
 This is the combination of React 18's concurrent features and React 19's coordination APIs. The React team calls this "Async React" — a complete system for building responsive async applications through composable primitives. Based on [Ricky Hanlon's React Conf 2025 demo](https://github.com/rickhanlonii/async-react), the vision is that product code becomes simple and declarative because three infrastructure layers handle async coordination internally:

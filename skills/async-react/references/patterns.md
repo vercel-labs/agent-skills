@@ -83,7 +83,7 @@ Support both `action` and `onChange`. The action prop accepts `void | Promise<vo
 ```tsx
 'use client';
 
-import { startTransition, useOptimistic } from 'react';
+import { useOptimistic, useTransition } from 'react';
 
 type TabListProps = {
   tabs: { label: string; value: string }[];
@@ -93,6 +93,7 @@ type TabListProps = {
 };
 
 export function TabList({ tabs, activeTab, action, onChange }: TabListProps) {
+  const [, startTransition] = useTransition();
   const [optimisticTab, setOptimisticTab] = useOptimistic(activeTab);
 
   function handleTabChange(e: React.MouseEvent<HTMLButtonElement>, value: string) {
@@ -355,7 +356,7 @@ export function PriorityButton({ taskId, priority }) {
 A single component can have multiple independent `useOptimistic` calls. Each tracks its own server prop:
 
 ```tsx
-export function TaskCard({ id, priority, assignee }) {
+export function TaskCard({ id, priority, assignee, assignees }) {
   const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority);
   const [optimisticAssignee, setOptimisticAssignee] = useOptimistic(assignee);
 
@@ -370,8 +371,9 @@ export function TaskCard({ id, priority, assignee }) {
   function handleAssignee(e: React.MouseEvent) {
     e.stopPropagation();
     startTransition(async () => {
-      setOptimisticAssignee(nextAssignee);
-      await reassignTask(id, nextAssignee);
+      const next = assignees[(assignees.indexOf(optimisticAssignee) + 1) % assignees.length];
+      setOptimisticAssignee(next);
+      await reassignTask(id, next);
     });
   }
 
