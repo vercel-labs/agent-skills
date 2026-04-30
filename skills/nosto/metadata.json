@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "organization": "Community",
+  "date": "April 2026",
+  "abstract": "Reference for Nosto's frontend JavaScript SDK and the @nosto/nosto-js npm package. Covers script loading, the session API (viewProduct, viewCategory, viewCart, viewSearch, addOrder), recommendation placements and attribution, customer identification, GraphQL search, GDPR/consent gating, React/Next.js integration via @nosto/nosto-react, and common gotchas (double-tracking, mixing Page Tagging with Session API, PII in customer_reference). Designed for AI agents implementing or debugging Nosto on storefronts.",
+  "references": [
+    "https://docs.nosto.com/techdocs",
+    "https://docs.nosto.com/techdocs/apis/frontend/js-apis",
+    "https://docs.nosto.com/techdocs/apis/frontend/implementation-guide-session-api",
+    "https://nosto.github.io/nosto-js/modules.html",
+    "https://nosto.github.io/nosto-js/modules/client.html",
+    "https://nosto.github.io/nosto-js/modules/core.html",
+    "https://github.com/Nosto/nosto-js",
+    "https://github.com/Nosto/nosto-react"
+  ]
+}
