@@ -136,6 +136,25 @@ Preview URL: https://skill-deploy-abc123.vercel.app
 Claim URL:   https://vercel.com/claim-deployment?code=...
 ```
 
+### vercel-python
+
+Diagnose, fix, and prepare Python projects for Vercel deployments. Complements the deployment and CLI token skills with Python-specific runtime, framework, and dependency guidance.
+
+**Use when:**
+- Deploying FastAPI, Flask, Django, or generic ASGI/WSGI apps to Vercel
+- Fixing Python entrypoint, handler, or framework detection errors
+- Debugging `pyproject.toml`, `requirements.txt`, `uv`, lockfile, or `.python-version` issues
+- Investigating Python bundle size, runtime dependency installation, or Vercel Python diagnostics
+- Using the Vercel Python SDK or runtime helper APIs
+
+**Categories covered:**
+- Entrypoint and callable discovery
+- FastAPI, Flask, and Django deployment patterns
+- Python version and dependency manifest selection
+- `uv` and lockfile behavior
+- Bundle size and runtime dependency troubleshooting
+- Vercel Python SDK and runtime APIs
+
 ## Installation
 
 ```bash
