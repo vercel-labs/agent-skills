@@ -11,7 +11,7 @@ tags: server, io, performance, next.js, route-handlers, og-image
 
 When loading static assets (fonts, logos, images, config files) in route handlers or server functions, hoist the I/O operation to module level. Module-level code runs once when the module is first imported, not on every request. This eliminates redundant file system reads or network fetches that would otherwise run on every invocation.
 
-**Incorrect: reads font file on every request**
+**Incorrect (reads font file on every request):**
 
 ```typescript
 // app/api/og/route.tsx
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
   const fontData = await fetch(
     new URL('./fonts/Inter.ttf', import.meta.url)
   ).then(res => res.arrayBuffer())
-  
+
   const logoData = await fetch(
     new URL('./images/logo.png', import.meta.url)
   ).then(res => res.arrayBuffer())
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
 }
 ```
 
-**Correct: loads once at module initialization**
+**Correct (loads once at module initialization):**
 
 ```typescript
 // app/api/og/route.tsx
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
 }
 ```
 
-**Alternative: synchronous file reads with Node.js fs**
+**Correct (synchronous fs at module level):**
 
 ```typescript
 // app/api/og/route.tsx
@@ -94,35 +94,42 @@ export async function GET(request: Request) {
 }
 ```
 
-**General Node.js example: loading config or templates**
+**Incorrect (reads config on every call):**
 
 ```typescript
-// Incorrect: reads config on every call
+import fs from 'node:fs/promises'
+
 export async function processRequest(data: Data) {
   const config = JSON.parse(
     await fs.readFile('./config.json', 'utf-8')
   )
   const template = await fs.readFile('./template.html', 'utf-8')
-  
+
   return render(template, data, config)
 }
+```
 
-// Correct: loads once at module level
-const configPromise = fs.readFile('./config.json', 'utf-8')
+**Correct (hoists config and template to module level):**
+
+```typescript
+import fs from 'node:fs/promises'
+
+const configPromise = fs
+  .readFile('./config.json', 'utf-8')
   .then(JSON.parse)
 const templatePromise = fs.readFile('./template.html', 'utf-8')
 
 export async function processRequest(data: Data) {
   const [config, template] = await Promise.all([
     configPromise,
-    templatePromise
+    templatePromise,
   ])
-  
+
   return render(template, data, config)
 }
 ```
 
-**When to use this pattern:**
+When to use this pattern:
 
 - Loading fonts for OG image generation
 - Loading static logos, icons, or watermarks
@@ -130,13 +137,13 @@ export async function processRequest(data: Data) {
 - Loading email templates or other static templates
 - Any static asset that's the same across all requests
 
-**When NOT to use this pattern:**
+When not to use this pattern:
 
 - Assets that vary per request or user
 - Files that may change during runtime (use caching with TTL instead)
 - Large files that would consume too much memory if kept loaded
 - Sensitive data that shouldn't persist in memory
 
-**With Vercel's [Fluid Compute](https://vercel.com/docs/fluid-compute):** Module-level caching is especially effective because multiple concurrent requests share the same function instance. The static assets stay loaded in memory across requests without cold start penalties.
+With Vercel's [Fluid Compute](https://vercel.com/docs/fluid-compute), module-level caching is especially effective because multiple concurrent requests share the same function instance. The static assets stay loaded in memory across requests without cold start penalties.
 
-**In traditional serverless:** Each cold start re-executes module-level code, but subsequent warm invocations reuse the loaded assets until the instance is recycled.
+In traditional serverless, each cold start re-executes module-level code, but subsequent warm invocations reuse the loaded assets until the instance is recycled.

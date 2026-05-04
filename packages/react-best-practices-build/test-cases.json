@@ -1,6 +1,22 @@
 [
   {
     "ruleId": "",
+    "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
+    "type": "bad",
+    "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId, handleConnected])\n}",
+    "language": "tsx",
+    "description": "Effect Event added as a dependency"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
+    "type": "good",
+    "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId])\n}",
+    "language": "tsx",
+    "description": "depend on reactive values, not the Effect Event"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "bad",
     "code": "function useWindowEvent(event: string, handler: (e) => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
@@ -65,6 +81,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Check Cheap Conditions Before Async Flags",
+    "type": "bad",
+    "code": "const someFlag = await getFlag()\n\nif (someFlag && someCondition) {\n  // ...\n}",
+    "language": "typescript",
+    "description": "Incorrect example for Check Cheap Conditions Before Async Flags"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Check Cheap Conditions Before Async Flags",
+    "type": "good",
+    "code": "if (someCondition) {\n  const someFlag = await getFlag()\n  if (someFlag) {\n    // ...\n  }\n}",
+    "language": "typescript",
+    "description": "Correct example for Check Cheap Conditions Before Async Flags"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Defer Await Until Needed",
     "type": "bad",
     "code": "async function handleRequest(userId: string, skipProcessing: boolean) {\n  const userData = await fetchUserData(userId)\n  \n  if (skipProcessing) {\n    // Returns immediately but still waited for userData\n    return { skipped: true }\n  }\n  \n  // Only this branch uses userData\n  return processUserData(userData)\n}",
@@ -126,6 +158,38 @@
     "code": "function Page() {\n  return (\n    <div>\n      <div>Sidebar</div>\n      <div>Header</div>\n      <div>\n        <Suspense fallback={<Skeleton />}>\n          <DataDisplay />\n        </Suspense>\n      </div>\n      <div>Footer</div>\n    </div>\n  )\n}\n\nasync function DataDisplay() {\n  const data = await fetchData() // Only blocks this component\n  return <div>{data.content}</div>\n}",
     "language": "tsx",
     "description": "wrapper shows immediately, data streams in"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prefer Statically Analyzable Paths",
+    "type": "bad",
+    "code": "const PAGE_MODULES = {\n  home: './pages/home',\n  settings: './pages/settings',\n} as const\n\nconst Page = await import(PAGE_MODULES[pageName])",
+    "language": "ts",
+    "description": "the bundler cannot tell what may be imported"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prefer Statically Analyzable Paths",
+    "type": "good",
+    "code": "const PAGE_MODULES = {\n  home: () => import('./pages/home'),\n  settings: () => import('./pages/settings'),\n} as const\n\nconst Page = await PAGE_MODULES[pageName]()",
+    "language": "ts",
+    "description": "use an explicit map of allowed modules"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prefer Statically Analyzable Paths",
+    "type": "bad",
+    "code": "const baseDir = path.join(process.cwd(), 'content/' + contentKind)",
+    "language": "ts",
+    "description": "a 2-value enum still hides the final path from static analysis"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Prefer Statically Analyzable Paths",
+    "type": "good",
+    "code": "const baseDir =\n  kind === ContentKind.Blog\n    ? path.join(process.cwd(), 'content/blog')\n    : path.join(process.cwd(), 'content/docs')",
+    "language": "ts",
+    "description": "make each final path literal at the callsite"
   },
   {
     "ruleId": "",
@@ -942,6 +1006,62 @@
     "code": "// RSC: send once\n<ClientList usernames={usernames} />\n\n// Client: transform there\n'use client'\nconst sorted = useMemo(() => [...usernames].sort(), [usernames])",
     "language": "tsx",
     "description": "sends 3 strings"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "bad",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\nexport async function GET(request: Request) {\n  // Runs on EVERY request - expensive!\n  const fontData = await fetch(\n    new URL('./fonts/Inter.ttf', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  const logoData = await fetch(\n    new URL('./images/logo.png', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
+    "language": "typescript",
+    "description": "reads font file on every request"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\n// Module-level: runs ONCE when module is first imported\nconst fontData = fetch(\n  new URL('./fonts/Inter.ttf', import.meta.url)\n).then(res => res.arrayBuffer())\n\nconst logoData = fetch(\n  new URL('./images/logo.png', import.meta.url)\n).then(res => res.arrayBuffer())\n\nexport async function GET(request: Request) {\n  // Await the already-started promises\n  const [font, logo] = await Promise.all([fontData, logoData])\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logo} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: font }] }\n  )\n}",
+    "language": "typescript",
+    "description": "loads once at module initialization"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\nimport { readFileSync } from 'fs'\nimport { join } from 'path'\n\n// Synchronous read at module level - blocks only during module init\nconst fontData = readFileSync(\n  join(process.cwd(), 'public/fonts/Inter.ttf')\n)\n\nconst logoData = readFileSync(\n  join(process.cwd(), 'public/images/logo.png')\n)\n\nexport async function GET(request: Request) {\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
+    "language": "typescript",
+    "description": "synchronous fs at module level"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "bad",
+    "code": "import fs from 'node:fs/promises'\n\nexport async function processRequest(data: Data) {\n  const config = JSON.parse(\n    await fs.readFile('./config.json', 'utf-8')\n  )\n  const template = await fs.readFile('./template.html', 'utf-8')\n\n  return render(template, data, config)\n}",
+    "language": "typescript",
+    "description": "reads config on every call"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Hoist Static I/O to Module Level",
+    "type": "good",
+    "code": "import fs from 'node:fs/promises'\n\nconst configPromise = fs\n  .readFile('./config.json', 'utf-8')\n  .then(JSON.parse)\nconst templatePromise = fs.readFile('./template.html', 'utf-8')\n\nexport async function processRequest(data: Data) {\n  const [config, template] = await Promise.all([\n    configPromise,\n    templatePromise,\n  ])\n\n  return render(template, data, config)\n}",
+    "language": "typescript",
+    "description": "hoists config and template to module level"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Shared Module State for Request Data",
+    "type": "bad",
+    "code": "let currentUser: User | null = null\n\nexport default async function Page() {\n  currentUser = await auth()\n  return <Dashboard />\n}\n\nasync function Dashboard() {\n  return <div>{currentUser?.name}</div>\n}",
+    "language": "tsx",
+    "description": "request data leaks across concurrent renders"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Avoid Shared Module State for Request Data",
+    "type": "good",
+    "code": "export default async function Page() {\n  const user = await auth()\n  return <Dashboard user={user} />\n}\n\nfunction Dashboard({ user }: { user: User | null }) {\n  return <div>{user?.name}</div>\n}",
+    "language": "tsx",
+    "description": "keep request data local to the render tree"
   },
   {
     "ruleId": "",

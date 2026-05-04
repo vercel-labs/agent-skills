@@ -68,6 +68,28 @@ React Native best practices optimized for AI agents. Contains 16 rules across 7 
 - Architecture (Medium) - monorepo structure, imports
 - Platform (Medium) - iOS/Android specific patterns
 
+### react-view-transitions
+
+Implement smooth, native-feeling animations using React's View Transition API. Covers the `<ViewTransition>` component, `addTransitionType`, transition types, and Next.js integration including the `transitionTypes` prop on `next/link`.
+
+**Use when:**
+- Adding page transitions or route animations
+- Animating enter/exit of components
+- Creating shared element transitions (list-to-detail morphing)
+- Implementing directional (forward/back) navigation animations
+- Integrating view transitions in Next.js App Router
+- Animating list reorder or Suspense fallback reveals
+
+**Topics covered:**
+- `<ViewTransition>` component (enter, exit, update, share triggers)
+- `addTransitionType` for directional/context-specific animations
+- View Transition Classes and CSS pseudo-elements
+- Shared element transitions with the `name` prop
+- JavaScript animations via Web Animations API
+- Next.js `transitionTypes` prop on `next/link`
+- Ready-to-use CSS animation recipes (fade, slide, scale, flip)
+- Accessibility (`prefers-reduced-motion`)
+
 ### composition-patterns
 
 React composition patterns that scale. Helps avoid boolean prop proliferation through compound components, state lifting, and internal composition.
