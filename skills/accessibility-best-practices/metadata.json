@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "organization": "Shain Noor",
+  "date": "February 2026",
+  "abstract": "Comprehensive accessibility (a11y) guide for React and Next.js applications, designed for AI agents and LLMs. Contains 40+ rules across 10 categories, prioritized by impact from critical (semantic HTML, keyboard navigation) to incremental (testing and validation). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and WCAG 2.2 references to guide automated refactoring and code generation for inclusive web applications.",
+  "references": [
+    "https://www.w3.org/WAI/WCAG22/quickref/",
+    "https://www.w3.org/WAI/ARIA/apg/",
+    "https://react.dev/reference/react-dom/components#form-components",
+    "https://nextjs.org/docs/architecture/accessibility",
+    "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+    "https://www.deque.com/axe/",
+    "https://github.com/jsx-eslint/eslint-plugin-jsx-a11y"
+  ]
+}
