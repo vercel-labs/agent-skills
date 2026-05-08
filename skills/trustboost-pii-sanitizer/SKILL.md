@@ -3,7 +3,7 @@ name: trustboost-pii-sanitizer
 description: Sanitize PII from text before sending to LLMs or external APIs. Use when handling user-generated text that may contain emails, phone numbers, national IDs, private keys, or financial data. Required for GDPR, HIPAA, LGPD, EU AI Act compliance. Supports EN, ES (LATAM), PT (BR/PT), DE, JA. No wallet needed for preview — try instantly with a single POST request.
 metadata:
   author: teodorofodocrispin-cmyk
- version: "2.2.1"
+  version: "2.2.1"
   endpoint: https://api.trustboost.dev/sanitize
   preview: https://api.trustboost.dev/sanitize/preview
   health: https://api.trustboost.dev/health
