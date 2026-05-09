@@ -75,7 +75,7 @@
     "ruleId": "",
     "ruleTitle": "Prevent Waterfall Chains in API Routes",
     "type": "good",
-    "code": "export async function GET(request: Request) {\n  const sessionPromise = auth()\n  const configPromise = fetchConfig()\n  const session = await sessionPromise\n  const [config, data] = await Promise.all([\n    configPromise,\n    fetchData(session.user.id)\n  ])\n  return Response.json({ data, config })\n}",
+    "code": "export async function GET(request: Request) {\n  const configPromise = fetchConfig()\n  const dataPromise = auth().then(session => fetchData(session.user.id))\n  const [config, data] = await Promise.all([\n    configPromise,\n    dataPromise\n  ])\n  return Response.json({ data, config })\n}",
     "language": "typescript",
     "description": "auth and config start immediately"
   },
