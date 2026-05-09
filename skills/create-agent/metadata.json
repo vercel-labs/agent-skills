@@ -1,0 +1,17 @@
+{
+  "name": "create-agent",
+  "version": "1.0.0",
+  "description": "Build and deploy durable AI agents on Vercel using Workflow DevKit, AI SDK 6, and AI Gateway",
+  "author": "vercel-labs",
+  "license": "MIT",
+  "keywords": [
+    "agent",
+    "ai-agent",
+    "workflow",
+    "durable",
+    "vercel",
+    "ai-sdk",
+    "ai-gateway"
+  ],
+  "categories": ["ai", "deployment", "tooling"]
+}
