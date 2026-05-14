@@ -286,7 +286,212 @@ Both scripts:
 4. `forge verify-contract` against Tenderly's etherscan-compat endpoint
 5. POST to `/contract/.../rename` to set the display name
 
-## Step 10 — Cleanup + token rotation
+## Step 10 — Simulate API for live-chain integration tests
+
+Tenderly's `/simulate` endpoint runs a fresh fork of any indexed chain at
+the current head, applies `state_objects` (storage + balance + code
+overrides), and returns the full decoded trace. Pair it with
+`/simulate-bundle` for multi-step setup → assertion sequences.
+
+### Personas pattern
+
+Pick a small set of throwaway EOAs (`0x1111…`, `0x2222…`, ...) and
+override their ERC-20 `_balances` and `_allowed` storage slots to load
+arbitrary balances + allowances with no on-chain prep:
+
+```ts
+// Standard FiatToken layout: _balances at slot 9, _allowed at slot 10.
+const balanceSlot = (holder, slot) =>
+  keccak256(abi.encode(holder, slot));
+const allowanceSlot = (owner, spender, slot) =>
+  keccak256(abi.encode(spender, keccak256(abi.encode(owner, slot))));
+
+const state_objects = {
+  [USDC]: {
+    storage: {
+      [balanceSlot(whale, 9)]: hex32(1_000_000_000_000n),
+      [allowanceSlot(whale, Permit2, 10)]: hex32(MAX),
+    },
+  },
+  [whale]: { balance: "0x8AC7230489E80000" /* 10 ETH for gas/fees */ },
+};
+```
+
+### simulate-bundle for stateful sequences
+
+When a test needs setup state that `state_objects` can't express (e.g.
+ERC-4626 `_totalSupply` derived from a real `deposit`, a lending market's
+bookkeeping after a primer-supply), bundle the setup tx in front of the
+assertion:
+
+```ts
+POST /api/v1/account/{a}/project/{p}/simulate-bundle
+{
+  "simulations": [
+    { /* tx 1: real deposit so vault bookkeeping is consistent */ },
+    { /* tx 2: the assertion call */ }
+  ]
+}
+```
+
+Each bundle entry sees the state from earlier entries. The runner asserts
+on the LAST entry's result. Pattern works for redeem-after-deposit,
+borrow-after-supply-liquidity, liquidate-after-oracle-crash.
+
+### Pyth-fresh bundle (the testnet-Pyth-staleness fix)
+
+Pyth feeds on Sepolia/Base Sepolia testnets aren't actively pushed, so
+oracle reads revert `OracleStale` most of the time. Fetch a Hermes VAA
+at runtime and bundle it:
+
+```ts
+const url = `https://hermes.pyth.network/api/latest_vaas?ids[]=${FEED_A}&ids[]=${FEED_B}`;
+const vaas = await fetch(url).then((r) => r.json());
+const pythUpdate = vaas.map((b64) => `0x${Buffer.from(b64, "base64").toString("hex")}`);
+
+await simulate({
+  to: PYTH,
+  input: encodeFunctionData({
+    abi: parseAbi(["function updatePriceFeeds(bytes[]) external payable"]),
+    functionName: "updatePriceFeeds",
+    args: [pythUpdate],
+  }),
+  value: "1000000000000000", // Pyth fee + buffer
+});
+// Subsequent sims see fresh feeds.
+```
+
+## Step 11 — Storage layout debugging
+
+When `state_objects.storage` overrides silently don't take effect, the
+mapping slot is wrong. **`forge inspect <Contract> storage-layout` is
+authoritative.** Don't infer slots from source-code line order — modern
+OpenZeppelin uses transient storage (EIP-1153) for some primitives:
+
+```bash
+forge inspect src/MyContract.sol:MyContract storage-layout
+```
+
+Classic trap: OpenZeppelin v5's `ReentrancyGuard` moved `_status` to
+transient storage, freeing slot 0 for the inheriting contract's first
+state variable. If you assume slot 1 based on source-code line order,
+your override writes to a slot the contract never reads.
+
+Verify with `cast storage <contract> <slot> --rpc-url <chain>`:
+
+```bash
+# A contract inheriting ReentrancyGuard would have _status=NOT_ENTERED=1
+# at slot 0 in the classic layout. If cast reads 0x000…0, transient
+# storage is in use — your inherited mapping is at slot 0, not slot 1.
+cast storage 0x... 0 --rpc-url https://sepolia.base.org
+```
+
+## Step 12 — Mock contracts via setCode
+
+For external dependencies that are hard to simulate (CCTP V2
+MessageTransmitter, Chainlink price feed callbacks, etc.), write a tiny
+stub contract, compile, extract its `deployedBytecode`, and use it as a
+`state_objects.<addr>.code` override.
+
+Example — stubbing CCTP V2 `receiveMessage` so it mints tokens to the
+caller:
+
+```solidity
+// src/test-helpers/MockMTStub.sol
+contract MockMTStub {
+    address public token;   // slot 0 low bits (20 bytes)
+    uint96  public mintAmt; // slot 0 high bits (12 bytes)
+
+    function receiveMessage(bytes calldata, bytes calldata) external returns (bool) {
+        IERC20(token).transfer(msg.sender, uint256(mintAmt));
+        return true;
+    }
+}
+```
+
+```ts
+const stub = JSON.parse(readFileSync("out/MockMTStub.sol/MockMTStub.json"));
+const runtime = stub.deployedBytecode.object;
+// Pack slot 0: token (low 20B) | mintAmt << 160 (high 12B)
+const slot0 = pad(toHex((BigInt(mintAmt) << 160n) | BigInt(TOKEN)), { size: 32 });
+
+state_objects[MESSAGE_TRANSMITTER_V2] = {
+  code: runtime,
+  storage: { ["0x" + "00".repeat(32)]: slot0 },
+};
+```
+
+Also pre-fund the stub with the asset it'll transfer (override the
+asset's `_balances[stubAddress]`). Pair with a hand-crafted CCTP V2
+message body matching the receiver's parser offsets exactly.
+
+## Step 13 — Universal Router + Permit2 sim patterns
+
+The hardest live-swap sim is the UR → Permit2 → PoolManager → hook
+chain, because Permit2's allowance lives in a triple-nested mapping that
+needs careful slot derivation:
+
+```ts
+// Permit2.allowance is at slot 1 (slot 0 = nonceBitmap on SignatureTransfer).
+// Layout: mapping(owner => mapping(token => mapping(spender => PackedAllowance)))
+function permit2AllowanceSlot(owner, token, spender) {
+  const s1 = keccak256(abi.encode(owner, 1));
+  const s2 = keccak256(abi.encode(token, s1));
+  return keccak256(abi.encode(spender, s2));
+}
+
+// PackedAllowance packs: amount uint160 (low) | expiration uint48 | nonce uint48
+function packAllowance(amount, expiration, nonce) {
+  return amount | (expiration << 160n) | (nonce << 208n);
+}
+
+state_objects[PERMIT2] = {
+  storage: {
+    [permit2AllowanceSlot(whale, TOKEN, UR)]: pad(toHex(
+      packAllowance(2n ** 160n - 1n, BigInt(Date.now() / 1000 + 365 * 86400), 0n)
+    ), { size: 32 }),
+  },
+};
+```
+
+Combined with the standard `_balances` + ERC-20 allowance overrides on
+the token, an EOA can call `UR.execute(V4_SWAP, ...)` end-to-end in a
+single sim.
+
+## Step 14 — Forks deprecated → primed vnet workflow
+
+In 2025 Tenderly deprecated the legacy Fork API (`POST /fork` returns
+`410 Gone: "Forks are deprecated. Please use Virtual Testnets"`). The
+replacement: a vnet that you mutate via admin RPC once and route every
+simulation through.
+
+```bash
+# 1. Free a vnet slot (free plan caps at 2 vnets per project; Pro lifts).
+curl -X DELETE -H "X-Access-Key: $TOKEN" "$API/vnets/$OLD_VNET_ID"
+
+# 2. Create primed vnet forking the chain you want.
+curl -X POST -H "X-Access-Key: $TOKEN" -H "Content-Type: application/json" "$API/vnets" \
+  -d '{"slug":"primed-hub","display_name":"Primed Hub",
+       "fork_config":{"network_id":84532,"block_number":"latest"},
+       "virtual_network_config":{"chain_config":{"chain_id":84532}},
+       "sync_state_config":{"enabled":false,"commitment_level":"latest"},
+       "explorer_page_config":{"enabled":true,"verification_visibility":"src"}}'
+
+# 3. Prime via admin RPC.
+curl -X POST -H "Content-Type: application/json" "$ADMIN_RPC" \
+  -d '{"jsonrpc":"2.0","method":"tenderly_setBalance","params":["0x...","0x8AC7230489E80000"],"id":1}'
+curl -X POST -H "Content-Type: application/json" "$ADMIN_RPC" \
+  -d '{"jsonrpc":"2.0","method":"tenderly_setErc20Balance","params":["<USDC>","0x...","0xE8D4A51000"],"id":1}'
+
+# 4. Run sims against the vnet's Public RPC instead of /simulate. State
+#    persists across calls — no per-sim state_objects needed.
+```
+
+Cost: each persistent vnet counts toward the vnet cap. Each sim costs TUs
+on the rate-limited budget. Worth it when your matrix runs many sims
+that share setup. Pro plans lift both limits.
+
+## Step 15 — Cleanup + token rotation
 
 Tell the user explicitly:
 
@@ -337,7 +542,24 @@ curl -s -X DELETE \
 | `/api/v1/account/{a}/project/{p}/wallet` | POST `{address, network_ids:[...], display_name}` | Add an EOA. **Don't use for contracts.** |
 | `/api/v1/account/{a}/project/{p}/contract/{chainId}/{addr}/rename` | POST `{display_name}` | Override Solidity contract name with custom display name. |
 | `/api/v1/account/{a}/project/{p}/tag` | POST `{contract_ids:["eth:CHAIN:0x..."], tag}` | Attach a free-form tag (orthogonal to display name). |
-| `/api/v1/account/{a}/project/{p}/contracts` | DELETE `{account_ids:["eth:CHAIN:0x..."]}` | Bulk remove entries (frees slots toward the 20-cap). |
+| `/api/v1/account/{a}/project/{p}/contracts` | DELETE `{account_ids:["eth:CHAIN:0x..."]}` | Bulk remove entries (frees slots toward the cap). |
 | `/api/v1/account/{a}/project/{p}/contracts?accountType=contract` | GET | Filtered list (just Contracts, not Wallets). |
+| `/api/v1/account/{a}/project/{p}/simulate` | POST `{network_id, from, to, input, state_objects, ...}` | Fresh-fork single-tx simulation with state overrides. |
+| `/api/v1/account/{a}/project/{p}/simulate-bundle` | POST `{simulations:[...]}` | Sequential setup→assertion bundle; state propagates. |
+| `/api/v1/account/{a}/project/{p}/fork` | POST | **Deprecated (HTTP 410)** — Tenderly killed this in 2025. Use Virtual TestNets instead. |
 | `{TENDERLY_PUBLIC_RPC}/verify/etherscan` | etherscan-compat | Vnet contract verification target. |
 | `/api/v1/account/{a}/project/{p}/etherscan/verify/network/{chainId}` | etherscan-compat | Public-network contract verification target. |
+
+## Real-world example
+
+Hub & Spoke Cross-Chain Confidential on Morpho [**h&sCCCm**] — a forex
+engine that bridges USDC across 9 CCTP V2 chains into a Morpho-Blue-based
+hub on Arc-shaped testnet. The pattern stack above (personas + state_objects
++ simulate-bundle + setCode mocks + Permit2 storage derivation + Pyth-fresh
+bundle + forge inspect storage-layout) was developed reviewing that
+protocol's hub-and-spoke transactions end-to-end through Tenderly — 117/127
+sim matrix coverage, two Codex adversarial findings caught + patched, all
+9 hub contracts source-verified into the dashboard's Contracts tab.
+
+The patterns generalize to any cross-chain protocol with CCTP V2,
+Uniswap v4 hooks, ERC-4626 vaults, or Pyth pull oracles.
