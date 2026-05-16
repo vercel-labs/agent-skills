@@ -12,6 +12,7 @@ Write for a user deciding what to fix next. Lead with the observed signal, the s
 - Use observed numbers only. Never invent savings, traffic, latency, or percentages.
 - Use cost magnitude language, not precise savings: "hundreds of dollars per month at current traffic," not "$340/mo."
 - Use precise performance language when measured: "95th percentile duration is 1,240ms."
+- Frame prerequisites as engineering constraints, not upsells. Explain the decision impact: what the missing data prevents, what the limited fallback can still do, and what the user should choose next.
 - Use short bullets and tables. Avoid long paragraphs in reports and final chat messages.
 - Write full sentences with punctuation in reports.
 

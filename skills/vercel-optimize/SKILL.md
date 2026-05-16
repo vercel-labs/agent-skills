@@ -34,7 +34,7 @@ This skill is built from field-tested Vercel optimization patterns. The architec
 - Authenticated: `vercel login`.
 - Linked project: `vercel link`, or set `VERCEL_PROJECT_ID` env var, or pass the project ID as the first argument to `collect-signals.mjs`.
 - Node.js 20+ on the host running the skill (built-in `node:test`, `fs.readdir({recursive})`, no installed deps required).
-- For per-route metrics: **Observability Plus** on the team. The skill degrades to billing-only + scanner mode without it.
+- For metric-backed route ranking: **Observability Plus** on the team.
 
 Do not put auth tokens in shell commands. Use `vercel login` or pre-existing environment variables; never type `VERCEL_TOKEN=...`, `--token ...`, or `Authorization: Bearer ...` into a command that the coding agent will echo in chat.
 
@@ -140,8 +140,8 @@ jq '{observabilityPlus, observabilityPlusUsable, observabilityPlusBlocker, obser
 |---|---|---|
 | `null` | Observability Plus is usable, queries returned data | Proceed to Step 2 |
 | `no_traffic` | Observability Plus enabled, but no traffic in window | Tell the user (different state, not a blocker per se); they may choose to come back after traffic accumulates OR proceed in scanner-only mode |
-| `payment_required` | Observability Plus is recognized but not paid / lapsed / over event quota | **Render the verbatim choice from [references/observability-plus.md](references/observability-plus.md), pause for user input** |
-| `no_oplus_probe` | The team has no Observability Plus capability at all | Same — render the choice template, pause for user input |
+| `payment_required` | Route-level metrics are recognized but not usable for these queries | **Render the verbatim choice from [references/observability-plus.md](references/observability-plus.md), pause for user input** |
+| `no_oplus_probe` | The team does not expose route-level Observability Plus metrics | Same — render the choice template, pause for user input |
 | `not_linked` | `vercel metrics` cannot find project linkage in the app directory | Link the app directory and rerun Step 1. If the user supplied app path + project name, run `vercel link --yes --project <project-name-or-id> --cwd <app-dir>`; add `--team <team-id-or-slug>` when known. Do not fall back to scanner-only unless the user declines linking |
 | `forbidden` | Auth-scope mismatch — wrong team | Do NOT pitch Observability Plus; tell the user to run `vercel switch <team>` and re-run |
 | `project_not_found` | Project ID not visible to auth'd team | Same — fix auth first, no Observability Plus pitch |
@@ -158,13 +158,13 @@ node scripts/collect-signals.mjs [projectId] --continue-without-observability > 
 
 Then continue with scan + merge. This second run may collect project config and usage, but it must happen only after the user accepts the limited audit.
 
-**Render the template in [references/observability-plus.md](references/observability-plus.md) VERBATIM.** Adapt only the one-line specifics slot from `observabilityPlusBlockerDetail`. The template is ~10 lines and contains exactly what the user needs to decide:
-- the specific problem,
-- one sentence on why per-route metrics matter for this skill,
-- a link to current pricing,
+**Render the template in [references/observability-plus.md](references/observability-plus.md) VERBATIM.** Adapt only the one-line specifics slot from `observabilityPlusBlockerDetail`. Frame this as a data dependency, not an upsell. The template contains exactly what the user needs to decide:
+- the specific metric access problem,
+- why route-level metrics prevent guesswork,
+- the limited value of scanner-only mode,
 - two options + ask.
 
-**Do not embellish.** Do not add a "For context, your project is Nuxt and you're billing $X/mo" paragraph at the end — the user can compute the cost/benefit themselves. Do not expand the Observability Plus features list, do not quote pricing tables, do not soften with hedges. Every extra word dilutes the decision. The reference doc lists the anti-patterns explicitly.
+**Do not embellish.** Do not add a "For context, your project is Nuxt and you're billing $X/mo" paragraph at the end — the user can compute the tradeoff themselves. Do not expand the Observability Plus feature list, do not quote pricing tables, and do not write sales copy. Every extra word dilutes the decision. The reference doc lists the anti-patterns explicitly.
 
 ### 1.5 Other failure modes (verbatim)
 
@@ -255,7 +255,7 @@ The script returns a structured object:
   "topInvestigating": [...],
   "topSkipped": [...],
   "options": [
-    { "label": "Keep default 6", "value": 6, "recommended": true, "description": "Best first pass; prioritizes larger signals and keeps coverage across issue types." },
+    { "label": "Keep default 6", "value": 6, "recommended": true, "description": "Investigates the strongest signals first while keeping coverage across issue types." },
     { "label": "Investigate all 21", "value": "all", ... },
     { "label": "Pick a specific N", "value": "custom", ... }
   ],
@@ -265,8 +265,8 @@ The script returns a structured object:
       "header": "Budget",
       "multiSelect": false,
       "options": [
-        { "label": "Keep default 6", "description": "Best first pass; prioritizes larger signals and keeps coverage across issue types." },
-        { "label": "Investigate all 21", "description": "Full audit of every signal that met the threshold; follow-up metrics can still remove mismatches before source investigation." },
+        { "label": "Keep default 6", "description": "Investigates the strongest signals first while keeping coverage across issue types." },
+        { "label": "Investigate all 21", "description": "Investigates every signal that met the threshold; follow-up metrics can still remove mismatches before source investigation." },
         { "label": "Pick a specific N", "description": "Expand the next highest-priority signals without going to the full 21." }
       ]
     }]
@@ -622,10 +622,10 @@ Never render precise dollar savings. Always anchor cost framing on "at current t
 If something goes wrong in any step, tell the user what happened and how to fix it. Use these templates:
 
 **No traffic in last 14 days:**
-> Your project hasn't had meaningful traffic in the last 14 days, so observability data is sparse. I can still surface static-scan-driven recommendations and platform recs (Fluid Compute, Bot Protection). For full per-route analysis, come back after a week or two of steady traffic.
+> This project has no meaningful traffic in the last 14 days, so route-level metrics are sparse. I can still check traffic-independent scanner findings and platform settings, but I cannot rank route fixes until traffic accumulates.
 
-**Observability Plus not enabled / not paid / not usable:**
-> Use the verbatim choice template in [references/observability-plus.md](references/observability-plus.md). Do NOT silently fall back to scanner-only mode; present the two-path choice: enable Observability Plus and re-run, or accept a limited scanner-only run.
+**Route-level metrics unavailable:**
+> Use the verbatim choice template in [references/observability-plus.md](references/observability-plus.md). Do NOT silently fall back to scanner-only mode; present the two-path choice: enable Observability Plus and re-run the metric-backed audit, or accept a limited scanner-only run.
 
 **No `vercel.json` and the project isn't linked:**
 > This worktree is not linked to a Vercel project. Run `vercel link --yes --project <project-name-or-id> --cwd <app-dir>` and rerun the audit. If the team is known, add `--team <team-id-or-slug>`.

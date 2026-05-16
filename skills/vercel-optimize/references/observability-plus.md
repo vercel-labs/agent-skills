@@ -2,9 +2,9 @@
 
 Use this file only when `signals.observabilityPlusBlocker` is set. Do not silently continue into scanner-only mode unless the user chooses that path.
 
-## Why It Matters
+## Why This Check Exists
 
-This skill ranks recommendations from measured route behavior. The high-value gates need per-route metrics:
+This is a data dependency, not an upgrade pitch. The skill ranks work by observed route behavior so it can separate hot, expensive paths from code that only looks suspicious. These gates need per-route metrics:
 
 | Gate | Required signal |
 |---|---|
@@ -17,23 +17,23 @@ This skill ranks recommendations from measured route behavior. The high-value ga
 | `cwv_poor` | Core Web Vitals by route |
 | `platform_bot_protection` | Fast Data Transfer by bot category |
 
-Scanner-only mode can still catch traffic-independent code issues, but it cannot rank the hottest routes or prove cost impact.
+Scanner-only mode can still catch traffic-independent code issues, but it cannot rank the hottest routes or prove cost impact. Make that tradeoff explicit before continuing.
 
 ## User Template
 
 Render this template first, then wait for the user's choice. Replace only `<detail>`.
 
 ```md
-**Observability Plus is required for the full audit.**
+**Per-route metrics are unavailable.**
 
 <detail>
 
-This skill ranks recommendations by per-route metrics: 95th percentile latency, cache hit rate, error rate, cold-start rate, and Incremental Static Regeneration reads and writes. Without those metrics, I can run scanner-only mode: useful for static code issues, but not enough for a ranked cost and performance audit.
+This audit needs route-level metrics to rank fixes by observed latency, cache hit rate, error rate, cold-start rate, and Incremental Static Regeneration reads and writes. Without them, I can run a scanner-only audit for traffic-independent code issues, but I cannot tell which routes matter most or prove cost impact.
 
-Pricing can change, so check the current Observability Plus pricing before enabling it: https://vercel.com/docs/observability/observability-plus
+Docs and current availability: https://vercel.com/docs/observability/observability-plus
 
 Choose one:
-1. Enable Observability Plus, then re-run for the full audit.
+1. Enable Observability Plus, then re-run the metric-backed audit.
 2. Continue in scanner-only mode for a limited audit.
 ```
 
@@ -46,11 +46,11 @@ If the host supports a structured question tool, use this exact customer-facing 
   "options": [
     {
       "label": "Enable and re-run",
-      "description": "Run the full audit with per-route latency, cache, error, cold-start, and Incremental Static Regeneration metrics."
+      "description": "Use route-level metrics to rank the routes that matter most for cost and performance."
     },
     {
       "label": "Run scanner-only",
-      "description": "Limited audit. Checks traffic-independent code patterns and will not rank the hottest routes or prove cost impact."
+      "description": "Check traffic-independent code patterns without route ranking or proven cost impact."
     }
   ]
 }
@@ -62,12 +62,12 @@ Use the full product name in this question. Do not abbreviate product names or m
 
 | Blocker | Detail |
 |---|---|
-| `payment_required` | `Detected: Observability Plus is recognized on this team but is not usable for these metric queries.` |
-| `no_oplus_probe` | `Detected: this team does not expose the per-route Observability Plus metrics this skill needs.` |
+| `payment_required` | `Detected: route-level metrics were recognized for this team, but these metric queries are not usable.` |
+| `no_oplus_probe` | `Detected: this team does not expose the route-level metrics this audit needs.` |
 | `not_linked` | `Detected: this app directory is not linked to a Vercel project.` |
 | `forbidden` | `Detected: the Vercel CLI is authenticated to a team that cannot read this project.` |
 | `project_not_found` | `Detected: the project ID is not visible to the authenticated team.` |
-| `project_disabled` | `Detected: Observability Plus is enabled for the team but disabled for this project.` |
+| `project_disabled` | `Detected: route-level metrics are enabled for the team but disabled for this project.` |
 | `all_failed_other` | `Detected: every per-route metric query failed. Error code: <code>.` |
 
 For `not_linked`, do not use the Observability Plus template. Link the app directory first:
@@ -78,7 +78,7 @@ vercel link --yes --project <project-name-or-id> --cwd <app-dir>
 
 Add `--team <team-id-or-slug>` when the team is known. If the user supplied both app path and project name, run the link command instead of asking them what to do.
 
-For `forbidden` and `project_not_found`, ask the user to run `vercel switch <team>` or verify the project ID before presenting an Observability Plus upgrade choice.
+For `forbidden` and `project_not_found`, ask the user to run `vercel switch <team>` or verify the project ID before presenting the Observability Plus choice.
 
 For `project_disabled`, do not present it as a team subscription problem. Ask the user to enable Observability Plus for this project, then re-run.
 

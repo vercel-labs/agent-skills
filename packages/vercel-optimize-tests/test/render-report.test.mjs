@@ -418,7 +418,7 @@ test('buildFinalReportMessage: extracts concise public message from rendered mar
     recommendations: [sampleRec],
     signals: baseSignals,
   });
-  assert.match(message.body, /^Report written: \/tmp\/report\.md/);
+  assert.match(message.body, /^Report saved: \/tmp\/report\.md/);
   assert.match(message.body, /\*\*Coverage\*\*: \*\*1\*\* metric signal met the investigation threshold/);
   assert.match(message.body, /Ready recommendations:/);
   assert.match(message.body, /1\. Parallelize three sequential fetch waves in \/dashboard\/\[sessionId\]/);
@@ -431,7 +431,7 @@ test('buildFinalReportMessage: extracts concise public message from rendered mar
 
 test('buildFinalReportMessage: does not invent counts without a Coverage line', () => {
   const message = buildFinalReportMessage({ reportPath: '/tmp/report.md', markdown: '# Report\n\nNo coverage.' });
-  assert.equal(message.body, 'Report written: /tmp/report.md\n\nOpen the report for the full results. No coverage line was available to summarize.');
+  assert.equal(message.body, 'Report saved: /tmp/report.md\n\nOpen the report for details. No coverage summary was available.');
   assert.equal(message.coverageLine, null);
 });
 
@@ -478,7 +478,7 @@ test('render-report CLI: --message-out writes concise final message separate fro
     ]);
     assertNoPublicInternals(report);
     assertNoPublicInternals(message.body);
-    assert.match(message.body, /^Report written:/);
+    assert.match(message.body, /^Report saved:/);
     assert.match(message.body, /\*\*Coverage\*\*:/);
     assert.match(message.body, /Ready recommendations:/);
     assert.match(message.body, /Parallelize three sequential fetch waves/);

@@ -23,7 +23,7 @@ test('oplus diag: queries all returned payment_required → payment_required blo
   const r = diagnoseObservabilityPlus(metrics, true);
   assert.equal(r.usable, false);
   assert.equal(r.blocker, 'payment_required');
-  assert.match(r.detail, /Observability Plus is recognized/);
+  assert.match(r.detail, /Route-level metrics were recognized/);
   assert.match(r.detail, /4\/4/);
 });
 
@@ -38,7 +38,7 @@ test('oplus diag: payment_required with subscription-required text → no_oplus_
   const r = diagnoseObservabilityPlus(metrics, true);
   assert.equal(r.usable, false);
   assert.equal(r.blocker, 'no_oplus_probe');
-  assert.match(r.detail, /require Observability Plus/);
+  assert.match(r.detail, /route-level Observability Plus data/);
 });
 
 test('oplus diag: queries all hit daily quota → daily_quota_exceeded blocker', () => {

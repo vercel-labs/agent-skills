@@ -88,7 +88,7 @@ test('voice drift: rendered report does not contain "OPlus" shorthand', () => {
       plan: { plan: 'pro', reason: '...' },
       observabilityPlus: false,
       observabilityPlusBlocker: 'payment_required',
-      observabilityPlusBlockerDetail: 'Observability Plus is recognized on the team but not paid.',
+      observabilityPlusBlockerDetail: 'Route-level metrics were recognized for this team, but these queries are not usable.',
     },
     opts: { projectName: 'test', generatedAt: null },
   });

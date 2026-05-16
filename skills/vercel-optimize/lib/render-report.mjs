@@ -201,13 +201,13 @@ function assertValidObservations(observations) {
 export function buildFinalReportMessage({ reportPath, markdown, recommendations = [], signals = {}, maxRecommendations = 10 } = {}) {
   const destination = reportPath || 'report.md';
   const coverageLine = extractCoverageLine(markdown);
-  const lines = [`Report written: ${destination}`];
+  const lines = [`Report saved: ${destination}`];
   if (coverageLine) {
     lines.push('');
     lines.push(stripDetailsLink(coverageLine));
   } else {
     lines.push('');
-    lines.push('Open the report for the full results. No coverage line was available to summarize.');
+    lines.push('Open the report for details. No coverage summary was available.');
   }
   const readyPreview = renderFinalRecommendationPreview(recommendations, signals, maxRecommendations);
   if (readyPreview.length > 0) {

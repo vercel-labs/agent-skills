@@ -187,7 +187,7 @@ test('buildBudgetSummary: budget preview avoids internal shorthand while raw can
   assert.match(s.chatPreview, /coverage across issue types/);
   assert.match(s.chatPreview, /Follow-up metrics can still remove mismatches/);
   assert.match(s.options[0].label, /default/);
-  assert.match(s.options[0].rationale, /larger signals/);
+  assert.match(s.options[0].rationale, /strongest signals/);
   assert.match(s.options[1].rationale, /follow-up metrics can still remove mismatches/);
 });
 

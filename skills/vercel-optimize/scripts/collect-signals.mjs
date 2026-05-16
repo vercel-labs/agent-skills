@@ -230,8 +230,8 @@ async function main() {
   }
 
   // The `vercel metrics schema` probe alone is NOT a reliable usability signal:
-  // it can return OK while per-route queries fail with payment_required (Observability
-  // Plus lapsed / over quota) or FORBIDDEN (auth-scope mismatch). Diagnose AFTER
+  // it can return OK while per-route queries fail with payment_required (metrics
+  // unavailable for the team) or FORBIDDEN (auth-scope mismatch). Diagnose AFTER
   // running queries by counting failure codes so the orchestrator can PAUSE and
   // surface the choice before falling back to scanner-only mode.
   oplusDiag = observabilityPlusConfig.access === false
@@ -392,13 +392,13 @@ export function diagnoseObservabilityPlus(metrics, oplusProbe) {
         return {
           usable: false,
           blocker: 'no_oplus_probe',
-          detail: `${top[1]}/${entries.length} metric queries require Observability Plus. Enable Observability Plus, then re-run for the full audit.`,
+          detail: `${top[1]}/${entries.length} metric queries need route-level Observability Plus data. Enable Observability Plus, then re-run the metric-backed audit.`,
         };
       }
       return {
         usable: false,
         blocker: 'payment_required',
-        detail: `${top[1]}/${entries.length} metric queries returned payment_required. Observability Plus is recognized on the team but not paid / lapsed / over the event quota.`,
+        detail: `${top[1]}/${entries.length} metric queries returned payment_required. Route-level metrics were recognized for this team, but these queries are not usable. Check the team's Observability Plus subscription or event quota.`,
       };
     }
     if (/forbidden|not_authorized|403/.test(topCode)) {
