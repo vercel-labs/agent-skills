@@ -228,7 +228,7 @@ export function classifyObservabilityPlusConfiguration(result, { projectId } = {
       source,
       access: false,
       blocker: 'no_oplus_probe',
-      detail: 'Observability Plus is not enabled for this team.',
+      detail: 'Route-level metrics are unavailable because Observability Plus is not enabled for this team.',
     };
   }
   if (/forbidden|not_authorized|403/.test(code) || /forbidden|not authorized|permission|403/.test(text)) {

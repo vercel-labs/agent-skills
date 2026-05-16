@@ -55,7 +55,8 @@ The skill detects the framework from `package.json`. Current coverage:
 cd ~/projects/my-app
 vercel link                                  # one-time
 RUN_DIR="$(mktemp -d)"
-node scripts/collect-signals.mjs > "$RUN_DIR/vercel-signals.json"
+node scripts/collect-signals.mjs > "$RUN_DIR/vercel-signals.json" 2> "$RUN_DIR/collect.stderr"
+node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$RUN_DIR/vercel-signals.json"
 node scripts/scan-codebase.mjs . > "$RUN_DIR/codebase.json"
 node scripts/merge-signals.mjs "$RUN_DIR/vercel-signals.json" "$RUN_DIR/codebase.json" --out "$RUN_DIR/signals.json"
 ```
@@ -97,7 +98,8 @@ Pull everything observability gives us, before reading any source code.
 ### 1.1 Run the collection script
 
 ```bash
-node scripts/collect-signals.mjs [projectId]
+node scripts/collect-signals.mjs [projectId] > "$RUN_DIR/vercel-signals.json" 2> "$RUN_DIR/collect.stderr"
+node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$RUN_DIR/vercel-signals.json"
 ```
 
 The script handles:
@@ -110,7 +112,7 @@ The script handles:
 - ~29 concurrent metric queries over a uniform 14-day window — function billing (count, cold-start split, GB-hr, CPU, peak/provisioned memory, TTFB, duration p95), request-level (cache, status, FDT by route/bot/cache), middleware (count + duration), ISR (reads + writes), images (count + host + source bytes), Speed Insights (LCP/INP/CLS/TTFB/count), firewall + BotID, external APIs (count + bytes + duration). Single source of truth: [lib/queries.mjs](lib/queries.mjs).
 - Stack detection from `package.json` (framework, version, ORM, monorepo)
 
-Output: one JSON document to stdout matching the schema in `references/data-collection.md`. Status messages on stderr.
+Output: one JSON document to stdout matching the schema in `references/data-collection.md`. Status messages go to stderr. Do not combine streams; if log lines appear in `vercel-signals.json`, rerun collection with `2> "$RUN_DIR/collect.stderr"` before parsing or merging.
 
 ### 1.2 Run the codebase scan
 
@@ -153,12 +155,13 @@ jq '{observabilityPlus, observabilityPlusUsable, observabilityPlusBlocker, obser
 If the user chooses scanner-only mode after a blocker, re-run collection with:
 
 ```bash
-node scripts/collect-signals.mjs [projectId] --continue-without-observability > "$RUN_DIR/vercel-signals.json"
+node scripts/collect-signals.mjs [projectId] --continue-without-observability > "$RUN_DIR/vercel-signals.json" 2> "$RUN_DIR/collect.stderr"
+node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$RUN_DIR/vercel-signals.json"
 ```
 
 Then continue with scan + merge. This second run may collect project config and usage, but it must happen only after the user accepts the limited audit.
 
-**Render the template in [references/observability-plus.md](references/observability-plus.md) VERBATIM.** Adapt only the one-line specifics slot from `observabilityPlusBlockerDetail`. Frame this as a data dependency, not an upsell. The template contains exactly what the user needs to decide:
+**Render the template in [references/observability-plus.md](references/observability-plus.md) VERBATIM.** Adapt only the one-line specifics slot from `observabilityPlusBlockerDetail`. Do not add a preface before the template; the heading is the first line the user should see. Frame this as a data dependency, not an upsell. The template contains exactly what the user needs to decide:
 - the specific metric access problem,
 - why route-level metrics prevent guesswork,
 - the limited value of scanner-only mode,

@@ -43,6 +43,7 @@ test('classifyObservabilityPlusConfiguration: no_oplus_probe on public API not-e
   assert.equal(r.ok, true);
   assert.equal(r.access, false);
   assert.equal(r.blocker, 'no_oplus_probe');
+  assert.match(r.detail, /^Route-level metrics are unavailable/);
   assert.match(r.detail, /not enabled/);
 });
 

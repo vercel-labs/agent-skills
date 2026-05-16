@@ -21,7 +21,7 @@ Scanner-only mode can still catch traffic-independent code issues, but it cannot
 
 ## User Template
 
-Render this template first, then wait for the user's choice. Replace only `<detail>`.
+Render this template first, then wait for the user's choice. Replace only `<detail>`. Do not add a preface; the heading is the opening line.
 
 ```md
 **Per-route metrics are unavailable.**
@@ -30,7 +30,7 @@ Render this template first, then wait for the user's choice. Replace only `<deta
 
 This audit needs route-level metrics to rank fixes by observed latency, cache hit rate, error rate, cold-start rate, and Incremental Static Regeneration reads and writes. Without them, I can run a scanner-only audit for traffic-independent code issues, but I cannot tell which routes matter most or prove cost impact.
 
-Docs and current availability: https://vercel.com/docs/observability/observability-plus
+Docs: https://vercel.com/docs/observability/observability-plus
 
 Choose one:
 1. Enable Observability Plus, then re-run the metric-backed audit.
@@ -88,7 +88,7 @@ For `no_traffic`, do not use this template. Tell the user the project has no mea
 
 If the user picks scanner-only mode:
 
-1. Re-run `node scripts/collect-signals.mjs [projectId] --continue-without-observability` if the current `signals.json` stopped at the fast blocker (`usageError=NOT_COLLECTED_OBSERVABILITY_BLOCKED` or `project=null`).
+1. Re-run `node scripts/collect-signals.mjs [projectId] --continue-without-observability > "$RUN_DIR/vercel-signals.json" 2> "$RUN_DIR/collect.stderr"` if the current `signals.json` stopped at the fast blocker (`usageError=NOT_COLLECTED_OBSERVABILITY_BLOCKED` or `project=null`).
 2. Run code scanners.
 3. Launch only traffic-independent findings.
 4. Render a clear data gap: per-route metric gates were skipped because Observability Plus data was unavailable.
