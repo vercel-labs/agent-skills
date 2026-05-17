@@ -203,6 +203,12 @@ elif [ -d "$INPUT_PATH" ]; then
         --exclude='.git' \
         --exclude='.env' \
         --exclude='.env.*' \
+        --exclude='.npmrc' \
+        --exclude='.npmrc.*' \
+        --exclude='.yarnrc' \
+        --exclude='.yarnrc.yml' \
+        --exclude='.pnpmrc' \
+        --exclude='.bunfig.toml' \
         -cf - . | tar -C "$STAGING_DIR" -xf -
 
     # Check if this is a static HTML project (no package.json)
