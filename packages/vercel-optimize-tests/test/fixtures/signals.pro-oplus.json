@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.1",
+  "collectedAt": "2026-05-12T00:00:00.000Z",
+  "projectId": "prj_test_pro",
+  "orgId": "team_test",
+  "projectIdSource": "repo.json",
+  "observabilityPlus": true,
+  "plan": { "plan": "pro", "reason": "commitment category=Spend" },
+  "project": {
+    "id": "prj_test_pro",
+    "framework": "nextjs",
+    "resourceConfig": { "fluid": false, "functionDefaultRegions": ["iad1"] },
+    "defaultResourceConfig": { "fluid": false },
+    "security": { "botIdEnabled": false, "managedRules": { "bot_filter": { "active": false } } }
+  },
+  "contract": { "context": "team_test", "commitments": [{ "category": "Spend", "value": 1200 }], "totalCommitments": 1 },
+  "usage": {
+    "period": { "from": "2026-04-12", "to": "2026-05-12" },
+    "services": [
+      { "name": "Edge Requests", "usage": "8M", "effectiveCost": 240.00, "billedCost": 192.00 },
+      { "name": "Function Duration", "usage": "120K GB-hr", "effectiveCost": 480.00, "billedCost": 384.00 },
+      { "name": "Image Optimization", "usage": "500K", "effectiveCost": 25.00, "billedCost": 20.00 }
+    ],
+    "totals": { "billedCost": 596.00 },
+    "chargeCount": 3
+  },
+  "usageError": null,
+  "stack": {
+    "framework": "next",
+    "frameworkVersion": "15.0.2",
+    "hasAppRouter": true,
+    "hasPagesRouter": false,
+    "typescript": true,
+    "orm": "prisma",
+    "isMonorepo": false,
+    "rootDirectory": null
+  },
+  "metrics": {
+    "fnDurationP95ByRoute": {
+      "ok": true,
+      "metricId": "vercel.function_invocation.function_duration_ms",
+      "aggregation": "p95",
+      "groupBy": ["route"],
+      "rows": [
+        { "route": "/api/products", "value": 850 },
+        { "route": "/api/checkout", "value": 320 },
+        { "route": "/api/users", "value": 950 },
+        { "route": "/api/healthcheck", "value": 50 }
+      ]
+    },
+    "requestsByRouteCache": {
+      "ok": true,
+      "metricId": "vercel.request.count",
+      "aggregation": "sum",
+      "groupBy": ["route", "cache_result"],
+      "rows": [
+        { "route": "/api/products", "cache_result": "HIT", "value": 100 },
+        { "route": "/api/products", "cache_result": "MISS", "value": 1199900 },
+        { "route": "/api/users", "cache_result": "HIT", "value": 50 },
+        { "route": "/api/users", "cache_result": "MISS", "value": 499950 },
+        { "route": "/api/checkout", "cache_result": "HIT", "value": 800000 },
+        { "route": "/api/checkout", "cache_result": "MISS", "value": 50000 },
+        { "route": "/api/healthcheck", "cache_result": "MISS", "value": 50 }
+      ]
+    },
+    "requestsByRouteStatus": {
+      "ok": true,
+      "metricId": "vercel.request.count",
+      "aggregation": "sum",
+      "groupBy": ["route", "http_status"],
+      "rows": [
+        { "route": "/api/checkout", "http_status": "503", "value": 800 },
+        { "route": "/api/healthcheck", "http_status": "500", "value": 5 },
+        { "route": "/api/products", "http_status": "200", "value": 1199900 }
+      ]
+    },
+    "externalApiP75": {
+      "ok": true,
+      "metricId": "vercel.external_api_request.request_duration_ms",
+      "aggregation": "p75",
+      "groupBy": ["origin_hostname"],
+      "rows": [
+        { "origin_hostname": "api.stripe.com", "value": 280 },
+        { "origin_hostname": "api.slow-vendor.com", "value": 3500 }
+      ]
+    },
+    "coldStartByRoute": {
+      "ok": true,
+      "rows": [
+        { "route": "/api/products", "total": 15000, "coldPct": 0.45 },
+        { "route": "/api/users", "total": 12000, "coldPct": 0.40 },
+        { "route": "/api/healthcheck", "total": 50, "coldPct": 0.20 }
+      ]
+    }
+  },
+  "codebase": {
+    "findings": [
+      { "pattern": "unoptimized-image", "file": "src/app/product/[id]/page.tsx", "line": 23, "route": "/product/[id]", "o11ySignal": "inv=1.2M,p95=850ms", "trafficIndependent": false },
+      { "pattern": "unoptimized-image", "file": "src/app/page.tsx", "line": 18, "route": "/", "o11ySignal": "inv=500K", "trafficIndependent": false },
+      { "pattern": "force-dynamic", "file": "src/app/api/products/route.ts", "line": 1, "route": "/api/products", "o11ySignal": "inv=1.2M,p95=850ms", "trafficIndependent": false },
+      { "pattern": "force-dynamic", "file": "src/app/api/users/route.ts", "line": 1, "route": "/api/users", "o11ySignal": "inv=500K,p95=950ms", "trafficIndependent": false },
+      { "pattern": "force-dynamic", "file": "src/app/api/abandoned/route.ts", "line": 1, "route": "/api/abandoned", "o11ySignal": "COLD-PATH", "trafficIndependent": false },
+      { "pattern": "headers-in-page", "file": "src/app/dashboard/page.tsx", "line": 5, "route": "/dashboard", "o11ySignal": "NO-ROUTE-MAPPING", "trafficIndependent": false }
+    ]
+  }
+}

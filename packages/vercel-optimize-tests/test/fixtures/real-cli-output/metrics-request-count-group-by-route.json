@@ -1,0 +1,106 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "route"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "route": "/dashboard/[sessionId]",
+      "vercel_request_count_sum": 4923
+    },
+    {
+      "route": "/sw.js",
+      "vercel_request_count_sum": 872
+    },
+    {
+      "route": "/icon-512x512.svg",
+      "vercel_request_count_sum": 476
+    },
+    {
+      "route": "/icon-192x192.svg",
+      "vercel_request_count_sum": 472
+    },
+    {
+      "route": "/icon-128x128.svg",
+      "vercel_request_count_sum": 399
+    },
+    {
+      "route": "/icon-72x72.svg",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-96x96.svg",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-144x144.svg",
+      "vercel_request_count_sum": 389
+    },
+    {
+      "route": "/icon-152x152.svg",
+      "vercel_request_count_sum": 387
+    },
+    {
+      "route": "/icon-384x384.svg",
+      "vercel_request_count_sum": 386
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_count_sum": 33,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_count_sum": 262,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "__truncated_for_fixture__": 1802
+    }
+  ],
+  "statistics": {
+    "bytesRead": 661910647,
+    "rowsRead": 11867884,
+    "dbTimeSeconds": 0
+  }
+}

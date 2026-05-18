@@ -1,0 +1,38 @@
+{
+  "query": {
+    "metric": "vercel.function_invocation.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "route",
+      "http_status"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "route": "/api/orders",
+      "http_status": "200",
+      "vercel_function_invocation_count_sum": 900
+    },
+    {
+      "route": "/api/orders",
+      "http_status": "500",
+      "vercel_function_invocation_count_sum": 100
+    },
+    {
+      "route": "/api/health",
+      "http_status": "200",
+      "vercel_function_invocation_count_sum": 250
+    }
+  ],
+  "data": [],
+  "statistics": {
+    "bytesRead": 0,
+    "rowsRead": 0,
+    "dbTimeSeconds": 0
+  }
+}

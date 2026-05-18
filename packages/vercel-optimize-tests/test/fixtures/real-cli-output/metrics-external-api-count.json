@@ -1,0 +1,2750 @@
+{
+  "query": {
+    "metric": "vercel.external_api_request.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "origin_hostname"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "origin_hostname": "fixture-app.example.com",
+      "vercel_external_api_request_count_sum": 12498
+    },
+    {
+      "origin_hostname": "fixture-preview.example.com",
+      "vercel_external_api_request_count_sum": 263
+    },
+    {
+      "origin_hostname": "fixture-preview.example.com",
+      "vercel_external_api_request_count_sum": 47
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 118,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 726,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 36,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 970,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 166,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 564,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 691,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 579,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 635,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 39,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 757,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 637,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 201,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 1199,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 819,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 1002,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 804,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 232,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 568,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 955,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 133,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 667,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-app.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 18,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 92,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 45,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 9,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 36,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 27,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 27,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 9,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 9,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 9,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 29,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_external_api_request_count_sum": 0,
+      "origin_hostname": "fixture-preview.example.com"
+    }
+  ],
+  "statistics": {
+    "bytesRead": 303473185,
+    "rowsRead": 6067429,
+    "dbTimeSeconds": 0
+  }
+}

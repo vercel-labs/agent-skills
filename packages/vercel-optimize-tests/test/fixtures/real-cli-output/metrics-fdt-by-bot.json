@@ -1,0 +1,5477 @@
+{
+  "query": {
+    "metric": "vercel.request.fdt_total_bytes",
+    "aggregation": "sum",
+    "groupBy": [
+      "bot_category"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "bot_category": "",
+      "vercel_request_fdt_total_bytes_sum": 27144852
+    },
+    {
+      "bot_category": "automated_browser",
+      "vercel_request_fdt_total_bytes_sum": 4353882
+    },
+    {
+      "bot_category": "preview",
+      "vercel_request_fdt_total_bytes_sum": 304186
+    },
+    {
+      "bot_category": "browser_impersonation",
+      "vercel_request_fdt_total_bytes_sum": 228746
+    },
+    {
+      "bot_category": "http_client",
+      "vercel_request_fdt_total_bytes_sum": 130751
+    },
+    {
+      "bot_category": "client_anomaly",
+      "vercel_request_fdt_total_bytes_sum": 33996
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 185702,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1056876,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 530077,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1245383,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 253800,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 648832,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1162914,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 21125,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 245608,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 10191393,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 922248,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 93819,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 879626,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 904660,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 242116,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1806266,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1013474,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1408987,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3177,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 960030,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 406744,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 692894,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1283089,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 207510,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 778502,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": ""
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3136,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 313363,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3132,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3132,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1011324,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1001916,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1001414,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1010293,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 6172,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "automated_browser"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 40915,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 40944,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 45846,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 51292,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 51645,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 51644,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 21900,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "preview"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8495,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7662,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8857,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7748,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8523,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7669,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16297,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8764,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7733,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8478,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7655,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8550,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7693,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16456,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16204,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16579,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16241,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8632,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7745,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 16472,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 8573,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 7720,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "browser_impersonation"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1711,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 19946,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 20727,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1697,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 20117,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 20130,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 20131,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 2575,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1658,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 22059,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "http_client"
+    },
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3085,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-14T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3088,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-15T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-16T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3084,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-17T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3089,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 3084,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-18T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-19T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-20T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-21T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-22T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-23T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-24T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-25T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-26T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-27T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 6776,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-28T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1129,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-29T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-04-30T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1182,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-01T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1186,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-02T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1184,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-03T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-04T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 2367,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-05T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1186,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-06T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-07T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-08T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1184,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-09T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-10T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1185,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-11T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 1187,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T08:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T12:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T16:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-12T20:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-13T00:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    },
+    {
+      "timestamp": "2026-05-13T04:00:00.000Z",
+      "vercel_request_fdt_total_bytes_sum": 0,
+      "bot_category": "client_anomaly"
+    }
+  ],
+  "statistics": {
+    "bytesRead": 276405325,
+    "rowsRead": 6052898,
+    "dbTimeSeconds": 0
+  }
+}

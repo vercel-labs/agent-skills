@@ -1,0 +1,264 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "route",
+      "request_method"
+    ],
+    "startTime": "2026-04-13T20:00:00.000Z",
+    "endTime": "2026-05-14T00:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST",
+      "vercel_request_count_sum": 4902
+    },
+    {
+      "route": "/sw.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 872
+    },
+    {
+      "route": "/icon-512x512.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 476
+    },
+    {
+      "route": "/icon-192x192.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 472
+    },
+    {
+      "route": "/icon-128x128.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 399
+    },
+    {
+      "route": "/icon-72x72.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-96x96.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-144x144.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 389
+    },
+    {
+      "route": "/icon-152x152.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 387
+    },
+    {
+      "route": "/icon-384x384.svg",
+      "request_method": "GET",
+      "vercel_request_count_sum": 386
+    },
+    {
+      "route": "/_next/static/media/93f479601ee12b01-s.p.woff2",
+      "request_method": "GET",
+      "vercel_request_count_sum": 114
+    },
+    {
+      "route": "/manifest.json",
+      "request_method": "GET",
+      "vercel_request_count_sum": 109
+    },
+    {
+      "route": "/",
+      "request_method": "GET",
+      "vercel_request_count_sum": 85
+    },
+    {
+      "route": "/admin",
+      "request_method": "GET",
+      "vercel_request_count_sum": 75
+    },
+    {
+      "route": "/status",
+      "request_method": "GET",
+      "vercel_request_count_sum": 75
+    },
+    {
+      "route": "/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/chunks/874-437a265a67d6cfee.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/chunks/app/(app)/page-76b69a44cfca4601.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/chunks/app/layout-d926359f217698d8.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/chunks/main-app-0f20f4d91de0a5c5.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/css/559aa335275ff5c4.css",
+      "request_method": "GET",
+      "vercel_request_count_sum": 59
+    },
+    {
+      "route": "/_next/static/chunks/webpack-892623e6d2362c29.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 57
+    },
+    {
+      "route": "/_next/static/chunks/app/(app)/status/page-a7392af1324ff489.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 54
+    },
+    {
+      "route": "/_next/static/chunks/app/(admin)/admin/page-9033718dbfc833a3.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 53
+    },
+    {
+      "route": "/index",
+      "request_method": "GET",
+      "vercel_request_count_sum": 26
+    },
+    {
+      "route": "/_next/static/chunks/964-58b945582d94bbe7.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 22
+    },
+    {
+      "route": "/favicon.ico",
+      "request_method": "GET",
+      "vercel_request_count_sum": 22
+    },
+    {
+      "route": "/dashboard/[sessionId]",
+      "request_method": "GET",
+      "vercel_request_count_sum": 21
+    },
+    {
+      "route": "/_next/static/chunks/964-b30ca31bfeaa814f.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 20
+    },
+    {
+      "route": "/_next/static/chunks/964-b268b2a50eb3a76d.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 17
+    },
+    {
+      "route": "/_next/static/chunks/361-4dd7dd0817a7d3ed.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 16
+    },
+    {
+      "route": "/_next/static/chunks/app/(app)/dashboard/%5BsessionId%5D/page-569a9b0900e7cdba.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 16
+    },
+    {
+      "route": "/",
+      "request_method": "POST",
+      "vercel_request_count_sum": 14
+    },
+    {
+      "route": "/_next/static/chunks/app/(app)/complete/page-e2110cf6464fcd09.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 14
+    },
+    {
+      "route": "/complete",
+      "request_method": "GET",
+      "vercel_request_count_sum": 14
+    },
+    {
+      "route": "/",
+      "request_method": "HEAD",
+      "vercel_request_count_sum": 9
+    },
+    {
+      "route": "/item/[itemId]",
+      "request_method": "GET",
+      "vercel_request_count_sum": 8
+    },
+    {
+      "route": "/404",
+      "request_method": "GET",
+      "vercel_request_count_sum": 1
+    },
+    {
+      "route": "/_next/static/chunks/app/(app)/item/%5BitemId%5D/page-0db47ba4bba7c446.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 1
+    },
+    {
+      "route": "/_next/static/chunks/app/timer-test/page-c339c5a13c401a84.js",
+      "request_method": "GET",
+      "vercel_request_count_sum": 1
+    },
+    {
+      "route": "/favicon.png",
+      "request_method": "GET",
+      "vercel_request_count_sum": 1
+    },
+    {
+      "route": "/timer-test",
+      "request_method": "GET",
+      "vercel_request_count_sum": 1
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_count_sum": 32,
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_count_sum": 261,
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST"
+    },
+    {
+      "timestamp": "2026-04-14T12:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "request_method": "POST"
+    }
+  ],
+  "statistics": {
+    "bytesRead": 4992290724,
+    "rowsRead": 119093036,
+    "dbTimeSeconds": 0
+  }
+}

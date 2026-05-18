@@ -1,0 +1,125 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "route",
+      "cache_result"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS",
+      "vercel_request_count_sum": 4923
+    },
+    {
+      "route": "/sw.js",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 850
+    },
+    {
+      "route": "/icon-192x192.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 472
+    },
+    {
+      "route": "/icon-512x512.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 464
+    },
+    {
+      "route": "/icon-128x128.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 399
+    },
+    {
+      "route": "/icon-72x72.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-96x96.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 392
+    },
+    {
+      "route": "/icon-144x144.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 389
+    },
+    {
+      "route": "/icon-152x152.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 387
+    },
+    {
+      "route": "/icon-384x384.svg",
+      "cache_result": "HIT",
+      "vercel_request_count_sum": 386
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_count_sum": 33,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_count_sum": 262,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "route": "/dashboard/[sessionId]",
+      "cache_result": "MISS"
+    },
+    {
+      "__truncated_for_fixture__": 1802
+    }
+  ],
+  "statistics": {
+    "bytesRead": 702570673,
+    "rowsRead": 12606356,
+    "dbTimeSeconds": 0
+  }
+}

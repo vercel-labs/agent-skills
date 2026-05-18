@@ -1,0 +1,98 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "http_status"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "http_status": "200",
+      "vercel_request_count_sum": 9903
+    },
+    {
+      "http_status": "304",
+      "vercel_request_count_sum": 286
+    },
+    {
+      "http_status": "303",
+      "vercel_request_count_sum": 28
+    },
+    {
+      "http_status": "429",
+      "vercel_request_count_sum": 21
+    },
+    {
+      "http_status": "401",
+      "vercel_request_count_sum": 18
+    },
+    {
+      "http_status": "204",
+      "vercel_request_count_sum": 9
+    },
+    {
+      "http_status": "206",
+      "vercel_request_count_sum": 1
+    },
+    {
+      "http_status": "404",
+      "vercel_request_count_sum": 1
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_count_sum": 48,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_count_sum": 317,
+      "http_status": "200"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_count_sum": 0,
+      "http_status": "200"
+    },
+    {
+      "__truncated_for_fixture__": 1440
+    }
+  ],
+  "statistics": {
+    "bytesRead": 145003110,
+    "rowsRead": 3182089,
+    "dbTimeSeconds": 0
+  }
+}

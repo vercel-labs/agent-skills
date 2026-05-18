@@ -1,0 +1,19 @@
+{
+  "query": {
+    "metric": "vercel.image_transformation.count",
+    "aggregation": "sum",
+    "groupBy": [],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [],
+  "data": [],
+  "statistics": {
+    "bytesRead": 9900754,
+    "rowsRead": 215947,
+    "dbTimeSeconds": 0
+  }
+}

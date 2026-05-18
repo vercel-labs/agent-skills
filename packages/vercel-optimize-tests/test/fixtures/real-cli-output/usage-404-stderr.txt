@@ -1,0 +1,2 @@
+Fetching usage data for example-team
+Error: Costs not found (404)

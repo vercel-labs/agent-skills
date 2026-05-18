@@ -1,0 +1,21 @@
+{
+  "query": {
+    "metric": "vercel.speed_insights_metric.inp",
+    "aggregation": "p75",
+    "groupBy": [
+      "route"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [],
+  "data": [],
+  "statistics": {
+    "bytesRead": 47363645,
+    "rowsRead": 1196328,
+    "dbTimeSeconds": 0
+  }
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "id": "vercel.request.count",
+    "description": "Requests Count"
+  },
+  {
+    "id": "vercel.request.external_rewrite_connect_ms",
+    "description": "Requests External Rewrite Connect Time"
+  },
+  {
+    "id": "vercel.request.external_rewrite_dns_ms",
+    "description": "Requests External Rewrite DNS Time"
+  },
+  {
+    "id": "vercel.request.fdt_in_bytes",
+    "description": "Requests Fast Data Transfer (Incoming)"
+  },
+  {
+    "id": "vercel.request.fdt_out_bytes",
+    "description": "Requests Fast Data Transfer (Outgoing)"
+  },
+  {
+    "id": "vercel.request.fdt_total_bytes",
+    "description": "Requests Fast Data Transfer (Total)"
+  },
+  {
+    "id": "vercel.request.route_cpu_duration_ms",
+    "description": "Requests Routing CPU Duration"
+  },
+  {
+    "id": "vercel.image_transformation.compression_ratio",
+    "description": "Image Transformations Compression Ratio"
+  },
+  {
+    "id": "vercel.image_transformation.count",
+    "description": "Image Transformations Count"
+  },
+  {
+    "id": "vercel.image_transformation.optimized_size_bytes",
+    "description": "Image Transformations Optimized Size"
+  },
+  {
+    "id": "vercel.image_transformation.request_duration_ms",
+    "description": "Image Transformations Duration"
+  },
+  {
+    "id": "vercel.image_transformation.size_change_percent",
+    "description": "Image Transformations Size Change"
+  },
+  {
+    "id": "vercel.image_transformation.source_size_bytes",
+    "description": "Image Transformations Source Size"
+  },
+  {
+    "id": "vercel.isr_operation.read_bytes",
+    "description": "ISR Operations Read Bandwidth"
+  },
+  {
+    "id": "vercel.isr_operation.read_units",
+    "description": "ISR Operations Read Units"
+  },
+  {
+    "id": "vercel.isr_operation.write_bytes",
+    "description": "ISR Operations Write Bandwidth"
+  },
+  {
+    "id": "vercel.isr_operation.write_units",
+    "description": "ISR Operations Write Units"
+  },
+  {
+    "id": "vercel.function_invocation.count",
+    "description": "Function Invocations Count"
+  },
+  {
+    "id": "vercel.function_invocation.fot_in_bytes",
+    "description": "Function Invocations Incoming Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.function_invocation.fot_out_bytes",
+    "description": "Function Invocations Outgoing Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.function_invocation.fot_total_bytes",
+    "description": "Function Invocations Total Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.function_invocation.function_cpu_time_ms",
+    "description": "Function Invocations Active CPU Time"
+  },
+  {
+    "id": "vercel.function_invocation.function_duration_gbhr",
+    "description": "Function Invocations Duration (Gb-hrs)"
+  },
+  {
+    "id": "vercel.function_invocation.function_duration_ms",
+    "description": "Function Invocations Duration (ms)"
+  },
+  {
+    "id": "vercel.function_invocation.peak_memory_mb",
+    "description": "Function Invocations Peak Memory"
+  },
+  {
+    "id": "vercel.function_invocation.provisioned_memory_mb",
+    "description": "Function Invocations Provisioned Memory"
+  },
+  {
+    "id": "vercel.function_invocation.ttfb_ms",
+    "description": "Function Invocations Time to First Byte"
+  },
+  {
+    "id": "vercel.middleware_invocation.count",
+    "description": "Middleware Invocations Count"
+  },
+  {
+    "id": "vercel.middleware_invocation.duration_ms",
+    "description": "Middleware Invocations Duration"
+  },
+  {
+    "id": "vercel.middleware_invocation.fot_in_bytes",
+    "description": "Middleware Invocations Incoming Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.middleware_invocation.fot_out_bytes",
+    "description": "Middleware Invocations Outgoing Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.middleware_invocation.fot_total_bytes",
+    "description": "Middleware Invocations Total Fast Origin Transfer"
+  },
+  {
+    "id": "vercel.middleware_invocation.function_cpu_time_ms",
+    "description": "Middleware Invocations Active CPU Time"
+  },
+  {
+    "id": "vercel.middleware_invocation.ttfb_ms",
+    "description": "Middleware Invocations Time to First Byte"
+  },
+  {
+    "id": "vercel.external_api_request.count",
+    "description": "External APIs Count"
+  },
+  {
+    "id": "vercel.external_api_request.request_duration_ms",
+    "description": "External APIs Duration"
+  },
+  {
+    "id": "vercel.external_api_request.transfer_bytes",
+    "description": "External APIs Transfer Bytes"
+  },
+  {
+    "id": "vercel.workflow_operation.run_cancelled",
+    "description": "Workflows Runs Cancelled"
+  },
+  {
+    "id": "vercel.workflow_operation.run_completed",
+    "description": "Workflows Runs Completed"
+  },
+  {
+    "id": "vercel.workflow_operation.run_failed",
+    "description": "Workflows Runs Failed"
+  },
+  {
+    "id": "vercel.workflow_operation.runs",
+    "description": "Workflows Runs Created"
+  },
+  {
+    "id": "vercel.workflow_operation.step_completed",
+    "description": "Workflows Steps Completed"
+  },
+  {
+    "id": "vercel.workflow_operation.step_failed",
+    "description": "Workflows Steps Failed"
+  },
+  {
+    "id": "vercel.workflow_operation.steps",
+    "description": "Workflows Steps Created"
+  },
+  {
+    "id": "vercel.ai_gateway_request.cache_creation_input_tokens",
+    "description": "AI Gateway Requests Cache Creation Tokens"
+  },
+  {
+    "id": "vercel.ai_gateway_request.cache_creation1h_input_tokens",
+    "description": "AI Gateway Requests Cache Creation 1h Input Tokens"
+  },
+  {
+    "id": "vercel.ai_gateway_request.cached_input_tokens",
+    "description": "AI Gateway Requests Cached Input Tokens"
+  },
+  {
+    "id": "vercel.ai_gateway_request.cost",
+    "description": "AI Gateway Requests Cost"
+  },
+  {
+    "id": "vercel.ai_gateway_request.count",
+    "description": "AI Gateway Requests Count"
+  },
+  {
+    "id": "vercel.ai_gateway_request.gateway_tool_call_cost",
+    "description": "AI Gateway Requests Gateway Tool Call Cost"
+  },
+  {
+    "id": "vercel.ai_gateway_request.gateway_tool_call_count",
+    "description": "AI Gateway Requests Gateway Tool Calls"
+  },
+  {
+    "id": "vercel.ai_gateway_request.input_tokens",
+    "description": "AI Gateway Requests Input Tokens"
+  },
+  {
+    "id": "vercel.ai_gateway_request.output_tokens",
+    "description": "AI Gateway Requests Output Tokens"
+  },
+  {
+    "id": "vercel.ai_gateway_request.reporting_write_cost",
+    "description": "AI Gateway Requests Reporting Write Cost"
+  },
+  {
+    "id": "vercel.ai_gateway_request.request_duration_ms",
+    "description": "AI Gateway Requests Duration"
+  },
+  {
+    "id": "vercel.ai_gateway_request.time_to_first_reasoning_token_ms",
+    "description": "AI Gateway Requests Time to First Reasoning Token"
+  },
+  {
+    "id": "vercel.ai_gateway_request.time_to_first_text_token_ms",
+    "description": "AI Gateway Requests Time to First Text Token"
+  },
+  {
+    "id": "vercel.ai_gateway_request.time_to_first_token_ms",
+    "description": "AI Gateway Requests Time to First Token"
+  },
+  {
+    "id": "vercel.ai_gateway_request.video_count",
+    "description": "AI Gateway Requests Video Count"
+  },
+  {
+    "id": "vercel.ai_gateway_request.video_duration_seconds",
+    "description": "AI Gateway Requests Video Duration"
+  },
+  {
+    "id": "vercel.ai_gateway_request.video_fps",
+    "description": "AI Gateway Requests Video FPS"
+  },
+  {
+    "id": "vercel.ai_gateway_request.web_search_call_count",
+    "description": "AI Gateway Requests Web Search Calls"
+  },
+  {
+    "id": "vercel.ai_gateway_request.zdr_cost",
+    "description": "AI Gateway Requests ZDR Cost"
+  },
+  {
+    "id": "vercel.firewall_action.count",
+    "description": "Firewall Actions Count"
+  },
+  {
+    "id": "vercel.bot_id_check.count",
+    "description": "BotID Checks Count"
+  },
+  {
+    "id": "vercel.speed_insights_metric.cls",
+    "description": "Speed Insights Cumulative Layout Shift"
+  },
+  {
+    "id": "vercel.speed_insights_metric.count",
+    "description": "Speed Insights Count"
+  },
+  {
+    "id": "vercel.speed_insights_metric.fcp",
+    "description": "Speed Insights First Contentful Paint"
+  },
+  {
+    "id": "vercel.speed_insights_metric.fid",
+    "description": "Speed Insights First Input Delay"
+  },
+  {
+    "id": "vercel.speed_insights_metric.inp",
+    "description": "Speed Insights Interaction to Next Paint"
+  },
+  {
+    "id": "vercel.speed_insights_metric.lcp",
+    "description": "Speed Insights Largest Contentful Paint"
+  },
+  {
+    "id": "vercel.speed_insights_metric.ttfb_ms",
+    "description": "Speed Insights Time to First Byte"
+  }
+]

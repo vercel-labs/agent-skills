@@ -1,0 +1,43 @@
+{
+  "error": {
+    "code": "invalid_filter_dimension",
+    "message": "Filter uses invalid dimension \"status\" for metric \"vercel.request.count\".",
+    "allowedValues": [
+      "asn_id",
+      "asn_name",
+      "bot_category",
+      "bot_category_legacy",
+      "bot_name",
+      "bot_verified",
+      "cache_result",
+      "client_ip",
+      "client_ip_country",
+      "client_ja4_digest",
+      "client_user_agent",
+      "deployment_id",
+      "edge_network_region",
+      "environment",
+      "error_code",
+      "http_accept",
+      "http_status",
+      "isr_cache_region",
+      "microfrontends_matched_path",
+      "microfrontends_response_reason",
+      "path_type",
+      "project_id",
+      "project_name",
+      "redirect_location",
+      "referrer_hostname",
+      "referrer_url",
+      "request_hostname",
+      "request_method",
+      "request_path",
+      "route",
+      "server_action_name",
+      "skew_protection",
+      "triggering_tag",
+      "waf_action",
+      "waf_rule_id"
+    ]
+  }
+}

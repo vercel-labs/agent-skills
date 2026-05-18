@@ -1,0 +1,134 @@
+{
+  "accountId": "team_test",
+  "speedInsights": {
+    "id": "speed-insights-fixture-id",
+    "hasData": false
+  },
+  "autoExposeSystemEnvs": true,
+  "autoAssignCustomDomains": true,
+  "autoAssignCustomDomainsUpdatedBy": "system",
+  "buildCommand": null,
+  "customEnvironments": [
+    {
+      "id": "env_test",
+      "createdAt": 1756172803294,
+      "updatedAt": 1756172949642,
+      "type": "preview",
+      "description": "for e2e",
+      "slug": "staging",
+      "domains": []
+    }
+  ],
+  "createdAt": 1754969842063,
+  "crons": {
+    "enabledAt": 1754972515657,
+    "disabledAt": null,
+    "updatedAt": 1777338984375,
+    "deploymentId": "deployment-baseline",
+    "definitions": []
+  },
+  "deploymentExpiration": {
+    "expirationDays": 180,
+    "expirationDaysProduction": 36500,
+    "expirationDaysCanceled": 30,
+    "expirationDaysErrored": 90,
+    "deploymentsToKeep": 10
+  },
+  "devCommand": null,
+  "directoryListing": false,
+  "framework": "nextjs",
+  "gitForkProtection": true,
+  "gitLFS": false,
+  "id": "prj_test",
+  "installCommand": null,
+  "lastRollbackTarget": null,
+  "name": "fixture-app",
+  "nodeVersion": "22.x",
+  "outputDirectory": null,
+  "productionDeploymentsFastLane": true,
+  "publicSource": null,
+  "defaultResourceConfig": {
+    "fluid": false,
+    "functionDefaultRegions": [
+      "iad1"
+    ],
+    "functionDefaultTimeout": 15,
+    "functionDefaultMemoryType": "standard",
+    "functionZeroConfigFailover": false,
+    "elasticConcurrencyEnabled": true
+  },
+  "resourceConfig": {
+    "fluid": false,
+    "functionDefaultRegions": [
+      "iad1"
+    ],
+    "elasticConcurrencyEnabled": true
+  },
+  "rootDirectory": null,
+  "serverlessFunctionRegion": "iad1",
+  "skewProtectionMaxAge": 43200,
+  "sourceFilesOutsideRootDirectory": true,
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "updatedAt": 1778016769733,
+  "live": false,
+  "gitComments": {
+    "onCommit": false,
+    "onPullRequest": true
+  },
+  "gitProviderOptions": {
+    "createDeployments": "enabled"
+  },
+  "webAnalytics": {
+    "id": "web-analytics-fixture-id"
+  },
+  "security": {
+    "firewallUpdatedAt": 1776977965900,
+    "firewallConfigVersion": 1,
+    "botIdEnabled": false,
+    "firewallEnabled": true,
+    "ja3Enabled": true,
+    "ja4Enabled": true,
+    "firewallSeawallEnabled": false,
+    "managedRules": {
+      "bot_filter": {
+        "active": true,
+        "action": "challenge"
+      }
+    },
+    "securityPlus": false
+  },
+  "hasDeployments": true,
+  "latestDeployments": [
+    {
+      "id": "REDACTED",
+      "url": "redacted.example.com",
+      "target": "production",
+      "readyState": "READY",
+      "createdAt": 1777338948001,
+      "meta": {
+        "ghCommitMessage": "REDACTED"
+      }
+    }
+  ],
+  "targets": {
+    "production": {
+      "id": "REDACTED",
+      "url": "redacted.example.com",
+      "target": "production",
+      "readyState": "READY",
+      "createdAt": 1777338948001
+    },
+    "preview": {
+      "id": "REDACTED",
+      "url": "redacted.example.com",
+      "target": null,
+      "readyState": "READY",
+      "createdAt": 1767773166006
+    }
+  },
+  "features": {
+    "webAnalytics": false
+  }
+}

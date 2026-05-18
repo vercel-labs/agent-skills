@@ -1,0 +1,21 @@
+{
+  "query": {
+    "metric": "vercel.middleware_invocation.count",
+    "aggregation": "sum",
+    "groupBy": [
+      "request_path"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [],
+  "data": [],
+  "statistics": {
+    "bytesRead": 4308919358,
+    "rowsRead": 95063936,
+    "dbTimeSeconds": 0
+  }
+}

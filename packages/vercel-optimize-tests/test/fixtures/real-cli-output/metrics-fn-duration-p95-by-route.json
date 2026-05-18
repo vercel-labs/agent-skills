@@ -1,0 +1,98 @@
+{
+  "query": {
+    "metric": "vercel.function_invocation.function_duration_ms",
+    "aggregation": "p95",
+    "groupBy": [
+      "route"
+    ],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "route": "/dashboard/[sessionId]",
+      "vercel_function_invocation_function_duration_ms_p95": 1081.9347
+    },
+    {
+      "route": "/",
+      "vercel_function_invocation_function_duration_ms_p95": 4844
+    },
+    {
+      "route": "/index",
+      "vercel_function_invocation_function_duration_ms_p95": 1243
+    },
+    {
+      "route": "/admin",
+      "vercel_function_invocation_function_duration_ms_p95": 2541
+    },
+    {
+      "route": "/status",
+      "vercel_function_invocation_function_duration_ms_p95": 1372
+    },
+    {
+      "route": "/complete",
+      "vercel_function_invocation_function_duration_ms_p95": 1529
+    },
+    {
+      "route": "/item/[itemId]",
+      "vercel_function_invocation_function_duration_ms_p95": 1647
+    },
+    {
+      "route": "/favicon.ico",
+      "vercel_function_invocation_function_duration_ms_p95": 408
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": 2829,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": 1268,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_function_invocation_function_duration_ms_p95": null,
+      "route": "/dashboard/[sessionId]"
+    },
+    {
+      "__truncated_for_fixture__": 1440
+    }
+  ],
+  "statistics": {
+    "bytesRead": 224741012,
+    "rowsRead": 3899520,
+    "dbTimeSeconds": 0
+  }
+}

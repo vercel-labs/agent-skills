@@ -1,0 +1,12 @@
+{
+  "name": "@vercel-labs/agent-skill-vercel-optimize-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check-docs": "node ../../skills/vercel-optimize/scripts/check-docs-fresh.mjs",
+    "check-citations": "node ../../skills/vercel-optimize/scripts/check-citations.mjs"
+  },
+  "license": "MIT"
+}

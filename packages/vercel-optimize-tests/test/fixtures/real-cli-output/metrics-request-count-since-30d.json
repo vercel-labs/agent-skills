@@ -1,0 +1,59 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "sum",
+    "groupBy": [],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [
+    {
+      "vercel_request_count_sum": 10267
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-04-13T04:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "timestamp": "2026-04-13T08:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "timestamp": "2026-04-13T12:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "timestamp": "2026-04-13T16:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "timestamp": "2026-04-13T20:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "timestamp": "2026-04-14T00:00:00.000Z",
+      "vercel_request_count_sum": 63
+    },
+    {
+      "timestamp": "2026-04-14T04:00:00.000Z",
+      "vercel_request_count_sum": 319
+    },
+    {
+      "timestamp": "2026-04-14T08:00:00.000Z",
+      "vercel_request_count_sum": 0
+    },
+    {
+      "__truncated_for_fixture__": 173
+    }
+  ],
+  "statistics": {
+    "bytesRead": 24833891,
+    "rowsRead": 526350,
+    "dbTimeSeconds": 0
+  }
+}

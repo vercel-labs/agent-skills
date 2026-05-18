@@ -1,0 +1,19 @@
+{
+  "query": {
+    "metric": "vercel.bot_id_check.count",
+    "aggregation": "sum",
+    "groupBy": [],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [],
+  "data": [],
+  "statistics": {
+    "bytesRead": 7227007,
+    "rowsRead": 156620,
+    "dbTimeSeconds": 0
+  }
+}

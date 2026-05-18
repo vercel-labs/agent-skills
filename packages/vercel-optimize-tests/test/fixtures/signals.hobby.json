@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0",
+  "collectedAt": "2026-05-12T00:00:00.000Z",
+  "projectId": "prj_test_hobby",
+  "orgId": null,
+  "projectIdSource": "file",
+  "observabilityPlus": false,
+  "plan": { "plan": "uncertain", "reason": "no commitments found" },
+  "project": {
+    "id": "prj_test_hobby",
+    "framework": "nextjs",
+    "resourceConfig": { "fluid": false }
+  },
+  "contract": { "commitments": [] },
+  "usage": { "services": [], "totals": {}, "chargeCount": 0 },
+  "stack": {
+    "framework": "next",
+    "frameworkVersion": "13.5.4",
+    "hasAppRouter": true,
+    "hasPagesRouter": false,
+    "typescript": true,
+    "orm": "none",
+    "isMonorepo": false
+  },
+  "metrics": {},
+  "codebase": {
+    "findings": [
+      { "pattern": "unoptimized-image", "file": "src/app/page.tsx", "line": 10, "route": "/", "o11ySignal": "NO-ROUTE-MAPPING", "trafficIndependent": false },
+      { "pattern": "unoptimized-image", "file": "src/app/about/page.tsx", "line": 5, "route": "/about", "o11ySignal": "NO-ROUTE-MAPPING", "trafficIndependent": false },
+      { "pattern": "source-maps-production", "file": "next.config.js", "line": 12, "trafficIndependent": true }
+    ]
+  }
+}

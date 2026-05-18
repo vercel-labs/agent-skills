@@ -1,0 +1,19 @@
+{
+  "query": {
+    "metric": "vercel.speed_insights_metric.count",
+    "aggregation": "sum",
+    "groupBy": [],
+    "startTime": "2026-04-13T04:00:00.000Z",
+    "endTime": "2026-05-13T08:00:00.000Z",
+    "granularity": {
+      "hours": 4
+    }
+  },
+  "summary": [],
+  "data": [],
+  "statistics": {
+    "bytesRead": 13637027,
+    "rowsRead": 299082,
+    "dbTimeSeconds": 0
+  }
+}

@@ -8,6 +8,18 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
+### vercel-optimize
+
+Audits a Vercel project for cost, performance, reliability, caching, function usage, and billing opportunities. It collects Vercel metrics first, then investigates only the routes and files those metrics point to.
+
+**Use when:**
+
+- Optimizing a deployed Vercel project
+- Reducing Vercel costs or function usage
+- Investigating slow or expensive routes
+- Finding caching, ISR, middleware, image, or build-minute issues
+- Producing a ranked cost and performance report
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
