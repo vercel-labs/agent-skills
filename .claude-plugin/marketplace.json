@@ -1,0 +1,51 @@
+{
+  "name": "vercel-agent-skills",
+  "owner": {
+    "name": "Vercel"
+  },
+  "metadata": {
+    "description": "Vercel's collection of AI-assisted development skills and tools",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "react-best-practices",
+      "source": "./skills/react-best-practices",
+      "description": "React and Next.js performance optimization guidelines from Vercel Engineering. Use when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Vercel Engineering"
+      },
+      "license": "MIT",
+      "keywords": ["react", "nextjs", "performance", "optimization"],
+      "category": "productivity",
+      "strict": false
+    },
+    {
+      "name": "web-design-guidelines",
+      "source": "./skills/web-design-guidelines",
+      "description": "Review UI code for Web Interface Guidelines compliance. Use when asked to review UI, check accessibility, audit design, review UX, or check site against best practices.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Vercel"
+      },
+      "license": "MIT",
+      "keywords": ["ui", "ux", "accessibility", "design", "web"],
+      "category": "productivity",
+      "strict": false
+    },
+    {
+      "name": "vercel-deploy",
+      "source": "./skills/claude.ai/vercel-deploy-claimable",
+      "description": "Deploy applications and websites to Vercel instantly. No authentication required - returns preview URL and claimable deployment link.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Vercel"
+      },
+      "license": "MIT",
+      "keywords": ["deploy", "vercel", "hosting", "preview"],
+      "category": "deployment",
+      "strict": false
+    }
+  ]
+}
