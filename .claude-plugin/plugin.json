@@ -1,0 +1,10 @@
+{
+  "name": "vercel-agent-skills",
+  "description": "Vercel's collection of agent skills for React, Next.js, deployment, and web best practices",
+  "version": "1.0.0",
+  "author": { "name": "Vercel Labs", "url": "https://github.com/vercel-labs" },
+  "homepage": "https://github.com/vercel-labs/agent-skills",
+  "license": "MIT",
+  "keywords": ["vercel", "react", "nextjs", "deployment", "frontend"],
+  "skills": "./skills/"
+}
