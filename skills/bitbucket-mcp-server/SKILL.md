@@ -14,7 +14,7 @@ metadata:
 This MCP server connects AI assistants to **Bitbucket Cloud** via the REST API 2.0. It exposes 6 generic HTTP pass-through tools (`bb_get`, `bb_post`, `bb_put`, `bb_patch`, `bb_delete`, `bb_clone`) that map directly to Bitbucket API endpoints — no wrapper abstractions, full API surface available.
 
 **Package:** `@aashari/mcp-server-atlassian-bitbucket`  
-**API base:** `https://api.bitbucket.org/2.0` (the `/2.0` prefix is added automatically)  
+**API base:** `https://api.bitbucket.org` (the MCP server adds the `/2.0` path prefix automatically to all endpoints)
 **API reference:** `https://developer.atlassian.com/cloud/bitbucket/rest/`
 
 ## Prerequisites
@@ -23,21 +23,25 @@ The MCP server must be configured in the agent's MCP settings pointing to `@aash
 
 ### Authentication
 
-Set one of these credential pairs:
+Set one of these credential pairs as environment variables. These are the env vars the MCP server reads — not standard Bitbucket API credentials (the server translates them internally).
 
-**Option A — Scoped API Token (recommended):**
+**Option A — Atlassian API Token (recommended):**
+Generate at `https://id.atlassian.com/manage-profile/security/api-tokens`
 ```
 ATLASSIAN_USER_EMAIL=your.email@company.com
 ATLASSIAN_API_TOKEN=ATATT...
 ```
+Required scopes when creating the token: `repository`, `workspace`, `pullrequest`
 
-**Option B — App Password (deprecated June 2026):**
+**Option B — Bitbucket App Password (legacy):**
+Generate at `https://bitbucket.org/account/settings/app-passwords/`
 ```
 ATLASSIAN_BITBUCKET_USERNAME=your_username
 ATLASSIAN_BITBUCKET_APP_PASSWORD=your_app_password
 ```
+Required app password permissions: Workspaces (Read), Repositories (Read/Write), Pull Requests (Read/Write)
 
-Required Bitbucket scopes: `repository`, `workspace`, `pullrequest:write`, `pullrequest`
+> App passwords are being deprecated by Atlassian — the deprecation timeline matches the server's own docs. Prefer Option A for new setups.
 
 ## Tools Reference
 
@@ -220,9 +224,9 @@ values:
 
 Pass `outputFormat: "json"` to get standard JSON.
 
-## JMESPath Filtering (`jq`)
+## Response Filtering (`jq` parameter)
 
-**Always use `jq`** to extract only the fields you need — unfiltered responses are expensive.
+The `bb_*` tools accept a `jq` parameter for filtering API responses. Despite the name, the expression language is **JMESPath** (not the `jq` CLI tool). Always use this to extract only the fields you need.
 
 | Pattern | Effect |
 |---|---|
