@@ -27,6 +27,15 @@
       "skills": [
         "web-design-guidelines"
       ]
+    },
+    {
+      "title": "Agent Relay",
+      "description": "Skills for delivering artifacts to humans via Agent Relay (arelay.app) — inbox API, end-to-end encrypted uploads, and Railway self-hosting.",
+      "skills": [
+        "agent-relay-api",
+        "agent-relay-e2ee",
+        "agent-relay-railway"
+      ]
     }
   ]
 }
