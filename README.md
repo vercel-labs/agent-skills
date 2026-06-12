@@ -67,6 +67,26 @@ Review UI code for compliance with web interface best practices. Audits your cod
 - Touch & Interaction (touch-action, tap-highlight)
 - Locale & i18n (Intl.DateTimeFormat, Intl.NumberFormat)
 
+### video-verification
+
+Record and verify UI flows over time with headless video, screenshots, extracted frames, runtime checks, and concrete review artifacts.
+
+**Use when:**
+
+- Recording loading-to-completion UI flows
+- Verifying streaming responses, animations, or async state transitions
+- Capturing proof for frontend review or PR evidence
+- Checking local previews, browser extension surfaces, canvas, video, iframe, or 3D output
+- Producing WebM, MP4, GIF, screenshot, or frame-by-frame artifacts
+
+**Categories covered:**
+
+- Headless-first Playwright video recording
+- Tool and command provenance for reproducibility
+- Screenshot and frame inspection
+- Console, network, runtime, and rendering issue classification
+- Pass/fail reporting with artifact links
+
 ### writing-guidelines
 
 Review docs and prose for compliance with the Vercel writing handbook. Audits your pages for 80+ rules covering voice, structure, content types, code samples, typography, and AI workflow.
