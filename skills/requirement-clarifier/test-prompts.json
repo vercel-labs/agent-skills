@@ -1,0 +1,108 @@
+{
+  "skill_name": "requirement-clarifier",
+  "version": "2.0-suite",
+  "description": "活体检查样本 — 用真实请求测试本 skill 套件的输出质量",
+  "modes_tested": ["growme", "change", "improve", "boundary"],
+  "test_cases": [
+    {
+      "id": "TC-01-growme-模糊需求",
+      "mode": "growme",
+      "user_input": "我想做一个 AI 教学的 skill",
+      "expected_output": [
+        "目标追问（受众/成功标准/边界）",
+        "信息缺口 ≤ 5 个",
+        "用 AskUserQuestion 工具",
+        "附推荐答案",
+        "不直接给方案"
+      ],
+      "trap": "❌ 不要立刻说'建议做成小红书图文'"
+    },
+    {
+      "id": "TC-02-change-多任务",
+      "mode": "change",
+      "user_input": "我手上有 8 个 skill 要精修，先做哪个？",
+      "expected_output": [
+        "按复杂度分桶",
+        "三维评分（影响/紧急/不确定）",
+        "P0/P1/P2/P3 排序",
+        "每项任务路由到具体 skill（skill-creator / luban / skill-vetter）",
+        "高不确定任务排在前面（fail fast）"
+      ],
+      "trap": "❌ 不要只说'按顺序做'不给路由"
+    },
+    {
+      "id": "TC-03-improve-审查方案",
+      "mode": "improve",
+      "user_input": "你看这个 SKILL.md 写得对不对？",
+      "expected_output": [
+        "按 7 类改进点扫描",
+        "按杠杆率排序（≤ 7 个）",
+        "SMART 改进动作（具体/可衡量/可达成/相关/有时限）",
+        "成本与风险标注",
+        "不直接动手改"
+      ],
+      "trap": "❌ 不要只说'建议加强'不给具体动作"
+    },
+    {
+      "id": "TC-04-串行模式",
+      "mode": "growme → change",
+      "user_input": "我想做一个 21 天 AI 写作训练营，3 个月内启动",
+      "expected_output": [
+        "Step 1: growme 澄清（目标/受众/边界/验收）",
+        "Step 2: change 分诊（内容开发/招生/平台/营销）",
+        "明确路由（不是 requirement-clarifier 自己执行）"
+      ],
+      "trap": "❌ 不要跳过 growme 直接 change"
+    },
+    {
+      "id": "TC-05-不触发边界",
+      "mode": "boundary",
+      "user_input": "X 工具怎么用？",
+      "expected_output": [
+        "不调用本 skill",
+        "直接用 AskUserQuestion 或领域 skill"
+      ],
+      "trap": "❌ 不要为了用而用"
+    },
+    {
+      "id": "TC-06-完整分诊样本",
+      "mode": "change",
+      "user_input": "我今天要做 5 件事：写公众号、写小红书、做 SKILL、跟一个投资人 meeting、清理桌面",
+      "expected_output_template": "【分诊结果】\n| # | 任务 | 复杂度 | 影响 | 紧急 | 不确定 | 优先级 | 路由到 |\n| 1 | 写公众号 | 中 | 高 | 中 | 低 | P1 | `original-writing` |\n| 2 | 写小红书 | 中 | 高 | 中 | 中 | P1 | `ad-copywriting` + `advanced-xhs-visual-design` |\n| 3 | 做 SKILL | 大 | 中 | 低 | 高 | P0 | `skill-creator`（首次做，高不确定→ 优先）|\n| 4 | 投资人 meeting | 小 | 高 | 高 | 中 | P0 | 直接干（不需要 skill）|\n| 5 | 清理桌面 | 小 | 低 | 低 | 低 | P3 | 砍掉 / 周末做 |",
+      "trap": "❌ 不要把'清理桌面'也拉进 P0"
+    },
+    {
+      "id": "TC-07-套件路由测试",
+      "mode": "router",
+      "user_input": "帮我看看这个方案是否最优",
+      "expected_output": [
+        "判断为 improve 模式",
+        "加载 improve-mode 子 skill",
+        "引用 seven-leverage-points.md",
+        "不直接执行 improve 流程（路由器身份）"
+      ],
+      "trap": "❌ 路由器不应直接给出改进清单（应路由到子 skill）"
+    },
+    {
+      "id": "TC-08-三模式反例",
+      "mode": "anti-patterns",
+      "user_input": "N/A（验证性测试）",
+      "expected_output": [
+        "growme 反例：把脑补当澄清",
+        "change 反例：只排顺序不给路由",
+        "improve 反例：只说'建议加强'不给动作"
+      ],
+      "trap": "❌ 三个反例至少各识别 1 个"
+    }
+  ],
+  "self_check_questions": [
+    "模式判断清晰吗（growme/change/improve）？",
+    "任务列表完整吗？没漏什么？",
+    "优先级排序的理由清楚吗？",
+    "路由到的 skill 是否真的能处理这个任务？（自检一遍）",
+    "依赖关系标全了吗？",
+    "改进清单按杠杆率排序了吗？",
+    "用户拿这份输出能直接开干吗？",
+    "输出前做了 5 个自检问题的核对吗？"
+  ]
+}

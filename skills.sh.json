@@ -27,6 +27,14 @@
       "skills": [
         "web-design-guidelines"
       ]
+    },
+    {
+      "title": "Methodology",
+      "description": "Skills for structured problem decomposition, task triage, and methodology-driven reasoning. Cross-runtime, multi-language.",
+      "skills": [
+        "requirement-clarifier"
+      ]
     }
   ]
 }
+
