@@ -1203,11 +1203,25 @@ function escapeRegExp(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// Basic ReDoS guard for user-supplied regex sources.
+// Rejects common high-risk constructs such as nested quantifiers and backreferences.
+function isSafeRegexSource(source) {
+  const s = String(source ?? '');
+  if (s.length > 512) return false;
+  if (/\\[1-9]/.test(s)) return false; // backreferences
+  if (/\((?:[^()\\]|\\.)*[+*](?:[^()\\]|\\.)*\)[+*{]/.test(s)) return false; // quantified group then quantified again
+  if (/(?:^|[^\\])\.\*/.test(s)) return false; // broad wildcard repetition
+  return true;
+}
+
 // Supports `/pattern/flags` literal-regex form OR plain escaped string. Caller flags merge with embedded flags via Set dedup.
 function compilePattern(pattern, flags) {
   const m = pattern.match(/^\/(.+)\/([gimsu]*)$/);
   if (m) {
     const mergedFlags = [...new Set(((m[2] || '') + (flags || '')).split(''))].join('');
+    if (!isSafeRegexSource(m[1])) {
+      throw new Error('unsafe regex pattern');
+    }
     return new RegExp(m[1], mergedFlags);
   }
   return new RegExp(pattern.replace(/[.+^${}()|[\]\\?*]/g, '\\$&'), flags);
