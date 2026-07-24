@@ -1210,7 +1210,6 @@ function isSafeRegexSource(source) {
   if (s.length > 512) return false;
   if (/\\[1-9]/.test(s)) return false; // backreferences
   if (/\((?:[^()\\]|\\.)*[+*](?:[^()\\]|\\.)*\)[+*{]/.test(s)) return false; // quantified group then quantified again
-  if (/(?:^|[^\\])\.\*/.test(s)) return false; // broad wildcard repetition
   return true;
 }
 
