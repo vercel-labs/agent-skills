@@ -42,7 +42,7 @@ Reserve directional slides for hierarchical navigation (list → detail) and ord
 
 ## Availability
 
-- **Next.js:** Do **not** install `react@canary` — the App Router already bundles React canary internally. `ViewTransition` works out of the box. `npm ls react` may show a stable-looking version; this is expected.
+- **Next.js:** Do **not** install `react@canary` — the App Router already bundles React canary internally. `npm ls react` may show a stable-looking version; this is expected. Enable the integration with `experimental: { viewTransition: true }` in `next.config.js`; without the flag, `<ViewTransition>` renders but navigations do not animate (see [`references/nextjs.md`](./references/nextjs.md)).
 - **Without Next.js:** Install `react@canary react-dom@canary` (`ViewTransition` is not in stable React).
 - Browser support: Chromium 125+ (React needs the v2 object form of `startViewTransition`), Firefox 144+, Safari 18.2+. Graceful degradation on unsupported browsers.
 
