@@ -7,6 +7,8 @@ tags: rerender, memo, useMemo, optimization
 
 ## Extract to Memoized Components
 
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so manual `memo()`/`useMemo()` is unnecessary.
+
 Extract expensive work into memoized components to enable early returns before computation.
 
 **Incorrect (computes avatar even when loading):**
@@ -40,5 +42,3 @@ function Profile({ user, loading }: Props) {
   )
 }
 ```
-
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.

@@ -20,6 +20,21 @@ Reference these guidelines when:
 - Refactoring existing React/Next.js code
 - Optimizing bundle size or load times
 
+## Pre-flight Checks
+
+Before recommending manual memoization, detect whether [React Compiler](https://react.dev/learn/react-compiler) is enabled in the target project:
+
+- `next.config.*` sets `reactCompiler: true` (or `experimental.reactCompiler: true` on older Next.js versions), or
+- `package.json` lists `babel-plugin-react-compiler` as a dependency
+
+If React Compiler is enabled, skip these three rules — the compiler already handles what they'd otherwise recommend by hand:
+
+- `rerender-memo` — Extract to Memoized Components
+- `rerender-memo-with-default-value` — Extract Default Non-primitive Parameter Value from Memoized Component to Constant
+- `rerender-simple-expression-in-memo` — Do not wrap a simple expression with a primitive result type in useMemo
+
+All other rules (including the rest of the `rerender-*` category) are unaffected by React Compiler and still apply.
+
 ## Rule Categories by Priority
 
 | Priority | Category | Impact | Prefix |

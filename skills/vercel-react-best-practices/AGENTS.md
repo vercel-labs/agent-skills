@@ -1685,6 +1685,8 @@ function ShareButton({ chatId }: { chatId: string }) {
 
 **Impact: LOW-MEDIUM (wasted computation on every render)**
 
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so `useMemo` usage generally isn't hand-written or worth auditing.
+
 When an expression is simple (few logical or arithmetical operators) and has a primitive result type (boolean, number, string), do not wrap it in `useMemo`.
 
 Calling `useMemo` and comparing hook dependencies may consume more resources than the expression itself.
@@ -1797,6 +1799,8 @@ function UserProfile({ user, theme }) {
 
 **Impact: MEDIUM (restores memoization by using a constant for default value)**
 
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so manual memoization (and this fix for its broken defaults) is unnecessary.
+
 When memoized component has a default value for some non-primitive optional parameter, such as an array, function, or object, calling the component without that parameter results in broken memoization. This is because new value instances are created on every rerender, and they do not pass strict equality comparison in `memo()`.
 
 To address this issue, extract the default value into a constant.
@@ -1828,6 +1832,8 @@ const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () =
 ### 5.6 Extract to Memoized Components
 
 **Impact: MEDIUM (enables early returns)**
+
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so manual `memo()`/`useMemo()` is unnecessary.
 
 Extract expensive work into memoized components to enable early returns before computation.
 
@@ -1862,8 +1868,6 @@ function Profile({ user, loading }: Props) {
   )
 }
 ```
-
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
 
 ### 5.7 Narrow Effect Dependencies
 
