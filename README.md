@@ -20,7 +20,7 @@ Audits a Vercel project for cost, performance, reliability, caching, function us
 - Finding caching, ISR, middleware, image, or build-minute issues
 - Producing a ranked cost and performance report
 
-### react-best-practices
+### vercel-react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
 
@@ -115,7 +115,7 @@ React Native best practices optimized for AI agents. Contains 16 rules across 7 
 - Architecture (Medium) - monorepo structure, imports
 - Platform (Medium) - iOS/Android specific patterns
 
-### react-view-transitions
+### vercel-react-view-transitions
 
 Implement smooth, native-feeling animations using React's View Transition API. Covers the `<ViewTransition>` component, `addTransitionType`, transition types, and Next.js integration including the `transitionTypes` prop on `next/link`.
 
@@ -139,7 +139,7 @@ Implement smooth, native-feeling animations using React's View Transition API. C
 - Ready-to-use CSS animation recipes (fade, slide, scale, flip)
 - Accessibility (`prefers-reduced-motion`)
 
-### composition-patterns
+### vercel-composition-patterns
 
 React composition patterns that scale. Helps avoid boolean prop proliferation through compound components, state lifting, and internal composition.
 
