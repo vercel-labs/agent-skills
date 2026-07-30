@@ -13,27 +13,35 @@ Review files for compliance with Web Interface Guidelines.
 
 ## How It Works
 
-1. Fetch the latest guidelines from the source URL below
+1. Read the vendored guidelines from `guidelines.md` in this skill's directory
 2. Read the specified files (or prompt user for files/pattern)
-3. Check against all rules in the fetched guidelines
+3. Check against all rules in `guidelines.md`
 4. Output findings in the terse `file:line` format
 
 ## Guidelines Source
 
-Fetch fresh guidelines before each review:
+Read the local, pinned copy — do not fetch from the network:
 
 ```
-https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
+guidelines.md
 ```
 
-Use WebFetch to retrieve the latest rules. The fetched content contains all the rules and output format instructions.
+`guidelines.md` is a vendored copy of `vercel-labs/web-interface-guidelines`'s `command.md`, pinned to a specific commit (see the header of `guidelines.md` for the exact SHA and date). Vendoring removes the supply-chain risk of live-fetching instructions from a remote URL on every invocation. The file contains all the rules and output format instructions.
 
 ## Usage
 
 When a user provides a file or pattern argument:
-1. Fetch guidelines from the source URL above
+1. Read `guidelines.md` in this skill's directory
 2. Read the specified files
-3. Apply all rules from the fetched guidelines
-4. Output findings using the format specified in the guidelines
+3. Apply all rules from `guidelines.md`
+4. Output findings using the format specified in `guidelines.md`
 
 If no files specified, ask the user which files to review.
+
+## Updating the pinned guidelines
+
+`guidelines.md` is a point-in-time snapshot and will drift from upstream over time. To refresh it:
+
+1. Fetch the current `command.md` from `https://github.com/vercel-labs/web-interface-guidelines` at the commit you want to pin to.
+2. Replace the content of `guidelines.md` below its header note, keeping the same header format.
+3. Update the header's commit SHA and date to the new pin.
