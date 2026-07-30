@@ -1373,7 +1373,7 @@ Automatic deduplication and efficient data fetching patterns reduce redundant ne
 
 **Impact: LOW (single listener for N components)**
 
-Use `useSWRSubscription()` to share global event listeners across component instances.
+Use a module-level singleton listener to share global event listeners across component instances, instead of each instance attaching its own.
 
 **Incorrect: N instances = N listeners**
 
@@ -1396,39 +1396,60 @@ When using the `useKeyboardShortcut` hook multiple times, each instance will reg
 **Correct: N instances = 1 listener**
 
 ```tsx
-import useSWRSubscription from 'swr/subscription'
-
 // Module-level Map to track callbacks per key
 const keyCallbacks = new Map<string, Set<() => void>>()
 
+// Module-level singleton: the single real DOM listener, attached once
+let globalKeydownHandler: ((e: KeyboardEvent) => void) | null = null
+
+function attachGlobalKeydownListener() {
+  if (globalKeydownHandler) return
+  globalKeydownHandler = (e: KeyboardEvent) => {
+    if (e.metaKey && keyCallbacks.has(e.key)) {
+      keyCallbacks.get(e.key)!.forEach(cb => cb())
+    }
+  }
+  window.addEventListener('keydown', globalKeydownHandler)
+}
+
+function detachGlobalKeydownListenerIfUnused() {
+  if (keyCallbacks.size === 0 && globalKeydownHandler) {
+    window.removeEventListener('keydown', globalKeydownHandler)
+    globalKeydownHandler = null
+  }
+}
+
 function useKeyboardShortcut(key: string, callback: () => void) {
+  // Stabilize the callback so the effect below doesn't need `callback`
+  // in its deps -- otherwise an inline arrow (a new identity every
+  // render) would tear down and re-attach the singleton listener on
+  // every render, the exact churn this pattern exists to avoid.
+  const callbackRef = useRef(callback)
+  useEffect(() => {
+    callbackRef.current = callback
+  })
+
   // Register this callback in the Map
   useEffect(() => {
+    const stableCallback = () => callbackRef.current()
+
     if (!keyCallbacks.has(key)) {
       keyCallbacks.set(key, new Set())
     }
-    keyCallbacks.get(key)!.add(callback)
+    keyCallbacks.get(key)!.add(stableCallback)
+    attachGlobalKeydownListener()
 
     return () => {
       const set = keyCallbacks.get(key)
       if (set) {
-        set.delete(callback)
+        set.delete(stableCallback)
         if (set.size === 0) {
           keyCallbacks.delete(key)
         }
       }
+      detachGlobalKeydownListenerIfUnused()
     }
-  }, [key, callback])
-
-  useSWRSubscription('global-keydown', () => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.metaKey && keyCallbacks.has(e.key)) {
-        keyCallbacks.get(e.key)!.forEach(cb => cb())
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  })
+  }, [key])
 }
 
 function Profile() {
@@ -1685,6 +1706,8 @@ function ShareButton({ chatId }: { chatId: string }) {
 
 **Impact: LOW-MEDIUM (wasted computation on every render)**
 
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so `useMemo` usage generally isn't hand-written or worth auditing.
+
 When an expression is simple (few logical or arithmetical operators) and has a primitive result type (boolean, number, string), do not wrap it in `useMemo`.
 
 Calling `useMemo` and comparing hook dependencies may consume more resources than the expression itself.
@@ -1797,6 +1820,8 @@ function UserProfile({ user, theme }) {
 
 **Impact: MEDIUM (restores memoization by using a constant for default value)**
 
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so manual memoization (and this fix for its broken defaults) is unnecessary.
+
 When memoized component has a default value for some non-primitive optional parameter, such as an array, function, or object, calling the component without that parameter results in broken memoization. This is because new value instances are created on every rerender, and they do not pass strict equality comparison in `memo()`.
 
 To address this issue, extract the default value into a constant.
@@ -1828,6 +1853,8 @@ const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () =
 ### 5.6 Extract to Memoized Components
 
 **Impact: MEDIUM (enables early returns)**
+
+**Skip if:** [React Compiler](https://react.dev/learn/react-compiler) is enabled — the compiler automatically optimizes re-renders, so manual `memo()`/`useMemo()` is unnecessary.
 
 Extract expensive work into memoized components to enable early returns before computation.
 
@@ -1862,8 +1889,6 @@ function Profile({ user, loading }: Props) {
   )
 }
 ```
-
-**Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
 
 ### 5.7 Narrow Effect Dependencies
 

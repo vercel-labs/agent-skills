@@ -24,14 +24,14 @@ export interface SkillConfig {
 }
 
 export const SKILLS: Record<string, SkillConfig> = {
-  'react-best-practices': {
-    name: 'react-best-practices',
+  'vercel-react-best-practices': {
+    name: 'vercel-react-best-practices',
     title: 'React Best Practices',
     description: 'React and Next.js codebases',
-    skillDir: join(SKILLS_DIR, 'react-best-practices'),
-    rulesDir: join(SKILLS_DIR, 'react-best-practices/rules'),
-    metadataFile: join(SKILLS_DIR, 'react-best-practices/metadata.json'),
-    outputFile: join(SKILLS_DIR, 'react-best-practices/AGENTS.md'),
+    skillDir: join(SKILLS_DIR, 'vercel-react-best-practices'),
+    rulesDir: join(SKILLS_DIR, 'vercel-react-best-practices/rules'),
+    metadataFile: join(SKILLS_DIR, 'vercel-react-best-practices/metadata.json'),
+    outputFile: join(SKILLS_DIR, 'vercel-react-best-practices/AGENTS.md'),
     sectionMap: {
       async: 1,
       bundle: 2,
@@ -43,14 +43,14 @@ export const SKILLS: Record<string, SkillConfig> = {
       advanced: 8,
     },
   },
-  'react-native-skills': {
-    name: 'react-native-skills',
+  'vercel-react-native-skills': {
+    name: 'vercel-react-native-skills',
     title: 'React Native Skills',
     description: 'React Native codebases',
-    skillDir: join(SKILLS_DIR, 'react-native-skills'),
-    rulesDir: join(SKILLS_DIR, 'react-native-skills/rules'),
-    metadataFile: join(SKILLS_DIR, 'react-native-skills/metadata.json'),
-    outputFile: join(SKILLS_DIR, 'react-native-skills/AGENTS.md'),
+    skillDir: join(SKILLS_DIR, 'vercel-react-native-skills'),
+    rulesDir: join(SKILLS_DIR, 'vercel-react-native-skills/rules'),
+    metadataFile: join(SKILLS_DIR, 'vercel-react-native-skills/metadata.json'),
+    outputFile: join(SKILLS_DIR, 'vercel-react-native-skills/AGENTS.md'),
     sectionMap: {
       rendering: 1,
       'list-performance': 2,
@@ -68,14 +68,14 @@ export const SKILLS: Record<string, SkillConfig> = {
       fonts: 14,
     },
   },
-  'composition-patterns': {
-    name: 'composition-patterns',
+  'vercel-composition-patterns': {
+    name: 'vercel-composition-patterns',
     title: 'React Composition Patterns',
     description: 'React codebases using composition',
-    skillDir: join(SKILLS_DIR, 'composition-patterns'),
-    rulesDir: join(SKILLS_DIR, 'composition-patterns/rules'),
-    metadataFile: join(SKILLS_DIR, 'composition-patterns/metadata.json'),
-    outputFile: join(SKILLS_DIR, 'composition-patterns/AGENTS.md'),
+    skillDir: join(SKILLS_DIR, 'vercel-composition-patterns'),
+    rulesDir: join(SKILLS_DIR, 'vercel-composition-patterns/rules'),
+    metadataFile: join(SKILLS_DIR, 'vercel-composition-patterns/metadata.json'),
+    outputFile: join(SKILLS_DIR, 'vercel-composition-patterns/AGENTS.md'),
     sectionMap: {
       architecture: 1,
       state: 2,
@@ -86,7 +86,7 @@ export const SKILLS: Record<string, SkillConfig> = {
 }
 
 // Default skill (for backwards compatibility)
-export const DEFAULT_SKILL = 'react-best-practices'
+export const DEFAULT_SKILL = 'vercel-react-best-practices'
 
 // Legacy exports for backwards compatibility
 export const SKILL_DIR = SKILLS[DEFAULT_SKILL].skillDir

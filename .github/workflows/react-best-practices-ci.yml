@@ -4,12 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'skills/react-best-practices/**'
+      - 'skills/vercel-react-best-practices/**'
       - 'packages/react-best-practices-build/**'
   pull_request:
     branches: [main]
     paths:
-      - 'skills/react-best-practices/**'
+      - 'skills/vercel-react-best-practices/**'
       - 'packages/react-best-practices-build/**'
 
 jobs:
