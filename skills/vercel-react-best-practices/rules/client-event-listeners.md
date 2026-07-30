@@ -2,12 +2,12 @@
 title: Deduplicate Global Event Listeners
 impact: LOW
 impactDescription: single listener for N components
-tags: client, swr, event-listeners, subscription
+tags: client, event-listeners, singleton
 ---
 
 ## Deduplicate Global Event Listeners
 
-Use `useSWRSubscription()` to share global event listeners across component instances.
+Use a module-level singleton listener to share global event listeners across component instances, instead of each instance attaching its own.
 
 **Incorrect (N instances = N listeners):**
 
@@ -30,10 +30,28 @@ When using the `useKeyboardShortcut` hook multiple times, each instance will reg
 **Correct (N instances = 1 listener):**
 
 ```tsx
-import useSWRSubscription from 'swr/subscription'
-
 // Module-level Map to track callbacks per key
 const keyCallbacks = new Map<string, Set<() => void>>()
+
+// Module-level singleton: the single real DOM listener, attached once
+let globalKeydownHandler: ((e: KeyboardEvent) => void) | null = null
+
+function attachGlobalKeydownListener() {
+  if (globalKeydownHandler) return
+  globalKeydownHandler = (e: KeyboardEvent) => {
+    if (e.metaKey && keyCallbacks.has(e.key)) {
+      keyCallbacks.get(e.key)!.forEach(cb => cb())
+    }
+  }
+  window.addEventListener('keydown', globalKeydownHandler)
+}
+
+function detachGlobalKeydownListenerIfUnused() {
+  if (keyCallbacks.size === 0 && globalKeydownHandler) {
+    window.removeEventListener('keydown', globalKeydownHandler)
+    globalKeydownHandler = null
+  }
+}
 
 function useKeyboardShortcut(key: string, callback: () => void) {
   // Register this callback in the Map
@@ -42,6 +60,7 @@ function useKeyboardShortcut(key: string, callback: () => void) {
       keyCallbacks.set(key, new Set())
     }
     keyCallbacks.get(key)!.add(callback)
+    attachGlobalKeydownListener()
 
     return () => {
       const set = keyCallbacks.get(key)
@@ -51,18 +70,9 @@ function useKeyboardShortcut(key: string, callback: () => void) {
           keyCallbacks.delete(key)
         }
       }
+      detachGlobalKeydownListenerIfUnused()
     }
   }, [key, callback])
-
-  useSWRSubscription('global-keydown', () => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.metaKey && keyCallbacks.has(e.key)) {
-        keyCallbacks.get(e.key)!.forEach(cb => cb())
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  })
 }
 
 function Profile() {
