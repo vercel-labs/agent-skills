@@ -1,16 +1,14 @@
 <!-- Vendoring metadata (added by this repo, not part of the upstream source) -->
 **Note**: Pinned from vercel-labs/web-interface-guidelines commit `d0a657bfe87e86dd3a4753d7ec28c7e7dd7a88fe` (2026-04-06). See "Updating the pinned guidelines" in this skill's SKILL.md to refresh this file.
 
----
+<!-- The upstream source is a slash-command template (command.md) whose own
+     frontmatter and `$ARGUMENTS` placeholder are meaningful only when invoked
+     directly as a command. Read here as reference data (per SKILL.md), those
+     are stripped so nothing below reads as an unresolved variable. -->
 
----
-description: Review UI code for Vercel Web Interface Guidelines compliance
-argument-hint: <file-or-pattern>
 ---
 
 # Web Interface Guidelines
-
-Review these files for compliance: $ARGUMENTS
 
 Read files, check against rules below. Output concise but comprehensive—sacrifice grammar for brevity. High signal-to-noise.
 

@@ -54,25 +54,36 @@ function detachGlobalKeydownListenerIfUnused() {
 }
 
 function useKeyboardShortcut(key: string, callback: () => void) {
+  // Stabilize the callback so the effect below doesn't need `callback`
+  // in its deps -- otherwise an inline arrow (a new identity every
+  // render) would tear down and re-attach the singleton listener on
+  // every render, the exact churn this pattern exists to avoid.
+  const callbackRef = useRef(callback)
+  useEffect(() => {
+    callbackRef.current = callback
+  })
+
   // Register this callback in the Map
   useEffect(() => {
+    const stableCallback = () => callbackRef.current()
+
     if (!keyCallbacks.has(key)) {
       keyCallbacks.set(key, new Set())
     }
-    keyCallbacks.get(key)!.add(callback)
+    keyCallbacks.get(key)!.add(stableCallback)
     attachGlobalKeydownListener()
 
     return () => {
       const set = keyCallbacks.get(key)
       if (set) {
-        set.delete(callback)
+        set.delete(stableCallback)
         if (set.size === 0) {
           keyCallbacks.delete(key)
         }
       }
       detachGlobalKeydownListenerIfUnused()
     }
-  }, [key, callback])
+  }, [key])
 }
 
 function Profile() {
