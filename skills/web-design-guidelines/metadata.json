@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "organization": "Vercel",
+  "date": "January 2026",
+  "abstract": "Review UI code for compliance with Web Interface Guidelines. Covers 100+ rules across accessibility, performance, forms, animation, typography, images, navigation, dark mode, touch interaction, and i18n."
+}
