@@ -67,6 +67,17 @@ Review UI code for compliance with web interface best practices. Audits your cod
 - Touch & Interaction (touch-action, tap-highlight)
 - Locale & i18n (Intl.DateTimeFormat, Intl.NumberFormat)
 
+### anti-ui-slop
+
+Reviews an interface for generic visual defaults, missing states, inert controls, and weak product specificity before shipping. It complements `web-design-guidelines` by focusing on product-specific direction and a bounded finish gate. The optional UIZZE evidence library covers 800,000+ real web and iOS screens.
+
+**Use when:**
+
+- "Stop UI slop"
+- "Make this interface feel specific"
+- "Critique this generated UI"
+- "Run a UI finish gate"
+
 ### writing-guidelines
 
 Review docs and prose for compliance with the Vercel writing handbook. Audits your pages for 80+ rules covering voice, structure, content types, code samples, typography, and AI workflow.
