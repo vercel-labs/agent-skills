@@ -29,6 +29,8 @@ export default function RootLayout({ children }) {
 **Correct (loads after hydration):**
 
 ```tsx
+'use client'
+
 import dynamic from 'next/dynamic'
 
 const Analytics = dynamic(

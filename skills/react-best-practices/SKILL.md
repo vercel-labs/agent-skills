@@ -107,7 +107,7 @@ Reference these guidelines when:
 
 ### 7. JavaScript Performance (LOW-MEDIUM)
 
-- `js-batch-dom-css` - Group CSS changes via classes or cssText
+- `js-batch-dom-css` - Avoid layout thrashing
 - `js-index-maps` - Build Map for repeated lookups
 - `js-cache-property-access` - Cache object properties in loops
 - `js-cache-function-results` - Cache function results in module-level Map
@@ -127,7 +127,7 @@ Reference these guidelines when:
 - `advanced-effect-event-deps` - Don't put `useEffectEvent` results in effect deps
 - `advanced-event-handler-refs` - Store event handlers in refs
 - `advanced-init-once` - Initialize app once per app load
-- `advanced-use-latest` - useLatest for stable callback refs
+- `advanced-use-latest` - useEffectEvent for stable callback refs
 
 ## How to Use
 
