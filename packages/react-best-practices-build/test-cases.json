@@ -785,6 +785,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Lower Context Providers Below Lazy Boundaries",
+    "type": "bad",
+    "code": "function UserSettingsButton({ userId }: { userId: string }) {\n  const [open, setOpen] = useState(false)\n\n  return (\n    <SettingsDataProvider userId={userId}>\n      <Button onClick={() => setOpen(true)}>Settings</Button>\n      <Modal open={open} onOpenChange={setOpen}>\n        <ModalContent>\n          <SettingsForm />\n        </ModalContent>\n      </Modal>\n    </SettingsDataProvider>\n  )\n}\n\nfunction SettingsDataProvider({\n  userId,\n  children,\n}: {\n  userId: string\n  children: React.ReactNode\n}) {\n  const value = useMemo(() => buildSettingsModel(userId), [userId])\n\n  return (\n    <SettingsDataContext.Provider value={value}>\n      {children}\n    </SettingsDataContext.Provider>\n  )\n}",
+    "language": "tsx",
+    "description": "provider runs while the modal is closed"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Lower Context Providers Below Lazy Boundaries",
+    "type": "good",
+    "code": "function UserSettingsButton({ userId }: { userId: string }) {\n  const [open, setOpen] = useState(false)\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Settings</Button>\n      <Modal open={open} onOpenChange={setOpen}>\n        <SettingsDataProvider userId={userId}>\n          <ModalContent>\n            <SettingsForm />\n          </ModalContent>\n        </SettingsDataProvider>\n      </Modal>\n    </>\n  )\n}\n\nfunction SettingsDataProvider({\n  userId,\n  children,\n}: {\n  userId: string\n  children: React.ReactNode\n}) {\n  const value = useMemo(() => buildSettingsModel(userId), [userId])\n\n  return (\n    <SettingsDataContext.Provider value={value}>\n      {children}\n    </SettingsDataContext.Provider>\n  )\n}",
+    "language": "tsx",
+    "description": "provider only mounts with modal content"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
     "type": "bad",
     "code": "const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",

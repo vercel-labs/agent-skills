@@ -63,7 +63,7 @@ async function extractTests() {
     }
     
     // Write test cases as JSON
-    await writeFile(TEST_CASES_FILE, JSON.stringify(allTestCases, null, 2), 'utf-8')
+    await writeFile(TEST_CASES_FILE, JSON.stringify(allTestCases, null, 2) + '\n', 'utf-8')
     
     console.log(`✓ Extracted ${allTestCases.length} test cases to ${TEST_CASES_FILE}`)
     console.log(`  - Bad examples: ${allTestCases.filter(tc => tc.type === 'bad').length}`)

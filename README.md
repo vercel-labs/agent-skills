@@ -22,7 +22,7 @@ Audits a Vercel project for cost, performance, reliability, caching, function us
 
 ### react-best-practices
 
-React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
+React and Next.js performance optimization guidelines from Vercel Engineering. Contains 71 rules across 8 categories, prioritized by impact.
 
 **Use when:**
 

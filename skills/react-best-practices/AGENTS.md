@@ -14,7 +14,7 @@ January 2026
 
 ## Abstract
 
-Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 40+ rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 71 rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
 
 ---
 
@@ -57,15 +57,16 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 5.4 [Don't Define Components Inside Components](#54-dont-define-components-inside-components)
    - 5.5 [Extract Default Non-primitive Parameter Value from Memoized Component to Constant](#55-extract-default-non-primitive-parameter-value-from-memoized-component-to-constant)
    - 5.6 [Extract to Memoized Components](#56-extract-to-memoized-components)
-   - 5.7 [Narrow Effect Dependencies](#57-narrow-effect-dependencies)
-   - 5.8 [Put Interaction Logic in Event Handlers](#58-put-interaction-logic-in-event-handlers)
-   - 5.9 [Split Combined Hook Computations](#59-split-combined-hook-computations)
-   - 5.10 [Subscribe to Derived State](#510-subscribe-to-derived-state)
-   - 5.11 [Use Functional setState Updates](#511-use-functional-setstate-updates)
-   - 5.12 [Use Lazy State Initialization](#512-use-lazy-state-initialization)
-   - 5.13 [Use Transitions for Non-Urgent Updates](#513-use-transitions-for-non-urgent-updates)
-   - 5.14 [Use useDeferredValue for Expensive Derived Renders](#514-use-usedeferredvalue-for-expensive-derived-renders)
-   - 5.15 [Use useRef for Transient Values](#515-use-useref-for-transient-values)
+   - 5.7 [Lower Context Providers Below Lazy Boundaries](#57-lower-context-providers-below-lazy-boundaries)
+   - 5.8 [Narrow Effect Dependencies](#58-narrow-effect-dependencies)
+   - 5.9 [Put Interaction Logic in Event Handlers](#59-put-interaction-logic-in-event-handlers)
+   - 5.10 [Split Combined Hook Computations](#510-split-combined-hook-computations)
+   - 5.11 [Subscribe to Derived State](#511-subscribe-to-derived-state)
+   - 5.12 [Use Functional setState Updates](#512-use-functional-setstate-updates)
+   - 5.13 [Use Lazy State Initialization](#513-use-lazy-state-initialization)
+   - 5.14 [Use Transitions for Non-Urgent Updates](#514-use-transitions-for-non-urgent-updates)
+   - 5.15 [Use useDeferredValue for Expensive Derived Renders](#515-use-usedeferredvalue-for-expensive-derived-renders)
+   - 5.16 [Use useRef for Transient Values](#516-use-useref-for-transient-values)
 6. [Rendering Performance](#6-rendering-performance) — **MEDIUM**
    - 6.1 [Animate SVG Wrapper Instead of SVG Element](#61-animate-svg-wrapper-instead-of-svg-element)
    - 6.2 [CSS content-visibility for Long Lists](#62-css-content-visibility-for-long-lists)
@@ -1865,7 +1866,87 @@ function Profile({ user, loading }: Props) {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
 
-### 5.7 Narrow Effect Dependencies
+### 5.7 Lower Context Providers Below Lazy Boundaries
+
+**Impact: MEDIUM (avoids provider setup and context updates for inactive UI)**
+
+Place context providers as close as possible to the subtree that consumes them, especially behind UI boundaries that only render when active, such as modals, drawers, popovers, tabs, accordions, and route segments. A provider above the boundary runs its initialization, subscriptions, memoization, and context updates even when the expensive UI is closed or not selected.
+
+**Incorrect: provider runs while the modal is closed**
+
+```tsx
+function UserSettingsButton({ userId }: { userId: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <SettingsDataProvider userId={userId}>
+      <Button onClick={() => setOpen(true)}>Settings</Button>
+      <Modal open={open} onOpenChange={setOpen}>
+        <ModalContent>
+          <SettingsForm />
+        </ModalContent>
+      </Modal>
+    </SettingsDataProvider>
+  )
+}
+
+function SettingsDataProvider({
+  userId,
+  children,
+}: {
+  userId: string
+  children: React.ReactNode
+}) {
+  const value = useMemo(() => buildSettingsModel(userId), [userId])
+
+  return (
+    <SettingsDataContext.Provider value={value}>
+      {children}
+    </SettingsDataContext.Provider>
+  )
+}
+```
+
+**Correct: provider only mounts with modal content**
+
+```tsx
+function UserSettingsButton({ userId }: { userId: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Settings</Button>
+      <Modal open={open} onOpenChange={setOpen}>
+        <SettingsDataProvider userId={userId}>
+          <ModalContent>
+            <SettingsForm />
+          </ModalContent>
+        </SettingsDataProvider>
+      </Modal>
+    </>
+  )
+}
+
+function SettingsDataProvider({
+  userId,
+  children,
+}: {
+  userId: string
+  children: React.ReactNode
+}) {
+  const value = useMemo(() => buildSettingsModel(userId), [userId])
+
+  return (
+    <SettingsDataContext.Provider value={value}>
+      {children}
+    </SettingsDataContext.Provider>
+  )
+}
+```
+
+Keep providers higher only when their state is genuinely shared by always-visible UI, needed to decide whether the boundary should open, or intentionally preloaded before the user activates the subtree.
+
+### 5.8 Narrow Effect Dependencies
 
 **Impact: LOW (minimizes effect re-runs)**
 
@@ -1906,7 +1987,7 @@ useEffect(() => {
 }, [isMobile])
 ```
 
-### 5.8 Put Interaction Logic in Event Handlers
+### 5.9 Put Interaction Logic in Event Handlers
 
 **Impact: MEDIUM (avoids effect re-runs and duplicate side effects)**
 
@@ -1947,7 +2028,7 @@ function Form() {
 
 Reference: [https://react.dev/learn/removing-effect-dependencies#should-this-code-move-to-an-event-handler](https://react.dev/learn/removing-effect-dependencies#should-this-code-move-to-an-event-handler)
 
-### 5.9 Split Combined Hook Computations
+### 5.10 Split Combined Hook Computations
 
 **Impact: MEDIUM (avoids recomputing independent steps)**
 
@@ -2007,7 +2088,7 @@ useEffect(() => {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, it automatically optimizes dependency tracking and may handle some of these cases for you.
 
-### 5.10 Subscribe to Derived State
+### 5.11 Subscribe to Derived State
 
 **Impact: MEDIUM (reduces re-render frequency)**
 
@@ -2032,7 +2113,7 @@ function Sidebar() {
 }
 ```
 
-### 5.11 Use Functional setState Updates
+### 5.12 Use Functional setState Updates
 
 **Impact: MEDIUM (prevents stale closures and unnecessary callback recreations)**
 
@@ -2110,7 +2191,7 @@ function TodoList() {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, the compiler can automatically optimize some cases, but functional updates are still recommended for correctness and to prevent stale closure bugs.
 
-### 5.12 Use Lazy State Initialization
+### 5.13 Use Lazy State Initialization
 
 **Impact: MEDIUM (wasted computation on every render)**
 
@@ -2164,7 +2245,7 @@ Use lazy initialization when computing initial values from localStorage/sessionS
 
 For simple primitives (`useState(0)`), direct references (`useState(props.value)`), or cheap literals (`useState({})`), the function form is unnecessary.
 
-### 5.13 Use Transitions for Non-Urgent Updates
+### 5.14 Use Transitions for Non-Urgent Updates
 
 **Impact: MEDIUM (maintains UI responsiveness)**
 
@@ -2200,7 +2281,7 @@ function ScrollTracker() {
 }
 ```
 
-### 5.14 Use useDeferredValue for Expensive Derived Renders
+### 5.15 Use useDeferredValue for Expensive Derived Renders
 
 **Impact: MEDIUM (keeps input responsive during heavy computation)**
 
@@ -2257,7 +2338,7 @@ function Search({ items }: { items: Item[] }) {
 
 Reference: [https://react.dev/reference/react/useDeferredValue](https://react.dev/reference/react/useDeferredValue)
 
-### 5.15 Use useRef for Transient Values
+### 5.16 Use useRef for Transient Values
 
 **Impact: MEDIUM (avoids unnecessary re-renders on frequent updates)**
 
