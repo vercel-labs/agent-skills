@@ -24,14 +24,54 @@ export async function parseRuleFile(
   const content = rawContent.replace(/\r\n/g, '\n')
   const lines = content.split('\n')
 
+  // Remove leading BOM, comments, and blank lines before attempting to parse frontmatter.
+  let startLine = 0
+  let inCommentBlock = false
+
+  // Strip BOM from the first line when present.
+  if (lines[0]?.startsWith('\uFEFF')) {
+    lines[0] = lines[0].slice(1)
+  }
+
+  while (startLine < lines.length) {
+    const line = lines[startLine].trim()
+
+    if (!line) {
+      startLine++
+      continue
+    }
+
+    if (inCommentBlock) {
+      if (line.includes('-->')) {
+        inCommentBlock = false
+      }
+      startLine++
+      continue
+    }
+
+    // Skip top-level HTML comments commonly added by generators
+    // (for example: <!-- AUTO-GENERATED ... -->).
+    if (line.startsWith('<!--')) {
+      if (!line.includes('-->')) {
+        inCommentBlock = true
+      }
+      startLine++
+      continue
+    }
+
+    break
+  }
+
+  const trimmedContent = lines.slice(startLine).join('\n')
+
   // Extract frontmatter if present
   let frontmatter: Record<string, any> = {}
   let contentStart = 0
 
-  if (content.startsWith('---')) {
-    const frontmatterEnd = content.indexOf('---', 3)
+  if (trimmedContent.startsWith('---')) {
+    const frontmatterEnd = trimmedContent.indexOf('---', 3)
     if (frontmatterEnd !== -1) {
-      const frontmatterText = content.slice(3, frontmatterEnd).trim()
+      const frontmatterText = trimmedContent.slice(3, frontmatterEnd).trim()
       frontmatterText.split('\n').forEach((line) => {
         const [key, ...valueParts] = line.split(':')
         if (key && valueParts.length) {
@@ -44,7 +84,7 @@ export async function parseRuleFile(
   }
 
   // Parse the rule content
-  const ruleContent = content.slice(contentStart).trim()
+  const ruleContent = trimmedContent.slice(contentStart).trim()
   const ruleLines = ruleContent.split('\n')
 
   // Extract title (first # or ## heading)
