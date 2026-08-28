@@ -1,5 +1,5 @@
 {
-  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "$schema": "https://raw.githubusercontent.com/vercel-labs/agent-skills/main/schemas/skills.sh.schema.json",
   "notGrouped": "bottom",
   "groupings": [
     {
