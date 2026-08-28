@@ -117,3 +117,72 @@ function assertRoute(routes, expected) {
     `missing route ${JSON.stringify(expected)}`,
   );
 }
+
+// Security/robustness: verify SKIP_DIRS (node_modules, .git, .vercel etc) are honored
+// using cross-platform segment logic (pathSegments), and emitted paths (routes, workspacePackages)
+// are always POSIX-style even if host fs uses \ . This enforces the scanner trust boundary.
+test('scan-codebase: skips ignored directories and emits POSIX paths', async () => {
+  const scratch = await mkdtemp(join(tmpdir(), 'vercel-optimize-scan-skip-'));
+  try {
+    await writeFile(join(scratch, 'package.json'), JSON.stringify({ dependencies: { next: '15.0.0' } }));
+
+    // Legit source that will produce a route entry
+    await mkdir(join(scratch, 'app'), { recursive: true });
+    await writeFile(join(scratch, 'app', 'page.tsx'), 'export default function Page(){}');
+
+    // Ignored dirs - if skip broken, enumerateRoutes/collect would see them and (for routes)
+    // could add bogus entries or scanners would process their content.
+    await mkdir(join(scratch, 'node_modules', 'next', 'dist'), { recursive: true });
+    await writeFile(join(scratch, 'node_modules', 'next', 'dist', 'index.js'), 'module.exports=1;');
+
+    await mkdir(join(scratch, '.git', 'objects'), { recursive: true });
+    await writeFile(join(scratch, '.git', 'config'), '[core]');
+
+    await mkdir(join(scratch, '.vercel'), { recursive: true });
+    await writeFile(join(scratch, '.vercel', 'project.json'), '{}');
+
+    const { stdout } = await exec('node', [SCRIPT, scratch]);
+    const out = JSON.parse(stdout);
+
+    // Legit route present
+    assert.ok(
+      out.routes?.some((r) => r.routePath === '/' && r.file === 'app/page.tsx'),
+      'should include route from legit source'
+    );
+
+    // No routes with ignored segments (skip worked for enumerateRoutes)
+    const badRoutes = (out.routes || []).filter((r) => /node_modules|\.git|\.vercel/.test(r.file || ''));
+    assert.equal(badRoutes.length, 0, 'routes must not include files from SKIP_DIRS');
+
+    // All emitted route files and workspace dirs use / (POSIX), never \
+    for (const r of (out.routes || [])) {
+      if (r.file) {
+        assert.ok(!r.file.includes('\\'), `route file must be POSIX: ${r.file}`);
+      }
+    }
+    for (const wp of (out.workspacePackages || [])) {
+      if (wp.dir) {
+        assert.ok(!wp.dir.includes('\\'), `workspace dir must be POSIX: ${wp.dir}`);
+      }
+    }
+  } finally {
+    await rm(scratch, { recursive: true, force: true });
+  }
+});
+
+// Unit coverage for the new helpers (used by scan + repo-root for scoping).
+test('util: toPosixPath and pathSegments handle cross-platform input', async () => {
+  // Dynamic import the util under test (avoids test bootstrap issues)
+  const { toPosixPath, pathSegments } = await import('../../../skills/vercel-optimize/lib/util.mjs');
+
+  assert.equal(toPosixPath('app\\page.tsx'), 'app/page.tsx');
+  assert.equal(toPosixPath('C:\\proj\\node_modules\\foo'), 'C:/proj/node_modules/foo');
+  assert.equal(toPosixPath('already/posix'), 'already/posix');
+  assert.equal(toPosixPath(null), '');
+  assert.equal(toPosixPath(undefined), '');
+
+  assert.deepEqual(pathSegments('app\\foo\\bar.ts'), ['app', 'foo', 'bar.ts']);
+  assert.deepEqual(pathSegments('C:\\Users\\x\\proj\\.git\\HEAD'), ['C:', 'Users', 'x', 'proj', '.git', 'HEAD']);
+  assert.deepEqual(pathSegments('/abs/path/node_modules/pkg'), ['abs', 'path', 'node_modules', 'pkg']);
+  assert.deepEqual(pathSegments(''), []);
+});
