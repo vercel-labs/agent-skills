@@ -227,7 +227,7 @@
     "ruleId": "",
     "ruleTitle": "Defer Non-Critical Third-Party Libraries",
     "type": "good",
-    "code": "import dynamic from 'next/dynamic'\n\nconst Analytics = dynamic(\n  () => import('@vercel/analytics/react').then(m => m.Analytics),\n  { ssr: false }\n)\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Analytics />\n      </body>\n    </html>\n  )\n}",
+    "code": "// components/analytics-provider.tsx\n'use client'\n\nimport dynamic from 'next/dynamic'\n\nconst Analytics = dynamic(\n  () => import('@vercel/analytics/react').then(m => m.Analytics),\n  { ssr: false }\n)\n\nexport function AnalyticsProvider() {\n  return <Analytics />\n}\n\n// app/layout.tsx\nimport { AnalyticsProvider } from '@/components/analytics-provider'\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <AnalyticsProvider />\n      </body>\n    </html>\n  )\n}",
     "language": "tsx",
     "description": "loads after hydration"
   },
@@ -243,7 +243,7 @@
     "ruleId": "",
     "ruleTitle": "Dynamic Imports for Heavy Components",
     "type": "good",
-    "code": "import dynamic from 'next/dynamic'\n\nconst MonacoEditor = dynamic(\n  () => import('./monaco-editor').then(m => m.MonacoEditor),\n  { ssr: false }\n)\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
+    "code": "'use client'\n\nimport dynamic from 'next/dynamic'\n\nconst MonacoEditor = dynamic(\n  () => import('./monaco-editor').then(m => m.MonacoEditor),\n  { ssr: false }\n)\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
     "language": "tsx",
     "description": "Monaco loads on demand"
   },
