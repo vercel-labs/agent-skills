@@ -182,7 +182,7 @@ bash /mnt/skills/user/deploy-to-vercel/resources/deploy.sh /path/to/project
 bash /mnt/skills/user/deploy-to-vercel/resources/deploy.sh /path/to/project.tgz
 ```
 
-The script auto-detects the framework from `package.json`, packages the project (excluding `node_modules`, `.git`, `.env`), uploads it, and waits for the build to complete.
+The script auto-detects the framework from `package.json`, packages the project (excluding `node_modules`, `.git`, `.env`, and common package-manager auth config files), uploads it, and waits for the build to complete.
 
 **Tell the user:** "Your deployment is ready at [previewUrl]. Claim it at [claimUrl] to manage your deployment."
 
