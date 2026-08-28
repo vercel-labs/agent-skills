@@ -297,6 +297,22 @@
   },
   {
     "ruleId": "",
+    "ruleTitle": "Revoke Blob URLs After Download",
+    "type": "bad",
+    "code": "function downloadBlob(blob: Blob, filename: string) {\n  const url = URL.createObjectURL(blob)\n  const link = document.createElement('a')\n  link.href = url\n  link.download = filename\n  link.click()\n}",
+    "language": "typescript",
+    "description": "Blob URL is never released"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Revoke Blob URLs After Download",
+    "type": "good",
+    "code": "function downloadBlob(blob: Blob, filename: string) {\n  const url = URL.createObjectURL(blob)\n\n  try {\n    const link = document.createElement('a')\n    link.href = url\n    link.download = filename\n    link.click()\n  } finally {\n    setTimeout(() => URL.revokeObjectURL(url), 0)\n  }\n}",
+    "language": "typescript",
+    "description": "release the URL after the browser handles the click"
+  },
+  {
+    "ruleId": "",
     "ruleTitle": "Use SWR for Automatic Deduplication",
     "type": "bad",
     "code": "function UserList() {\n  const [users, setUsers] = useState([])\n  useEffect(() => {\n    fetch('/api/users')\n      .then(r => r.json())\n      .then(setUsers)\n  }, [])\n}",
