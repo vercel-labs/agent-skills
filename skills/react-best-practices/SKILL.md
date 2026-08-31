@@ -147,3 +147,34 @@ Each rule file contains:
 ## Full Compiled Document
 
 For the complete guide with all rules expanded: `AGENTS.md`
+
+## Human-Centered Overlay
+
+Performance optimization should preserve human-centered clarity and task momentum.
+
+### Fast UI/UX Gate (Before Merge)
+
+Block merge when any of these fail:
+
+- Primary CTA is dominant and easy to hit.
+- Choice density is controlled (no overloaded action clusters).
+- Long flows are chunked with visible progress.
+- Async actions show immediate feedback states.
+- Validation is specific and inline, not only post-submit.
+- Critical actions are not buried in low-recall middle positions.
+- End states are explicit (success/failure + next step).
+
+### Principle-to-Implementation Mapping
+
+Use this mapping during review and refactoring:
+
+- Fitts: expand hit areas and reduce travel distance for critical actions.
+- Hick: reduce simultaneous options and stage complexity.
+- Gestalt + Von Restorff: keep role consistency and isolate one key focal action.
+- Jakob: preserve conventional behavior in trust-critical flows.
+- Miller: chunk dense screens and split mega-forms into staged steps.
+- Goal-Gradient + Zeigarnik: expose progress and resume paths for incomplete work.
+- Tesler + Postel: shift complexity to system defaults/parsers and tolerate human input variance.
+- Peak-End: optimize final state feedback and remove finish-line ambiguity.
+- Doherty: maintain fast perceived response with immediate visual acknowledgment.
+- Serial Position + Occam + Parkinson: prioritize boundary placement and resist unnecessary complexity creep.
