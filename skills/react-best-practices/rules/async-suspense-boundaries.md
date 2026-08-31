@@ -59,6 +59,8 @@ Sidebar, Header, and Footer render immediately. Only DataDisplay waits for data.
 **Alternative (share promise across components):**
 
 ```tsx
+import { use } from 'react'
+
 function Page() {
   // Start fetch immediately, but don't await
   const dataPromise = fetchData()
