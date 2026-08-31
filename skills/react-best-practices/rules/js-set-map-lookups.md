@@ -22,3 +22,25 @@ items.filter(item => allowedIds.includes(item.id))
 const allowedIds = new Set(['a', 'b', 'c', ...])
 items.filter(item => allowedIds.has(item.id))
 ```
+
+### Common Pitfall: Recreating Set/Map Inside Functions
+
+Creating a Set inside a function that runs repeatedly negates the benefit - Set construction is O(n), so you pay O(n) on every call instead of once.
+
+**Incorrect (recreated every call):**
+
+```typescript
+function isAllowed(id: string) {
+  const allowedIds = new Set(['a', 'b', 'c', ...])
+  return allowedIds.has(id)
+}
+```
+
+**Correct (created once at module level):**
+
+```typescript
+const allowedIds = new Set(['a', 'b', 'c', ...])
+
+function isAllowed(id: string) {
+  return allowedIds.has(id)
+}
