@@ -7,9 +7,9 @@ tags: composition, compound-components, architecture
 
 ## Use Compound Components
 
-Structure complex components as compound components with a shared context. Each
-subcomponent accesses shared state via context, not props. Consumers compose the
-pieces they need.
+Structure complex components as multi-part compound headless components with a shared context where a single logical widget is decomposed into many small, focused subcomponents that communicate through internal shared state via context rather than prop drilling. Consumers then compose the pieces they need.
+
+Composable components naturally fit with one another. Each component is built to match the others, keeping the UI consistent. Prevent polymorphic React components at all costs.
 
 **Incorrect (monolithic component with render props):**
 
@@ -109,4 +109,6 @@ const Composer = {
 </Composer.Provider>
 ```
 
-Consumers explicitly compose exactly what they need. No hidden conditionals. And the state, actions and meta are dependency-injected by a parent provider, allowing multiple usages of the same component structure.
+Consumers explicitly compose exactly what they need. No hidden conditionals. And the state, actions and meta are dependency-injected by a parent provider that owns centralized state, behavior and semantics, allowing multiple usages of the same component structure.
+
+Leaf components may also layer on local responsibilities that are intrinsically per-item tightly scoped to how one item registers itself with the store and translates global state.
