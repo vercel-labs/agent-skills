@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "organization": "Vercel",
+  "date": "April 2026",
+  "abstract": "Diagnose, fix, and prepare Python projects for Vercel deployments, including FastAPI, Flask, Django, ASGI/WSGI entrypoints, dependency manifests, Python versions, bundle size, and Python SDK/runtime helpers.",
+  "references": [
+    "references/runtime-and-entrypoints.md",
+    "references/dependencies-and-versions.md",
+    "references/frameworks.md",
+    "references/troubleshooting.md",
+    "references/sdk-runtime-apis.md"
+  ]
+}
