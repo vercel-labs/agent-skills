@@ -27,6 +27,17 @@ function incrementVersion(version: string): string {
 }
 
 /**
+ * Rule files live under rules/, while their compiled AGENTS.md lives one
+ * directory higher. Keep relative links valid in the compiled document.
+ */
+function rewriteCompiledLinks(markdown: string): string {
+  return markdown.replace(
+    /\]\(\.\/(?!rules\/)([^)#]+\.md(?:#[^)]+)?)\)/g,
+    '](./rules/$1)'
+  )
+}
+
+/**
  * Generate markdown from rules
  */
 function generateMarkdown(
@@ -89,7 +100,7 @@ function generateMarkdown(
       md += `**Impact: ${rule.impact}${
         rule.impactDescription ? ` (${rule.impactDescription})` : ''
       }**\n\n`
-      md += `${rule.explanation}\n\n`
+      md += `${rewriteCompiledLinks(rule.explanation)}\n\n`
 
       rule.examples.forEach((example) => {
         if (example.description) {
@@ -104,7 +115,7 @@ function generateMarkdown(
           md += `\`\`\`\n\n`
         }
         if (example.additionalText) {
-          md += `${example.additionalText}\n\n`
+          md += `${rewriteCompiledLinks(example.additionalText)}\n\n`
         }
       })
 
