@@ -169,6 +169,29 @@ test('buildResolver: array exports resolve to the first target', async () => {
   assert.equal(out, join(scratch, 'packages', 'content-kit', 'components', 'index.ts'));
 });
 
+for (const [shape, exports] of [
+  ['string', './index.js'],
+  ['array', ['./index.js', './fallback.js']],
+  ['conditional object', { import: './index.js' }],
+]) {
+  test(`buildResolver: root ${shape} exports resolve only the package entry`, () => {
+    const dir = join(tmpdir(), 'root-exports');
+    const resolve = buildResolver([{ name: '@acme/root', dir, pkg: { exports } }]);
+    assert.equal(resolve('@acme/root'), join(dir, 'index.js'));
+    assert.equal(resolve('@acme/root/private'), null);
+  });
+}
+
+test('resolveWorkspaceImports: follows a bare import with root exports sugar', async () => {
+  const source = join(scratch, 'apps', 'fixture-site', 'app', 'root-export.tsx');
+  const dir = join(scratch, 'packages', 'content-kit');
+  const entry = join(dir, 'root-entry.ts');
+  await writeFile(source, "import { value } from '@acme/root';\n");
+  await writeFile(entry, 'export const value = true;\n');
+  const resolve = buildResolver([{ name: '@acme/root', dir, pkg: { exports: './root-entry.ts' } }]);
+  assert.deepEqual(await resolveWorkspaceImports(source, resolve), [entry]);
+});
+
 test('buildResolver: returns null for non-workspace imports', async () => {
   const pkgs = await listWorkspacePackages(scratch);
   const resolve = buildResolver(pkgs);
