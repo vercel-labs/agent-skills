@@ -13,7 +13,7 @@ The section ID (in parentheses) is the filename prefix used to group rules.
 ## 2. Bundle Size Optimization (bundle)
 
 **Impact:** CRITICAL  
-**Description:** Reducing initial bundle size improves Time to Interactive and Largest Contentful Paint.
+**Description:** Reducing initial bundle size improves Largest Contentful Paint and Interaction to Next Paint.
 
 ## 3. Server-Side Performance (server)
 
