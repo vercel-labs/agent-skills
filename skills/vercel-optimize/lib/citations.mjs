@@ -106,6 +106,7 @@ export async function libraryForStack(framework, version) {
 
 export async function sanitizeCitations(rec, framework, version) {
   const lib = await loadLibrary();
+  const hasStack = Boolean(framework && version);
   const strippedUnknown = [];
   const strippedVersion = [];
   const kept = [];
@@ -113,7 +114,9 @@ export async function sanitizeCitations(rec, framework, version) {
   for (const cite of rec.citations ?? []) {
     const ruleRef = await lookupSkillRule(cite);
     if (ruleRef) {
-      if (matchesFrameworkVersion(ruleRef.applicableFrameworks.join(' || '), framework, version) || ruleRef.applicableFrameworks.includes('*')) {
+      if (!hasStack ||
+          ruleRef.applicableFrameworks.includes('*') ||
+          matchesFrameworkVersion(ruleRef.applicableFrameworks.join(' || '), framework, version)) {
         kept.push(cite);
       } else {
         strippedVersion.push(cite);
@@ -126,7 +129,8 @@ export async function sanitizeCitations(rec, framework, version) {
       strippedUnknown.push(cite);
       continue;
     }
-    if (entry.applicableFrameworks.includes('*') ||
+    if (!hasStack ||
+        entry.applicableFrameworks.includes('*') ||
         entry.applicableFrameworks.some(p => matchesFrameworkVersion(p, framework, version))) {
       kept.push(cite);
     } else {

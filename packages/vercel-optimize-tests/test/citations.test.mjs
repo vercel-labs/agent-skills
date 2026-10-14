@@ -116,6 +116,35 @@ test('sanitizeCitations strips unknown URL', async () => {
   assert.equal(strippedUnknown[0], 'https://example.com/totally-fake');
 });
 
+test('sanitizeCitations strips unknown citations without a detected stack', async () => {
+  const rec = { citations: [
+    'https://vercel.com/docs/caching/cdn-cache',
+    'https://example.com/totally-fake',
+    'vercel-react-best-practices:not-a-real-rule',
+  ]};
+  const { rec: out, strippedUnknown, strippedVersion } = await sanitizeCitations(rec);
+  assert.deepEqual(out.citations, ['https://vercel.com/docs/caching/cdn-cache']);
+  assert.deepEqual(strippedUnknown, [
+    'https://example.com/totally-fake',
+    'vercel-react-best-practices:not-a-real-rule',
+  ]);
+  assert.deepEqual(strippedVersion, []);
+});
+
+test('sanitizeCitations retains known versioned citations without a detected stack', async () => {
+  const rec = { citations: [
+    'https://nextjs.org/docs/app/api-reference/directives/use-cache',
+    'vercel-react-best-practices:server-after-nonblocking',
+  ]};
+  const { rec: out, strippedUnknown, strippedVersion } = await sanitizeCitations(rec);
+  assert.deepEqual(out.citations, [
+    'https://nextjs.org/docs/app/api-reference/directives/use-cache',
+    'vercel-react-best-practices:server-after-nonblocking',
+  ]);
+  assert.deepEqual(strippedUnknown, []);
+  assert.deepEqual(strippedVersion, []);
+});
+
 test('sanitizeCitations strips version-mismatched URL', async () => {
   const rec = { citations: [
     'https://nextjs.org/docs/app/api-reference/directives/use-cache',

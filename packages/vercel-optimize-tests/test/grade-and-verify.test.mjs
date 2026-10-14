@@ -1182,12 +1182,20 @@ test('extractClaims + verifyClaim: route-error not-found catches need explicit 4
   assert.equal(supported.disposition, 'verified');
 });
 
-test('verifyClaim: citation_in_library accepts skill-rule format', async () => {
+test('verifyClaim: citation_in_library accepts known skill-rule reference', async () => {
   const r = await verifyClaim({
     type: 'citation_in_library',
     url: 'vercel-react-best-practices:async-parallel',
   });
   assert.equal(r.disposition, 'verified');
+});
+
+test('verifyClaim: citation_in_library rejects unknown skill-rule reference', async () => {
+  const r = await verifyClaim({
+    type: 'citation_in_library',
+    url: 'vercel-react-best-practices:not-a-real-rule',
+  });
+  assert.equal(r.disposition, 'failed');
 });
 
 test('verifyClaim: citation_in_library rejects unknown URL', async () => {

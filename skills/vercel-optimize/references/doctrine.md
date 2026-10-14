@@ -55,8 +55,8 @@ The library has two parts:
 
 Three sanitizers enforce this:
 - `missing-citation` — drops recs with empty `citations[]`.
-- `unknown-citation` — strips URLs not in the library, marks `needsReview=true`.
-- `version-mismatch` — strips URLs whose `applicableFrameworks` doesn't match the project's framework@version (parsed from `package.json`).
+- `unknown-citation` — strips URLs and skill-rule references not in the library, even when the project stack is unknown.
+- `version-mismatch` — when the stack is known, strips citations whose `applicableFrameworks` doesn't match the project's framework@version (parsed from `package.json`).
 
 Two verifier claim types check it: `citation_in_library` (URL ∈ allow-list) and `citation_applies_to_version` (semver match).
 

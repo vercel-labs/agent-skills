@@ -381,6 +381,19 @@ test('applySanitizers: drops uncited rec via missing-citation last', async () =>
   assert.equal(r.dropReason, 'missing-citation');
 });
 
+test('applySanitizers: unknown citation is stripped without a detected stack', async () => {
+  const rec = {
+    what: 'Do a thing',
+    citations: ['https://example.com/totally-fake'],
+  };
+  const r = await applySanitizers(rec);
+  assert.equal(r.kept, false);
+  assert.equal(r.dropReason, 'missing-citation');
+  assert.deepEqual(rec.citations, []);
+  assert.ok(rec.sanitizerTrail.includes('unknown-citation:https://example.com/totally-fake'));
+  assert.equal(rec.needsReview, undefined);
+});
+
 test('applySanitizers: version-mismatch strips next@15-only URL on next@13 project', async () => {
   const rec = {
     what: 'Cache with "use cache".',
