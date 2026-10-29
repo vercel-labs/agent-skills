@@ -38,6 +38,7 @@ To update the snapshot to a newer upstream version:
 1. Get the latest commit SHA: `gh api repos/vercel-labs/web-interface-guidelines/commits/main --jq .sha`
 2. Download it: `curl -fsSL https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/<SHA>/command.md -o references/command.md`
 3. Review the changes, then update the Source URL and SHA-256 above (`shasum -a 256 references/command.md`)
+4. Regenerate `skills/web-design-guidelines.zip` so it matches the updated folder
 
 ## Usage
 
