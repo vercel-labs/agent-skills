@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/vercel-labs/agent-skills/main/schemas/skills.sh.schema.json",
+  "title": "skills.sh catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["groupings"],
+  "properties": {
+    "notGrouped": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Where ungrouped skills appear relative to groupings."
+    },
+    "groupings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "skills"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "skills": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          }
+        }
+      }
+    }
+  }
+}
