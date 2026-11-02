@@ -27,6 +27,17 @@ function incrementVersion(version: string): string {
 }
 
 /**
+ * Rewrite rule-file-relative links (./foo.md) so they resolve from the
+ * generated AGENTS.md at the skill root (./rules/foo.md)
+ */
+function rewriteRuleLinks(markdown: string): string {
+  return markdown.replace(
+    /\]\(\.\/([a-z0-9][a-z0-9-]*\.md(?:#[^)\s]+)?)\)/g,
+    '](./rules/$1)'
+  )
+}
+
+/**
  * Generate markdown from rules
  */
 function generateMarkdown(
@@ -274,7 +285,7 @@ async function buildSkill(skillConfig: SkillConfig) {
   }
 
   // Generate markdown
-  const markdown = generateMarkdown(sections, metadata, skillConfig)
+  const markdown = rewriteRuleLinks(generateMarkdown(sections, metadata, skillConfig))
 
   // Write output
   await writeFile(skillConfig.outputFile, markdown, 'utf-8')
