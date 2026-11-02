@@ -18,7 +18,8 @@
       "skills": [
         "deploy-to-vercel",
         "vercel-cli-with-tokens",
-        "vercel-optimize"
+        "vercel-optimize",
+        "hol-guard-vercel"
       ]
     },
     {
