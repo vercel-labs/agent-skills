@@ -7,6 +7,7 @@ import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pickProbeFile, detectRepoRoot, resolveRepoRoot, deriveRootFromSignals } from '../../../skills/vercel-optimize/lib/repo-root.mjs';
+import { toPosixPath } from '../../../skills/vercel-optimize/lib/util.mjs';
 
 let scratch;
 test('setup: create scratch monorepo', async () => {
@@ -107,7 +108,8 @@ test('resolveRepoRoot: API rootDirectory wins over walk-up heuristic', async () 
   const recs = [{ affectedFiles: ['apps/fixture-site/app/event/[code]/page.tsx'] }];
   const r = await resolveRepoRoot(recs, null, join(scratch, 'apps', 'fixture-site'), signals);
   assert.equal(r.source, 'api');
-  assert.equal(r.root, scratch);
+  // API-derived root uses POSIX separators for consistency (even on Windows).
+  assert.equal(toPosixPath(r.root), toPosixPath(scratch));
   assert.equal(r.apiOffset, 'apps/fixture-site');
 });
 

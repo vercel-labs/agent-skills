@@ -13,6 +13,7 @@ import {
   buildResolver,
   resolveWorkspaceImports,
 } from '../lib/workspace-resolver.mjs';
+import { toPosixPath, pathSegments } from '../lib/util.mjs';
 
 const SCHEMA_VERSION = '1.0';
 const SKIP_DIRS = new Set(['node_modules', '.next', '.vercel', 'dist', 'build', '.git', 'coverage', '.turbo', '__tests__', 'cypress']);
@@ -71,7 +72,7 @@ async function main() {
     scannedAt: new Date().toISOString(),
     rootDir,
     monorepoRoot: monorepoRoot ?? null,
-    workspacePackages: workspacePackages.map((p) => ({ name: p.name, dir: relative(monorepoRoot ?? rootDir, p.dir) })),
+    workspacePackages: workspacePackages.map((p) => ({ name: p.name, dir: toPosixPath(relative(monorepoRoot ?? rootDir, p.dir)) })),
     stack,
     routes,
     findings,
@@ -103,10 +104,10 @@ async function enrichRoutesWithWorkspaceImports(routes, scanRootDir, resolver, m
       perSpecifierCap: 3,
     });
     if (resolved.length === 0) continue;
-    // Paths must be relative to the monorepo root so they align between signals + verifier.
+    // Paths must be relative to the monorepo root (POSIX) so they align between signals + verifier.
     r.workspaceImports = resolved
       .slice(0, WORKSPACE_IMPORT_LIMIT_PER_ROUTE)
-      .map((abs) => relative(monorepoRoot, abs));
+      .map((abs) => toPosixPath(relative(monorepoRoot, abs)));
   }
 }
 
@@ -115,7 +116,9 @@ async function collectFiles(root) {
   const out = [];
   for (const e of entries) {
     if (!e.isFile()) continue;
-    const segments = (e.parentPath ?? e.path ?? root).split('/');
+    // Use pathSegments (cross-platform) so SKIP_DIRS like 'node_modules' and '.git'
+    // are honored on Windows (where readdir parentPath uses \ separators).
+    const segments = pathSegments(e.parentPath ?? e.path ?? root);
     if (segments.some((s) => SKIP_DIRS.has(s))) continue;
     if (SKIP_FILE_PATTERNS.some((re) => re.test(e.name))) continue;
     if (!/\.(tsx?|jsx?|mjs|cjs|html|svelte|astro|vue|json)$/.test(e.name)) continue;
@@ -124,7 +127,10 @@ async function collectFiles(root) {
     try {
       const content = await readFile(full, 'utf-8');
       if (content.length > 500_000) continue;
-      out.push({ path: relative(root, full), content });
+      // Always emit POSIX paths so globs, route matchers, briefs, and verifiers
+      // (all assume /) work on any host OS. This is a security boundary: only
+      // intended project files (not deps or VCS) reach scanners + LLM context.
+      out.push({ path: toPosixPath(relative(root, full)), content });
     } catch {}
   }
   return out;
@@ -155,11 +161,12 @@ async function enumerateRoutes(root) {
   const routes = [];
   for (const e of entries) {
     if (!e.isFile()) continue;
-    const segments = (e.parentPath ?? e.path ?? root).split('/');
+    // Cross-platform skip using normalized segments (see collectFiles).
+    const segments = pathSegments(e.parentPath ?? e.path ?? root);
     if (segments.some((s) => SKIP_DIRS.has(s))) continue;
 
     const full = join(e.parentPath ?? e.path ?? root, e.name);
-    const rel = relative(root, full);
+    const rel = toPosixPath(relative(root, full));
 
     // App Router: route groups ((name)), parallel routes (@slot), private folders
     // (_name), and the top-level page.tsx (no path segment) all need explicit handling.

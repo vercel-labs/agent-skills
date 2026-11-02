@@ -5,6 +5,7 @@ import { isAbsolute, join, normalize, relative } from 'node:path';
 import { loadLibrary, matchesFrameworkVersion } from './citations.mjs';
 import { deriveProjectFacts } from './project-facts.mjs';
 import { renderSupportTopics } from './support-topics.mjs';
+import { toPosixPath } from './util.mjs';
 
 const NON_LAYOUT_FILE_CAP = 12;
 const LAYOUT_FILE_CAP = 3;
@@ -168,15 +169,18 @@ function absoluteBriefPath(file, roots) {
 function repoRelativeBriefPath(file, roots) {
   if (typeof file !== 'string' || file.length === 0) return null;
   const normalized = normalize(file);
-  if (isRepoRelativePath(normalized)) return normalized;
+  const posixNorm = toPosixPath(normalized);
+  if (isRepoRelativePath(posixNorm)) return posixNorm;
   const abs = absoluteBriefPath(file, roots);
-  if (!abs || !roots.repoRoot) return normalized;
+  if (!abs || !roots.repoRoot) return posixNorm;
   const rel = normalize(relative(roots.repoRoot, abs));
-  return rel.startsWith('..') ? normalized : rel;
+  const posixRel = toPosixPath(rel);
+  return posixRel.startsWith('..') ? posixNorm : posixRel;
 }
 
 function isRepoRelativePath(file) {
-  return /^(apps|packages)\//.test(file);
+  // Accept both seps but source data uses /; normalize caller.
+  return /^(apps|packages)\//.test(toPosixPath(file));
 }
 
 function capBriefFiles(nonLayoutCandidates, layoutCandidates, routes) {
