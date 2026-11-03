@@ -41,6 +41,17 @@ React and Next.js performance optimization guidelines from Vercel Engineering. C
 - Rendering performance (Medium)
 - JavaScript micro-optimizations (Low-Medium)
 
+### [browser-act](https://github.com/browser-act/skills)
+
+Browser automation CLI built for AI agents. Break through anti-bot wall.
+
+**Use when:**
+
+- Automating browser interactions in AI workflows
+- Validating login, navigation, and anti-bot flows
+- Testing web UI agents end-to-end
+
+
 ### web-design-guidelines
 
 Review UI code for compliance with web interface best practices. Audits your code for 100+ rules covering accessibility, performance, and UX.
