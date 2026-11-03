@@ -4,7 +4,7 @@
  */
 
 import { readdir, readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { dirname, join, relative, sep } from 'path'
 import { Rule, Section, GuidelinesDocument, ImpactLevel } from './types.js'
 import { parseRuleFile, RuleFile } from './parser.js'
 import { SKILLS, SkillConfig, DEFAULT_SKILL } from './config.js'
@@ -276,8 +276,25 @@ async function buildSkill(skillConfig: SkillConfig) {
   // Generate markdown
   const markdown = generateMarkdown(sections, metadata, skillConfig)
 
+  // Rule bodies are authored inside rulesDir, so their same-directory links
+  // (e.g. ./async-defer-await.md) break once inlined into the output file.
+  // Rewrite them to stay valid relative to the output location.
+  const rulesPrefix = relative(dirname(skillConfig.outputFile), skillConfig.rulesDir)
+    .split(sep)
+    .join('/')
+  const rewritten = rulesPrefix
+    ? markdown.replace(
+        /\]\(\.\/([\w.-]+\.md)(#[^)]*)?\)/g,
+        (_match, file, anchor) => {
+          const target = `${rulesPrefix}/${file}`
+          const prefixed = target.startsWith('..') ? target : `./${target}`
+          return `](${prefixed}${anchor ?? ''})`
+        }
+      )
+    : markdown
+
   // Write output
-  await writeFile(skillConfig.outputFile, markdown, 'utf-8')
+  await writeFile(skillConfig.outputFile, rewritten, 'utf-8')
 
   console.log(
     `  ✓ Built AGENTS.md with ${sections.length} sections and ${ruleData.length} rules`
