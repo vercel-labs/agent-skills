@@ -29,6 +29,9 @@ export default function RootLayout({ children }) {
 **Correct (loads after hydration):**
 
 ```tsx
+// components/analytics-provider.tsx
+'use client'
+
 import dynamic from 'next/dynamic'
 
 const Analytics = dynamic(
@@ -36,12 +39,21 @@ const Analytics = dynamic(
   { ssr: false }
 )
 
+export function AnalyticsProvider() {
+  return <Analytics />
+}
+```
+
+```tsx
+// app/layout.tsx — remains a Server Component
+import { AnalyticsProvider } from '@/components/analytics-provider'
+
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
         {children}
-        <Analytics />
+        <AnalyticsProvider />
       </body>
     </html>
   )
