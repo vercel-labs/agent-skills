@@ -1,0 +1,29 @@
+{
+  "name": "vercel-agent-skills",
+  "displayName": "Vercel Agent Skills",
+  "version": "1.0.0",
+  "description": "Collection of Vercel-authored skills for React, React Native, web design reviews, and deploy workflows.",
+  "author": {
+    "name": "Vercel"
+  },
+  "publisher": "Vercel",
+  "homepage": "https://github.com/vercel-labs/agent-skills",
+  "repository": "https://github.com/vercel-labs/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "cursor",
+    "plugin",
+    "skills",
+    "react",
+    "nextjs",
+    "react-native",
+    "vercel"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "frontend",
+    "performance",
+    "deployment"
+  ],
+  "skills": "./skills/"
+}
