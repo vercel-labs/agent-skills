@@ -168,6 +168,21 @@ Deploy applications and websites to Vercel. Prefers git-push deploys on a linked
 - "Deploy and give me the link"
 - "Create a preview deployment"
 
+### ios-hig-design-guide
+
+iOS design specification workflow grounded in Apple Human Interface Guidelines (HIG). Includes a sync script that fetches the latest Apple HIG source JSON and generates curated references for feature-level UI/UX specs.
+
+**Use when:**
+- Drafting iOS feature specs from official guidance
+- Reviewing iOS UI against Apple HIG conventions
+- Building accessibility, typography, color, and interaction rules into design docs
+- Needing source-linked recommendations that can be refreshed as Apple updates HIG
+
+**What it includes:**
+- Source sync script for Apple HIG index and pages
+- Curated iOS-focused workflow reference
+- Skill instructions for converting HIG guidance into actionable product decisions
+
 ## Installation
 
 ```bash

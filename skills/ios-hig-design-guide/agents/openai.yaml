@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS HIG Guide"
+  short_description: "Collect and apply Apple iOS Human Interface Guidelines"
+  default_prompt: "Use $ios-hig-design-guide to fetch Apple HIG sources and produce actionable iOS UI/UX specifications for this feature."
