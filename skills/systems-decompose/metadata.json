@@ -1,0 +1,23 @@
+{
+  "name": "systems-decompose",
+  "displayName": "Systems Decomposition",
+  "version": "1.0.0",
+  "description": "Systematic feature decomposition for React/Next.js applications. Plan before implementing to map data flow, define interfaces, and enumerate error states.",
+  "author": "Sunny Patneedi",
+  "license": "CC-BY-SA-4.0",
+  "tags": [
+    "architecture",
+    "planning",
+    "nextjs",
+    "react",
+    "api-design",
+    "error-handling",
+    "performance"
+  ],
+  "repository": "https://github.com/sunnypatneedi/claude-starter-kit",
+  "category": "Architecture & Planning",
+  "compatibility": {
+    "agents": ["claude", "cursor", "openai", "anthropic"],
+    "frameworks": ["nextjs", "react", "typescript"]
+  }
+}
