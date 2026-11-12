@@ -4,6 +4,7 @@ description: Deploy and manage projects on Vercel using token-based authenticati
 metadata:
   author: vercel
   version: "1.0.0"
+  source: https://github.com/vercel-labs/agent-skills/tree/main/skills/vercel-cli-with-tokens
 ---
 
 # Vercel CLI with Tokens

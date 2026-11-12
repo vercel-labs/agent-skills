@@ -4,6 +4,7 @@ description: Review docs/prose for Writing Guidelines compliance. Use when asked
 metadata:
   author: vercel
   version: "1.0.0"
+  source: https://github.com/vercel-labs/agent-skills/tree/main/skills/writing-guidelines
   argument-hint: <file-or-pattern>
 ---
 

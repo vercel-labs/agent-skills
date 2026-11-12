@@ -5,6 +5,7 @@ license: MIT
 metadata:
   author: vercel
   version: "1.0.0"
+  source: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-view-transitions
 ---
 
 # React View Transitions
