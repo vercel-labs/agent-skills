@@ -4,6 +4,7 @@ description: Deploy applications and websites to Vercel. Use when the user reque
 metadata:
   author: vercel
   version: "4.0.0"
+  source: https://github.com/vercel-labs/agent-skills/tree/main/skills/deploy-to-vercel
 ---
 
 # Deploy to Vercel

@@ -3,6 +3,7 @@ name: vercel-optimize
 description: "Use for Vercel cost and performance optimization on deployed projects, especially Next.js, SvelteKit, Nuxt, and limited Astro apps. Collect Vercel metrics, usage, project config, and code scan results first; investigate only metric-backed candidates; produce ranked recommendations grounded in verified files and version-aware Vercel/framework docs. Trigger for Vercel bill reduction, slow or expensive routes, caching opportunities, Function Invocations, Build Minutes, Fast Data Transfer, Core Web Vitals, Bot Management, Fluid compute, or cost breakdown requests."
 metadata:
   version: "1.2.0"
+  source: https://github.com/vercel-labs/agent-skills/tree/main/skills/vercel-optimize
 ---
 
 # Vercel Optimize
