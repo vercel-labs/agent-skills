@@ -20,6 +20,20 @@ Audits a Vercel project for cost, performance, reliability, caching, function us
 - Finding caching, ISR, middleware, image, or build-minute issues
 - Producing a ranked cost and performance report
 
+### modern-react-guidance
+
+Task-based guidance for implementing and reviewing React web components. The skill routes agents to relevant, current React documentation for state, Effects, Actions, forms, Suspense, responsiveness, compiler-aware performance, and browser API integration. It includes a focused performance reference carrying forward selected React Best Practices recommendations.
+
+Install it with:
+
+```bash
+npx skills add vercel-labs/agent-skills --skill modern-react-guidance
+```
+
+The skill reads only the guidance relevant to the task and checks it against the project's React version and framework. Fetching current documentation requires access to `react.dev`; linked legacy performance examples are hosted on `github.com`. It can also use project-local documentation when online sources are unavailable.
+
+This is a separate skill; the existing `react-best-practices` skill remains available. It can be used alongside Modern Web Guidance for web platform decisions. Automatic discovery by Modern Web Guidance is not part of this addition.
+
 ### react-best-practices
 
 React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, prioritized by impact.
