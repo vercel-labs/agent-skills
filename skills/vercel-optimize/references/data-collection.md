@@ -154,11 +154,21 @@ The skill never crashes the entire collection on a single endpoint failure. Ever
     { "timestamp": "2026-04-13T04:00:00.000Z", "vercel_request_count_sum": 0, "route": "/dashboard/[sessionId]" }
     /* ... */
   ],
-  "statistics": { "bytesRead": 10267, "rowsRead": 947, "dbTimeSeconds": 0 }
+  "statistics": { "bytesRead": 10267, "rowsRead": 947, "dbTimeSeconds": 0 },
+  // Newer CLIs (with `vercel metrics --data`) also return:
+  "queryId": "observability-api-...",
+  "meta": {
+    "outputs": {
+      "vercel_request_count_sum": { "kind": "metric", "metric": "vercel.request.count", "unit": "count" }
+    },
+    "effectiveTimeRange": { "start": "2026-04-13T04:00:00.000Z", "end": "2026-05-13T08:00:00.000Z" }
+  }
 }
 ```
 
 Field naming rule: the metric ID's dots become underscores, and the aggregation suffix is appended — `vercel.request.count` + `sum` → `vercel_request_count_sum`. `lib/vercel.mjs::normalizeSummary()` flattens `summary[]` into `[{<dim>: v, ..., value: <n>}]`.
+
+`queryId` and `meta` are additive, so the collector ignores them. On those CLIs, `query.startTime` and `query.endTime` report the range the API actually queried (`meta.effectiveTimeRange`, after bucket alignment), which can be wider than the requested `--since` window. `meta.outputs` is keyed by the same `<metric>_<aggregation>` column, and `meta.excludedIntervals` lists Observability Plus periods left out of the result. `vercel metrics --data` returns the same `query`/`summary`/`data` layout with one column per output alias, for queries with several metrics or formulas.
 
 ### `vercel metrics schema --format json`
 
