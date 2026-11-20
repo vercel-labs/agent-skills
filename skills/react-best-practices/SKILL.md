@@ -9,7 +9,7 @@ metadata:
 
 # Vercel React Best Practices
 
-Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 70 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
+Comprehensive performance optimization guide for React and Next.js applications, maintained by Vercel. Contains 71 rules across 8 categories, prioritized by impact to guide automated refactoring and code generation.
 
 ## When to Apply
 
@@ -83,6 +83,7 @@ Reference these guidelines when:
 - `rerender-derived-state-no-effect` - Derive state during render, not effects
 - `rerender-functional-setstate` - Use functional setState for stable callbacks
 - `rerender-lazy-state-init` - Pass function to useState for expensive values
+- `rerender-lower-context-providers` - Put context providers below lazy UI boundaries when only inactive content needs them
 - `rerender-simple-expression-in-memo` - Avoid memo for simple primitives
 - `rerender-split-combined-hooks` - Split hooks with independent dependencies
 - `rerender-move-effect-to-event` - Put interaction logic in event handlers
