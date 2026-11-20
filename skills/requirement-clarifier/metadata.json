@@ -1,0 +1,13 @@
+{
+  "version": "3.0.0",
+  "organization": "yingzhengzhang06-sys",
+  "date": "June 2026",
+  "abstract": "Three-mode triage station for ambiguous requests (growme + change + improve). A router that turns vague intent into an executable spec, a task pile into a routed execution plan, and an existing plan into an improvement checklist. Native Chinese scenarios, cross-runtime neutral (Claude Code / Codex / OpenCode / OpenClaw / Hermes). Includes a 30+ skill routing table as a public asset — installing this skill is installing a 'full skill routing map'.",
+  "references": [
+    "https://github.com/mattpocock/skills",
+    "https://github.com/obra/superpowers",
+    "https://github.com/addyosmani/agent-skills",
+    "https://github.com/garrytan/gstack",
+    "https://github.com/yingzhengzhang06-sys/requirement-clarifier"
+  ]
+}
