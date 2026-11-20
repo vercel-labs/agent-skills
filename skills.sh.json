@@ -27,6 +27,14 @@
       "skills": [
         "web-design-guidelines"
       ]
+    },
+    {
+      "title": "Productivity & Automation",
+      "description": "Skills for document automation and agent memory maintenance — Feishu/Lark document API workflows and AI agent memory optimization.",
+      "skills": [
+        "feishu-document-api",
+        "hermes-memory-maintenance"
+      ]
     }
   ]
 }
