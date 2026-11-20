@@ -1,38 +1,44 @@
 ---
-
-title: Extract Default Non-primitive Parameter Value from Memoized Component to Constant
+title: Pass Stable Non-primitive Props to Memoized Components
 impact: MEDIUM
-impactDescription: restores memoization by using a constant for default value
+impactDescription: restores memoization by avoiding new references on each render
 tags: rerender, memo, optimization
-
 ---
 
-## Extract Default Non-primitive Parameter Value from Memoized Component to Constant
+## Pass Stable Non-primitive Props to Memoized Components
 
-When memoized component has a default value for some non-primitive optional parameter, such as an array, function, or object, calling the component without that parameter results in broken memoization. This is because new value instances are created on every rerender, and they do not pass strict equality comparison in `memo()`.
+When parent components pass non-primitive props (functions, objects, arrays) as inline values to a memoized child, each render creates a new reference. `memo()` performs shallow comparison of props, so new references cause unnecessary re-renders.
 
-To address this issue, extract the default value into a constant.
+To address this, extract inline non-primitive values to stable references outside the component.
 
-**Incorrect (`onClick` has different values on every rerender):**
+**Incorrect (new function reference on every render):**
 
 ```tsx
-const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {
-  // ...
-})
-
-// Used without optional onClick
-<UserAvatar />
+function UserList() {
+  return <UserAvatar onClick={() => handleClick()} />
+}
 ```
 
-**Correct (stable default value):**
+**Correct (stable reference):**
 
 ```tsx
 const NOOP = () => {};
 
-const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {
-  // ...
-})
-
-// Used without optional onClick
-<UserAvatar />
+function UserList() {
+  return <UserAvatar onClick={NOOP} />
+}
 ```
+
+**Alternative with useCallback:**
+
+```tsx
+function UserList({ userId }: { userId: string }) {
+  const handleClick = useCallback(() => {
+    doSomething(userId)
+  }, [userId])
+
+  return <UserAvatar onClick={handleClick} />
+}
+```
+
+Default parameter values in a memoized component (e.g., `{ onClick = () => {} }`) do NOT affect memo comparison—`memo()` only compares props passed by the parent, not internal defaults. The optimization above applies to the **caller**, not the component definition.

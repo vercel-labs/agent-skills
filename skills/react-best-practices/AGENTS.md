@@ -55,9 +55,9 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 5.2 [Defer State Reads to Usage Point](#52-defer-state-reads-to-usage-point)
    - 5.3 [Do not wrap a simple expression with a primitive result type in useMemo](#53-do-not-wrap-a-simple-expression-with-a-primitive-result-type-in-usememo)
    - 5.4 [Don't Define Components Inside Components](#54-dont-define-components-inside-components)
-   - 5.5 [Extract Default Non-primitive Parameter Value from Memoized Component to Constant](#55-extract-default-non-primitive-parameter-value-from-memoized-component-to-constant)
-   - 5.6 [Extract to Memoized Components](#56-extract-to-memoized-components)
-   - 5.7 [Narrow Effect Dependencies](#57-narrow-effect-dependencies)
+   - 5.5 [Extract to Memoized Components](#55-extract-to-memoized-components)
+   - 5.6 [Narrow Effect Dependencies](#56-narrow-effect-dependencies)
+   - 5.7 [Pass Stable Non-primitive Props to Memoized Components](#57-pass-stable-non-primitive-props-to-memoized-components)
    - 5.8 [Put Interaction Logic in Event Handlers](#58-put-interaction-logic-in-event-handlers)
    - 5.9 [Split Combined Hook Computations](#59-split-combined-hook-computations)
    - 5.10 [Subscribe to Derived State](#510-subscribe-to-derived-state)
@@ -113,7 +113,7 @@ Waterfalls are the #1 performance killer. Each sequential await adds full networ
 
 When a branch uses `await` for a flag or remote value and also requires a **cheap synchronous** condition (local props, request metadata, already-loaded state), evaluate the cheap condition **first**. Otherwise you pay for the async call even when the compound condition can never be true.
 
-This is a specialization of [Defer Await Until Needed](./async-defer-await.md) for `flag && cheapCondition` style checks.
+This is a specialization of [Defer Await Until Needed](./rules/async-defer-await.md) for `flag && cheapCondition` style checks.
 
 **Incorrect:**
 
@@ -216,7 +216,7 @@ async function updateResource(resourceId: string, userId: string) {
 
 This optimization is especially valuable when the skipped branch is frequently taken, or when the deferred operation is expensive.
 
-For `await getFlag()` combined with a cheap synchronous guard (`flag && someCondition`), see [Check Cheap Conditions Before Async Flags](./async-cheap-condition-before-await.md).
+For `await getFlag()` combined with a cheap synchronous guard (`flag && someCondition`), see [Check Cheap Conditions Before Async Flags](./rules/async-cheap-condition-before-await.md).
 
 ### 1.3 Dependency-Based Parallelization
 
@@ -529,6 +529,8 @@ export default function RootLayout({ children }) {
 **Correct: loads after hydration**
 
 ```tsx
+'use client'
+
 import dynamic from 'next/dynamic'
 
 const Analytics = dynamic(
@@ -567,6 +569,8 @@ function CodePanel({ code }: { code: string }) {
 **Correct: Monaco loads on demand**
 
 ```tsx
+'use client'
+
 import dynamic from 'next/dynamic'
 
 const MonacoEditor = dynamic(
@@ -889,7 +893,7 @@ Safe exceptions:
 
 - Process-wide singletons that do not store request- or user-specific mutable data
 
-For static assets and config, see [Hoist Static I/O to Module Level](./server-hoist-static-io.md).
+For static assets and config, see [Hoist Static I/O to Module Level](./rules/server-hoist-static-io.md).
 
 ### 3.4 Cross-Request LRU Caching
 
@@ -1793,39 +1797,7 @@ function UserProfile({ user, theme }) {
 
 - Scroll position resets inside the component
 
-### 5.5 Extract Default Non-primitive Parameter Value from Memoized Component to Constant
-
-**Impact: MEDIUM (restores memoization by using a constant for default value)**
-
-When memoized component has a default value for some non-primitive optional parameter, such as an array, function, or object, calling the component without that parameter results in broken memoization. This is because new value instances are created on every rerender, and they do not pass strict equality comparison in `memo()`.
-
-To address this issue, extract the default value into a constant.
-
-**Incorrect: `onClick` has different values on every rerender**
-
-```tsx
-const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {
-  // ...
-})
-
-// Used without optional onClick
-<UserAvatar />
-```
-
-**Correct: stable default value**
-
-```tsx
-const NOOP = () => {};
-
-const UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {
-  // ...
-})
-
-// Used without optional onClick
-<UserAvatar />
-```
-
-### 5.6 Extract to Memoized Components
+### 5.5 Extract to Memoized Components
 
 **Impact: MEDIUM (enables early returns)**
 
@@ -1865,7 +1837,7 @@ function Profile({ user, loading }: Props) {
 
 **Note:** If your project has [React Compiler](https://react.dev/learn/react-compiler) enabled, manual memoization with `memo()` and `useMemo()` is not necessary. The compiler automatically optimizes re-renders.
 
-### 5.7 Narrow Effect Dependencies
+### 5.6 Narrow Effect Dependencies
 
 **Impact: LOW (minimizes effect re-runs)**
 
@@ -1905,6 +1877,46 @@ useEffect(() => {
   }
 }, [isMobile])
 ```
+
+### 5.7 Pass Stable Non-primitive Props to Memoized Components
+
+**Impact: MEDIUM (restores memoization by avoiding new references on each render)**
+
+When parent components pass non-primitive props (functions, objects, arrays) as inline values to a memoized child, each render creates a new reference. `memo()` performs shallow comparison of props, so new references cause unnecessary re-renders.
+
+To address this, extract inline non-primitive values to stable references outside the component.
+
+**Incorrect: new function reference on every render**
+
+```tsx
+function UserList() {
+  return <UserAvatar onClick={() => handleClick()} />
+}
+```
+
+**Correct: stable reference**
+
+```tsx
+const NOOP = () => {};
+
+function UserList() {
+  return <UserAvatar onClick={NOOP} />
+}
+```
+
+**Alternative with useCallback:**
+
+```tsx
+function UserList({ userId }: { userId: string }) {
+  const handleClick = useCallback(() => {
+    doSomething(userId)
+  }, [userId])
+
+  return <UserAvatar onClick={handleClick} />
+}
+```
+
+Default parameter values in a memoized component (e.g., `{ onClick = () => {} }`) do NOT affect memo comparison—`memo()` only compares props passed by the parent, not internal defaults. The optimization above applies to the **caller**, not the component definition.
 
 ### 5.8 Put Interaction Logic in Event Handlers
 

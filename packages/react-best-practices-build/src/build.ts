@@ -27,6 +27,14 @@ function incrementVersion(version: string): string {
 }
 
 /**
+ * Fix relative markdown links: rule files use paths relative to rules/ directory,
+ * but AGENTS.md is one level up, so prepend rules/ to relative markdown links
+ */
+function fixRelativeLinks(text: string): string {
+  return text.replace(/\]\(\.\/(?!rules\/)/g, '](./rules/')
+}
+
+/**
  * Generate markdown from rules
  */
 function generateMarkdown(
@@ -89,7 +97,7 @@ function generateMarkdown(
       md += `**Impact: ${rule.impact}${
         rule.impactDescription ? ` (${rule.impactDescription})` : ''
       }**\n\n`
-      md += `${rule.explanation}\n\n`
+      md += `${fixRelativeLinks(rule.explanation)}\n\n`
 
       rule.examples.forEach((example) => {
         if (example.description) {
@@ -104,7 +112,7 @@ function generateMarkdown(
           md += `\`\`\`\n\n`
         }
         if (example.additionalText) {
-          md += `${example.additionalText}\n\n`
+          md += `${fixRelativeLinks(example.additionalText)}\n\n`
         }
       })
 
