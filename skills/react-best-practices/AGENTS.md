@@ -427,7 +427,7 @@ Both components share the same promise, so only one fetch occurs. Layout renders
 
 **Impact: CRITICAL**
 
-Reducing initial bundle size improves Time to Interactive and Largest Contentful Paint.
+Reducing initial bundle size improves Largest Contentful Paint and Interaction to Next Paint.
 
 ### 2.1 Avoid Barrel File Imports
 
@@ -550,7 +550,7 @@ export default function RootLayout({ children }) {
 
 ### 2.4 Dynamic Imports for Heavy Components
 
-**Impact: CRITICAL (directly affects TTI and LCP)**
+**Impact: CRITICAL (directly affects LCP and INP)**
 
 Use `next/dynamic` to lazy-load large components not needed on initial render.
 
@@ -2607,7 +2607,7 @@ Avoids expensive re-renders and state loss.
 
 **Impact: HIGH (eliminates render-blocking)**
 
-Script tags without `defer` or `async` block HTML parsing while the script downloads and executes. This delays First Contentful Paint and Time to Interactive.
+Script tags without `defer` or `async` block HTML parsing while the script downloads and executes. This delays First Contentful Paint and Largest Contentful Paint.
 
 - **`defer`**: Downloads in parallel, executes after HTML parsing completes, maintains execution order
 
