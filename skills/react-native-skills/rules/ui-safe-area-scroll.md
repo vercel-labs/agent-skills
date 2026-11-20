@@ -9,6 +9,8 @@ tags: safe-area, scrollview, layout
 
 Use `contentInsetAdjustmentBehavior="automatic"` on the root ScrollView instead of wrapping content in SafeAreaView or manual padding. This lets iOS handle safe area insets natively with proper scroll behavior.
 
+> **Platform note:** `contentInsetAdjustmentBehavior` is an iOS-only prop. On Android, it is silently ignored.
+
 **Incorrect (SafeAreaView wrapper):**
 
 ```tsx
@@ -63,3 +65,31 @@ function MyScreen() {
 ```
 
 The native approach handles dynamic safe areas (keyboard, toolbars) and allows content to scroll behind the status bar naturally.
+
+### Cross-platform alternative
+
+For cross-platform projects, combine `contentInsetAdjustmentBehavior` on iOS with `react-native-safe-area-context` padding on Android:
+
+```tsx
+import { Platform, ScrollView, View, Text } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+function MyScreen() {
+  const insets = useSafeAreaInsets()
+
+  return (
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      contentContainerStyle={Platform.select({
+        android: { paddingTop: insets.top },
+      })}
+    >
+      <View>
+        <Text>Content</Text>
+      </View>
+    </ScrollView>
+  )
+}
+```
+
+On iOS, `contentInsetAdjustmentBehavior` handles safe areas natively. On Android, the `contentContainerStyle` padding provides equivalent spacing.
