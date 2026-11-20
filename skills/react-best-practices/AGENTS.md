@@ -47,9 +47,10 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 3.10 [Use after() for Non-Blocking Operations](#310-use-after-for-non-blocking-operations)
 4. [Client-Side Data Fetching](#4-client-side-data-fetching) — **MEDIUM-HIGH**
    - 4.1 [Deduplicate Global Event Listeners](#41-deduplicate-global-event-listeners)
-   - 4.2 [Use Passive Event Listeners for Scrolling Performance](#42-use-passive-event-listeners-for-scrolling-performance)
-   - 4.3 [Use SWR for Automatic Deduplication](#43-use-swr-for-automatic-deduplication)
-   - 4.4 [Version and Minimize localStorage Data](#44-version-and-minimize-localstorage-data)
+   - 4.2 [Revoke Blob URLs After Download](#42-revoke-blob-urls-after-download)
+   - 4.3 [Use Passive Event Listeners for Scrolling Performance](#43-use-passive-event-listeners-for-scrolling-performance)
+   - 4.4 [Use SWR for Automatic Deduplication](#44-use-swr-for-automatic-deduplication)
+   - 4.5 [Version and Minimize localStorage Data](#45-version-and-minimize-localstorage-data)
 5. [Re-render Optimization](#5-re-render-optimization) — **MEDIUM**
    - 5.1 [Calculate Derived State During Rendering](#51-calculate-derived-state-during-rendering)
    - 5.2 [Defer State Reads to Usage Point](#52-defer-state-reads-to-usage-point)
@@ -1439,7 +1440,46 @@ function Profile() {
 }
 ```
 
-### 4.2 Use Passive Event Listeners for Scrolling Performance
+### 4.2 Revoke Blob URLs After Download
+
+**Impact: MEDIUM (prevents Blob data from being retained in memory)**
+
+Every `URL.createObjectURL()` call keeps its backing `Blob` alive until the document unloads or `URL.revokeObjectURL()` is called. Revoke one-off download URLs after triggering the download, especially when users can download large or repeated files.
+
+**Incorrect: Blob URL is never released**
+
+```typescript
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.click()
+}
+```
+
+**Correct: release the URL after the browser handles the click**
+
+```typescript
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+
+  try {
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    link.click()
+  } finally {
+    setTimeout(() => URL.revokeObjectURL(url), 0)
+  }
+}
+```
+
+The deferred cleanup lets the browser consume the click before invalidating the URL. For Blob URLs used by images, previews, or other longer-lived consumers, revoke the previous URL when it is replaced or the consumer unmounts instead of immediately after creation.
+
+Reference: [https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL_static](https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL_static)
+
+### 4.3 Use Passive Event Listeners for Scrolling Performance
 
 **Impact: MEDIUM (eliminates scroll delay caused by event listeners)**
 
@@ -1483,7 +1523,7 @@ useEffect(() => {
 
 **Don't use passive when:** implementing custom swipe gestures, custom zoom controls, or any listener that needs `preventDefault()`.
 
-### 4.3 Use SWR for Automatic Deduplication
+### 4.4 Use SWR for Automatic Deduplication
 
 **Impact: MEDIUM-HIGH (automatic deduplication)**
 
@@ -1535,7 +1575,7 @@ function UpdateButton() {
 
 Reference: [https://swr.vercel.app](https://swr.vercel.app)
 
-### 4.4 Version and Minimize localStorage Data
+### 4.5 Version and Minimize localStorage Data
 
 **Impact: MEDIUM (prevents schema conflicts, reduces storage size)**
 
