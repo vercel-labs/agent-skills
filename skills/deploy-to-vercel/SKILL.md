@@ -70,12 +70,13 @@ This is the ideal state. The project is linked and has git integration.
    ```
    Vercel automatically builds from the push. Non-production branches get preview deployments; the production branch (usually `main`) gets a production deployment.
 
-3. **Retrieve the preview URL.** If the CLI is authenticated:
+3. **Retrieve the preview URL.** If the CLI is authenticated, find the deployment of the commit you pushed:
    ```bash
-   sleep 5
-   vercel ls --format json
+   vercel ls <project-name> --meta githubCommitSha=$(git rev-parse HEAD) --format json
    ```
-   The JSON output has a `deployments` array. Find the latest entry — its `url` field is the preview URL.
+   The preview URL is `.deployments[0].url`. For GitLab or Bitbucket remotes, filter on `gitlabCommitSha` or `bitbucketCommitSha` instead. The deployment can take a few seconds to appear after the push; if `deployments` is empty, run the command again. Pass the project name so a monorepo returns this project's deployment, not a sibling project's built from the same commit.
+
+   To wait for the build to finish, run `vercel inspect <url> --wait --timeout 20m` (see below).
 
    If the CLI is not authenticated, tell the user to check the Vercel dashboard or the commit status checks on their git provider for the preview URL.
 
@@ -94,6 +95,14 @@ Use `--no-wait` so the CLI returns immediately with the deployment URL instead o
 ```bash
 vercel inspect <deployment-url>
 ```
+
+To wait for the build to finish, make one blocking call instead of polling with `sleep` and repeated `vercel inspect`:
+
+```bash
+vercel inspect <deployment-url> --wait --timeout 20m
+```
+
+It returns when the build finishes and exits non-zero if the deployment fails, is canceled, or the timeout is reached first. The default timeout is 3m, too short for most real builds, so pass a longer one. If it fails, read the build logs with `vercel inspect <deployment-url> --logs`.
 
 For production deploys (only if user explicitly asks):
 ```bash
@@ -128,7 +137,7 @@ The CLI is working but the project isn't linked yet. This is the opportunity to 
 
 4. **Then deploy using the best available method:**
    - If a git remote exists → commit and push (see git push method above)
-   - If no git remote → `vercel deploy [path] -y --no-wait --scope <team-slug>`, then `vercel inspect <url>` to check status
+   - If no git remote → `vercel deploy [path] -y --no-wait --scope <team-slug>`, then `vercel inspect <url>` to check status (`--wait --timeout 20m` to wait for the build)
 
 ---
 
@@ -155,7 +164,7 @@ The Vercel CLI isn't set up at all.
    vercel link --scope <team-slug>          # if no git remote
    ```
 
-5. **Deploy** using the best available method (git push if remote exists, otherwise `vercel deploy -y --no-wait --scope <team-slug>`, then `vercel inspect <url>` to check status).
+5. **Deploy** using the best available method (git push if remote exists, otherwise `vercel deploy -y --no-wait --scope <team-slug>`, then `vercel inspect <url>` to check status, with `--wait --timeout 20m` to wait for the build).
 
 ---
 
@@ -193,8 +202,8 @@ Check whether the CLI is logged in with `vercel whoami`. If it is, follow Step 2
 
 Always show the user the deployment URL.
 
-- **Git push:** Use `vercel ls --format json` to find the preview URL. If the CLI isn't authenticated, tell the user to check the Vercel dashboard or commit status checks.
-- **CLI deploy:** Show the URL returned by `vercel deploy --no-wait`. Use `vercel inspect <url>` to check build status and report it to the user.
+- **Git push:** Use `vercel ls <project-name> --meta githubCommitSha=$(git rev-parse HEAD) --format json` to find the preview URL. If the CLI isn't authenticated, tell the user to check the Vercel dashboard or commit status checks.
+- **CLI deploy:** Show the URL returned by `vercel deploy --no-wait`. Use `vercel inspect <url>` to check build status, or `vercel inspect <url> --wait --timeout 20m` to wait for it, and report it to the user.
 - **No-auth fallback:** Show the deployment URL, the claim URL, and the expiry the CLI printed.
 
 **Do not** curl or fetch the deployed URL to verify it works. Just return the link.

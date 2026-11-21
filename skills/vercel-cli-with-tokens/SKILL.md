@@ -133,6 +133,14 @@ Check status:
 vercel inspect <deployment-url>
 ```
 
+Wait for the build to finish with one blocking call instead of polling with `sleep` and repeated `vercel inspect`:
+
+```bash
+vercel inspect <deployment-url> --wait --timeout 20m
+```
+
+It returns when the build finishes and exits non-zero if the deployment fails, is canceled, or the timeout is reached first. The default timeout is 3m, too short for most real builds, so pass a longer one. If it fails, read the build logs with `vercel inspect <deployment-url> --logs`.
+
 ### Full Deploy Flow (no project ID — need to link)
 
 Use this when you have a token and team but no pre-existing project ID.
@@ -187,12 +195,12 @@ Git pushes trigger automatic Vercel deployments.
    git push
    ```
 3. Vercel builds automatically. Non-production branches get preview deployments.
-4. Retrieve the deployment URL:
+4. Retrieve the deployment URL of the commit you pushed:
    ```bash
-   sleep 5
-   vercel ls --format json --scope <team-slug>
+   vercel ls <project-name> --meta githubCommitSha=$(git rev-parse HEAD) --format json --scope <team-slug>
    ```
-   Find the latest entry in the `deployments` array.
+   The URL is `.deployments[0].url`. For GitLab or Bitbucket remotes, filter on `gitlabCommitSha` or `bitbucketCommitSha` instead. The deployment can take a few seconds to appear after the push; if `deployments` is empty, run the command again.
+5. To wait for the build to finish, run `vercel inspect <deployment-url> --wait --timeout 20m` (see Quick Deploy above).
 
 **B) CLI Deploy — no git remote**
 
@@ -200,10 +208,11 @@ Git pushes trigger automatic Vercel deployments.
 vercel deploy --scope <team-slug> -y --no-wait
 ```
 
-Check status:
+Check status, or wait for the build to finish:
 
 ```bash
 vercel inspect <deployment-url>
+vercel inspect <deployment-url> --wait --timeout 20m
 ```
 
 ### Deploying from a Remote Repository (code not cloned locally)
@@ -256,6 +265,9 @@ vercel ls --format json --scope <team-slug>
 
 # Inspect a specific deployment
 vercel inspect <deployment-url>
+
+# Block until the build finishes (exits non-zero on failure or timeout; default timeout 3m)
+vercel inspect <deployment-url> --wait --timeout 20m
 
 # View build logs (requires Vercel CLI v35+)
 vercel inspect <deployment-url> --logs
