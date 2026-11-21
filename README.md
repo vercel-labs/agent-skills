@@ -168,6 +168,29 @@ Deploy applications and websites to Vercel. Prefers git-push deploys on a linked
 - "Deploy and give me the link"
 - "Create a preview deployment"
 
+### nosto
+
+Frontend integration guide for [Nosto](https://www.nosto.com/), the e-commerce personalization platform. Covers the `nostojs` global, the `@nosto/nosto-js` npm package, and `@nosto/nosto-react`.
+
+**Use when:**
+- Implementing or debugging Nosto on a storefront
+- Migrating from Page Tagging to the Session API (SPA / headless)
+- Sending Nosto events (`viewProduct`, `viewCategory`, `viewCart`, `viewSearch`, `addOrder`)
+- Rendering recommendation placements and wiring add-to-cart attribution
+- Integrating Nosto into a React / Next.js app with `@nosto/nosto-react`
+- Gating Nosto behind GDPR / cookie consent
+
+**Topics covered:**
+- Initialization (`init`, the legacy stub, custom script loaders, Shopify Markets)
+- Session API chain (`defaultSession().viewX(...).setPlacements([...]).load()`)
+- Order tracking and conversion attribution
+- Recommendation placements, dynamic filtering, `prerender` / `postrender` callbacks
+- Customer identification (with PII / `customer_reference` rules)
+- Nosto Search GraphQL
+- Common gotchas: mixing Page Tagging with Session API, double-tracking, empty placements, SSR limitations
+
+**Sources:** [docs.nosto.com/techdocs](https://docs.nosto.com/techdocs), [nosto-js typedoc](https://nosto.github.io/nosto-js/modules.html).
+
 ## Installation
 
 ```bash
