@@ -134,8 +134,13 @@ function buildPackageLookup(p) {
   const exact = new Map();
   const wildcards = [];
   const exports = p.pkg.exports;
-  if (exports && typeof exports === 'object' && !Array.isArray(exports)) {
-    for (const [key, value] of Object.entries(exports)) {
+  if (exports) {
+    // Root exports can be a string, fallback array, or conditional object
+    // without a surrounding { '.': ... } subpath map.
+    const isSubpathMap = typeof exports === 'object' && !Array.isArray(exports)
+      && Object.keys(exports).some((key) => key.startsWith('.'));
+    const entries = isSubpathMap ? Object.entries(exports) : [['.', exports]];
+    for (const [key, value] of entries) {
       const target = pickConditionalTarget(value);
       if (typeof target !== 'string') continue;
       if (key.includes('*')) {
