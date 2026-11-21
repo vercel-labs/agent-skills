@@ -1,0 +1,22 @@
+{
+  "name": "agent-skills",
+  "owner": {
+    "name": "Vercel",
+    "url": "https://vercel.com"
+  },
+  "metadata": {
+    "description": "Vercel's official collection of agent skills"
+  },
+  "plugins": [
+    {
+      "name": "agent-skills",
+      "source": "./",
+      "description": "Vercel's official collection of agent skills for deploying, optimizing, and building on Vercel with React and Next.js best practices.",
+      "author": {
+        "name": "Vercel",
+        "url": "https://vercel.com"
+      },
+      "category": "development"
+    }
+  ]
+}

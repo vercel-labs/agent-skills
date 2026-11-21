@@ -1,0 +1,23 @@
+{
+  "name": "agent-skills",
+  "version": "1.0.0",
+  "description": "Vercel's official collection of agent skills for deploying, optimizing, and building on Vercel with React and Next.js best practices.",
+  "author": {
+    "name": "Vercel",
+    "url": "https://vercel.com"
+  },
+  "homepage": "https://skills.sh/vercel-labs/agent-skills",
+  "repository": "https://github.com/vercel-labs/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "vercel",
+    "agent-skills",
+    "react",
+    "nextjs",
+    "deploy"
+  ],
+  "skills": "./skills/",
+  "icon": "./.codex-plugin/logo.png",
+  "privacyPolicyUrl": "https://vercel.com/legal/privacy-notice",
+  "termsOfServiceUrl": "https://vercel.com/legal/terms"
+}

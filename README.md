@@ -174,6 +174,28 @@ Deploy applications and websites to Vercel. Prefers git-push deploys on a linked
 npx skills add vercel-labs/agent-skills
 ```
 
+## Install as an agent plugin
+
+This repo ships an agent-agnostic marketplace at [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json) that exposes the existing `skills/` directory (no copies).
+
+**Generic:** clone the repo (or point your agent at `vercel-labs/agent-skills`), add the marketplace, then install `agent-skills`.
+
+**Codex:**
+
+```bash
+codex plugin marketplace add vercel-labs/agent-skills
+codex plugin add agent-skills@agent-skills
+```
+
+**Claude Code:**
+
+```bash
+/plugin marketplace add vercel-labs/agent-skills
+/plugin install agent-skills@agent-skills
+```
+
+Local checkout: `codex plugin marketplace add /path/to/agent-skills`.
+
 ## Usage
 
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
