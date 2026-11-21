@@ -113,7 +113,7 @@ Waterfalls are the #1 performance killer. Each sequential await adds full networ
 
 When a branch uses `await` for a flag or remote value and also requires a **cheap synchronous** condition (local props, request metadata, already-loaded state), evaluate the cheap condition **first**. Otherwise you pay for the async call even when the compound condition can never be true.
 
-This is a specialization of [Defer Await Until Needed](./async-defer-await.md) for `flag && cheapCondition` style checks.
+This is a specialization of [Defer Await Until Needed](./rules/async-defer-await.md) for `flag && cheapCondition` style checks.
 
 **Incorrect:**
 
@@ -216,7 +216,7 @@ async function updateResource(resourceId: string, userId: string) {
 
 This optimization is especially valuable when the skipped branch is frequently taken, or when the deferred operation is expensive.
 
-For `await getFlag()` combined with a cheap synchronous guard (`flag && someCondition`), see [Check Cheap Conditions Before Async Flags](./async-cheap-condition-before-await.md).
+For `await getFlag()` combined with a cheap synchronous guard (`flag && someCondition`), see [Check Cheap Conditions Before Async Flags](./rules/async-cheap-condition-before-await.md).
 
 ### 1.3 Dependency-Based Parallelization
 
@@ -889,7 +889,7 @@ Safe exceptions:
 
 - Process-wide singletons that do not store request- or user-specific mutable data
 
-For static assets and config, see [Hoist Static I/O to Module Level](./server-hoist-static-io.md).
+For static assets and config, see [Hoist Static I/O to Module Level](./rules/server-hoist-static-io.md).
 
 ### 3.4 Cross-Request LRU Caching
 
