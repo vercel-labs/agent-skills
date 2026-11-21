@@ -3,6 +3,7 @@
 // usage + codebase stack + metric queries. Status → stderr, JSON → stdout.
 // Degrades gracefully when capabilities are missing.
 
+import { collectBuildSignals, redactProjectSecrets } from '../lib/build-signals.mjs';
 import {
   checkCliVersion,
   checkAuth,
@@ -24,7 +25,7 @@ import {
 import { classifyFrameworkSupport } from '../lib/framework-support.mjs';
 import { QUERIES, TIME_WINDOW, normalizerFor } from '../lib/queries.mjs';
 
-const SCHEMA_VERSION = '1.2';
+const SCHEMA_VERSION = '1.3';
 
 const log = (...args) => console.error('[collect-signals]', ...args);
 
@@ -131,7 +132,8 @@ async function main() {
   log(`command scope resolved (source=${commandScope.source}; scoped=${scope ? 'yes' : 'no'})`);
 
   log('validating linked project belongs to the resolved scope…');
-  const projectCfg = await getProjectConfig(project.projectId, project.orgId);
+  // Deploy Hook ids and URLs are secrets: anyone holding one can trigger builds. Keep only names and refs.
+  const projectCfg = redactProjectSecrets(await getProjectConfig(project.projectId, project.orgId));
   const projectScope = validateProjectScope(projectCfg, project);
   if (!projectScope.ok) {
     throw new Error(`PROJECT_SCOPE_MISMATCH: ${projectScope.detail} Ask the user to confirm the exact Vercel project and team/personal scope, then rerun after \`vercel link --yes --project <project-name-or-id> --team <team-slug>\` or after setting both VERCEL_PROJECT_ID and VERCEL_ORG_ID for the intended scope.`);
@@ -236,12 +238,17 @@ async function main() {
     log('continuing after Observability Plus blocker because --continue-without-observability was set');
   }
 
-  log('pulling account plan + contract + usage in parallel…');
-  const [accountPlan, contract, usageResult] = await Promise.all([
+  log('pulling account plan + contract + usage + builds in parallel…');
+  const [accountPlan, contract, usageResult, builds] = await Promise.all([
     getAccountPlan(project.orgId || scope),
     getContract(scope),
     getUsage({ days: 14, scope }),
+    collectBuildSignals({ projectId: project.projectId, orgId: project.orgId })
+      .catch((err) => ({ ok: false, code: 'BUILD_SIGNALS_FAILED', detail: String(err?.message ?? err) })),
   ]);
+  log(builds?.ok
+    ? `builds: ${builds.builtCount} built deployments in ${builds.windowDays}d; billing detail for ${builds.detailedCount}${builds.listTruncated ? ' (list truncated)' : ''}`
+    : `builds: unavailable (${builds?.code ?? 'unknown'}) — build gates will skip`);
 
   let usage = null;
   let usageContextMismatch = false;
@@ -338,6 +345,7 @@ async function main() {
     usageError: usageResult?.ok
       ? (usageContextMismatch ? 'USAGE_CONTEXT_MISMATCH' : null)
       : (usageResult?.code ?? 'UNKNOWN'),
+    builds,
     stack,
     metrics,
     metricsSchema: schema,

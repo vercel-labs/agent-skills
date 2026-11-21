@@ -13,6 +13,7 @@ const KIND_LABELS = new Map([
   ['cwv_poor', 'Poor Core Web Vitals'],
   ['platform_fluid_compute', 'Fluid Compute usage'],
   ['platform_bot_protection', 'Bot traffic'],
+  ['build_machine_oversized', 'Oversized build machine'],
   ['rendering_candidate', 'Rendering opportunity'],
   ['missing_cache_headers', 'Missing cache headers'],
   ['max_age_without_s_maxage', 'Browser-only cache header'],

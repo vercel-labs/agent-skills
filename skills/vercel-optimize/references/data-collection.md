@@ -20,7 +20,7 @@ The merged `signals.json` has this top-level shape:
 
 ```json
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.3",
   "collectedAt": "2026-05-12T20:48:44.123Z",
   "timeWindow": "14d",
   "projectId": "prj_xxx",
@@ -49,9 +49,10 @@ The merged `signals.json` has this top-level shape:
   "observabilityPlusBlocker": null | "no_oplus_probe" | "project_disabled" | "payment_required" | "forbidden" | "daily_quota_exceeded" | "project_not_found" | "not_linked" | "all_failed_other" | "no_traffic",
   "observabilityPlusBlockerDetail": "...",
   "plan": { "plan": "hobby" | "pro" | "enterprise" | "uncertain", "reason": "..." },
-  "project": { /* /v9/projects/:id response; team-owned projects include ?teamId */ },
+  "project": { /* /v9/projects/:id response; team-owned projects include ?teamId. link.deployHooks[] is reduced to {name, ref, createdAt}: hook ids and URLs are secrets */ },
   "contract": { "context": "...", "commitments": [], "totalCommitments": 0 },
   "usage": { /* vercel usage --format json --breakdown daily, or null */ },
+  "builds": { "ok": true, "windowDays": 14, "listedCount": 0, "builtCount": 0, "detailedCount": 0, "detailFailures": 0, "listTruncated": false, "deployments": [ /* {id, createdAt, state, target, source, branch, timeForBillingMs, cpuTimeForBillingMs, buildMachine, buildCores, buildMemoryMb, machineSelection, buildSkipped, triggeredByDeployHook} */ ] } | { "ok": false, "code": "..." },
   "usageError": null | "USAGE_UNAVAILABLE" | "USAGE_CONTEXT_MISMATCH" | "NOT_COLLECTED_OBSERVABILITY_BLOCKED" | "NOT_COLLECTED_UNSUPPORTED_FRAMEWORK" | "EXIT_<n>" | "UNKNOWN",
   "stack": { /* framework + version + router + ORM + monorepo */ },
   "codebase": { /* scan-codebase output: stack + routes + findings */ },
@@ -76,6 +77,7 @@ Downstream consumers reference `signals.<field>` paths verbatim. Bumping `schema
 | Framework support | local `package.json` via `detectStack()` + `classifyFrameworkSupport()` | Code-backed route recommendations | Stop before metric fan-out on unsupported frameworks unless the user chooses `--continue-unsupported-framework` |
 | CLI command scope | `vercel whoami --format json`, then `vercel api /v2/teams/:orgId` when a linked `team_...` ID must be converted to a slug | Keeps `vercel metrics`, `vercel usage`, and `vercel contract` on the linked project's account instead of the user's current/personal scope | `PROJECT_SCOPE_UNRESOLVED` or `SCOPE_UNRESOLVED`; stop and ask the user to clarify the intended project/account, then re-link under the intended team or personal account |
 | Project/scope verification | `vercel api /v9/projects/:id?teamId=<orgId>` for team-owned projects; omit `teamId` for `usr_...` user-owned projects | Proves the resolved account can read the resolved project before Observability Plus or billing conclusions | `PROJECT_SCOPE_MISMATCH`; stop and ask the user to confirm the exact project and team/personal scope. Do not report Observability Plus as missing until this check passes |
+| Build deployments | `vercel api /v7/deployments?projectId=<id>&since=<14d>&limit=100` (up to 5 pages), then `vercel api /v13/deployments/:id` for at most 40 most recent READY/ERROR deployments (`duration.timeForBilling`, `duration.cpuTimeForBilling`, `resourceConfig.buildMachine.{purchaseType,cores,memory,machineSelectionType}`, `buildSkipped`, presence of `meta.deployHookName`). `source` is `git` for both pushes and Deploy Hook builds, so the hook name is the marker. `meta.deployHookId` is the secret end of the hook URL and is never read or stored. Team-owned projects add `teamId`. Needs no Observability Plus. | `build_machine_oversized` | `builds.ok=false` with the CLI error code; build gates emit no candidates |
 | Observability Plus configuration | Vercel CLI/API probe plus one metric access check; user-owned projects skip the team configuration endpoint and rely on the scoped metrics probe | All `metrics.*` signals | Stop early when the account lacks Observability Plus or this project is disabled |
 | Observability Plus metrics access | One canary `vercel metrics vercel.request.count --since 14d --limit 1`, then full fan-out only if it succeeds | All `metrics.*` signals | Set `observabilityPlusUsable=false` with blocker detail; emit a blocker document after project/scope verification but before billing collection unless `--continue-without-observability` is passed |
 | Project config | Verified project API response from project/scope verification | Fluid Compute, BotID, Speed Insights, security flags | Stop on ownership mismatch; otherwise gates that need missing optional fields skip |

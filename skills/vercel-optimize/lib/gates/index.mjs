@@ -12,6 +12,7 @@ import * as scannerDriven from './scanner-driven.mjs';
 import * as observabilityEventsAttribution from './observability-events-attribution.mjs';
 import * as usageSpikeTriage from './usage-spike-triage.mjs';
 import * as buildMinutesFanout from './build-minutes-fanout.mjs';
+import * as buildMachineOversized from './build-machine-oversized.mjs';
 import * as regionMisconfig from './region-misconfig.mjs';
 
 // Intentionally NOT registered:
@@ -33,6 +34,7 @@ export const gates = [
   observabilityEventsAttribution,
   usageSpikeTriage,
   buildMinutesFanout,
+  buildMachineOversized,
   regionMisconfig,
 ];
 
@@ -42,4 +44,4 @@ export const DEFAULT_MAX_CODE_CANDIDATES = 6;
 export const MAX_CODE_CANDIDATES = DEFAULT_MAX_CODE_CANDIDATES;
 
 // Bump on any threshold change so report + iteration baselines can detect gate-logic drift.
-export const GATE_VERSION = '1.8.0';
+export const GATE_VERSION = '1.9.0';

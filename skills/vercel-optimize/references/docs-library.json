@@ -152,7 +152,19 @@
     {
       "url": "https://vercel.com/docs/builds",
       "topic": "Builds — build infrastructure, monorepo build controls, concurrency, and queues",
-      "appliesTo": ["build_minutes_fanout"],
+      "appliesTo": ["build_minutes_fanout", "build_machine_oversized"],
+      "applicableFrameworks": ["*"]
+    },
+    {
+      "url": "https://vercel.com/docs/builds/managing-builds",
+      "topic": "Managing builds — build machine types, Elastic sizing, on-demand concurrent builds",
+      "appliesTo": ["build_machine_oversized"],
+      "applicableFrameworks": ["*"]
+    },
+    {
+      "url": "https://vercel.com/docs/pricing#builds",
+      "topic": "Build pricing — Build CPU Minutes as billed duration times vCPUs",
+      "appliesTo": ["build_machine_oversized"],
       "applicableFrameworks": ["*"]
     },
     {

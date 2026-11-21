@@ -286,6 +286,11 @@ export const SPEC_GENERATORS = {
     return [];
   },
 
+  build_machine_oversized(_c) {
+    // Project config + sampled deployment billing durations carry the evidence; no per-candidate query.
+    return [];
+  },
+
   region_misconfig(_c) {
     // Branch 2 (scanner-only) — per-region TTFB metric unavailable today, so no deep-dive query.
     return [];

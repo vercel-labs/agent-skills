@@ -327,6 +327,7 @@ function candidateFamily(kind) {
     case 'middleware_heavy':
       return 'middleware';
     case 'build_minutes_fanout':
+    case 'build_machine_oversized':
       return 'build';
     default:
       return kind || null;

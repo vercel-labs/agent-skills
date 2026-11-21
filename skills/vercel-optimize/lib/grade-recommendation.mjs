@@ -1,10 +1,11 @@
 // 4-axis rubric (specificity, actionability, grounding, evidence) → bucket. See references/recommendations.md.
-// Account-scope (platform_*) recs use a separate grounding/evidence pair — they structurally cannot produce file:line.
+// Account-scope recs (platform_* kinds, scope: 'account', or an `<account>` candidateRef) use a separate
+// grounding/evidence pair — they structurally cannot produce file:line.
 
 const HEDGE_WORDS = /\b(consider|might|may|could|perhaps|maybe|likely|probably)\b/gi;
 const VERB_OPENERS = /^\s*(?:[-*]\s+|\d+[.)]\s+|[*_]+)?(?:add|set|enable|disable|replace|remove|move|wrap|cache|defer|parallelize|introduce|configure|update|change|switch|opt[-\s]?in|opt[-\s]?out|export|import|install|run|delete|rename)/im;
-const COUNT_WORDS_RE = /\b(errors?|queries|invocations|requests|reads|writes|bytes|fetch(?:es)?|calls?|hits?|misses?|seconds?|images?|deployments?|cold[- ]?starts?|users?)\b/gi;
-const UNIT_RE = /\b\d[\d.,]*\s*(?:%|ms|s|sec|seconds?|min|minutes?|h|hours?|GB|MB|KB|K|M|B|rps|qps|req\/s|reqs?\/min)\b/gi;
+const COUNT_WORDS_RE = /\b(errors?|queries|invocations|requests|reads|writes|bytes|fetch(?:es)?|calls?|hits?|misses?|seconds?|images?|deployments?|builds?|cold[- ]?starts?|users?)\b/gi;
+const UNIT_RE = /\b\d[\d.,]*\s*(?:%|ms|s|sec|seconds?|min|minutes?|(?:billed|CPU)\s+minutes?|vCPUs?|h|hours?|GB|MB|KB|K|M|B|rps|qps|req\/s|reqs?\/min)\b/gi;
 const CODE_FENCE_RE = /```[\s\S]*?```/g;
 const INLINE_CODE_RE = /`[^`\n]{10,}`/g;
 const FILE_LINE_RE = /[\w/.\-()\[\]]+\.\w+:\d+/g;
@@ -13,7 +14,18 @@ const FILE_LINE_RE = /[\w/.\-()\[\]]+\.\w+:\d+/g;
 const W = { grounding: 0.35, evidence: 0.30, specificity: 0.20, actionability: 0.15 };
 
 export function gradeRecommendation(rec, ctx = {}) {
-  const accountScope = isAccountScope(rec);
+  if (isAccountScope(rec)) return gradeAs(rec, ctx, true);
+  // Gate candidates without a route carry the `<account>` sentinel (investigation-brief.mjs). Some, like
+  // build_minutes_fanout, also cite scanner file:line evidence, so grade both ways and keep the stronger.
+  if (hasAccountSentinel(rec)) {
+    const asRoute = gradeAs(rec, ctx, false);
+    const asAccount = gradeAs(rec, ctx, true);
+    return asAccount.overall > asRoute.overall ? asAccount : asRoute;
+  }
+  return gradeAs(rec, ctx, false);
+}
+
+function gradeAs(rec, ctx, accountScope) {
   const specificity = scoreSpecificity(rec);
   const actionability = scoreActionability(rec);
   const grounding = accountScope ? scoreGroundingAccount(rec) : scoreGrounding(rec, ctx);
@@ -34,6 +46,10 @@ function isAccountScope(rec) {
   const ref = rec?.candidateRef;
   if (typeof ref === 'string' && ref.startsWith('platform_')) return true;
   return false;
+}
+
+function hasAccountSentinel(rec) {
+  return typeof rec?.candidateRef === 'string' && rec.candidateRef.endsWith(':<account>');
 }
 
 function grade(overall) {
@@ -108,7 +124,7 @@ function scoreEvidence(rec) {
 // No findingRefs/code fences possible — grade structural tie to gate + signal-quoting.
 function scoreGroundingAccount(rec) {
   let s = 0;
-  if (typeof rec.candidateRef === 'string' && rec.candidateRef.startsWith('platform_')) s += 0.4;
+  if (typeof rec.candidateRef === 'string' && (rec.candidateRef.startsWith('platform_') || hasAccountSentinel(rec))) s += 0.4;
   else if (typeof rec.candidateRef === 'string' && rec.candidateRef.length > 0) s += 0.2;
   // Quoting deep-dive data in why/fix is the account-scope equivalent of citing file:line.
   const text = [rec.why, rec.fix, rec.verify].filter((x) => typeof x === 'string').join('\n');

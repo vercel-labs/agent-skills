@@ -6,9 +6,20 @@
 
 The deterministic threshold expressions that turn observability signals into investigation candidates. Pure JS, no LLM. Thresholds live in `lib/gates/*.mjs`.
 
-Total gates: 15. Budget cap: `MAX_CODE_CANDIDATES = 6`. Gate version: `1.8.0`.
+Total gates: 16. Budget cap: `MAX_CODE_CANDIDATES = 6`. Gate version: `1.9.0`.
 
 ## Gates
+
+### `build_machine_oversized`
+
+- **Threshold**: `fixed build machine is enhanced or turbo AND >= 5 successful billed builds sampled AND estimated window CPU minutes >= 300 AND no memory-related Elastic resize reason`
+- **Billing dimension**: build
+- **Scope**: account
+- **Source citation**: `vercel-optimize gate threshold`
+
+Project is pinned to a larger build machine. Build CPU Minutes are billed duration times vCPUs, so the recommended fix is Elastic, which sizes each build. The gate reports the break-even billed duration on the next smaller machine as context.
+
+---
 
 ### `build_minutes_fanout`
 

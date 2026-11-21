@@ -19,6 +19,8 @@ This is a data dependency, not an upgrade pitch. The skill ranks work by observe
 
 Scanner-only mode can still catch traffic-independent code issues, but it cannot rank the hottest routes or prove cost impact. Make that tradeoff explicit before continuing.
 
+Build gates (`build_minutes_fanout`, `build_machine_oversized`) are not in this table: they use project config, deployments, billing, and build logs. For a build-focused request, skip this template and use the build-focused template in SKILL.md instead.
+
 ## User Template
 
 Render this template first, then wait for the user's choice. Replace only `<detail>`. Do not add a preface; the heading is the opening line.

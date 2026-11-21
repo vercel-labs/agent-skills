@@ -1,3 +1,5 @@
+import { gate as buildMachineGate } from './gates/build-machine-oversized.mjs';
+import { gate as buildFanoutGate } from './gates/build-minutes-fanout.mjs';
 import { impactMagnitude } from './impact-magnitude.mjs';
 
 const SLOW_ROUTE_P95_THRESHOLD_MS = 500;
@@ -28,6 +30,7 @@ export function synthesizeImpactFromSignal(rec, signals = {}) {
     rec?.evidence?.o11ySignal,
     rec?.why,
     rec?.what,
+    gateSignalFallback(rec, signals),
   ].filter((v) => typeof v === 'string' && v.trim()).join('\n') || null;
   if (!sig || !tier) return null;
   const m = String(sig);
@@ -78,9 +81,21 @@ export function synthesizeImpactFromSignal(rec, signals = {}) {
   if (coldPct != null) {
     return `${tier} impact — current cold-start share is ${coldPct}%; the gate fires above ${COLD_START_THRESHOLD_PCT}%.`;
   }
+  const pinnedMachine = m.match(/machine=(enhanced|turbo)\b/i)?.[1] ?? null;
+  const smallerMachine = m.match(/smaller=(standard|enhanced)\b/i)?.[1] ?? null;
+  const medianBilledMin = parseSigNumber(m, /median_billed_min=([\d.]+)/);
+  const breakEvenMin = parseSigNumber(m, /break_even_min=([\d]+)/);
+  if (pinnedMachine && smallerMachine && medianBilledMin != null && breakEvenMin != null) {
+    return `${tier} impact — builds on the pinned ${capitalizeWord(pinnedMachine)} machine bill a median ${medianBilledMin} minutes; switching to Elastic lets each build use a smaller machine when it fits (${capitalizeWord(smallerMachine)} alone costs less unless builds take longer than ${breakEvenMin} billed minutes).`;
+  }
   if (rec?.candidateRef?.startsWith('build_minutes_fanout:') || rec?.kind === 'build_minutes_fanout') {
-    return buildSharePct != null
-      ? `${tier} impact — Build CPU Minutes account for ${buildSharePct}% of observed billed cost in this window.`
+    if (buildSharePct != null && buildSharePct > 0) {
+      return `${tier} impact — Build CPU Minutes account for ${buildSharePct}% of observed billed cost in this window.`;
+    }
+    // Fired by the repo scanner alone (usage missing or zero): don't imply a billing threshold was measured.
+    const scannerFindings = parseSigNumber(m, /scanner_findings=(\d+)/);
+    return scannerFindings
+      ? `${tier} impact — the repo disables or bypasses the Turborepo build cache; build usage for this window wasn't available to size it.`
       : `${tier} impact — Build CPU Minutes exceeded the gate threshold in this window.`;
   }
   return `${tier} impact — see follow-up metrics for magnitude.`;
@@ -123,4 +138,28 @@ function round2(n) {
 function formatInteger(n) {
   if (!Number.isFinite(n)) return String(n);
   return Math.round(n).toLocaleString('en-US');
+}
+
+function capitalizeWord(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
+// Account-scoped build gates are deterministic over signals.json, so when a written recommendation
+// omits the gate's o11ySignal, re-derive it instead of falling back to a placeholder impact line.
+const BUILD_GATES = Object.freeze({
+  build_machine_oversized: { gate: buildMachineGate, has: /machine=(?:enhanced|turbo)\b/i },
+  build_minutes_fanout: { gate: buildFanoutGate, has: /build_minutes_share=/i },
+});
+
+function gateSignalFallback(rec, signals) {
+  const kind = rec?.kind ?? (typeof rec?.candidateRef === 'string' ? rec.candidateRef.split(':')[0] : null);
+  const entry = BUILD_GATES[kind];
+  if (!entry || !signals || typeof signals !== 'object') return null;
+  const existing = [rec?.o11ySignal, rec?.evidence?.o11ySignal].filter((v) => typeof v === 'string').join('\n');
+  if (entry.has.test(existing)) return null;
+  try {
+    return entry.gate(signals)?.[0]?.o11ySignal ?? null;
+  } catch {
+    return null;
+  }
 }

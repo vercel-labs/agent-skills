@@ -23,7 +23,7 @@ Core doctrine: read [references/doctrine.md](references/doctrine.md) if any rule
 - Authenticated CLI session: `vercel login`.
 - Linked app directory: `vercel link`. `VERCEL_PROJECT_ID` can help resolve project config, but `vercel metrics` still requires directory linkage. The link or environment must include the intended project org/team/user scope so the collector can resolve a CLI-safe `--scope` and keep `vercel metrics`, `vercel usage`, and `vercel contract` on the same account.
 - Node.js 20+.
-- Observability Plus for route-level metric-backed recommendations.
+- Observability Plus for route-level metric-backed recommendations. Build-cost checks don't need it: build gates read project config, deployments, billing, and build logs, which limited runs still collect.
 
 Never put auth tokens in shell commands. Do not type `VERCEL_TOKEN=...`, `--token ...`, or `Authorization: Bearer ...` into commands that may be echoed in chat.
 
@@ -112,14 +112,15 @@ vercel link --yes --project <project-name-or-id> --cwd <app-dir>
 
 - `forbidden` or `project_not_found`: fix auth/team scope. Do not pitch Observability Plus.
 - `all_failed_other`: show the raw error code and ask whether to continue in limited code-only mode.
+- Build-focused requests (Build CPU Minutes, build machines, slow or expensive builds): an Observability Plus blocker doesn't limit the build audit. Scope, auth, and link blockers still apply. Tell the user route metrics are unavailable using the build-focused template under Chat Templates, word for word, then rerun with `--continue-without-observability` without waiting for a choice.
 
-Do not silently fall back to code-only mode. If the user accepts a limited audit, rerun collection with:
+Do not silently fall back to code-only mode. Except for build-focused requests, if the user accepts a limited audit, rerun collection with:
 
 ```bash
 node scripts/collect-signals.mjs [projectId] --continue-without-observability > "$RUN_DIR/vercel-signals.json" 2> "$RUN_DIR/collect.stderr"
 ```
 
-Then scan and merge again.
+Then rerun the scan and the merge, adding `--force` to `merge-signals.mjs`. The first merge already wrote `signals.json`; without `--force` the merge fails and the gates run on the blocked collection, which has no usage or build data.
 
 ### 2. Gate candidates
 
@@ -312,6 +313,10 @@ Use these messages without adding sales copy or process detail.
 **Route-level metrics unavailable:**
 
 > Use the verbatim choice template in [references/observability-plus.md](references/observability-plus.md). Do not silently fall back to code-only mode; present the two-path choice: enable Observability Plus and rerun the metric-backed audit, or accept a limited code-only run.
+
+**Route-level metrics unavailable on a build-focused request:**
+
+> Route-level metrics aren't available for this run. Build-cost checks don't use them, so I'm continuing with the full build audit. This run won't include runtime recommendations.
 
 **Project is not linked:**
 

@@ -15,7 +15,8 @@ import {
 } from '../lib/workspace-resolver.mjs';
 
 const SCHEMA_VERSION = '1.0';
-const SKIP_DIRS = new Set(['node_modules', '.next', '.vercel', 'dist', 'build', '.git', 'coverage', '.turbo', '__tests__', 'cypress']);
+// .claude and .agents hold project-installed agent skills (including this one); scanning them flags the skill's own source.
+const SKIP_DIRS = new Set(['node_modules', '.next', '.vercel', 'dist', 'build', '.git', 'coverage', '.turbo', '__tests__', 'cypress', '.claude', '.agents']);
 const SKIP_FILE_PATTERNS = [/\.test\./, /\.spec\./, /\.d\.ts$/];
 
 async function main() {
