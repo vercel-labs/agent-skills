@@ -41,6 +41,26 @@ React and Next.js performance optimization guidelines from Vercel Engineering. C
 - Rendering performance (Medium)
 - JavaScript micro-optimizations (Low-Medium)
 
+### optimize-turbopack-css
+
+Diagnose and reduce CSS growth when a Next.js 15 or 16 app moves from webpack to Turbopack. Measures both builds, isolates the cause, and optimizes Sass source and stylesheet boundaries in measured, reversible phases. Includes a dependency-free CSS analyzer.
+
+**Use when:**
+
+- Turbopack ships more raw or transferred CSS than webpack
+- Lightning CSS expands logical properties into long `:lang()` and `:dir()` selector lists
+- Sass loops or shared partials emit more CSS than the app uses
+- Routes preload CSS for error boundaries, barrels, or components they don't render
+- CSS Modules class names inflate CSS, HTML, and RSC payloads
+
+**Causes covered:**
+
+- Browser-target lowering (Browserslist and `lightningCssFeatures`)
+- Sass generator multiplication and selector-emitting partials
+- Overlapping global framework and utility CSS
+- Chunking, route scope, and shared client dependency graphs
+- CSS Modules class-name overhead
+
 ### web-design-guidelines
 
 Review UI code for compliance with web interface best practices. Audits your code for 100+ rules covering accessibility, performance, and UX.
