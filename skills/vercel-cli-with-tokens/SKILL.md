@@ -17,15 +17,15 @@ Before running any Vercel CLI commands, identify where the token is coming from.
 ### A) `VERCEL_TOKEN` is already set in the environment
 
 ```bash
-printenv VERCEL_TOKEN
+[ -n "$VERCEL_TOKEN" ] && echo "VERCEL_TOKEN is set" || echo "VERCEL_TOKEN is not set"
 ```
 
-If this returns a value, you're ready. Skip to Step 2.
+If it is set, you're ready. Skip to Step 2. Never print the token value itself.
 
 ### B) Token is in a `.env` file under `VERCEL_TOKEN`
 
 ```bash
-grep '^VERCEL_TOKEN=' .env 2>/dev/null
+grep -q '^VERCEL_TOKEN=' .env 2>/dev/null && echo "VERCEL_TOKEN found in .env"
 ```
 
 If found, export it:
@@ -36,13 +36,13 @@ export VERCEL_TOKEN=$(grep '^VERCEL_TOKEN=' .env | cut -d= -f2-)
 
 ### C) Token is in a `.env` file under a different name
 
-Look for any variable that looks like a Vercel token (Vercel tokens typically start with `vca_`):
+List matching variable names (without printing their values):
 
 ```bash
-grep -i 'vercel' .env 2>/dev/null
+grep -i 'vercel' .env 2>/dev/null | cut -d= -f1
 ```
 
-Inspect the output to identify which variable holds the token, then export it as `VERCEL_TOKEN`:
+Identify which variable holds the token, then export it as `VERCEL_TOKEN` without echoing it:
 
 ```bash
 export VERCEL_TOKEN=$(grep '^<VARIABLE_NAME>=' .env | cut -d= -f2-)
@@ -50,7 +50,7 @@ export VERCEL_TOKEN=$(grep '^<VARIABLE_NAME>=' .env | cut -d= -f2-)
 
 ### D) No token found — ask the user
 
-If none of the above yield a token, ask the user to provide one. They can create a Vercel access token at vercel.com/account/tokens.
+If none of the above yield a token, ask the user to create one at vercel.com/account/tokens and set it as `VERCEL_TOKEN` in their shell or `.env` file themselves. Do not ask them to paste the token into the conversation.
 
 ---
 
@@ -74,8 +74,8 @@ Similarly, check for the project ID and team scope. These let the CLI target the
 printenv VERCEL_PROJECT_ID
 printenv VERCEL_ORG_ID
 
-# Or check .env
-grep -i 'vercel' .env 2>/dev/null
+# Or check .env (IDs only, never the token)
+grep -iE '^VERCEL_(PROJECT|ORG)_ID=' .env 2>/dev/null
 ```
 
 **If you have a project URL** (e.g. `https://vercel.com/my-team/my-project`), extract the team slug:
@@ -299,6 +299,7 @@ Full details: https://vercel.com/docs/plans/pro-plan
 ## Working Agreement
 
 - **Never pass `VERCEL_TOKEN` as a `--token` flag.** Export it as an environment variable and let the CLI read it natively.
+- **Never print `VERCEL_TOKEN` or ask the user to paste it in chat.** Check for token presence without echoing its value, and have the user set it in their shell or `.env` file.
 - **Check the environment for tokens before asking the user.** Look in the current env and `.env` files first.
 - **Default to preview deployments.** Only deploy to production when explicitly asked.
 - **Ask before pushing to git.** Never push commits without the user's approval.
@@ -311,11 +312,11 @@ Full details: https://vercel.com/docs/plans/pro-plan
 
 ### Token not found
 
-Check the environment and any `.env` files present:
+Check the environment and any `.env` files present (variable names only):
 
 ```bash
-printenv | grep -i vercel
-grep -i vercel .env 2>/dev/null
+printenv | grep -i vercel | cut -d= -f1
+grep -i vercel .env 2>/dev/null | cut -d= -f1
 ```
 
 ### Authentication error
@@ -323,7 +324,7 @@ grep -i vercel .env 2>/dev/null
 If the CLI fails with `Authentication required`:
 - The token may be expired or invalid.
 - Verify: `vercel whoami` (uses `VERCEL_TOKEN` from environment).
-- Ask the user for a fresh token.
+- Ask the user to set a fresh `VERCEL_TOKEN` in their shell or `.env` file (do not have them paste it into chat).
 
 ### Wrong team
 
