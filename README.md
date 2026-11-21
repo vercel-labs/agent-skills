@@ -40,6 +40,7 @@ React and Next.js performance optimization guidelines from Vercel Engineering. C
 - Re-render optimization (Medium)
 - Rendering performance (Medium)
 - JavaScript micro-optimizations (Low-Medium)
+- Advanced patterns (Low)
 
 ### web-design-guidelines
 
