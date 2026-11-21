@@ -27,6 +27,13 @@
       "skills": [
         "web-design-guidelines"
       ]
+    },
+    {
+      "title": "Testing",
+      "description": "Skills for testing and QA of web applications.",
+      "skills": [
+        "web-qa-testing"
+      ]
     }
   ]
 }
