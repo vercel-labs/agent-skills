@@ -1,0 +1,19 @@
+{
+  "name": "@linkedapi/linkedin-growth-skill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skill scripts for the linkedin-growth pipeline (lead import + connection management via linkedin-cli).",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "doctor": "node scripts/doctor.mjs",
+    "tick": "node scripts/tick.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "croner": "^9.0.0"
+  },
+  "license": "MIT"
+}
