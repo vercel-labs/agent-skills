@@ -170,8 +170,18 @@ Deploy applications and websites to Vercel. Prefers git-push deploys on a linked
 
 ## Installation
 
+### Agent Skills CLI
+
 ```bash
 npx skills add vercel-labs/agent-skills
+```
+
+### Cursor plugin
+
+Install with:
+
+```bash
+/add-plugin vercel-agent-skills
 ```
 
 ## Usage
