@@ -25,7 +25,8 @@
       "title": "Design",
       "description": "Skills for reviewing and improving web interfaces, accessibility, and UX quality.",
       "skills": [
-        "web-design-guidelines"
+        "web-design-guidelines",
+        "anti-ui-slop"
       ]
     }
   ]
