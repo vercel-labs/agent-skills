@@ -1,10 +1,10 @@
 # AI application
 
-LLM-backed apps, agents, code-sandbox tools, RAG pipelines. Cost shape is dominated by per-token AI Gateway spend and Sandbox active-compute time, not edge requests or function duration. Many AI customers also have a SaaS surface (auth, dashboards), but the cost lever lives upstream of the dashboard.
+LLM-backed apps, agents, code-sandbox tools, RAG pipelines. Cost shape is dominated by per-token AI Gateway spend and Sandbox active-compute time, not CDN requests or function duration. Many AI customers also have a SaaS surface (auth, dashboards), but the cost lever lives upstream of the dashboard.
 
 ## Typical billing shape
 
-AI Gateway > Sandbox Active Compute > Function Duration > Function Invocations. Edge Requests usually quiet; ISR rarely applies. Observability Events can climb fast if every tool-call span is captured at full fidelity.
+AI Gateway > Sandbox Active Compute > Function Duration > Function Invocations. CDN Requests usually quiet; ISR rarely applies. Observability Events can climb fast if every tool-call span is captured at full fidelity.
 
 ## Priority patterns
 

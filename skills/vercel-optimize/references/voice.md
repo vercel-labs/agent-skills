@@ -56,7 +56,7 @@ Use these spellings:
 | `Web Analytics` | `Vercel Analytics` |
 | `Hobby`, `Pro`, `Enterprise` | `hobby`, `pro`, `enterprise` as plan names |
 
-Mirror billing names from the user's dashboard. If a dashboard still says `Edge Requests`, use `Edge Requests`; do not rename it.
+Mirror billing names from the user's dashboard. `Edge Requests` was renamed `CDN Requests` in September 2026 (same metric, pricing, and limits). Say `CDN Requests`; if the billing data for the window still says `Edge Requests`, note once that it is the same metric now called `CDN Requests`.
 
 ## Recommendation shape
 

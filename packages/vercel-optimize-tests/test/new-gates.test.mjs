@@ -297,3 +297,26 @@ test('platform_bot_protection: when BotID is enabled, no candidate regardless of
   };
   assert.deepEqual(botGate(signals), []);
 });
+
+for (const name of ['CDN Requests', 'Edge Requests']) {
+  test(`platform_bot_protection: reads billed cost from the "${name}" usage line`, () => {
+    const signals = {
+      project: { security: { botIdEnabled: false, managedRules: {} } },
+      usage: { services: [{ name: 'CDN Request CPU Duration', billedCost: 1 }, { name, billedCost: 60 }] },
+      metrics: { requestsByRouteCache: { rows: [{ route: '/', cache_result: 'MISS', value: 1000 }] } },
+    };
+    const out = botGate(signals);
+    assert.equal(out.length, 1);
+    assert.equal(out[0].evidence.edgeCost, 60);
+    assert.match(out[0].o11ySignal, /edge_cost=60/);
+  });
+}
+
+test('platform_bot_protection: CDN Request CPU Duration alone is not treated as request cost', () => {
+  const signals = {
+    project: { security: { botIdEnabled: false, managedRules: {} } },
+    usage: { services: [{ name: 'CDN Request CPU Duration', billedCost: 60 }] },
+    metrics: { requestsByRouteCache: { rows: [{ route: '/', cache_result: 'MISS', value: 1000 }] } },
+  };
+  assert.deepEqual(botGate(signals), []);
+});

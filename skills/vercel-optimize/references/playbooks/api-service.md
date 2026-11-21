@@ -4,7 +4,7 @@ Headless API backend. No UI routes. Often consumed by mobile apps, partner integ
 
 ## Typical billing shape
 
-Function Duration dominates (every request is a function invocation). Edge Requests scale with API traffic. External API costs matter when the service is a thin shim over third-party APIs (Stripe, Twilio, etc.).
+Function Duration dominates (every request is a function invocation). CDN Requests scale with API traffic. External API costs matter when the service is a thin shim over third-party APIs (Stripe, Twilio, etc.).
 
 ## Priority patterns
 

@@ -12,7 +12,7 @@ export const metadata = {
   scope: 'account',
   sourceCitation: 'vercel-optimize gate threshold',
   description:
-    'When BotID is disabled AND there is evidence (observed bot bandwidth share, edge cost, or substantial request volume) that bot traffic is non-trivial. Bot traffic inflates edge request counts without delivering user value; staged bot protection can reduce waste on bot-heavy projects. Skipped on quiet projects with no bot evidence — the recommendation would be noise.',
+    'When BotID is disabled AND there is evidence (observed bot bandwidth share, CDN request cost, or substantial request volume) that bot traffic is non-trivial. Bot traffic inflates CDN request counts without delivering user value; staged bot protection can reduce waste on bot-heavy projects. Skipped on quiet projects with no bot evidence — the recommendation would be noise.',
 };
 
 export function gate(signals) {
@@ -30,7 +30,8 @@ export function gate(signals) {
   const totalRequests = totalRequestsFromSignals(signals);
   const botShare = computeBotShare(signals);
   const edgeService = (signals.usage?.services ?? []).find(
-    (s) => /edge.request/i.test(s.name ?? '')
+    // Billing name is "CDN Requests" since Sept 2026; older windows say "Edge Requests".
+    (s) => /^(?:edge|cdn)[ -]requests?$/i.test(s.name ?? '')
   );
   const edgeCost = edgeService?.billedCost ?? null;
 
@@ -71,7 +72,7 @@ export function gate(signals) {
       : 'BotID disabled with observable traffic',
     question: botShare?.botPct != null && botShare.botPct > 0.2
       ? `Bot traffic accounts for ${(botShare.botPct * 100).toFixed(0)}% of FDT bytes (top category: ${botShare.topCategory ?? 'unknown'}). Would enabling BotID + a challenge rule reduce that share?`
-      : 'Would enabling BotID (Bot Protection) reduce edge request volume from automated traffic?',
+      : 'Would enabling BotID (Bot Protection) reduce CDN request volume from automated traffic?',
     evidence: {
       botEnabled: false,
       edgeCost,

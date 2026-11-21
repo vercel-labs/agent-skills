@@ -49,7 +49,7 @@ Total scanners: 15.
 - **Billing dimension**: function-duration
 - **Traffic-independent**: no (cold-path findings get dropped)
 
-**Description.** force-dynamic disables static + ISR rendering. The route runs the function on every request. Sometimes necessary (cookies, headers, real-time data), often a habit that costs function-duration and edge-requests at scale.
+**Description.** force-dynamic disables static + ISR rendering. The route runs the function on every request. Sometimes necessary (cookies, headers, real-time data), often a habit that costs function duration and CDN requests at scale.
 
 **Fix.** Audit the route. If dynamic behavior comes from cookies()/headers()/searchParams, force-dynamic may be redundant — Next infers dynamic automatically. Consider revalidate / 'use cache' / generateStaticParams if any portion can be pre-rendered.
 
@@ -112,7 +112,7 @@ Total scanners: 15.
 - **Billing dimension**: edge-requests
 - **Traffic-independent**: yes (cold-path findings survive the doctrine drop)
 
-**Description.** middleware.ts without a config.matcher (or matcher: ["/(.*)"]) runs on every request including _next/static, _next/image, favicon.ico, and image asset fetches. Edge-request cost scales accordingly.
+**Description.** middleware.ts without a config.matcher (or matcher: ["/(.*)"]) runs on every request including _next/static, _next/image, favicon.ico, and image asset fetches. CDN request cost scales accordingly.
 
 **Fix.** Scope the matcher to actual application paths. Example: matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"]
 

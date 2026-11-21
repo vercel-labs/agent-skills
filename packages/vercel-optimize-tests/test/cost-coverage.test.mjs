@@ -11,6 +11,12 @@ test('classifyService: covered services map to their dimension', () => {
   assert.deepEqual(classifyService('ISR Reads', allDims), { covered: true, dim: 'isr' });
 });
 
+test('classifyService: CDN Requests (renamed from Edge Requests) stays covered', () => {
+  assert.deepEqual(classifyService('CDN Requests', allDims), { covered: true, dim: 'edge-requests' });
+  assert.deepEqual(classifyService('CDN Request CPU Duration', allDims), { covered: true, dim: 'edge-requests' });
+  assert.deepEqual(classifyService('Edge Requests - Additional CPU Duration', allDims), { covered: true, dim: 'edge-requests' });
+});
+
 test('classifyService: uncovered services flagged with family', () => {
   const sandbox = classifyService('Sandbox Provisioned Memory', allDims);
   assert.equal(sandbox.covered, false);

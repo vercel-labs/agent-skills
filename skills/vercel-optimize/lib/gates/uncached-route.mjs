@@ -14,7 +14,7 @@ export const metadata = {
   scope: 'route',
   sourceCitation: 'vercel-optimize gate threshold',
   description:
-    'Routes serving > 500 requests/period at < 50% cache hit AND at least 20% GET traffic. Each uncached GET request reaches the function, costing edge requests + function duration. Routes that are mostly POST/PUT/DELETE (Server Actions, mutations) are skipped — 0% cache is correct behavior there. Routes with missing method-share data are gated instead of launched. Auth-gated routes are disqualified separately.',
+    'Routes serving > 500 requests/period at < 50% cache hit AND at least 20% GET traffic. Each uncached GET request reaches the function, costing CDN requests + function duration. Routes that are mostly POST/PUT/DELETE (Server Actions, mutations) are skipped — 0% cache is correct behavior there. Routes with missing method-share data are gated instead of launched. Auth-gated routes are disqualified separately.',
 };
 
 /**

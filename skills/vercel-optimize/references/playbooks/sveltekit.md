@@ -9,7 +9,7 @@ config rather than per-route framework APIs.
 ## Typical billing shape
 
 Function Duration dominates server-rendered routes (every `+page.server.ts`
-`load` + `+server.ts` POST handler runs as a function). Edge Requests grow
+`load` + `+server.ts` POST handler runs as a function). CDN Requests grow
 with API surface (`+server.ts` and form actions). ISR is supported via the
 adapter; when enabled, it converts to a cache_result HIT after first render.
 Image Optimization is rarely a SvelteKit-specific lever (it's the same

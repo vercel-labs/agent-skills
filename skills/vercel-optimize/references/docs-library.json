@@ -205,8 +205,14 @@
     },
     {
       "url": "https://vercel.com/docs/manage-cdn-usage",
-      "topic": "Vercel Edge Network bandwidth — Fast Data Transfer, included quotas, overage pricing",
+      "topic": "CDN pricing and usage — Fast Data Transfer, Fast Origin Transfer, CDN Requests (formerly Edge Requests), included quotas, overage pricing",
       "appliesTo": ["large_static_asset", "uncached_route"],
+      "applicableFrameworks": ["*"]
+    },
+    {
+      "url": "https://vercel.com/docs/pricing/flat-rate-cdn",
+      "topic": "Flat Rate CDN — fixed monthly tier covering CDN Requests and Fast Data Transfer on Pro, tier changes at the next billing cycle",
+      "appliesTo": ["platform_bot_protection", "large_static_asset", "uncached_route", "cache_header_gap"],
       "applicableFrameworks": ["*"]
     },
     {

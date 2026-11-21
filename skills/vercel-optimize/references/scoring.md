@@ -48,7 +48,7 @@ When the project is on a Flex Commit and the report frames savings against contr
 | Discountable (slider applies) | Non-discountable (raw rate) |
 |---|---|
 | Seats | Build CPU Minutes |
-| Edge Requests | Fluid Active CPU |
+| CDN Requests (formerly Edge Requests) | Fluid Active CPU |
 | Fast Data Transfer | Fluid Provisioned Memory |
 | Fast Origin Transfer | Raw Flex top-up |
 | Image Optimization | |
@@ -57,9 +57,15 @@ When the project is on a Flex Commit and the report frames savings against contr
 
 A recommendation that targets a non-discountable SKU should never frame savings as a percentage of contract; frame as absolute magnitude only. Conversely, a discountable-SKU recommendation may surface "applies to contract burndown" in the magnitude phrase.
 
+### Flat Rate CDN
+
+Pro teams can pay for CDN usage with Flat Rate CDN: a fixed monthly tier that covers CDN Requests, Fast Data Transfer, Blob Data Transfer, Sandbox Data Transfer, and Observability Events generated from CDN requests. Usage above the tier for a billing cycle moves the team to a higher tier at the start of the next cycle; above the highest tier, it moves to on-demand pricing.
+
+When the billing data shows these resources covered by a Flat Rate CDN tier (for example, CDN Requests and Fast Data Transfer with usage but zero billed cost), do not frame a CDN request or data transfer reduction as a lower bill this cycle. Frame it as headroom inside the current tier, or as avoiding a move to a higher tier, and still report the performance impact. Cite `https://vercel.com/docs/pricing/flat-rate-cdn`.
+
 **Why magnitudes:**
 
-- Traffic varies. A "20% reduction in edge requests" is exact at today's traffic and meaningless next quarter.
+- Traffic varies. A "20% reduction in CDN requests" is exact at today's traffic and meaningless next quarter.
 - Pricing changes. Vercel's billing rates move; precise dollar projections rot.
 - The user is smart. They'd rather see "hundreds of dollars per month" with a real metric backing it than `$340/mo` with a hand-wave behind it.
 - The `$-strip` sanitizer enforces this at output time. Any `$N` literal that slips into customer-facing fields is replaced with "the billed cost" before rendering.
@@ -73,7 +79,7 @@ type ImpactLabel = {
   // MAGNITUDE: cost recs
   costMagnitude?: 'negligible' | 'small' | 'medium' | 'large' | 'very-large';
   costPhrase?: string;
-  billingDimension?: string;   // 'Edge Requests' | 'Function Duration' | ...
+  billingDimension?: string;   // 'CDN Requests' | 'Function Duration' | ...
   fractionReduced?: number;    // 0.2 = ~20% — internal only, NOT rendered
 };
 ```
@@ -194,11 +200,11 @@ The recommender selects 0-2 playbooks based on the project's `stack.applicationP
 | Application profile | Likely top dimensions | Apply playbooks |
 |---|---|---|
 | `ai-application` (AI SDK, AI Gateway, Sandbox usage) | AI Gateway, Sandbox Active Compute, Function Duration | `playbooks/ai-application.md` |
-| `ecommerce` (Stripe, Shopify, cart components) | Edge Requests, Function Duration | `playbooks/ecommerce.md` |
+| `ecommerce` (Stripe, Shopify, cart components) | CDN Requests, Function Duration | `playbooks/ecommerce.md` |
 | `saas` (auth, dashboards, multi-tenant) | Function Duration, Bandwidth | `playbooks/saas.md` |
-| `api-service` (mostly API routes, no UI) | Function Duration, Edge Requests | `playbooks/api-service.md` |
-| `content-site` (blog, docs, mostly static) | Edge Requests, Image Optimization | `playbooks/content-site.md` |
-| `marketing` (landing pages, A/B tests) | Edge Requests, ISR Reads | `playbooks/marketing.md` |
+| `api-service` (mostly API routes, no UI) | Function Duration, CDN Requests | `playbooks/api-service.md` |
+| `content-site` (blog, docs, mostly static) | CDN Requests, Image Optimization | `playbooks/content-site.md` |
+| `marketing` (landing pages, A/B tests) | CDN Requests, ISR Reads | `playbooks/marketing.md` |
 
 `ai-application` is checked first in `inferPlaybook()` — an AI-heavy SaaS or AI commerce app shares the AI playbook's billing shape (AI Gateway dominant) and gotchas, not the dashboard or cart-checkout patterns.
 

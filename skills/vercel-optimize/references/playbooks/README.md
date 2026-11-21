@@ -32,7 +32,7 @@ Each playbook is a Markdown file with a fixed shape so the recommender can parse
 # {Profile name}
 
 ## Typical billing shape
-(Which dimensions dominate — e.g., "Edge Requests > Function Duration > Image Optimization")
+(Which dimensions dominate — e.g., "CDN Requests > Function Duration > Image Optimization")
 
 ## Priority patterns
 (Ordered list of patterns this profile particularly benefits from)

@@ -5,7 +5,7 @@ export const metadata = {
   billingDimension: 'edge-requests',
   trafficIndependent: true,
   description:
-    'middleware.ts without a config.matcher (or matcher: ["/(.*)"]) runs on every request including _next/static, _next/image, favicon.ico, and image asset fetches. Edge-request cost scales accordingly.',
+    'middleware.ts without a config.matcher (or matcher: ["/(.*)"]) runs on every request including _next/static, _next/image, favicon.ico, and image asset fetches. CDN request cost scales accordingly.',
   fix:
     'Scope the matcher to actual application paths. Example: matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"]',
   citations: [

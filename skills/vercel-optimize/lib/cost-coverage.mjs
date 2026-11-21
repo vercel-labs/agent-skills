@@ -6,8 +6,9 @@ const SERVICE_DIMENSION = [
   { match: /^Function Invocations$/i,                    dim: 'function-duration' },
   { match: /^Fluid Active CPU$/i,                        dim: 'function-duration' },
   { match: /^Fluid Provisioned Memory$/i,                dim: 'function-duration' },
-  { match: /^Edge Requests$/i,                           dim: 'edge-requests' },
-  { match: /^Edge Requests.*Additional CPU Duration/i,   dim: 'edge-requests' },
+  // "Edge Requests" was renamed "CDN Requests" (Sept 2026). Match both so older billing windows still classify.
+  { match: /^(?:Edge|CDN) Requests$/i,                   dim: 'edge-requests' },
+  { match: /^(?:Edge|CDN) Requests?\b.*CPU Duration/i,   dim: 'edge-requests' },
   { match: /^Edge Function Execution Units$/i,           dim: 'edge-requests' },
   { match: /^Edge Middleware Invocations$/i,             dim: 'edge-requests' },
   { match: /^ISR (Reads|Writes)$/i,                      dim: 'isr' },
@@ -126,7 +127,7 @@ export function renderCostCoverageMarkdown(coverage) {
   lines.push('');
   const coveredPct = totalBilled > 0 ? (coveredBilled / totalBilled) * 100 : 0;
   const uncoveredPct = totalBilled > 0 ? (uncoveredBilled / totalBilled) * 100 : 0;
-  lines.push(`This audit has metric coverage for **$${coveredBilled.toFixed(0)} (${coveredPct.toFixed(0)}%)** of this bill via function-duration, edge-requests, ISR, middleware, and image-optimization dimensions. **$${uncoveredBilled.toFixed(0)} (${uncoveredPct.toFixed(0)}%)** sits in billed areas this run cannot analyze safely, including the top actionable items below:`);
+  lines.push(`This audit has metric coverage for **$${coveredBilled.toFixed(0)} (${coveredPct.toFixed(0)}%)** of this bill via function-duration, CDN requests, ISR, middleware, and image-optimization dimensions. **$${uncoveredBilled.toFixed(0)} (${uncoveredPct.toFixed(0)}%)** sits in billed areas this run cannot analyze safely, including the top actionable items below:`);
   lines.push('');
   lines.push('| Service | Billed | Share | Family | Coverage |');
   lines.push('|---|---|---|---|---|');

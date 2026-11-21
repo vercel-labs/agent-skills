@@ -10,13 +10,13 @@ maxBriefChars: 800
 ---
 
 ## Investigation Brief
-Bot Protection recommendations must be grounded in observed automated traffic or meaningful edge-request scale.
+Bot Protection recommendations must be grounded in observed automated traffic or meaningful CDN request scale.
 
 ## Evidence To Check
-Check bot bandwidth share, edge request volume, existing WAF managed rules, and whether BotID or Bot Protection is already enabled. Prefer a staged Log to Challenge or Deny path for rules whose false-positive risk is not proven.
+Check bot bandwidth share, CDN request volume, existing WAF managed rules, and whether BotID or Bot Protection is already enabled. Prefer a staged Log to Challenge or Deny path for rules whose false-positive risk is not proven.
 
 ## Do Not Recommend When
-Do not recommend disabling Vercel security products to reduce cost. Do not recommend Bot Protection for quiet projects with no bot evidence.
+Do not recommend disabling Vercel security products to reduce cost. Do not recommend Bot Protection for quiet projects with no bot evidence. On Flat Rate CDN, frame fewer CDN requests as tier headroom, not a lower bill.
 
 ## Verification
 State the observed bot share or scale signal, current protection state, and any existing log, challenge, deny, or BotID check.

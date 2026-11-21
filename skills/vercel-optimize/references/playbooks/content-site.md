@@ -4,7 +4,7 @@ Documentation, blogs, knowledge bases, marketing-adjacent content with mostly st
 
 ## Typical billing shape
 
-Edge Requests dominate (every page view is an edge request; static assets even more). Image Optimization is often the #2 line item. Function Duration tends to be low — most pages should be static or ISR.
+CDN Requests dominate (every page view is a CDN request; static assets even more). Image Optimization is often the #2 line item. Function Duration tends to be low — most pages should be static or ISR. On Flat Rate CDN, CDN Requests and Fast Data Transfer are covered by a fixed tier, so see the Flat Rate CDN rule in `references/scoring.md` before framing request reductions as savings.
 
 ## Priority patterns
 

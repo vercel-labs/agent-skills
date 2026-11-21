@@ -4,7 +4,7 @@ Storefronts with cart, checkout, product catalogs. Often Stripe-integrated. Traf
 
 ## Typical billing shape
 
-Edge Requests dominate (catalog browsing, image asset traffic) → Image Optimization (product images) → Function Duration (cart/checkout APIs). ISR Reads matter when product pages use ISR.
+CDN Requests dominate (catalog browsing, image asset traffic) → Image Optimization (product images) → Function Duration (cart/checkout APIs). ISR Reads matter when product pages use ISR. On Flat Rate CDN, see the Flat Rate CDN rule in `references/scoring.md` before framing CDN request reductions as savings.
 
 ## Priority patterns
 
@@ -19,7 +19,7 @@ Edge Requests dominate (catalog browsing, image asset traffic) → Image Optimiz
 - **Product images served raw.** `<img src={product.imageUrl}>` for hundreds of variants costs more than the rest of the bill combined. Always next/image.
 - **`force-dynamic` on the storefront homepage.** Often added during development to test cart-state behavior, never removed. Audit ruthlessly.
 - **Sequential Stripe calls.** "Create customer" → "create subscription" → "create invoice" is often three sequential awaits where two could run in parallel.
-- **Bot traffic on product search.** Marketing-driven traffic + bot traffic on search routes inflates edge request cost. Bot Protection often pays for itself within a month.
+- **Bot traffic on product search.** Marketing-driven traffic + bot traffic on search routes inflates CDN request cost. Bot Protection often pays for itself within a month on on-demand CDN pricing; on Flat Rate CDN, frame it as keeping usage inside the current tier.
 
 ## Cross-references
 

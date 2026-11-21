@@ -44,7 +44,7 @@ const SIGNAL_LABELS = new Map([
   ['ratio', 'ratio'],
   ['host', 'host'],
   ['calls', 'external API calls'],
-  ['edge_cost', 'Edge Request cost units'],
+  ['edge_cost', 'CDN Request cost units'],
   ['bot_protection', 'Bot Protection'],
   ['bot_fdt_pct', 'bot Fast Data Transfer share'],
   ['LCP', 'Largest Contentful Paint (LCP)'],

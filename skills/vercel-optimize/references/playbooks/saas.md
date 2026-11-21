@@ -1,10 +1,10 @@
 # SaaS
 
-Multi-tenant applications with authenticated dashboards, settings, billing. Auth-gated by default. Traffic skews toward function duration (per-user data fetches) over edge requests.
+Multi-tenant applications with authenticated dashboards, settings, billing. Auth-gated by default. Traffic skews toward function duration (per-user data fetches) over CDN requests.
 
 ## Typical billing shape
 
-Function Duration dominates (every dashboard request runs the function fully — no edge caching for auth-gated content). Edge Requests grow with API surface. ISR rarely applies. Image Optimization rarely material.
+Function Duration dominates (every dashboard request runs the function fully — no edge caching for auth-gated content). CDN Requests grow with API surface. ISR rarely applies. Image Optimization rarely material.
 
 ## Priority patterns
 

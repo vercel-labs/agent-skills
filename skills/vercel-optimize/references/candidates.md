@@ -94,7 +94,7 @@ Observability Events line item exceeds 20% of total billed cost. High share usua
 - **Scope**: account
 - **Source citation**: `vercel-optimize gate threshold`
 
-When BotID is disabled AND there is evidence (observed bot bandwidth share, edge cost, or substantial request volume) that bot traffic is non-trivial. Bot traffic inflates edge request counts without delivering user value; staged bot protection can reduce waste on bot-heavy projects. Skipped on quiet projects with no bot evidence — the recommendation would be noise.
+When BotID is disabled AND there is evidence (observed bot bandwidth share, CDN request cost, or substantial request volume) that bot traffic is non-trivial. Bot traffic inflates CDN request counts without delivering user value; staged bot protection can reduce waste on bot-heavy projects. Skipped on quiet projects with no bot evidence — the recommendation would be noise.
 
 ---
 
@@ -160,7 +160,7 @@ Routes with p95 function duration above 500ms at meaningful traffic (>=1,400 inv
 - **Scope**: route
 - **Source citation**: `vercel-optimize gate threshold`
 
-Routes serving > 500 requests/period at < 50% cache hit AND at least 20% GET traffic. Each uncached GET request reaches the function, costing edge requests + function duration. Routes that are mostly POST/PUT/DELETE (Server Actions, mutations) are skipped — 0% cache is correct behavior there. Routes with missing method-share data are gated instead of launched. Auth-gated routes are disqualified separately.
+Routes serving > 500 requests/period at < 50% cache hit AND at least 20% GET traffic. Each uncached GET request reaches the function, costing CDN requests + function duration. Routes that are mostly POST/PUT/DELETE (Server Actions, mutations) are skipped — 0% cache is correct behavior there. Routes with missing method-share data are gated instead of launched. Auth-gated routes are disqualified separately.
 
 ---
 
