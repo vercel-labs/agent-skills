@@ -507,10 +507,97 @@ export async function queryMetric(metricId, opts = {}) {
   const onRetry = (attempt, delayMs) => {
     console.error(`[queryMetric] ${metricId} hit RATE_LIMITED; retry ${attempt}/3 after ${(delayMs / 1000).toFixed(0)}s`);
   };
-  return await throttle.run(() =>
-    retryOnRateLimit(() => runVercelJson(scopedArgs(args, opts.scope)), { onRetry })
+  const runOnce = (a) => throttle.run(() =>
+    retryOnRateLimit(() => runVercelJson(scopedArgs(a, opts.scope)), { onRetry })
   );
+  const result = await runOnce(args);
+  if (result?.ok || !AGGREGATION_REJECTIONS.has(String(result?.code))) return result;
+
+  // Queries here were written against CLI v53.4.0. Later CLIs (seen on 62.5.0 and 65.2.0) renamed some
+  // metrics, switched dimensions to camelCase, and allow only count/unique on *.count metrics. On a
+  // rejection, retry in the current form and map the response back to the legacy shape, so callers,
+  // gates, and fixtures keep their field names.
+  const modern = modernizeMetricQuery(metricId, opts);
+  if (!modern.changed) return result;
+  const modernArgs = ['metrics', modern.metricId, '--format', 'json'];
+  if (modern.aggregation) modernArgs.push('-a', modern.aggregation);
+  for (const dim of modern.groupBy) modernArgs.push('--group-by', dim);
+  if (modern.filter) modernArgs.push('-f', modern.filter);
+  if (opts.since) modernArgs.push('--since', opts.since);
+  if (opts.until) modernArgs.push('--until', opts.until);
+  if (opts.limit) modernArgs.push('--limit', String(opts.limit));
+  const retry = await runOnce(modernArgs);
+  if (!retry?.ok) return result;
+  return {
+    ...retry,
+    data: restoreLegacyMetricShape(retry.data, { metricId, aggregation: opts.aggregation, groupBy: opts.groupBy ?? [] }, modern),
+    compatFallback: { metricId: modern.metricId, aggregation: modern.aggregation, groupBy: modern.groupBy },
+  };
 }
+
+const AGGREGATION_REJECTIONS = new Set(['invalid_aggregation', 'invalid_request']);
+
+// Renamed metrics. `aggregation` overrides the requested one when the replacement measures it differently:
+// there is no Speed Insights count metric any more, so sample volume comes from the count of LCP samples.
+const METRIC_RENAMES = Object.freeze({
+  'vercel.speed_insights_metric.lcp': { id: 'vercel.speed_insights.lcp_ms' },
+  'vercel.speed_insights_metric.inp': { id: 'vercel.speed_insights.inp_ms' },
+  'vercel.speed_insights_metric.cls': { id: 'vercel.speed_insights.cls' },
+  'vercel.speed_insights_metric.ttfb_ms': { id: 'vercel.speed_insights.ttfb_ms' },
+  'vercel.speed_insights_metric.count': { id: 'vercel.speed_insights.lcp_ms', aggregation: 'count' },
+  'vercel.middleware_invocation.duration_ms': { id: 'vercel.middleware_invocation.request_duration_ms' },
+});
+
+const snakeToCamel = (dim) => String(dim).replace(/_([a-z0-9])/g, (_, c) => c.toUpperCase());
+
+export function modernizeMetricQuery(metricId, opts = {}) {
+  const rename = METRIC_RENAMES[metricId];
+  const id = rename?.id ?? metricId;
+  let aggregation = rename?.aggregation ?? opts.aggregation;
+  if (aggregation === 'sum' && /\.count$/.test(id)) aggregation = 'count';
+  const legacyGroupBy = opts.groupBy ?? [];
+  const groupBy = legacyGroupBy.map(snakeToCamel);
+  let filter = opts.filter;
+  if (typeof filter === 'string') {
+    for (const dim of legacyGroupBy) filter = filter.replace(new RegExp(`\\b${dim}\\b`, 'g'), snakeToCamel(dim));
+  }
+  const changed = id !== metricId
+    || aggregation !== opts.aggregation
+    || groupBy.some((d, i) => d !== legacyGroupBy[i])
+    || filter !== opts.filter;
+  return { metricId: id, aggregation, groupBy, filter, changed };
+}
+
+export function restoreLegacyMetricShape(data, legacy, modern) {
+  if (!data || typeof data !== 'object') return data;
+  const fromKey = `${modern.metricId.replace(/\./g, '_')}_${modern.aggregation}`;
+  const toKey = `${legacy.metricId.replace(/\./g, '_')}_${legacy.aggregation}`;
+  const dimPairs = legacy.groupBy.map((d, i) => [modern.groupBy[i], d]).filter(([m, l]) => m && m !== l);
+  const restoreRow = (row) => {
+    if (!row || typeof row !== 'object') return row;
+    const out = { ...row };
+    if (fromKey !== toKey && Object.hasOwn(out, fromKey)) {
+      out[toKey] = out[fromKey];
+      delete out[fromKey];
+    }
+    for (const [m, l] of dimPairs) {
+      if (Object.hasOwn(out, m)) {
+        out[l] = out[m];
+        delete out[m];
+      }
+    }
+    return out;
+  };
+  return {
+    ...data,
+    query: data.query && typeof data.query === 'object'
+      ? { ...data.query, metric: legacy.metricId, aggregation: legacy.aggregation, groupBy: legacy.groupBy }
+      : data.query,
+    summary: Array.isArray(data.summary) ? data.summary.map(restoreRow) : data.summary,
+    data: Array.isArray(data.data) ? data.data.map(restoreRow) : data.data,
+  };
+}
+
 
 // Team-owned projects need `?teamId=<orgId>` to avoid current-team drift. User-
 // owned projects use the authenticated user context and should not pass teamId.
