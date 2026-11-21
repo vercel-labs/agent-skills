@@ -6,7 +6,7 @@ How recommendations are shaped, written, sanitized, and graded.
 
 - [Schema](#schema)
 - [Writing rules](#writing-rules)
-- [The 12 sanitizers](#the-12-sanitizers)
+- [The 16 sanitizers](#the-16-sanitizers)
 - [Envelope-unwrap recovery](#envelope-unwrap-recovery)
 - [Grading rubric](#grading-rubric)
 - [Next.js version awareness](#nextjs-version-awareness)
@@ -116,7 +116,7 @@ The `$-strip` sanitizer enforces this at output time, but the prompt should also
 
 Don't recommend `'use cache'` (Next 15+) to a Next 13 user. The recommender prompt receives only the citation subset valid for the user's stack — but the LLM can still hallucinate. The `version-mismatch` sanitizer catches stragglers.
 
-## The 12 sanitizers
+## The 16 sanitizers
 
 Each sanitizer records its action in `rec.sanitizerTrail` when it mutates a field. Tag format: `tag:detail`. Tags are lexically stable — downstream consumers grep them.
 
@@ -125,15 +125,19 @@ Each sanitizer records its action in `rec.sanitizerTrail` when it mutates a fiel
 | 1 | `$-strip` | Money-literal regex in customer field | Replace with "the billed cost" | `$-strip:N` |
 | 2 | `vercel-directive-strip` | `stale-if-error` / `proxy-revalidate` in cache-control | Strip directive (Vercel CDN doesn't honor) | `vercel-directive-strip:directive` |
 | 3 | `rate-limit` | Concurrency × delay > known provider rate limit | Prepend caveat, set needsReview | `rate-limit:provider:prescribed/limit` |
-| 4 | `pre-release` | Fix enables `-rc`/`-beta`/`-canary` feature | Append "requires pre-release version" caveat | `pre-release:pkg@version` |
-| 5 | `middleware-conflict` | Rec targets route covered by middleware matcher | Append "Middleware {matcher} may intercept" caveat | `middleware-conflict:matcher` |
-| 6 | `undeclared-dep` | Fix imports a package not in package.json | Prepend "Add dependency first: npm i {pkg}" | `undeclared-dep:pkg` |
+| 4 | `pre-release` | Fix enables `-rc`/`-beta`/`-canary` feature | Append "requires pre-release version" caveat, set needsReview | `pre-release:pkg@version` |
+| 5 | `middleware-conflict` | Rec targets route covered by middleware matcher | Append "Middleware {matcher} may intercept" caveat, set needsReview | `middleware-conflict:matcher` |
+| 6 | `undeclared-dep` | Fix imports a package not in package.json | Prepend "Add dependency first: npm i {pkg}", set needsReview | `undeclared-dep:pkg` |
 | 7 | `count-correct` | Cited count > verified count, ground-truth known | Rewrite to "~N" with verified count | `count-correct:token:cited→actual` |
 | 8 | `count-strip` | Cited count > verified count, no ground truth | Rewrite to "a number of" | `count-strip:token` |
 | 9 | `rendering-mode-mislabel` | Rec blames ISR/SSR on a static page | Append warning, set needsReview | `rendering-mode-mislabel` |
-| 10 | `unknown-citation` | URL not in `references/docs-library.json` | Strip URL, set needsReview if all stripped | `unknown-citation:url` |
-| 11 | `version-mismatch` | URL's `applicableFrameworks` doesn't match stack | Strip URL, set needsReview if all stripped | `version-mismatch:url` |
-| 12 | `missing-citation` | `citations.length === 0` after other sanitizers | DROP rec entirely | (rec not emitted; counted at end) |
+| 10 | `window-units` | Observed window counts are described as monthly | Rewrite `/mo` and monthly units to `/window` | `window-units:field` |
+| 11 | `function-duration-invocations` | Slow-route fix claims duration work lowers invocation count | Replace with duration-only impact and caching caveat | `function-duration-invocations:field` |
+| 12 | `bot-protection-certainty` | Bot/WAF claims exceed collected evidence | Soften certainty, add staged-rollout caveat, set needsReview | `bot-protection-certainty:field` |
+| 13 | `cache-tag-invalidation-certainty` | Cache tags are claimed to preserve updates without a matching invalidation path | Require `revalidateTag()` / `updateTag()` verification, set needsReview | `cache-tag-invalidation-certainty:field` |
+| 14 | `unknown-citation` | URL or skill-rule ref not in `references/docs-library.json` | Strip citation; `missing-citation` drops the rec if none remain | `unknown-citation:citation` |
+| 15 | `version-mismatch` | Citation's `applicableFrameworks` doesn't match a detected stack | Strip citation; skipped when stack is unknown | `version-mismatch:citation` |
+| 16 | `missing-citation` | `citations.length === 0` after other sanitizers | DROP rec entirely | (rec not emitted; counted at end) |
 
 The sanitizer order matters: dollar-strip runs first (cheap, deterministic), then content sanitizers, then citation sanitizers last. This guarantees citation count is computed against the final state.
 

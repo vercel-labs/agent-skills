@@ -48,15 +48,9 @@ export async function applySanitizers(rec, ctx = {}) {
     }
   }
 
-  if (ctx.framework && ctx.version) {
-    const before = (rec.citations ?? []).slice();
-    const { strippedUnknown, strippedVersion } = await sanitizeCitations(rec, ctx.framework, ctx.version);
-    for (const u of strippedUnknown) recordSanitizer(rec, `unknown-citation:${u}`);
-    for (const u of strippedVersion) recordSanitizer(rec, `version-mismatch:${u}`);
-    const lostAny = strippedUnknown.length > 0 || strippedVersion.length > 0;
-    const lostAll = lostAny && (rec.citations ?? []).length === 0 && before.length > 0;
-    if (lostAll) rec.needsReview = true;
-  }
+  const { strippedUnknown, strippedVersion } = await sanitizeCitations(rec, ctx.framework, ctx.version);
+  for (const u of strippedUnknown) recordSanitizer(rec, `unknown-citation:${u}`);
+  for (const u of strippedVersion) recordSanitizer(rec, `version-mismatch:${u}`);
 
   // missing-citation runs LAST so citation strippers above can starve a rec.
   const missing = missingCitation.apply(rec, ctx) ?? {};

@@ -4,7 +4,7 @@ import { readFile, access, readdir } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { dirname, isAbsolute, join, normalize } from 'node:path';
 import { promisify } from 'node:util';
-import { isKnownUrl, sanitizeCitations } from './citations.mjs';
+import { isKnownUrl, lookupSkillRule, sanitizeCitations } from './citations.mjs';
 import { findRecContradictions } from './project-facts.mjs';
 import { canonicalizeRoute } from './route-normalize.mjs';
 
@@ -168,7 +168,10 @@ async function verifyRepoCount({ pattern, expected, repoRoot = '.' }) {
 async function verifyCitationInLibrary({ url }) {
   if (!url) return { disposition: 'unsupported', reason: 'citation_in_library requires url' };
   if (/^[\w-]+:[\w-]+$/.test(url)) {
-    return { disposition: 'verified', reason: 'skill-rule reference format (allowed)' };
+    const known = await lookupSkillRule(url);
+    return known
+      ? { disposition: 'verified', reason: 'skill-rule reference in curated library' }
+      : { disposition: 'failed', reason: 'skill-rule reference not in curated library — likely hallucination' };
   }
   const known = await isKnownUrl(url);
   return known
