@@ -161,7 +161,7 @@ The Vercel CLI isn't set up at all.
 
 ### No-Auth Fallback — `vercel deploy --temporary`
 
-**When to use:** The CLI has no credentials and `vercel login` isn't possible (sandboxes, agents, non-interactive environments). Do **not** ask the user to approve a CLI login or device code first — try this.
+**When to use:** The CLI has no credentials and `vercel login` isn't possible (sandboxes, agents, non-interactive environments). You do not need to ask the user to approve a CLI login or device code first, **but always ask before publishing**: tell the user which directory will be built and uploaded, that the result is a live public URL, and that it expires unless claimed. Continue only if they explicitly agree.
 
 ```bash
 npx vercel@latest deploy [path] --temporary -y
@@ -185,7 +185,7 @@ You have full shell access. Follow the decision flow above using the CLI directl
 
 ### Sandboxed environments (claude.ai, Codex)
 
-Check whether the CLI is logged in with `vercel whoami`. If it is, follow Step 2, including team selection. If it isn't, use the **no-auth fallback**.
+Check whether the CLI is logged in with `vercel whoami`. If it is, follow Step 2, including team selection. If it isn't, follow the **no-auth fallback** (including asking the user to confirm before publishing).
 
 ---
 
@@ -227,4 +227,4 @@ the command with escalated permissions — want me to proceed?
 
 ### CLI Auth Failure
 
-If `vercel login` or `vercel deploy` fails with authentication errors, use the no-auth fallback: `vercel deploy --temporary -y`.
+If `vercel login` or `vercel deploy` fails with authentication errors, offer the **no-auth fallback** (`vercel deploy --temporary -y`) and run it only after the user agrees to a public temporary deployment (telling them which directory will be built and uploaded, that the URL is live and public, and that it expires unless claimed).
