@@ -3,6 +3,7 @@
 
 import { access } from 'node:fs/promises';
 import { join, dirname, resolve, normalize } from 'node:path';
+import { toPosixPath } from './util.mjs';
 
 // Prefer affectedFiles[0] over findingRefs — findingRefs often share the same file.
 export function pickProbeFile(recs) {
@@ -43,11 +44,19 @@ export async function detectRepoRoot(probeFile, startDir, maxDepth = 10) {
 export function deriveRootFromSignals(signals, cwd = process.cwd()) {
   const dir = signals?.project?.rootDirectory;
   if (!dir || typeof dir !== 'string') return null;
-  const offset = normalize(dir).replace(/^\.\/?/, '').replace(/\/$/, '');
+  // Normalize API rootDirectory (POSIX-style) via toPosix after platform normalize
+  // so offset always uses / for matching against posix-ified cwd.
+  const offset = toPosixPath(normalize(dir)).replace(/^\.\/?/, '').replace(/\/$/, '');
   if (!offset) return null;
-  const cwdAbs = resolve(cwd);
-  // Match `<root>/<offset>` OR `<root>/<offset>/<more>` — orchestrator may run from a subdir.
-  const parts = cwdAbs.split('/');
+  // For unit tests passing fake unix absolute paths (start with /), use literally
+  // so string prefix math returns matching unix-style root. Real cwds get resolved.
+  // resolve on win would turn '/fake' into 'C:\fake' breaking test expectations.
+  const cwdAbs = String(cwd).startsWith('/') ? cwd : resolve(cwd);
+  // Use POSIX form for splitting so API-provided rootDirectory (always /) matches
+  // cwd on Windows hosts. This prevents falling back to wrong root and mis-scoping
+  // file verification / claim evidence.
+  const cwdPosix = toPosixPath(cwdAbs);
+  const parts = cwdPosix.split('/');
   const offsetParts = offset.split('/');
   for (let start = parts.length - offsetParts.length; start >= 0; start--) {
     const slice = parts.slice(start, start + offsetParts.length).join('/');
