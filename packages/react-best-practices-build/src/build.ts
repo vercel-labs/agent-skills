@@ -7,6 +7,7 @@ import { readdir, readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule, Section, GuidelinesDocument, ImpactLevel } from './types.js'
 import { parseRuleFile, RuleFile } from './parser.js'
+import { assignRuleIds } from './rule-ids.js'
 import { SKILLS, SkillConfig, DEFAULT_SKILL } from './config.js'
 
 // Parse command line arguments
@@ -154,38 +155,9 @@ async function buildSkill(skillConfig: SkillConfig) {
     }
   }
 
-  // Group rules by section
-  const sectionsMap = new Map<number, Section>()
-
-  ruleData.forEach(({ section, rule }) => {
-    if (!sectionsMap.has(section)) {
-      sectionsMap.set(section, {
-        number: section,
-        title: `Section ${section}`, // Will be overridden by section metadata
-        impact: rule.impact,
-        rules: [],
-      })
-    }
-    sectionsMap.get(section)!.rules.push(rule)
-  })
-
-  // Sort rules within each section by title (using en-US locale for consistency across environments)
-  sectionsMap.forEach((section) => {
-    section.rules.sort((a, b) =>
-      a.title.localeCompare(b.title, 'en-US', { sensitivity: 'base' })
-    )
-
-    // Assign IDs based on sorted order
-    section.rules.forEach((rule, index) => {
-      rule.id = `${section.number}.${index + 1}`
-      rule.subsection = index + 1
-    })
-  })
-
-  // Convert to array and sort
-  const sections = Array.from(sectionsMap.values()).sort(
-    (a, b) => a.number - b.number
-  )
+  // Group rules by section and assign ids in title order — shared with
+  // extract-tests so AGENTS.md headings and test-case ids always match.
+  const sections = assignRuleIds(ruleData)
 
   // Read section metadata from consolidated _sections.md file
   const sectionsFile = join(skillConfig.rulesDir, '_sections.md')

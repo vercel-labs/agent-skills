@@ -6,8 +6,9 @@
 import { readdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule, TestCase } from './types.js'
-import { parseRuleFile } from './parser.js'
-import { RULES_DIR, TEST_CASES_FILE } from './config.js'
+import { parseRuleFile, RuleFile } from './parser.js'
+import { assignRuleIds } from './rule-ids.js'
+import { SKILLS, DEFAULT_SKILL, TEST_CASES_FILE } from './config.js'
 
 /**
  * Extract test cases from a rule
@@ -42,28 +43,36 @@ function extractTestCases(rule: Rule): TestCase[] {
  */
 async function extractTests() {
   try {
+    const skillConfig = SKILLS[DEFAULT_SKILL]
     console.log('Extracting test cases from rules...')
-    console.log(`Rules directory: ${RULES_DIR}`)
+    console.log(`Rules directory: ${skillConfig.rulesDir}`)
     console.log(`Output file: ${TEST_CASES_FILE}`)
     
-    const files = await readdir(RULES_DIR)
+    const files = await readdir(skillConfig.rulesDir)
     const ruleFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('_') && f !== 'README.md')
     
-    const allTestCases: TestCase[] = []
-    
+    const ruleData: RuleFile[] = []
     for (const file of ruleFiles) {
-      const filePath = join(RULES_DIR, file)
+      const filePath = join(skillConfig.rulesDir, file)
       try {
-        const { rule } = await parseRuleFile(filePath)
-        const testCases = extractTestCases(rule)
-        allTestCases.push(...testCases)
+        ruleData.push(await parseRuleFile(filePath, skillConfig.sectionMap))
       } catch (error) {
         console.error(`Error processing ${file}:`, error)
       }
     }
+
+    // Ids come from the section/title ordering build.ts uses for AGENTS.md, so a
+    // test case and its rule heading always carry the same id. assignRuleIds
+    // mutates the parsed rules, so file order below stays as read from disk.
+    assignRuleIds(ruleData)
+
+    const allTestCases: TestCase[] = []
+    for (const { rule } of ruleData) {
+      allTestCases.push(...extractTestCases(rule))
+    }
     
     // Write test cases as JSON
-    await writeFile(TEST_CASES_FILE, JSON.stringify(allTestCases, null, 2), 'utf-8')
+    await writeFile(TEST_CASES_FILE, JSON.stringify(allTestCases, null, 2) + '\n', 'utf-8')
     
     console.log(`✓ Extracted ${allTestCases.length} test cases to ${TEST_CASES_FILE}`)
     console.log(`  - Bad examples: ${allTestCases.filter(tc => tc.type === 'bad').length}`)
