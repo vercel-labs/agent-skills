@@ -3,11 +3,11 @@
  * Validate rule files follow the correct structure
  */
 
-import { readdir } from 'fs/promises'
+import { readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { Rule } from './types.js'
 import { parseRuleFile } from './parser.js'
-import { RULES_DIR } from './config.js'
+import { RULES_DIR, OUTPUT_FILE, TEST_CASES_FILE } from './config.js'
 
 interface ValidationError {
   file: string
@@ -66,6 +66,38 @@ function validateRule(rule: Rule, file: string): ValidationError[] {
 }
 
 /**
+ * Test cases are keyed by rule id, and that id must be the same one AGENTS.md
+ * uses for the rule heading — otherwise a consumer can't join a case to its rule.
+ */
+async function validateTestCases(): Promise<ValidationError[]> {
+  const errors: ValidationError[] = []
+  const file = 'test-cases.json'
+
+  const agents = await readFile(OUTPUT_FILE, 'utf-8')
+  const titlesById = new Map<string, string>()
+  for (const line of agents.split('\n')) {
+    const m = line.match(/^### (\d+\.\d+) (.+)$/)
+    if (m) titlesById.set(m[1], m[2].trim())
+  }
+
+  const testCases = JSON.parse(await readFile(TEST_CASES_FILE, 'utf-8'))
+  for (const testCase of testCases) {
+    if (!testCase.ruleId) {
+      errors.push({ file, message: `Test case for "${testCase.ruleTitle}" has no ruleId` })
+      continue
+    }
+    const title = titlesById.get(testCase.ruleId)
+    if (title === undefined) {
+      errors.push({ file, ruleId: testCase.ruleId, message: `ruleId is not a heading in AGENTS.md (case: "${testCase.ruleTitle}")` })
+    } else if (title !== testCase.ruleTitle) {
+      errors.push({ file, ruleId: testCase.ruleId, message: `ruleTitle "${testCase.ruleTitle}" does not match AGENTS.md heading "${title}"` })
+    }
+  }
+
+  return errors
+}
+
+/**
  * Main validation function
  */
 async function validate() {
@@ -101,6 +133,16 @@ async function validate() {
     } else {
       console.log(`✓ All ${ruleFiles.length} rule files are valid`)
     }
+
+    const testCaseErrors = await validateTestCases()
+    if (testCaseErrors.length > 0) {
+      console.error('\n✗ Test case validation failed:\n')
+      testCaseErrors.forEach(error => {
+        console.error(`  ${error.file}${error.ruleId ? ` (${error.ruleId})` : ''}: ${error.message}`)
+      })
+      process.exit(1)
+    }
+    console.log('✓ test-cases.json rule ids match AGENTS.md headings')
   } catch (error) {
     console.error('Validation failed:', error)
     process.exit(1)

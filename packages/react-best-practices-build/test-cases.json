@@ -1,6 +1,6 @@
 [
   {
-    "ruleId": "",
+    "ruleId": "8.1",
     "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
     "type": "bad",
     "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId, handleConnected])\n}",
@@ -8,7 +8,7 @@
     "description": "Effect Event added as a dependency"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.1",
     "ruleTitle": "Do Not Put Effect Events in Dependency Arrays",
     "type": "good",
     "code": "import { useEffect, useEffectEvent } from 'react'\n\nfunction ChatRoom({ roomId, onConnected }: {\n  roomId: string\n  onConnected: () => void\n}) {\n  const handleConnected = useEffectEvent(onConnected)\n\n  useEffect(() => {\n    const connection = createConnection(roomId)\n    connection.on('connected', handleConnected)\n    connection.connect()\n\n    return () => connection.disconnect()\n  }, [roomId])\n}",
@@ -16,7 +16,7 @@
     "description": "depend on reactive values, not the Effect Event"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.3",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "bad",
     "code": "function useWindowEvent(event: string, handler: (e) => void) {\n  useEffect(() => {\n    window.addEventListener(event, handler)\n    return () => window.removeEventListener(event, handler)\n  }, [event, handler])\n}",
@@ -24,7 +24,7 @@
     "description": "re-subscribes on every render"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.3",
     "ruleTitle": "Store Event Handlers in Refs",
     "type": "good",
     "code": "import { useEffectEvent } from 'react'\n\nfunction useWindowEvent(event: string, handler: (e) => void) {\n  const onEvent = useEffectEvent(handler)\n\n  useEffect(() => {\n    window.addEventListener(event, onEvent)\n    return () => window.removeEventListener(event, onEvent)\n  }, [event])\n}",
@@ -32,7 +32,7 @@
     "description": "stable subscription"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.2",
     "ruleTitle": "Initialize App Once, Not Per Mount",
     "type": "bad",
     "code": "function Comp() {\n  useEffect(() => {\n    loadFromStorage()\n    checkAuthToken()\n  }, [])\n\n  // ...\n}",
@@ -40,7 +40,7 @@
     "description": "runs twice in dev, re-runs on remount"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.2",
     "ruleTitle": "Initialize App Once, Not Per Mount",
     "type": "good",
     "code": "let didInit = false\n\nfunction Comp() {\n  useEffect(() => {\n    if (didInit) return\n    didInit = true\n    loadFromStorage()\n    checkAuthToken()\n  }, [])\n\n  // ...\n}",
@@ -48,7 +48,7 @@
     "description": "once per app load"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.4",
     "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "bad",
     "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearch(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query, onSearch])\n}",
@@ -56,7 +56,7 @@
     "description": "effect re-runs on every callback change"
   },
   {
-    "ruleId": "",
+    "ruleId": "8.4",
     "ruleTitle": "useEffectEvent for Stable Callback Refs",
     "type": "good",
     "code": "import { useEffectEvent } from 'react';\n\nfunction SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchEvent = useEffectEvent(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchEvent(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
@@ -64,7 +64,7 @@
     "description": "using React's useEffectEvent"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.4",
     "ruleTitle": "Prevent Waterfall Chains in API Routes",
     "type": "bad",
     "code": "export async function GET(request: Request) {\n  const session = await auth()\n  const config = await fetchConfig()\n  const data = await fetchData(session.user.id)\n  return Response.json({ data, config })\n}",
@@ -72,7 +72,7 @@
     "description": "config waits for auth, data waits for both"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.4",
     "ruleTitle": "Prevent Waterfall Chains in API Routes",
     "type": "good",
     "code": "export async function GET(request: Request) {\n  const sessionPromise = auth()\n  const configPromise = fetchConfig()\n  const session = await sessionPromise\n  const [config, data] = await Promise.all([\n    configPromise,\n    fetchData(session.user.id)\n  ])\n  return Response.json({ data, config })\n}",
@@ -80,7 +80,7 @@
     "description": "auth and config start immediately"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.1",
     "ruleTitle": "Check Cheap Conditions Before Async Flags",
     "type": "bad",
     "code": "const someFlag = await getFlag()\n\nif (someFlag && someCondition) {\n  // ...\n}",
@@ -88,7 +88,7 @@
     "description": "Incorrect example for Check Cheap Conditions Before Async Flags"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.1",
     "ruleTitle": "Check Cheap Conditions Before Async Flags",
     "type": "good",
     "code": "if (someCondition) {\n  const someFlag = await getFlag()\n  if (someFlag) {\n    // ...\n  }\n}",
@@ -96,7 +96,7 @@
     "description": "Correct example for Check Cheap Conditions Before Async Flags"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.2",
     "ruleTitle": "Defer Await Until Needed",
     "type": "bad",
     "code": "async function handleRequest(userId: string, skipProcessing: boolean) {\n  const userData = await fetchUserData(userId)\n  \n  if (skipProcessing) {\n    // Returns immediately but still waited for userData\n    return { skipped: true }\n  }\n  \n  // Only this branch uses userData\n  return processUserData(userData)\n}",
@@ -104,7 +104,7 @@
     "description": "blocks both branches"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.2",
     "ruleTitle": "Defer Await Until Needed",
     "type": "good",
     "code": "async function handleRequest(userId: string, skipProcessing: boolean) {\n  if (skipProcessing) {\n    // Returns immediately without waiting\n    return { skipped: true }\n  }\n  \n  // Fetch only when needed\n  const userData = await fetchUserData(userId)\n  return processUserData(userData)\n}",
@@ -112,7 +112,7 @@
     "description": "only blocks when needed"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.3",
     "ruleTitle": "Dependency-Based Parallelization",
     "type": "bad",
     "code": "const [user, config] = await Promise.all([\n  fetchUser(),\n  fetchConfig()\n])\nconst profile = await fetchProfile(user.id)",
@@ -120,7 +120,7 @@
     "description": "profile waits for config unnecessarily"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.3",
     "ruleTitle": "Dependency-Based Parallelization",
     "type": "good",
     "code": "import { all } from 'better-all'\n\nconst { user, config, profile } = await all({\n  async user() { return fetchUser() },\n  async config() { return fetchConfig() },\n  async profile() {\n    return fetchProfile((await this.$.user).id)\n  }\n})",
@@ -128,7 +128,7 @@
     "description": "config and profile run in parallel"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.5",
     "ruleTitle": "Promise.all() for Independent Operations",
     "type": "bad",
     "code": "const user = await fetchUser()\nconst posts = await fetchPosts()\nconst comments = await fetchComments()",
@@ -136,7 +136,7 @@
     "description": "sequential execution, 3 round trips"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.5",
     "ruleTitle": "Promise.all() for Independent Operations",
     "type": "good",
     "code": "const [user, posts, comments] = await Promise.all([\n  fetchUser(),\n  fetchPosts(),\n  fetchComments()\n])",
@@ -144,7 +144,7 @@
     "description": "parallel execution, 1 round trip"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.6",
     "ruleTitle": "Strategic Suspense Boundaries",
     "type": "bad",
     "code": "async function Page() {\n  const data = await fetchData() // Blocks entire page\n  \n  return (\n    <div>\n      <div>Sidebar</div>\n      <div>Header</div>\n      <div>\n        <DataDisplay data={data} />\n      </div>\n      <div>Footer</div>\n    </div>\n  )\n}",
@@ -152,7 +152,7 @@
     "description": "wrapper blocked by data fetching"
   },
   {
-    "ruleId": "",
+    "ruleId": "1.6",
     "ruleTitle": "Strategic Suspense Boundaries",
     "type": "good",
     "code": "function Page() {\n  return (\n    <div>\n      <div>Sidebar</div>\n      <div>Header</div>\n      <div>\n        <Suspense fallback={<Skeleton />}>\n          <DataDisplay />\n        </Suspense>\n      </div>\n      <div>Footer</div>\n    </div>\n  )\n}\n\nasync function DataDisplay() {\n  const data = await fetchData() // Only blocks this component\n  return <div>{data.content}</div>\n}",
@@ -160,7 +160,7 @@
     "description": "wrapper shows immediately, data streams in"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.5",
     "ruleTitle": "Prefer Statically Analyzable Paths",
     "type": "bad",
     "code": "const PAGE_MODULES = {\n  home: './pages/home',\n  settings: './pages/settings',\n} as const\n\nconst Page = await import(PAGE_MODULES[pageName])",
@@ -168,7 +168,7 @@
     "description": "the bundler cannot tell what may be imported"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.5",
     "ruleTitle": "Prefer Statically Analyzable Paths",
     "type": "good",
     "code": "const PAGE_MODULES = {\n  home: () => import('./pages/home'),\n  settings: () => import('./pages/settings'),\n} as const\n\nconst Page = await PAGE_MODULES[pageName]()",
@@ -176,7 +176,7 @@
     "description": "use an explicit map of allowed modules"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.5",
     "ruleTitle": "Prefer Statically Analyzable Paths",
     "type": "bad",
     "code": "const baseDir = path.join(process.cwd(), 'content/' + contentKind)",
@@ -184,7 +184,7 @@
     "description": "a 2-value enum still hides the final path from static analysis"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.5",
     "ruleTitle": "Prefer Statically Analyzable Paths",
     "type": "good",
     "code": "const baseDir =\n  kind === ContentKind.Blog\n    ? path.join(process.cwd(), 'content/blog')\n    : path.join(process.cwd(), 'content/docs')",
@@ -192,7 +192,7 @@
     "description": "make each final path literal at the callsite"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.1",
     "ruleTitle": "Avoid Barrel File Imports",
     "type": "bad",
     "code": "import { Check, X, Menu } from 'lucide-react'\n// Loads 1,583 modules, takes ~2.8s extra in dev\n// Runtime cost: 200-800ms on every cold start\n\nimport { Button, TextField } from '@mui/material'\n// Loads 2,225 modules, takes ~4.2s extra in dev",
@@ -200,7 +200,7 @@
     "description": "imports entire library"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.1",
     "ruleTitle": "Avoid Barrel File Imports",
     "type": "good",
     "code": "// Keep the standard imports - Next.js transforms them to direct imports\nimport { Check, X, Menu } from 'lucide-react'\n// Full TypeScript support, no manual path wrangling",
@@ -208,7 +208,7 @@
     "description": "Correct - Next.js 13.5+ (recommended) example for Avoid Barrel File Imports"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.1",
     "ruleTitle": "Avoid Barrel File Imports",
     "type": "good",
     "code": "import Button from '@mui/material/Button'\nimport TextField from '@mui/material/TextField'\n// Loads only what you use",
@@ -216,7 +216,7 @@
     "description": "Correct - Direct imports (non-Next.js projects) example for Avoid Barrel File Imports"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.3",
     "ruleTitle": "Defer Non-Critical Third-Party Libraries",
     "type": "bad",
     "code": "import { Analytics } from '@vercel/analytics/react'\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Analytics />\n      </body>\n    </html>\n  )\n}",
@@ -224,7 +224,7 @@
     "description": "blocks initial bundle"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.3",
     "ruleTitle": "Defer Non-Critical Third-Party Libraries",
     "type": "good",
     "code": "import dynamic from 'next/dynamic'\n\nconst Analytics = dynamic(\n  () => import('@vercel/analytics/react').then(m => m.Analytics),\n  { ssr: false }\n)\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Analytics />\n      </body>\n    </html>\n  )\n}",
@@ -232,7 +232,7 @@
     "description": "loads after hydration"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.4",
     "ruleTitle": "Dynamic Imports for Heavy Components",
     "type": "bad",
     "code": "import { MonacoEditor } from './monaco-editor'\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
@@ -240,7 +240,7 @@
     "description": "Monaco bundles with main chunk ~300KB"
   },
   {
-    "ruleId": "",
+    "ruleId": "2.4",
     "ruleTitle": "Dynamic Imports for Heavy Components",
     "type": "good",
     "code": "import dynamic from 'next/dynamic'\n\nconst MonacoEditor = dynamic(\n  () => import('./monaco-editor').then(m => m.MonacoEditor),\n  { ssr: false }\n)\n\nfunction CodePanel({ code }: { code: string }) {\n  return <MonacoEditor value={code} />\n}",
@@ -248,7 +248,7 @@
     "description": "Monaco loads on demand"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.1",
     "ruleTitle": "Deduplicate Global Event Listeners",
     "type": "bad",
     "code": "function useKeyboardShortcut(key: string, callback: () => void) {\n  useEffect(() => {\n    const handler = (e: KeyboardEvent) => {\n      if (e.metaKey && e.key === key) {\n        callback()\n      }\n    }\n    window.addEventListener('keydown', handler)\n    return () => window.removeEventListener('keydown', handler)\n  }, [key, callback])\n}",
@@ -256,7 +256,7 @@
     "description": "N instances = N listeners"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.1",
     "ruleTitle": "Deduplicate Global Event Listeners",
     "type": "good",
     "code": "import useSWRSubscription from 'swr/subscription'\n\n// Module-level Map to track callbacks per key\nconst keyCallbacks = new Map<string, Set<() => void>>()\n\nfunction useKeyboardShortcut(key: string, callback: () => void) {\n  // Register this callback in the Map\n  useEffect(() => {\n    if (!keyCallbacks.has(key)) {\n      keyCallbacks.set(key, new Set())\n    }\n    keyCallbacks.get(key)!.add(callback)\n\n    return () => {\n      const set = keyCallbacks.get(key)\n      if (set) {\n        set.delete(callback)\n        if (set.size === 0) {\n          keyCallbacks.delete(key)\n        }\n      }\n    }\n  }, [key, callback])\n\n  useSWRSubscription('global-keydown', () => {\n    const handler = (e: KeyboardEvent) => {\n      if (e.metaKey && keyCallbacks.has(e.key)) {\n        keyCallbacks.get(e.key)!.forEach(cb => cb())\n      }\n    }\n    window.addEventListener('keydown', handler)\n    return () => window.removeEventListener('keydown', handler)\n  })\n}\n\nfunction Profile() {\n  // Multiple shortcuts will share the same listener\n  useKeyboardShortcut('p', () => { /* ... */ }) \n  useKeyboardShortcut('k', () => { /* ... */ })\n  // ...\n}",
@@ -264,7 +264,7 @@
     "description": "N instances = 1 listener"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.4",
     "ruleTitle": "Version and Minimize localStorage Data",
     "type": "bad",
     "code": "// No version, stores everything, no error handling\nlocalStorage.setItem('userConfig', JSON.stringify(fullUserObject))\nconst data = localStorage.getItem('userConfig')",
@@ -272,7 +272,7 @@
     "description": "Incorrect example for Version and Minimize localStorage Data"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.4",
     "ruleTitle": "Version and Minimize localStorage Data",
     "type": "good",
     "code": "const VERSION = 'v2'\n\nfunction saveConfig(config: { theme: string; language: string }) {\n  try {\n    localStorage.setItem(`userConfig:${VERSION}`, JSON.stringify(config))\n  } catch {\n    // Throws in incognito/private browsing, quota exceeded, or disabled\n  }\n}\n\nfunction loadConfig() {\n  try {\n    const data = localStorage.getItem(`userConfig:${VERSION}`)\n    return data ? JSON.parse(data) : null\n  } catch {\n    return null\n  }\n}\n\n// Migration from v1 to v2\nfunction migrate() {\n  try {\n    const v1 = localStorage.getItem('userConfig:v1')\n    if (v1) {\n      const old = JSON.parse(v1)\n      saveConfig({ theme: old.darkMode ? 'dark' : 'light', language: old.lang })\n      localStorage.removeItem('userConfig:v1')\n    }\n  } catch {}\n}",
@@ -280,7 +280,7 @@
     "description": "Correct example for Version and Minimize localStorage Data"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.2",
     "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
     "type": "bad",
     "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch)\n  document.addEventListener('wheel', handleWheel)\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
@@ -288,7 +288,7 @@
     "description": "Incorrect example for Use Passive Event Listeners for Scrolling Performance"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.2",
     "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
     "type": "good",
     "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch, { passive: true })\n  document.addEventListener('wheel', handleWheel, { passive: true })\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
@@ -296,7 +296,7 @@
     "description": "Correct example for Use Passive Event Listeners for Scrolling Performance"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.3",
     "ruleTitle": "Use SWR for Automatic Deduplication",
     "type": "bad",
     "code": "function UserList() {\n  const [users, setUsers] = useState([])\n  useEffect(() => {\n    fetch('/api/users')\n      .then(r => r.json())\n      .then(setUsers)\n  }, [])\n}",
@@ -304,7 +304,7 @@
     "description": "no deduplication, each instance fetches"
   },
   {
-    "ruleId": "",
+    "ruleId": "4.3",
     "ruleTitle": "Use SWR for Automatic Deduplication",
     "type": "good",
     "code": "import useSWR from 'swr'\n\nfunction UserList() {\n  const { data: users } = useSWR('/api/users', fetcher)\n}",
@@ -312,7 +312,7 @@
     "description": "multiple instances share one request"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.1",
     "ruleTitle": "Avoid Layout Thrashing",
     "type": "bad",
     "code": "function layoutThrashing(element: HTMLElement) {\n  element.style.width = '100px'\n  const width = element.offsetWidth  // Forces reflow\n  element.style.height = '200px'\n  const height = element.offsetHeight  // Forces another reflow\n}",
@@ -320,7 +320,7 @@
     "description": "interleaved reads and writes force reflows"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.1",
     "ruleTitle": "Avoid Layout Thrashing",
     "type": "good",
     "code": "function updateElementStyles(element: HTMLElement) {\n  // Batch all writes together\n  element.style.width = '100px'\n  element.style.height = '200px'\n  element.style.backgroundColor = 'blue'\n  element.style.border = '1px solid black'\n  \n  // Read after all writes are done (single reflow)\n  const { width, height } = element.getBoundingClientRect()\n}",
@@ -328,7 +328,7 @@
     "description": "batch writes, then read once"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.1",
     "ruleTitle": "Avoid Layout Thrashing",
     "type": "good",
     "code": "function updateElementStyles(element: HTMLElement) {\n  element.classList.add('highlighted-box')\n  \n  const { width, height } = element.getBoundingClientRect()\n}",
@@ -336,7 +336,7 @@
     "description": "batch reads, then writes"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.4",
     "ruleTitle": "Cache Repeated Function Calls",
     "type": "bad",
     "code": "function ProjectList({ projects }: { projects: Project[] }) {\n  return (\n    <div>\n      {projects.map(project => {\n        // slugify() called 100+ times for same project names\n        const slug = slugify(project.name)\n        \n        return <ProjectCard key={project.id} slug={slug} />\n      })}\n    </div>\n  )\n}",
@@ -344,7 +344,7 @@
     "description": "redundant computation"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.4",
     "ruleTitle": "Cache Repeated Function Calls",
     "type": "good",
     "code": "// Module-level cache\nconst slugifyCache = new Map<string, string>()\n\nfunction cachedSlugify(text: string): string {\n  if (slugifyCache.has(text)) {\n    return slugifyCache.get(text)!\n  }\n  const result = slugify(text)\n  slugifyCache.set(text, result)\n  return result\n}\n\nfunction ProjectList({ projects }: { projects: Project[] }) {\n  return (\n    <div>\n      {projects.map(project => {\n        // Computed only once per unique project name\n        const slug = cachedSlugify(project.name)\n        \n        return <ProjectCard key={project.id} slug={slug} />\n      })}\n    </div>\n  )\n}",
@@ -352,7 +352,7 @@
     "description": "cached results"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.3",
     "ruleTitle": "Cache Property Access in Loops",
     "type": "bad",
     "code": "for (let i = 0; i < arr.length; i++) {\n  process(obj.config.settings.value)\n}",
@@ -360,7 +360,7 @@
     "description": "3 lookups × N iterations"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.3",
     "ruleTitle": "Cache Property Access in Loops",
     "type": "good",
     "code": "const value = obj.config.settings.value\nconst len = arr.length\nfor (let i = 0; i < len; i++) {\n  process(value)\n}",
@@ -368,7 +368,7 @@
     "description": "1 lookup total"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.5",
     "ruleTitle": "Cache Storage API Calls",
     "type": "bad",
     "code": "function getTheme() {\n  return localStorage.getItem('theme') ?? 'light'\n}\n// Called 10 times = 10 storage reads",
@@ -376,7 +376,7 @@
     "description": "reads storage on every call"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.5",
     "ruleTitle": "Cache Storage API Calls",
     "type": "good",
     "code": "const storageCache = new Map<string, string | null>()\n\nfunction getLocalStorage(key: string) {\n  if (!storageCache.has(key)) {\n    storageCache.set(key, localStorage.getItem(key))\n  }\n  return storageCache.get(key)\n}\n\nfunction setLocalStorage(key: string, value: string) {\n  localStorage.setItem(key, value)\n  storageCache.set(key, value)  // keep cache in sync\n}",
@@ -384,7 +384,7 @@
     "description": "Map cache"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.6",
     "ruleTitle": "Combine Multiple Array Iterations",
     "type": "bad",
     "code": "const admins = users.filter(u => u.isAdmin)\nconst testers = users.filter(u => u.isTester)\nconst inactive = users.filter(u => !u.isActive)",
@@ -392,7 +392,7 @@
     "description": "3 iterations"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.6",
     "ruleTitle": "Combine Multiple Array Iterations",
     "type": "good",
     "code": "const admins: User[] = []\nconst testers: User[] = []\nconst inactive: User[] = []\n\nfor (const user of users) {\n  if (user.isAdmin) admins.push(user)\n  if (user.isTester) testers.push(user)\n  if (!user.isActive) inactive.push(user)\n}",
@@ -400,7 +400,7 @@
     "description": "1 iteration"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.9",
     "ruleTitle": "Early Return from Functions",
     "type": "bad",
     "code": "function validateUsers(users: User[]) {\n  let hasError = false\n  let errorMessage = ''\n  \n  for (const user of users) {\n    if (!user.email) {\n      hasError = true\n      errorMessage = 'Email required'\n    }\n    if (!user.name) {\n      hasError = true\n      errorMessage = 'Name required'\n    }\n    // Continues checking all users even after error found\n  }\n  \n  return hasError ? { valid: false, error: errorMessage } : { valid: true }\n}",
@@ -408,7 +408,7 @@
     "description": "processes all items even after finding answer"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.9",
     "ruleTitle": "Early Return from Functions",
     "type": "good",
     "code": "function validateUsers(users: User[]) {\n  for (const user of users) {\n    if (!user.email) {\n      return { valid: false, error: 'Email required' }\n    }\n    if (!user.name) {\n      return { valid: false, error: 'Name required' }\n    }\n  }\n\n  return { valid: true }\n}",
@@ -416,7 +416,7 @@
     "description": "returns immediately on first error"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.11",
     "ruleTitle": "Use flatMap to Map and Filter in One Pass",
     "type": "bad",
     "code": "const userNames = users\n  .map(user => user.isActive ? user.name : null)\n  .filter(Boolean)",
@@ -424,7 +424,7 @@
     "description": "2 iterations, intermediate array"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.11",
     "ruleTitle": "Use flatMap to Map and Filter in One Pass",
     "type": "good",
     "code": "const userNames = users.flatMap(user =>\n  user.isActive ? [user.name] : []\n)",
@@ -432,7 +432,7 @@
     "description": "1 iteration, no intermediate array"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.10",
     "ruleTitle": "Hoist RegExp Creation",
     "type": "bad",
     "code": "function Highlighter({ text, query }: Props) {\n  const regex = new RegExp(`(${query})`, 'gi')\n  const parts = text.split(regex)\n  return <>{parts.map((part, i) => ...)}</>\n}",
@@ -440,7 +440,7 @@
     "description": "new RegExp every render"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.10",
     "ruleTitle": "Hoist RegExp Creation",
     "type": "good",
     "code": "const EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/\n\nfunction Highlighter({ text, query }: Props) {\n  const regex = useMemo(\n    () => new RegExp(`(${escapeRegex(query)})`, 'gi'),\n    [query]\n  )\n  const parts = text.split(regex)\n  return <>{parts.map((part, i) => ...)}</>\n}",
@@ -448,7 +448,7 @@
     "description": "memoize or hoist"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.2",
     "ruleTitle": "Build Index Maps for Repeated Lookups",
     "type": "bad",
     "code": "function processOrders(orders: Order[], users: User[]) {\n  return orders.map(order => ({\n    ...order,\n    user: users.find(u => u.id === order.userId)\n  }))\n}",
@@ -456,7 +456,7 @@
     "description": "Incorrect (O(n) per lookup) example for Build Index Maps for Repeated Lookups"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.2",
     "ruleTitle": "Build Index Maps for Repeated Lookups",
     "type": "good",
     "code": "function processOrders(orders: Order[], users: User[]) {\n  const userById = new Map(users.map(u => [u.id, u]))\n\n  return orders.map(order => ({\n    ...order,\n    user: userById.get(order.userId)\n  }))\n}",
@@ -464,7 +464,7 @@
     "description": "Correct (O(1) per lookup) example for Build Index Maps for Repeated Lookups"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.8",
     "ruleTitle": "Early Length Check for Array Comparisons",
     "type": "bad",
     "code": "function hasChanges(current: string[], original: string[]) {\n  // Always sorts and joins, even when lengths differ\n  return current.sort().join() !== original.sort().join()\n}",
@@ -472,7 +472,7 @@
     "description": "always runs expensive comparison"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.8",
     "ruleTitle": "Early Length Check for Array Comparisons",
     "type": "good",
     "code": "function hasChanges(current: string[], original: string[]) {\n  // Early return if lengths differ\n  if (current.length !== original.length) {\n    return true\n  }\n  // Only sort when lengths match\n  const currentSorted = current.toSorted()\n  const originalSorted = original.toSorted()\n  for (let i = 0; i < currentSorted.length; i++) {\n    if (currentSorted[i] !== originalSorted[i]) {\n      return true\n    }\n  }\n  return false\n}",
@@ -480,7 +480,7 @@
     "description": "Correct (O(1) length check first) example for Early Length Check for Array Comparisons"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.12",
     "ruleTitle": "Use Loop for Min/Max Instead of Sort",
     "type": "bad",
     "code": "interface Project {\n  id: string\n  name: string\n  updatedAt: number\n}\n\nfunction getLatestProject(projects: Project[]) {\n  const sorted = [...projects].sort((a, b) => b.updatedAt - a.updatedAt)\n  return sorted[0]\n}",
@@ -488,7 +488,7 @@
     "description": "Incorrect (O(n log n) - sort to find latest) example for Use Loop for Min/Max Instead of Sort"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.12",
     "ruleTitle": "Use Loop for Min/Max Instead of Sort",
     "type": "bad",
     "code": "function getOldestAndNewest(projects: Project[]) {\n  const sorted = [...projects].sort((a, b) => a.updatedAt - b.updatedAt)\n  return { oldest: sorted[0], newest: sorted[sorted.length - 1] }\n}",
@@ -496,7 +496,7 @@
     "description": "Incorrect (O(n log n) - sort for oldest and newest) example for Use Loop for Min/Max Instead of Sort"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.12",
     "ruleTitle": "Use Loop for Min/Max Instead of Sort",
     "type": "good",
     "code": "function getLatestProject(projects: Project[]) {\n  if (projects.length === 0) return null\n  \n  let latest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt > latest.updatedAt) {\n      latest = projects[i]\n    }\n  }\n  \n  return latest\n}\n\nfunction getOldestAndNewest(projects: Project[]) {\n  if (projects.length === 0) return { oldest: null, newest: null }\n  \n  let oldest = projects[0]\n  let newest = projects[0]\n  \n  for (let i = 1; i < projects.length; i++) {\n    if (projects[i].updatedAt < oldest.updatedAt) oldest = projects[i]\n    if (projects[i].updatedAt > newest.updatedAt) newest = projects[i]\n  }\n  \n  return { oldest, newest }\n}",
@@ -504,7 +504,7 @@
     "description": "Correct (O(n) - single loop) example for Use Loop for Min/Max Instead of Sort"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.7",
     "ruleTitle": "Defer Non-Critical Work with requestIdleCallback",
     "type": "bad",
     "code": "function handleSearch(query: string) {\n  const results = searchItems(query)\n  setResults(results)\n\n  // These block the main thread immediately\n  analytics.track('search', { query })\n  saveToRecentSearches(query)\n  prefetchTopResults(results.slice(0, 3))\n}",
@@ -512,7 +512,7 @@
     "description": "blocks main thread during user interaction"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.7",
     "ruleTitle": "Defer Non-Critical Work with requestIdleCallback",
     "type": "good",
     "code": "function handleSearch(query: string) {\n  const results = searchItems(query)\n  setResults(results)\n\n  // Defer non-critical work to idle periods\n  requestIdleCallback(() => {\n    analytics.track('search', { query })\n  })\n\n  requestIdleCallback(() => {\n    saveToRecentSearches(query)\n  })\n\n  requestIdleCallback(() => {\n    prefetchTopResults(results.slice(0, 3))\n  })\n}",
@@ -520,7 +520,7 @@
     "description": "defers non-critical work to idle time"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.13",
     "ruleTitle": "Use Set/Map for O(1) Lookups",
     "type": "bad",
     "code": "const allowedIds = ['a', 'b', 'c', ...]\nitems.filter(item => allowedIds.includes(item.id))",
@@ -528,7 +528,7 @@
     "description": "Incorrect (O(n) per check) example for Use Set/Map for O(1) Lookups"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.13",
     "ruleTitle": "Use Set/Map for O(1) Lookups",
     "type": "good",
     "code": "const allowedIds = new Set(['a', 'b', 'c', ...])\nitems.filter(item => allowedIds.has(item.id))",
@@ -536,7 +536,7 @@
     "description": "Correct (O(1) per check) example for Use Set/Map for O(1) Lookups"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.14",
     "ruleTitle": "Use toSorted() Instead of sort() for Immutability",
     "type": "bad",
     "code": "function UserList({ users }: { users: User[] }) {\n  // Mutates the users prop array!\n  const sorted = useMemo(\n    () => users.sort((a, b) => a.name.localeCompare(b.name)),\n    [users]\n  )\n  return <div>{sorted.map(renderUser)}</div>\n}",
@@ -544,7 +544,7 @@
     "description": "mutates original array"
   },
   {
-    "ruleId": "",
+    "ruleId": "7.14",
     "ruleTitle": "Use toSorted() Instead of sort() for Immutability",
     "type": "good",
     "code": "function UserList({ users }: { users: User[] }) {\n  // Creates new sorted array, original unchanged\n  const sorted = useMemo(\n    () => users.toSorted((a, b) => a.name.localeCompare(b.name)),\n    [users]\n  )\n  return <div>{sorted.map(renderUser)}</div>\n}",
@@ -552,7 +552,7 @@
     "description": "creates new array"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.1",
     "ruleTitle": "Animate SVG Wrapper Instead of SVG Element",
     "type": "bad",
     "code": "function LoadingSpinner() {\n  return (\n    <svg \n      className=\"animate-spin\"\n      width=\"24\" \n      height=\"24\" \n      viewBox=\"0 0 24 24\"\n    >\n      <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n    </svg>\n  )\n}",
@@ -560,7 +560,7 @@
     "description": "animating SVG directly - no hardware acceleration"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.1",
     "ruleTitle": "Animate SVG Wrapper Instead of SVG Element",
     "type": "good",
     "code": "function LoadingSpinner() {\n  return (\n    <div className=\"animate-spin\">\n      <svg \n        width=\"24\" \n        height=\"24\" \n        viewBox=\"0 0 24 24\"\n      >\n        <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n      </svg>\n    </div>\n  )\n}",
@@ -568,7 +568,7 @@
     "description": "animating wrapper div - hardware accelerated"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.9",
     "ruleTitle": "Use Explicit Conditional Rendering",
     "type": "bad",
     "code": "function Badge({ count }: { count: number }) {\n  return (\n    <div>\n      {count && <span className=\"badge\">{count}</span>}\n    </div>\n  )\n}\n\n// When count = 0, renders: <div>0</div>\n// When count = 5, renders: <div><span class=\"badge\">5</span></div>",
@@ -576,7 +576,7 @@
     "description": "renders \"0\" when count is 0"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.9",
     "ruleTitle": "Use Explicit Conditional Rendering",
     "type": "good",
     "code": "function Badge({ count }: { count: number }) {\n  return (\n    <div>\n      {count > 0 ? <span className=\"badge\">{count}</span> : null}\n    </div>\n  )\n}\n\n// When count = 0, renders: <div></div>\n// When count = 5, renders: <div><span class=\"badge\">5</span></div>",
@@ -584,7 +584,7 @@
     "description": "renders nothing when count is 0"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.3",
     "ruleTitle": "Hoist Static JSX Elements",
     "type": "bad",
     "code": "function LoadingSkeleton() {\n  return <div className=\"animate-pulse h-20 bg-gray-200\" />\n}\n\nfunction Container() {\n  return (\n    <div>\n      {loading && <LoadingSkeleton />}\n    </div>\n  )\n}",
@@ -592,7 +592,7 @@
     "description": "recreates element every render"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.3",
     "ruleTitle": "Hoist Static JSX Elements",
     "type": "good",
     "code": "const loadingSkeleton = (\n  <div className=\"animate-pulse h-20 bg-gray-200\" />\n)\n\nfunction Container() {\n  return (\n    <div>\n      {loading && loadingSkeleton}\n    </div>\n  )\n}",
@@ -600,7 +600,7 @@
     "description": "reuses same element"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.5",
     "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
     "type": "bad",
     "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  // localStorage is not available on server - throws error\n  const theme = localStorage.getItem('theme') || 'light'\n  \n  return (\n    <div className={theme}>\n      {children}\n    </div>\n  )\n}",
@@ -608,7 +608,7 @@
     "description": "breaks SSR"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.5",
     "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
     "type": "bad",
     "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  const [theme, setTheme] = useState('light')\n  \n  useEffect(() => {\n    // Runs after hydration - causes visible flash\n    const stored = localStorage.getItem('theme')\n    if (stored) {\n      setTheme(stored)\n    }\n  }, [])\n  \n  return (\n    <div className={theme}>\n      {children}\n    </div>\n  )\n}",
@@ -616,7 +616,7 @@
     "description": "visual flickering"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.5",
     "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
     "type": "good",
     "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  return (\n    <>\n      <div id=\"theme-wrapper\">\n        {children}\n      </div>\n      <script\n        dangerouslySetInnerHTML={{\n          __html: `\n            (function() {\n              try {\n                var theme = localStorage.getItem('theme') || 'light';\n                var el = document.getElementById('theme-wrapper');\n                if (el) el.className = theme;\n              } catch (e) {}\n            })();\n          `,\n        }}\n      />\n    </>\n  )\n}",
@@ -624,7 +624,7 @@
     "description": "no flicker, no hydration mismatch"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.6",
     "ruleTitle": "Suppress Expected Hydration Mismatches",
     "type": "bad",
     "code": "function Timestamp() {\n  return <span>{new Date().toLocaleString()}</span>\n}",
@@ -632,7 +632,7 @@
     "description": "known mismatch warnings"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.6",
     "ruleTitle": "Suppress Expected Hydration Mismatches",
     "type": "good",
     "code": "function Timestamp() {\n  return (\n    <span suppressHydrationWarning>\n      {new Date().toLocaleString()}\n    </span>\n  )\n}",
@@ -640,7 +640,7 @@
     "description": "suppress expected mismatch only"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.8",
     "ruleTitle": "Use defer or async on Script Tags",
     "type": "bad",
     "code": "export default function Document() {\n  return (\n    <html>\n      <head>\n        <script src=\"https://example.com/analytics.js\" />\n        <script src=\"/scripts/utils.js\" />\n      </head>\n      <body>{/* content */}</body>\n    </html>\n  )\n}",
@@ -648,7 +648,7 @@
     "description": "blocks rendering"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.8",
     "ruleTitle": "Use defer or async on Script Tags",
     "type": "good",
     "code": "import Script from 'next/script'\n\nexport default function Page() {\n  return (\n    <>\n      <Script src=\"https://example.com/analytics.js\" strategy=\"afterInteractive\" />\n      <Script src=\"/scripts/utils.js\" strategy=\"beforeInteractive\" />\n    </>\n  )\n}",
@@ -656,7 +656,7 @@
     "description": "non-blocking"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.4",
     "ruleTitle": "Optimize SVG Precision",
     "type": "bad",
     "code": "<path d=\"M 10.293847 20.847362 L 30.938472 40.192837\" />",
@@ -664,7 +664,7 @@
     "description": "excessive precision"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.4",
     "ruleTitle": "Optimize SVG Precision",
     "type": "good",
     "code": "<path d=\"M 10.3 20.8 L 30.9 40.2\" />",
@@ -672,7 +672,7 @@
     "description": "1 decimal place"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.11",
     "ruleTitle": "Use useTransition Over Manual Loading States",
     "type": "bad",
     "code": "function SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isLoading, setIsLoading] = useState(false)\n\n  const handleSearch = async (value: string) => {\n    setIsLoading(true)\n    setQuery(value)\n    const data = await fetchResults(value)\n    setResults(data)\n    setIsLoading(false)\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isLoading && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
@@ -680,7 +680,7 @@
     "description": "manual loading state"
   },
   {
-    "ruleId": "",
+    "ruleId": "6.11",
     "ruleTitle": "Use useTransition Over Manual Loading States",
     "type": "good",
     "code": "import { useTransition, useState } from 'react'\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isPending, startTransition] = useTransition()\n\n  const handleSearch = (value: string) => {\n    setQuery(value) // Update input immediately\n    \n    startTransition(async () => {\n      // Fetch and update results\n      const data = await fetchResults(value)\n      setResults(data)\n    })\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isPending && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
@@ -688,7 +688,7 @@
     "description": "useTransition with built-in pending state"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.2",
     "ruleTitle": "Defer State Reads to Usage Point",
     "type": "bad",
     "code": "function ShareButton({ chatId }: { chatId: string }) {\n  const searchParams = useSearchParams()\n\n  const handleShare = () => {\n    const ref = searchParams.get('ref')\n    shareChat(chatId, { ref })\n  }\n\n  return <button onClick={handleShare}>Share</button>\n}",
@@ -696,7 +696,7 @@
     "description": "subscribes to all searchParams changes"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.2",
     "ruleTitle": "Defer State Reads to Usage Point",
     "type": "good",
     "code": "function ShareButton({ chatId }: { chatId: string }) {\n  const handleShare = () => {\n    const params = new URLSearchParams(window.location.search)\n    const ref = params.get('ref')\n    shareChat(chatId, { ref })\n  }\n\n  return <button onClick={handleShare}>Share</button>\n}",
@@ -704,7 +704,7 @@
     "description": "reads on demand, no subscription"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.7",
     "ruleTitle": "Narrow Effect Dependencies",
     "type": "bad",
     "code": "useEffect(() => {\n  console.log(user.id)\n}, [user])",
@@ -712,7 +712,7 @@
     "description": "re-runs on any user field change"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.7",
     "ruleTitle": "Narrow Effect Dependencies",
     "type": "good",
     "code": "useEffect(() => {\n  console.log(user.id)\n}, [user.id])",
@@ -720,7 +720,7 @@
     "description": "re-runs only when id changes"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.1",
     "ruleTitle": "Calculate Derived State During Rendering",
     "type": "bad",
     "code": "function Form() {\n  const [firstName, setFirstName] = useState('First')\n  const [lastName, setLastName] = useState('Last')\n  const [fullName, setFullName] = useState('')\n\n  useEffect(() => {\n    setFullName(firstName + ' ' + lastName)\n  }, [firstName, lastName])\n\n  return <p>{fullName}</p>\n}",
@@ -728,7 +728,7 @@
     "description": "redundant state and effect"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.1",
     "ruleTitle": "Calculate Derived State During Rendering",
     "type": "good",
     "code": "function Form() {\n  const [firstName, setFirstName] = useState('First')\n  const [lastName, setLastName] = useState('Last')\n  const fullName = firstName + ' ' + lastName\n\n  return <p>{fullName}</p>\n}",
@@ -736,7 +736,7 @@
     "description": "derive during render"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.10",
     "ruleTitle": "Subscribe to Derived State",
     "type": "bad",
     "code": "function Sidebar() {\n  const width = useWindowWidth()  // updates continuously\n  const isMobile = width < 768\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
@@ -744,7 +744,7 @@
     "description": "re-renders on every pixel change"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.10",
     "ruleTitle": "Subscribe to Derived State",
     "type": "good",
     "code": "function Sidebar() {\n  const isMobile = useMediaQuery('(max-width: 767px)')\n  return <nav className={isMobile ? 'mobile' : 'desktop'} />\n}",
@@ -752,7 +752,7 @@
     "description": "re-renders only when boolean changes"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.11",
     "ruleTitle": "Use Functional setState Updates",
     "type": "bad",
     "code": "function TodoList() {\n  const [items, setItems] = useState(initialItems)\n  \n  // Callback must depend on items, recreated on every items change\n  const addItems = useCallback((newItems: Item[]) => {\n    setItems([...items, ...newItems])\n  }, [items])  // ❌ items dependency causes recreations\n  \n  // Risk of stale closure if dependency is forgotten\n  const removeItem = useCallback((id: string) => {\n    setItems(items.filter(item => item.id !== id))\n  }, [])  // ❌ Missing items dependency - will use stale items!\n  \n  return <ItemsEditor items={items} onAdd={addItems} onRemove={removeItem} />\n}",
@@ -760,7 +760,7 @@
     "description": "requires state as dependency"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.11",
     "ruleTitle": "Use Functional setState Updates",
     "type": "good",
     "code": "function TodoList() {\n  const [items, setItems] = useState(initialItems)\n  \n  // Stable callback, never recreated\n  const addItems = useCallback((newItems: Item[]) => {\n    setItems(curr => [...curr, ...newItems])\n  }, [])  // ✅ No dependencies needed\n  \n  // Always uses latest state, no stale closure risk\n  const removeItem = useCallback((id: string) => {\n    setItems(curr => curr.filter(item => item.id !== id))\n  }, [])  // ✅ Safe and stable\n  \n  return <ItemsEditor items={items} onAdd={addItems} onRemove={removeItem} />\n}",
@@ -768,7 +768,7 @@
     "description": "stable callbacks, no stale closures"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.12",
     "ruleTitle": "Use Lazy State Initialization",
     "type": "bad",
     "code": "function FilteredList({ items }: { items: Item[] }) {\n  // buildSearchIndex() runs on EVERY render, even after initialization\n  const [searchIndex, setSearchIndex] = useState(buildSearchIndex(items))\n  const [query, setQuery] = useState('')\n  \n  // When query changes, buildSearchIndex runs again unnecessarily\n  return <SearchResults index={searchIndex} query={query} />\n}\n\nfunction UserProfile() {\n  // JSON.parse runs on every render\n  const [settings, setSettings] = useState(\n    JSON.parse(localStorage.getItem('settings') || '{}')\n  )\n  \n  return <SettingsForm settings={settings} onChange={setSettings} />\n}",
@@ -776,7 +776,7 @@
     "description": "runs on every render"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.12",
     "ruleTitle": "Use Lazy State Initialization",
     "type": "good",
     "code": "function FilteredList({ items }: { items: Item[] }) {\n  // buildSearchIndex() runs ONLY on initial render\n  const [searchIndex, setSearchIndex] = useState(() => buildSearchIndex(items))\n  const [query, setQuery] = useState('')\n  \n  return <SearchResults index={searchIndex} query={query} />\n}\n\nfunction UserProfile() {\n  // JSON.parse runs only on initial render\n  const [settings, setSettings] = useState(() => {\n    const stored = localStorage.getItem('settings')\n    return stored ? JSON.parse(stored) : {}\n  })\n  \n  return <SettingsForm settings={settings} onChange={setSettings} />\n}",
@@ -784,7 +784,7 @@
     "description": "runs only once"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.5",
     "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
     "type": "bad",
     "code": "const UserAvatar = memo(function UserAvatar({ onClick = () => {} }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
@@ -792,7 +792,7 @@
     "description": "`onClick` has different values on every rerender"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.5",
     "ruleTitle": "Extract Default Non-primitive Parameter Value from Memoized Component to Constant",
     "type": "good",
     "code": "const NOOP = () => {};\n\nconst UserAvatar = memo(function UserAvatar({ onClick = NOOP }: { onClick?: () => void }) {\n  // ...\n})\n\n// Used without optional onClick\n<UserAvatar />",
@@ -800,7 +800,7 @@
     "description": "stable default value"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.6",
     "ruleTitle": "Extract to Memoized Components",
     "type": "bad",
     "code": "function Profile({ user, loading }: Props) {\n  const avatar = useMemo(() => {\n    const id = computeAvatarId(user)\n    return <Avatar id={id} />\n  }, [user])\n\n  if (loading) return <Skeleton />\n  return <div>{avatar}</div>\n}",
@@ -808,7 +808,7 @@
     "description": "computes avatar even when loading"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.6",
     "ruleTitle": "Extract to Memoized Components",
     "type": "good",
     "code": "const UserAvatar = memo(function UserAvatar({ user }: { user: User }) {\n  const id = useMemo(() => computeAvatarId(user), [user])\n  return <Avatar id={id} />\n})\n\nfunction Profile({ user, loading }: Props) {\n  if (loading) return <Skeleton />\n  return (\n    <div>\n      <UserAvatar user={user} />\n    </div>\n  )\n}",
@@ -816,7 +816,7 @@
     "description": "skips computation when loading"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.8",
     "ruleTitle": "Put Interaction Logic in Event Handlers",
     "type": "bad",
     "code": "function Form() {\n  const [submitted, setSubmitted] = useState(false)\n  const theme = useContext(ThemeContext)\n\n  useEffect(() => {\n    if (submitted) {\n      post('/api/register')\n      showToast('Registered', theme)\n    }\n  }, [submitted, theme])\n\n  return <button onClick={() => setSubmitted(true)}>Submit</button>\n}",
@@ -824,7 +824,7 @@
     "description": "event modeled as state + effect"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.8",
     "ruleTitle": "Put Interaction Logic in Event Handlers",
     "type": "good",
     "code": "function Form() {\n  const theme = useContext(ThemeContext)\n\n  function handleSubmit() {\n    post('/api/register')\n    showToast('Registered', theme)\n  }\n\n  return <button onClick={handleSubmit}>Submit</button>\n}",
@@ -832,7 +832,7 @@
     "description": "do it in the handler"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.4",
     "ruleTitle": "Don't Define Components Inside Components",
     "type": "bad",
     "code": "function UserProfile({ user, theme }) {\n  // Defined inside to access `theme` - BAD\n  const Avatar = () => (\n    <img\n      src={user.avatarUrl}\n      className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}\n    />\n  )\n\n  // Defined inside to access `user` - BAD\n  const Stats = () => (\n    <div>\n      <span>{user.followers} followers</span>\n      <span>{user.posts} posts</span>\n    </div>\n  )\n\n  return (\n    <div>\n      <Avatar />\n      <Stats />\n    </div>\n  )\n}",
@@ -840,7 +840,7 @@
     "description": "remounts on every render"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.4",
     "ruleTitle": "Don't Define Components Inside Components",
     "type": "good",
     "code": "function Avatar({ src, theme }: { src: string; theme: string }) {\n  return (\n    <img\n      src={src}\n      className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}\n    />\n  )\n}\n\nfunction Stats({ followers, posts }: { followers: number; posts: number }) {\n  return (\n    <div>\n      <span>{followers} followers</span>\n      <span>{posts} posts</span>\n    </div>\n  )\n}\n\nfunction UserProfile({ user, theme }) {\n  return (\n    <div>\n      <Avatar src={user.avatarUrl} theme={theme} />\n      <Stats followers={user.followers} posts={user.posts} />\n    </div>\n  )\n}",
@@ -848,7 +848,7 @@
     "description": "pass props instead"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.3",
     "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
     "type": "bad",
     "code": "function Header({ user, notifications }: Props) {\n  const isLoading = useMemo(() => {\n    return user.isLoading || notifications.isLoading\n  }, [user.isLoading, notifications.isLoading])\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
@@ -856,7 +856,7 @@
     "description": "Incorrect example for Do not wrap a simple expression with a primitive result type in useMemo"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.3",
     "ruleTitle": "Do not wrap a simple expression with a primitive result type in useMemo",
     "type": "good",
     "code": "function Header({ user, notifications }: Props) {\n  const isLoading = user.isLoading || notifications.isLoading\n\n  if (isLoading) return <Skeleton />\n  // return some markup\n}",
@@ -864,7 +864,7 @@
     "description": "Correct example for Do not wrap a simple expression with a primitive result type in useMemo"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.9",
     "ruleTitle": "Split Combined Hook Computations",
     "type": "bad",
     "code": "const sortedProducts = useMemo(() => {\n  const filtered = products.filter((p) => p.category === category)\n  const sorted = filtered.toSorted((a, b) =>\n    sortOrder === \"asc\" ? a.price - b.price : b.price - a.price\n  )\n  return sorted\n}, [products, category, sortOrder])",
@@ -872,7 +872,7 @@
     "description": "changing `sortOrder` recomputes filtering"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.9",
     "ruleTitle": "Split Combined Hook Computations",
     "type": "good",
     "code": "const filteredProducts = useMemo(\n  () => products.filter((p) => p.category === category),\n  [products, category]\n)\n\nconst sortedProducts = useMemo(\n  () =>\n    filteredProducts.toSorted((a, b) =>\n      sortOrder === \"asc\" ? a.price - b.price : b.price - a.price\n    ),\n  [filteredProducts, sortOrder]\n)",
@@ -880,7 +880,7 @@
     "description": "filtering only recomputes when products or category change"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.9",
     "ruleTitle": "Split Combined Hook Computations",
     "type": "bad",
     "code": "useEffect(() => {\n  analytics.trackPageView(pathname)\n  document.title = `${pageTitle} | My App`\n}, [pathname, pageTitle])",
@@ -888,7 +888,7 @@
     "description": "both effects run when either dependency changes"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.9",
     "ruleTitle": "Split Combined Hook Computations",
     "type": "good",
     "code": "useEffect(() => {\n  analytics.trackPageView(pathname)\n}, [pathname])\n\nuseEffect(() => {\n  document.title = `${pageTitle} | My App`\n}, [pageTitle])",
@@ -896,7 +896,7 @@
     "description": "effects run independently"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.13",
     "ruleTitle": "Use Transitions for Non-Urgent Updates",
     "type": "bad",
     "code": "function ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => setScrollY(window.scrollY)\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
@@ -904,7 +904,7 @@
     "description": "blocks UI on every scroll"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.13",
     "ruleTitle": "Use Transitions for Non-Urgent Updates",
     "type": "good",
     "code": "import { startTransition } from 'react'\n\nfunction ScrollTracker() {\n  const [scrollY, setScrollY] = useState(0)\n  useEffect(() => {\n    const handler = () => {\n      startTransition(() => setScrollY(window.scrollY))\n    }\n    window.addEventListener('scroll', handler, { passive: true })\n    return () => window.removeEventListener('scroll', handler)\n  }, [])\n}",
@@ -912,7 +912,7 @@
     "description": "non-blocking updates"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.14",
     "ruleTitle": "Use useDeferredValue for Expensive Derived Renders",
     "type": "bad",
     "code": "function Search({ items }: { items: Item[] }) {\n  const [query, setQuery] = useState('')\n  const filtered = items.filter(item => fuzzyMatch(item, query))\n\n  return (\n    <>\n      <input value={query} onChange={e => setQuery(e.target.value)} />\n      <ResultsList results={filtered} />\n    </>\n  )\n}",
@@ -920,7 +920,7 @@
     "description": "input feels laggy while filtering"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.14",
     "ruleTitle": "Use useDeferredValue for Expensive Derived Renders",
     "type": "good",
     "code": "function Search({ items }: { items: Item[] }) {\n  const [query, setQuery] = useState('')\n  const deferredQuery = useDeferredValue(query)\n  const filtered = useMemo(\n    () => items.filter(item => fuzzyMatch(item, deferredQuery)),\n    [items, deferredQuery]\n  )\n  const isStale = query !== deferredQuery\n\n  return (\n    <>\n      <input value={query} onChange={e => setQuery(e.target.value)} />\n      <div style={{ opacity: isStale ? 0.7 : 1 }}>\n        <ResultsList results={filtered} />\n      </div>\n    </>\n  )\n}",
@@ -928,7 +928,7 @@
     "description": "input stays snappy, results render when ready"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.15",
     "ruleTitle": "Use useRef for Transient Values",
     "type": "bad",
     "code": "function Tracker() {\n  const [lastX, setLastX] = useState(0)\n\n  useEffect(() => {\n    const onMove = (e: MouseEvent) => setLastX(e.clientX)\n    window.addEventListener('mousemove', onMove)\n    return () => window.removeEventListener('mousemove', onMove)\n  }, [])\n\n  return (\n    <div\n      style={{\n        position: 'fixed',\n        top: 0,\n        left: lastX,\n        width: 8,\n        height: 8,\n        background: 'black',\n      }}\n    />\n  )\n}",
@@ -936,7 +936,7 @@
     "description": "renders every update"
   },
   {
-    "ruleId": "",
+    "ruleId": "5.15",
     "ruleTitle": "Use useRef for Transient Values",
     "type": "good",
     "code": "function Tracker() {\n  const lastXRef = useRef(0)\n  const dotRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const onMove = (e: MouseEvent) => {\n      lastXRef.current = e.clientX\n      const node = dotRef.current\n      if (node) {\n        node.style.transform = `translateX(${e.clientX}px)`\n      }\n    }\n    window.addEventListener('mousemove', onMove)\n    return () => window.removeEventListener('mousemove', onMove)\n  }, [])\n\n  return (\n    <div\n      ref={dotRef}\n      style={{\n        position: 'fixed',\n        top: 0,\n        left: 0,\n        width: 8,\n        height: 8,\n        background: 'black',\n        transform: 'translateX(0px)',\n      }}\n    />\n  )\n}",
@@ -944,7 +944,7 @@
     "description": "no re-render for tracking"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.10",
     "ruleTitle": "Use after() for Non-Blocking Operations",
     "type": "bad",
     "code": "import { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Logging blocks the response\n  const userAgent = request.headers.get('user-agent') || 'unknown'\n  await logUserAction({ userAgent })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
@@ -952,7 +952,7 @@
     "description": "blocks response"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.10",
     "ruleTitle": "Use after() for Non-Blocking Operations",
     "type": "good",
     "code": "import { after } from 'next/server'\nimport { headers, cookies } from 'next/headers'\nimport { logUserAction } from '@/app/utils'\n\nexport async function POST(request: Request) {\n  // Perform mutation\n  await updateDatabase(request)\n  \n  // Log after response is sent\n  after(async () => {\n    const userAgent = (await headers()).get('user-agent') || 'unknown'\n    const sessionCookie = (await cookies()).get('session-id')?.value || 'anonymous'\n    \n    logUserAction({ sessionCookie, userAgent })\n  })\n  \n  return new Response(JSON.stringify({ status: 'success' }), {\n    status: 200,\n    headers: { 'Content-Type': 'application/json' }\n  })\n}",
@@ -960,7 +960,7 @@
     "description": "non-blocking"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.1",
     "ruleTitle": "Authenticate Server Actions Like API Routes",
     "type": "bad",
     "code": "'use server'\n\nexport async function deleteUser(userId: string) {\n  // Anyone can call this! No auth check\n  await db.user.delete({ where: { id: userId } })\n  return { success: true }\n}",
@@ -968,7 +968,7 @@
     "description": "no authentication check"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.1",
     "ruleTitle": "Authenticate Server Actions Like API Routes",
     "type": "good",
     "code": "'use server'\n\nimport { verifySession } from '@/lib/auth'\nimport { unauthorized } from '@/lib/errors'\n\nexport async function deleteUser(userId: string) {\n  // Always check auth inside the action\n  const session = await verifySession()\n  \n  if (!session) {\n    throw unauthorized('Must be logged in')\n  }\n  \n  // Check authorization too\n  if (session.user.role !== 'admin' && session.user.id !== userId) {\n    throw unauthorized('Cannot delete other users')\n  }\n  \n  await db.user.delete({ where: { id: userId } })\n  return { success: true }\n}",
@@ -976,7 +976,7 @@
     "description": "authentication inside the action"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.9",
     "ruleTitle": "Per-Request Deduplication with React.cache()",
     "type": "bad",
     "code": "const getUser = cache(async (params: { uid: number }) => {\n  return await db.user.findUnique({ where: { id: params.uid } })\n})\n\n// Each call creates new object, never hits cache\ngetUser({ uid: 1 })\ngetUser({ uid: 1 })  // Cache miss, runs query again",
@@ -984,7 +984,7 @@
     "description": "always cache miss"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.9",
     "ruleTitle": "Per-Request Deduplication with React.cache()",
     "type": "good",
     "code": "const params = { uid: 1 }\ngetUser(params)  // Query runs\ngetUser(params)  // Cache hit (same reference)",
@@ -992,7 +992,7 @@
     "description": "cache hit"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.2",
     "ruleTitle": "Avoid Duplicate Serialization in RSC Props",
     "type": "bad",
     "code": "// RSC: sends 6 strings (2 arrays × 3 items)\n<ClientList usernames={usernames} usernamesOrdered={usernames.toSorted()} />",
@@ -1000,7 +1000,7 @@
     "description": "duplicates array"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.2",
     "ruleTitle": "Avoid Duplicate Serialization in RSC Props",
     "type": "good",
     "code": "// RSC: send once\n<ClientList usernames={usernames} />\n\n// Client: transform there\n'use client'\nconst sorted = useMemo(() => [...usernames].sort(), [usernames])",
@@ -1008,7 +1008,7 @@
     "description": "sends 3 strings"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.5",
     "ruleTitle": "Hoist Static I/O to Module Level",
     "type": "bad",
     "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\nexport async function GET(request: Request) {\n  // Runs on EVERY request - expensive!\n  const fontData = await fetch(\n    new URL('./fonts/Inter.ttf', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  const logoData = await fetch(\n    new URL('./images/logo.png', import.meta.url)\n  ).then(res => res.arrayBuffer())\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
@@ -1016,7 +1016,7 @@
     "description": "reads font file on every request"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.5",
     "ruleTitle": "Hoist Static I/O to Module Level",
     "type": "good",
     "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\n\n// Module-level: runs ONCE when module is first imported\nconst fontData = fetch(\n  new URL('./fonts/Inter.ttf', import.meta.url)\n).then(res => res.arrayBuffer())\n\nconst logoData = fetch(\n  new URL('./images/logo.png', import.meta.url)\n).then(res => res.arrayBuffer())\n\nexport async function GET(request: Request) {\n  // Await the already-started promises\n  const [font, logo] = await Promise.all([fontData, logoData])\n\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logo} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: font }] }\n  )\n}",
@@ -1024,7 +1024,7 @@
     "description": "loads once at module initialization"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.5",
     "ruleTitle": "Hoist Static I/O to Module Level",
     "type": "good",
     "code": "// app/api/og/route.tsx\nimport { ImageResponse } from 'next/og'\nimport { readFileSync } from 'fs'\nimport { join } from 'path'\n\n// Synchronous read at module level - blocks only during module init\nconst fontData = readFileSync(\n  join(process.cwd(), 'public/fonts/Inter.ttf')\n)\n\nconst logoData = readFileSync(\n  join(process.cwd(), 'public/images/logo.png')\n)\n\nexport async function GET(request: Request) {\n  return new ImageResponse(\n    <div style={{ fontFamily: 'Inter' }}>\n      <img src={logoData} />\n      Hello World\n    </div>,\n    { fonts: [{ name: 'Inter', data: fontData }] }\n  )\n}",
@@ -1032,7 +1032,7 @@
     "description": "synchronous fs at module level"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.5",
     "ruleTitle": "Hoist Static I/O to Module Level",
     "type": "bad",
     "code": "import fs from 'node:fs/promises'\n\nexport async function processRequest(data: Data) {\n  const config = JSON.parse(\n    await fs.readFile('./config.json', 'utf-8')\n  )\n  const template = await fs.readFile('./template.html', 'utf-8')\n\n  return render(template, data, config)\n}",
@@ -1040,7 +1040,7 @@
     "description": "reads config on every call"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.5",
     "ruleTitle": "Hoist Static I/O to Module Level",
     "type": "good",
     "code": "import fs from 'node:fs/promises'\n\nconst configPromise = fs\n  .readFile('./config.json', 'utf-8')\n  .then(JSON.parse)\nconst templatePromise = fs.readFile('./template.html', 'utf-8')\n\nexport async function processRequest(data: Data) {\n  const [config, template] = await Promise.all([\n    configPromise,\n    templatePromise,\n  ])\n\n  return render(template, data, config)\n}",
@@ -1048,7 +1048,7 @@
     "description": "hoists config and template to module level"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.3",
     "ruleTitle": "Avoid Shared Module State for Request Data",
     "type": "bad",
     "code": "let currentUser: User | null = null\n\nexport default async function Page() {\n  currentUser = await auth()\n  return <Dashboard />\n}\n\nasync function Dashboard() {\n  return <div>{currentUser?.name}</div>\n}",
@@ -1056,7 +1056,7 @@
     "description": "request data leaks across concurrent renders"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.3",
     "ruleTitle": "Avoid Shared Module State for Request Data",
     "type": "good",
     "code": "export default async function Page() {\n  const user = await auth()\n  return <Dashboard user={user} />\n}\n\nfunction Dashboard({ user }: { user: User | null }) {\n  return <div>{user?.name}</div>\n}",
@@ -1064,7 +1064,7 @@
     "description": "keep request data local to the render tree"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.7",
     "ruleTitle": "Parallel Data Fetching with Component Composition",
     "type": "bad",
     "code": "export default async function Page() {\n  const header = await fetchHeader()\n  return (\n    <div>\n      <div>{header}</div>\n      <Sidebar />\n    </div>\n  )\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}",
@@ -1072,7 +1072,7 @@
     "description": "Sidebar waits for Page's fetch to complete"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.7",
     "ruleTitle": "Parallel Data Fetching with Component Composition",
     "type": "good",
     "code": "async function Header() {\n  const data = await fetchHeader()\n  return <div>{data}</div>\n}\n\nasync function Sidebar() {\n  const items = await fetchSidebarItems()\n  return <nav>{items.map(renderItem)}</nav>\n}\n\nexport default function Page() {\n  return (\n    <div>\n      <Header />\n      <Sidebar />\n    </div>\n  )\n}",
@@ -1080,7 +1080,7 @@
     "description": "both fetch simultaneously"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.8",
     "ruleTitle": "Parallel Nested Data Fetching",
     "type": "bad",
     "code": "const chats = await Promise.all(\n  chatIds.map(id => getChat(id))\n)\n\nconst chatAuthors = await Promise.all(\n  chats.map(chat => getUser(chat.author))\n)",
@@ -1088,7 +1088,7 @@
     "description": "a single slow item blocks all nested fetches"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.8",
     "ruleTitle": "Parallel Nested Data Fetching",
     "type": "good",
     "code": "const chatAuthors = await Promise.all(\n  chatIds.map(id => getChat(id).then(chat => getUser(chat.author)))\n)",
@@ -1096,7 +1096,7 @@
     "description": "each item chains its own nested fetch"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.6",
     "ruleTitle": "Minimize Serialization at RSC Boundaries",
     "type": "bad",
     "code": "async function Page() {\n  const user = await fetchUser()  // 50 fields\n  return <Profile user={user} />\n}\n\n'use client'\nfunction Profile({ user }: { user: User }) {\n  return <div>{user.name}</div>  // uses 1 field\n}",
@@ -1104,7 +1104,7 @@
     "description": "serializes all 50 fields"
   },
   {
-    "ruleId": "",
+    "ruleId": "3.6",
     "ruleTitle": "Minimize Serialization at RSC Boundaries",
     "type": "good",
     "code": "async function Page() {\n  const user = await fetchUser()\n  return <Profile name={user.name} />\n}\n\n'use client'\nfunction Profile({ name }: { name: string }) {\n  return <div>{name}</div>\n}",
