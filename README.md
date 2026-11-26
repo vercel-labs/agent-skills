@@ -168,6 +168,22 @@ Deploy applications and websites to Vercel. Prefers git-push deploys on a linked
 - "Deploy and give me the link"
 - "Create a preview deployment"
 
+### paperzilla
+
+Chat with your agent about projects, recommendations, and canonical papers in Paperzilla.
+
+**Use when:**
+- Asking for the latest recommendations from a Paperzilla project
+- Fetching canonical paper details or markdown for summarization
+- Explaining why a paper matters for your research
+- Leaving recommendation feedback or exporting structured Paperzilla data
+
+**Features:**
+- Project and feed browsing via the `pz` CLI
+- Canonical paper lookup with markdown-backed summarization
+- Recommendation feedback workflows
+- JSON export and Atom feed URL support
+
 ## Installation
 
 ```bash
