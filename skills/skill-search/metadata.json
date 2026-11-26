@@ -1,0 +1,9 @@
+{
+  "name": "skill-search",
+  "description": "Semantic search over 105K+ agent skill cards. Use this skill when you need to find the most relevant skills, tools, or capabilities for a given task.",
+  "author": "wjl2023",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": "https://github.com/wjl2023/skill-search",
+  "tags": ["search", "semantic-search", "skills", "discovery", "agent-tools"]
+}
