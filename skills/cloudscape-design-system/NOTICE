@@ -1,0 +1,18 @@
+This skill (the scraper, SKILL.md, metadata, and documentation wrapper) is
+released under the MIT license (see LICENSE).
+
+The content under `references/` is derived from the public Cloudscape Design
+System documentation at https://cloudscape.design/, which is authored and
+maintained by Amazon Web Services, Inc. It is included here for the purpose
+of reference-grounded assistance by AI agents.
+
+The Cloudscape Design System component source code is published by AWS under
+the Apache License 2.0:
+  https://github.com/cloudscape-design/components
+
+Trademarks and brand assets referenced in the source material are property of
+their respective owners; their inclusion in excerpted documentation does not
+imply endorsement.
+
+If you are an AWS representative and would like the ingested documentation
+removed or amended, please open an issue on the skill's repository.
