@@ -49,7 +49,7 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "useEffectEvent for Stable Callback Refs",
+    "ruleTitle": "useEffectEvent for Latest-Value Callbacks",
     "type": "bad",
     "code": "function SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearch(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query, onSearch])\n}",
     "language": "tsx",
@@ -57,7 +57,7 @@
   },
   {
     "ruleId": "",
-    "ruleTitle": "useEffectEvent for Stable Callback Refs",
+    "ruleTitle": "useEffectEvent for Latest-Value Callbacks",
     "type": "good",
     "code": "import { useEffectEvent } from 'react';\n\nfunction SearchInput({ onSearch }: { onSearch: (q: string) => void }) {\n  const [query, setQuery] = useState('')\n  const onSearchEvent = useEffectEvent(onSearch)\n\n  useEffect(() => {\n    const timeout = setTimeout(() => onSearchEvent(query), 300)\n    return () => clearTimeout(timeout)\n  }, [query])\n}",
     "language": "tsx",
@@ -283,16 +283,16 @@
     "ruleId": "",
     "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
     "type": "bad",
-    "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch)\n  document.addEventListener('wheel', handleWheel)\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
-    "language": "typescript",
+    "code": "function Feed({ children }: { children: ReactNode }) {\n  const scrollerRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const el = scrollerRef.current\n    if (!el) return\n    const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n    const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n\n    el.addEventListener('touchstart', handleTouch)\n    el.addEventListener('wheel', handleWheel)\n\n    return () => {\n      el.removeEventListener('touchstart', handleTouch)\n      el.removeEventListener('wheel', handleWheel)\n    }\n  }, [])\n\n  return <div ref={scrollerRef} className=\"overflow-auto\">{children}</div>\n}",
+    "language": "tsx",
     "description": "Incorrect example for Use Passive Event Listeners for Scrolling Performance"
   },
   {
     "ruleId": "",
     "ruleTitle": "Use Passive Event Listeners for Scrolling Performance",
     "type": "good",
-    "code": "useEffect(() => {\n  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n  \n  document.addEventListener('touchstart', handleTouch, { passive: true })\n  document.addEventListener('wheel', handleWheel, { passive: true })\n  \n  return () => {\n    document.removeEventListener('touchstart', handleTouch)\n    document.removeEventListener('wheel', handleWheel)\n  }\n}, [])",
-    "language": "typescript",
+    "code": "function Feed({ children }: { children: ReactNode }) {\n  const scrollerRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const el = scrollerRef.current\n    if (!el) return\n    const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)\n    const handleWheel = (e: WheelEvent) => console.log(e.deltaY)\n\n    el.addEventListener('touchstart', handleTouch, { passive: true })\n    el.addEventListener('wheel', handleWheel, { passive: true })\n\n    return () => {\n      el.removeEventListener('touchstart', handleTouch)\n      el.removeEventListener('wheel', handleWheel)\n    }\n  }, [])\n\n  return <div ref={scrollerRef} className=\"overflow-auto\">{children}</div>\n}",
+    "language": "tsx",
     "description": "Correct example for Use Passive Event Listeners for Scrolling Performance"
   },
   {
@@ -557,15 +557,15 @@
     "type": "bad",
     "code": "function LoadingSpinner() {\n  return (\n    <svg \n      className=\"animate-spin\"\n      width=\"24\" \n      height=\"24\" \n      viewBox=\"0 0 24 24\"\n    >\n      <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n    </svg>\n  )\n}",
     "language": "tsx",
-    "description": "animating SVG directly - no hardware acceleration"
+    "description": "animating SVG directly - repaints in engines without SVG compositing"
   },
   {
     "ruleId": "",
     "ruleTitle": "Animate SVG Wrapper Instead of SVG Element",
     "type": "good",
-    "code": "function LoadingSpinner() {\n  return (\n    <div className=\"animate-spin\">\n      <svg \n        width=\"24\" \n        height=\"24\" \n        viewBox=\"0 0 24 24\"\n      >\n        <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n      </svg>\n    </div>\n  )\n}",
+    "code": "function LoadingSpinner() {\n  return (\n    <div className=\"inline-block animate-spin\">\n      <svg \n        width=\"24\" \n        height=\"24\" \n        viewBox=\"0 0 24 24\"\n      >\n        <circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" />\n      </svg>\n    </div>\n  )\n}",
     "language": "tsx",
-    "description": "animating wrapper div - hardware accelerated"
+    "description": "animating wrapper div - composited"
   },
   {
     "ruleId": "",
@@ -587,7 +587,7 @@
     "ruleId": "",
     "ruleTitle": "Hoist Static JSX Elements",
     "type": "bad",
-    "code": "function LoadingSkeleton() {\n  return <div className=\"animate-pulse h-20 bg-gray-200\" />\n}\n\nfunction Container() {\n  return (\n    <div>\n      {loading && <LoadingSkeleton />}\n    </div>\n  )\n}",
+    "code": "function LoadingSkeleton() {\n  return <div className=\"animate-pulse h-20 bg-gray-200\" />\n}\n\nfunction Container({ loading }: { loading: boolean }) {\n  return (\n    <div>\n      {loading && <LoadingSkeleton />}\n    </div>\n  )\n}",
     "language": "tsx",
     "description": "recreates element every render"
   },
@@ -595,7 +595,7 @@
     "ruleId": "",
     "ruleTitle": "Hoist Static JSX Elements",
     "type": "good",
-    "code": "const loadingSkeleton = (\n  <div className=\"animate-pulse h-20 bg-gray-200\" />\n)\n\nfunction Container() {\n  return (\n    <div>\n      {loading && loadingSkeleton}\n    </div>\n  )\n}",
+    "code": "const loadingSkeleton = (\n  <div className=\"animate-pulse h-20 bg-gray-200\" />\n)\n\nfunction Container({ loading }: { loading: boolean }) {\n  return (\n    <div>\n      {loading && loadingSkeleton}\n    </div>\n  )\n}",
     "language": "tsx",
     "description": "reuses same element"
   },
@@ -619,9 +619,9 @@
     "ruleId": "",
     "ruleTitle": "Prevent Hydration Mismatch Without Flickering",
     "type": "good",
-    "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  return (\n    <>\n      <div id=\"theme-wrapper\">\n        {children}\n      </div>\n      <script\n        dangerouslySetInnerHTML={{\n          __html: `\n            (function() {\n              try {\n                var theme = localStorage.getItem('theme') || 'light';\n                var el = document.getElementById('theme-wrapper');\n                if (el) el.className = theme;\n              } catch (e) {}\n            })();\n          `,\n        }}\n      />\n    </>\n  )\n}",
+    "code": "function ThemeWrapper({ children }: { children: ReactNode }) {\n  return (\n    <>\n      <div id=\"theme-wrapper\" suppressHydrationWarning>\n        {children}\n      </div>\n      <script\n        dangerouslySetInnerHTML={{\n          __html: `\n            (function() {\n              try {\n                var theme = localStorage.getItem('theme') || 'light';\n                var el = document.getElementById('theme-wrapper');\n                if (el) el.className = theme;\n              } catch (e) {}\n            })();\n          `,\n        }}\n      />\n    </>\n  )\n}",
     "language": "tsx",
-    "description": "no flicker, no hydration mismatch"
+    "description": "no flicker, expected mismatch suppressed"
   },
   {
     "ruleId": "",
@@ -683,7 +683,7 @@
     "ruleId": "",
     "ruleTitle": "Use useTransition Over Manual Loading States",
     "type": "good",
-    "code": "import { useTransition, useState } from 'react'\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isPending, startTransition] = useTransition()\n\n  const handleSearch = (value: string) => {\n    setQuery(value) // Update input immediately\n    \n    startTransition(async () => {\n      // Fetch and update results\n      const data = await fetchResults(value)\n      setResults(data)\n    })\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isPending && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
+    "code": "import { useRef, useTransition, useState } from 'react'\n\nfunction SearchResults() {\n  const [query, setQuery] = useState('')\n  const [results, setResults] = useState([])\n  const [isPending, startTransition] = useTransition()\n  const controllerRef = useRef<AbortController | null>(null)\n\n  const handleSearch = (value: string) => {\n    setQuery(value) // Update input immediately\n\n    // Cancel the previous request so it can't overwrite this one\n    controllerRef.current?.abort()\n    const controller = new AbortController()\n    controllerRef.current = controller\n\n    startTransition(async () => {\n      try {\n        const data = await fetchResults(value, controller.signal) // pass signal to fetch()\n        // Updates after `await` are not Transitions unless wrapped again\n        startTransition(() => {\n          setResults(data)\n        })\n      } catch (e) {\n        if ((e as Error).name !== 'AbortError') throw e\n      }\n    })\n  }\n\n  return (\n    <>\n      <input onChange={(e) => handleSearch(e.target.value)} />\n      {isPending && <Spinner />}\n      <ResultsList results={results} />\n    </>\n  )\n}",
     "language": "tsx",
     "description": "useTransition with built-in pending state"
   },

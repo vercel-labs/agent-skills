@@ -38,20 +38,32 @@ function SearchResults() {
 **Correct (useTransition with built-in pending state):**
 
 ```tsx
-import { useTransition, useState } from 'react'
+import { useRef, useTransition, useState } from 'react'
 
 function SearchResults() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [isPending, startTransition] = useTransition()
+  const controllerRef = useRef<AbortController | null>(null)
 
   const handleSearch = (value: string) => {
     setQuery(value) // Update input immediately
-    
+
+    // Cancel the previous request so it can't overwrite this one
+    controllerRef.current?.abort()
+    const controller = new AbortController()
+    controllerRef.current = controller
+
     startTransition(async () => {
-      // Fetch and update results
-      const data = await fetchResults(value)
-      setResults(data)
+      try {
+        const data = await fetchResults(value, controller.signal) // pass signal to fetch()
+        // Updates after `await` are not Transitions unless wrapped again
+        startTransition(() => {
+          setResults(data)
+        })
+      } catch (e) {
+        if ((e as Error).name !== 'AbortError') throw e
+      }
     })
   }
 
@@ -68,8 +80,12 @@ function SearchResults() {
 **Benefits:**
 
 - **Automatic pending state**: No need to manually manage `setIsLoading(true/false)`
-- **Error resilience**: Pending state correctly resets even if the transition throws
 - **Better responsiveness**: Keeps the UI responsive during updates
-- **Interrupt handling**: New transitions automatically cancel pending ones
+
+**Caveats (from the React docs):**
+
+- **State updates after `await` are not Transitions.** Wrap each one in another `startTransition`, as above.
+- **Async Actions are not ordered or cancelled.** "Actions within a Transition do not guarantee execution order", so a slow earlier request can overwrite a newer one. Ongoing Transitions are also batched: the newest results and `isPending` wait for every request still in flight. Aborting the previous request (as above) fixes both. `useActionState` and `<form>` actions handle ordering for you.
+- **Errors go to the nearest error boundary.** A function passed to `startTransition` that throws shows the error boundary. The example rethrows everything except `AbortError`; catch inside the action if you want an inline error message.
 
 Reference: [useTransition](https://react.dev/reference/react/useTransition)

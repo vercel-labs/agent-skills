@@ -97,7 +97,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
    - 8.1 [Do Not Put Effect Events in Dependency Arrays](#81-do-not-put-effect-events-in-dependency-arrays)
    - 8.2 [Initialize App Once, Not Per Mount](#82-initialize-app-once-not-per-mount)
    - 8.3 [Store Event Handlers in Refs](#83-store-event-handlers-in-refs)
-   - 8.4 [useEffectEvent for Stable Callback Refs](#84-useeffectevent-for-stable-callback-refs)
+   - 8.4 [useEffectEvent for Latest-Value Callbacks](#84-useeffectevent-for-latest-value-callbacks)
 
 ---
 
@@ -1447,37 +1447,55 @@ Add `{ passive: true }` to touch and wheel event listeners to enable immediate s
 
 **Incorrect:**
 
-```typescript
-useEffect(() => {
-  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
-  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
-  
-  document.addEventListener('touchstart', handleTouch)
-  document.addEventListener('wheel', handleWheel)
-  
-  return () => {
-    document.removeEventListener('touchstart', handleTouch)
-    document.removeEventListener('wheel', handleWheel)
-  }
-}, [])
+```tsx
+function Feed({ children }: { children: ReactNode }) {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
+    const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
+
+    el.addEventListener('touchstart', handleTouch)
+    el.addEventListener('wheel', handleWheel)
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouch)
+      el.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
+  return <div ref={scrollerRef} className="overflow-auto">{children}</div>
+}
 ```
 
 **Correct:**
 
-```typescript
-useEffect(() => {
-  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
-  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
-  
-  document.addEventListener('touchstart', handleTouch, { passive: true })
-  document.addEventListener('wheel', handleWheel, { passive: true })
-  
-  return () => {
-    document.removeEventListener('touchstart', handleTouch)
-    document.removeEventListener('wheel', handleWheel)
-  }
-}, [])
+```tsx
+function Feed({ children }: { children: ReactNode }) {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
+    const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
+
+    el.addEventListener('touchstart', handleTouch, { passive: true })
+    el.addEventListener('wheel', handleWheel, { passive: true })
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouch)
+      el.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
+  return <div ref={scrollerRef} className="overflow-auto">{children}</div>
+}
 ```
+
+**Already passive by default on `window`, `document`, `document.documentElement` and `document.body`:** `touchstart` and `touchmove` in all major browsers (Chrome 55, Firefox 61, Safari 11.1), and `wheel`/`mousewheel` in Chrome 73+ and Firefox 84+, but not Safari ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#using_passive_listeners)). On those targets, an explicit `{ passive: true }` only changes behaviour for `wheel`/`mousewheel` in Safari (and in browsers older than those versions). On any other element the default is `false`, and a non-passive listener on the element a scroll starts over, or any of its ancestors, delays that scroll.
 
 **Use passive when:** tracking/analytics, logging, any listener that doesn't call `preventDefault()`.
 
@@ -2336,11 +2354,11 @@ Optimizing the rendering process reduces the work the browser needs to do.
 
 ### 6.1 Animate SVG Wrapper Instead of SVG Element
 
-**Impact: LOW (enables hardware acceleration)**
+**Impact: LOW (enables hardware acceleration in engines that don't composite SVG animations)**
 
-Many browsers don't have hardware acceleration for CSS3 animations on SVG elements. Wrap SVG in a `<div>` and animate the wrapper instead.
+Engines without hardware acceleration for SVG animations repaint the SVG on every frame when a CSS animation targets the SVG element itself. Chromium 89+ and Firefox already hardware-accelerate these animations ([Chrome blog](https://developer.chrome.com/blog/hardware-accelerated-animations)), so there the wrapper makes no difference. Wrapping the SVG in an inline-block `<div>` and animating the wrapper is a cheap way to get compositing in engines that don't. Keep the wrapper `inline-block` (or give it the SVG's size): a block-level wrapper stretches to the container width and rotates around its own centre, not the icon's. Confirm with DevTools → Rendering → Paint flashing.
 
-**Incorrect: animating SVG directly - no hardware acceleration**
+**Incorrect: animating SVG directly - repaints in engines without SVG compositing**
 
 ```tsx
 function LoadingSpinner() {
@@ -2357,12 +2375,12 @@ function LoadingSpinner() {
 }
 ```
 
-**Correct: animating wrapper div - hardware accelerated**
+**Correct: animating wrapper div - composited**
 
 ```tsx
 function LoadingSpinner() {
   return (
-    <div className="animate-spin">
+    <div className="inline-block animate-spin">
       <svg 
         width="24" 
         height="24" 
@@ -2375,7 +2393,7 @@ function LoadingSpinner() {
 }
 ```
 
-This applies to all CSS transforms and transitions (`transform`, `opacity`, `translate`, `scale`, `rotate`). The wrapper div allows browsers to use GPU acceleration for smoother animations.
+This applies to the compositor-friendly properties: `transform` (and the individual `translate`, `scale`, `rotate` properties) and `opacity`.
 
 ### 6.2 CSS content-visibility for Long Lists
 
@@ -2424,7 +2442,7 @@ function LoadingSkeleton() {
   return <div className="animate-pulse h-20 bg-gray-200" />
 }
 
-function Container() {
+function Container({ loading }: { loading: boolean }) {
   return (
     <div>
       {loading && <LoadingSkeleton />}
@@ -2440,7 +2458,7 @@ const loadingSkeleton = (
   <div className="animate-pulse h-20 bg-gray-200" />
 )
 
-function Container() {
+function Container({ loading }: { loading: boolean }) {
   return (
     <div>
       {loading && loadingSkeleton}
@@ -2524,13 +2542,13 @@ function ThemeWrapper({ children }: { children: ReactNode }) {
 
 Component first renders with default value (`light`), then updates after hydration, causing a visible flash of incorrect content.
 
-**Correct: no flicker, no hydration mismatch**
+**Correct: no flicker, expected mismatch suppressed**
 
 ```tsx
 function ThemeWrapper({ children }: { children: ReactNode }) {
   return (
     <>
-      <div id="theme-wrapper">
+      <div id="theme-wrapper" suppressHydrationWarning>
         {children}
       </div>
       <script
@@ -2551,7 +2569,9 @@ function ThemeWrapper({ children }: { children: ReactNode }) {
 }
 ```
 
-The inline script executes synchronously before showing the element, ensuring the DOM already has the correct value. No flickering, no hydration mismatch.
+The inline script executes synchronously before showing the element, ensuring the DOM already has the correct value, so there is no flicker.
+
+The script adds a `class` attribute React did not render, so hydration sees a mismatch: React logs *"A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up"* in development. React leaves the attribute as the script set it, which is what this pattern needs. `suppressHydrationWarning` on that element silences this one expected mismatch. It applies one level deep, so keep it on the element the script changes. [`next-themes`](https://github.com/pacocoursey/next-themes) puts it on `<html>` for the same reason. If you send a Content-Security-Policy, the inline script needs a nonce or hash. The script only runs when it arrives in server-rendered HTML; browsers don't execute a `<script>` that React inserts on the client, so this works for first-load SSR only.
 
 This pattern is especially useful for theme toggles, user preferences, authentication states, and any client-only data that should render immediately without flashing default values.
 
@@ -2812,20 +2832,32 @@ function SearchResults() {
 **Correct: useTransition with built-in pending state**
 
 ```tsx
-import { useTransition, useState } from 'react'
+import { useRef, useTransition, useState } from 'react'
 
 function SearchResults() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [isPending, startTransition] = useTransition()
+  const controllerRef = useRef<AbortController | null>(null)
 
   const handleSearch = (value: string) => {
     setQuery(value) // Update input immediately
-    
+
+    // Cancel the previous request so it can't overwrite this one
+    controllerRef.current?.abort()
+    const controller = new AbortController()
+    controllerRef.current = controller
+
     startTransition(async () => {
-      // Fetch and update results
-      const data = await fetchResults(value)
-      setResults(data)
+      try {
+        const data = await fetchResults(value, controller.signal) // pass signal to fetch()
+        // Updates after `await` are not Transitions unless wrapped again
+        startTransition(() => {
+          setResults(data)
+        })
+      } catch (e) {
+        if ((e as Error).name !== 'AbortError') throw e
+      }
     })
   }
 
@@ -2843,11 +2875,15 @@ function SearchResults() {
 
 - **Automatic pending state**: No need to manually manage `setIsLoading(true/false)`
 
-- **Error resilience**: Pending state correctly resets even if the transition throws
-
 - **Better responsiveness**: Keeps the UI responsive during updates
 
-- **Interrupt handling**: New transitions automatically cancel pending ones
+**Caveats: from the React docs**
+
+- **State updates after `await` are not Transitions.** Wrap each one in another `startTransition`, as above.
+
+- **Async Actions are not ordered or cancelled.** "Actions within a Transition do not guarantee execution order", so a slow earlier request can overwrite a newer one. Ongoing Transitions are also batched: the newest results and `isPending` wait for every request still in flight. Aborting the previous request (as above) fixes both. `useActionState` and `<form>` actions handle ordering for you.
+
+- **Errors go to the nearest error boundary.** A function passed to `startTransition` that throws shows the error boundary. The example rethrows everything except `AbortError`; catch inside the action if you want an inline error message.
 
 Reference: [https://react.dev/reference/react/useTransition](https://react.dev/reference/react/useTransition)
 
@@ -3760,9 +3796,9 @@ function useWindowEvent(event: string, handler: (e) => void) {
 
 **Alternative: use `useEffectEvent` if you're on latest React:**
 
-`useEffectEvent` provides a cleaner API for the same pattern: it creates a stable function reference that always calls the latest version of the handler.
+`useEffectEvent` achieves the same goal with less code: the Effect Event always calls the latest `handler`, so it stays out of the dependency array and the listener re-subscribes only when `event` changes. Its identity is **not** stable: React intentionally returns a new function on every render, so never list it in a dependency array or pass it to other components or Hooks. See [useEffectEvent](https://react.dev/reference/react/useEffectEvent).
 
-### 8.4 useEffectEvent for Stable Callback Refs
+### 8.4 useEffectEvent for Latest-Value Callbacks
 
 **Impact: LOW (prevents effect re-runs)**
 

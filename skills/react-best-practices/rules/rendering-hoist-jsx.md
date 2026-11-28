@@ -16,7 +16,7 @@ function LoadingSkeleton() {
   return <div className="animate-pulse h-20 bg-gray-200" />
 }
 
-function Container() {
+function Container({ loading }: { loading: boolean }) {
   return (
     <div>
       {loading && <LoadingSkeleton />}
@@ -32,7 +32,7 @@ const loadingSkeleton = (
   <div className="animate-pulse h-20 bg-gray-200" />
 )
 
-function Container() {
+function Container({ loading }: { loading: boolean }) {
   return (
     <div>
       {loading && loadingSkeleton}
