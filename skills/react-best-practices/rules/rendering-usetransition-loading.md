@@ -44,16 +44,16 @@ function SearchResults() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [isPending, startTransition] = useTransition()
-  const latestQuery = useRef('')
+  const requestId = useRef(0)
 
   const handleSearch = (value: string) => {
     setQuery(value) // Update input immediately
-    latestQuery.current = value
+    const id = ++requestId.current
 
     startTransition(async () => {
       const data = await fetchResults(value)
       // An older, slower request can resolve after a newer one: drop it
-      if (latestQuery.current !== value) return
+      if (id !== requestId.current) return
       // Updates after `await` are not Transitions unless wrapped again
       startTransition(() => {
         setResults(data)
