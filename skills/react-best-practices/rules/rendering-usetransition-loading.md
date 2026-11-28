@@ -38,20 +38,26 @@ function SearchResults() {
 **Correct (useTransition with built-in pending state):**
 
 ```tsx
-import { useTransition, useState } from 'react'
+import { useRef, useTransition, useState } from 'react'
 
 function SearchResults() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [isPending, startTransition] = useTransition()
+  const latestQuery = useRef('')
 
   const handleSearch = (value: string) => {
     setQuery(value) // Update input immediately
-    
+    latestQuery.current = value
+
     startTransition(async () => {
-      // Fetch and update results
       const data = await fetchResults(value)
-      setResults(data)
+      // An older, slower request can resolve after a newer one: drop it
+      if (latestQuery.current !== value) return
+      // Updates after `await` are not Transitions unless wrapped again
+      startTransition(() => {
+        setResults(data)
+      })
     })
   }
 
@@ -68,8 +74,12 @@ function SearchResults() {
 **Benefits:**
 
 - **Automatic pending state**: No need to manually manage `setIsLoading(true/false)`
-- **Error resilience**: Pending state correctly resets even if the transition throws
 - **Better responsiveness**: Keeps the UI responsive during updates
-- **Interrupt handling**: New transitions automatically cancel pending ones
+
+**Caveats (from the React docs):**
+
+- **State updates after `await` are not Transitions.** Wrap each one in another `startTransition`, as above.
+- **Transitions are not cancelled.** Multiple ongoing Transitions are batched together, and async results can arrive out of order, so a slow earlier request can overwrite a newer one. Guard against stale responses (as above), or let a data library handle ordering.
+- **Errors go to the nearest error boundary.** A function passed to `startTransition` that throws shows the error boundary, so catch errors inside the action if you want an inline error message.
 
 Reference: [useTransition](https://react.dev/reference/react/useTransition)

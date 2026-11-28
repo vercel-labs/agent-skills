@@ -1,15 +1,15 @@
 ---
 title: Animate SVG Wrapper Instead of SVG Element
 impact: LOW
-impactDescription: enables hardware acceleration
+impactDescription: enables hardware acceleration in engines that don't composite SVG animations
 tags: rendering, svg, css, animation, performance
 ---
 
 ## Animate SVG Wrapper Instead of SVG Element
 
-Many browsers don't have hardware acceleration for CSS3 animations on SVG elements. Wrap SVG in a `<div>` and animate the wrapper instead.
+Engines without hardware acceleration for SVG animations repaint the SVG on every frame when a CSS animation targets the SVG element itself. Chromium 89+ and Firefox already hardware-accelerate these animations ([Chrome blog](https://developer.chrome.com/blog/hardware-accelerated-animations)), so there the wrapper makes no difference. Wrapping the SVG in a `<div>` and animating the wrapper is a cheap, harmless way to get compositing in engines that don't. Confirm with DevTools → Rendering → Paint flashing.
 
-**Incorrect (animating SVG directly - no hardware acceleration):**
+**Incorrect (animating SVG directly - repaints in engines without SVG compositing):**
 
 ```tsx
 function LoadingSpinner() {
@@ -26,7 +26,7 @@ function LoadingSpinner() {
 }
 ```
 
-**Correct (animating wrapper div - hardware accelerated):**
+**Correct (animating wrapper div - composited):**
 
 ```tsx
 function LoadingSpinner() {
@@ -44,4 +44,4 @@ function LoadingSpinner() {
 }
 ```
 
-This applies to all CSS transforms and transitions (`transform`, `opacity`, `translate`, `scale`, `rotate`). The wrapper div allows browsers to use GPU acceleration for smoother animations.
+This applies to the compositor-friendly properties: `transform` (and the individual `translate`, `scale`, `rotate` properties) and `opacity`.
