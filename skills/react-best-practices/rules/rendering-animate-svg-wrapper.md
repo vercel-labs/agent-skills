@@ -7,7 +7,7 @@ tags: rendering, svg, css, animation, performance
 
 ## Animate SVG Wrapper Instead of SVG Element
 
-Engines without hardware acceleration for SVG animations repaint the SVG on every frame when a CSS animation targets the SVG element itself. Chromium 89+ and Firefox already hardware-accelerate these animations ([Chrome blog](https://developer.chrome.com/blog/hardware-accelerated-animations)), so there the wrapper makes no difference. Wrapping the SVG in a `<div>` and animating the wrapper is a cheap, harmless way to get compositing in engines that don't. Confirm with DevTools → Rendering → Paint flashing.
+Engines without hardware acceleration for SVG animations repaint the SVG on every frame when a CSS animation targets the SVG element itself. Chromium 89+ and Firefox already hardware-accelerate these animations ([Chrome blog](https://developer.chrome.com/blog/hardware-accelerated-animations)), so there the wrapper makes no difference. Wrapping the SVG in an inline-block `<div>` and animating the wrapper is a cheap way to get compositing in engines that don't. Keep the wrapper `inline-block` (or give it the SVG's size): a block-level wrapper stretches to the container width and rotates around its own centre, not the icon's. Confirm with DevTools → Rendering → Paint flashing.
 
 **Incorrect (animating SVG directly - repaints in engines without SVG compositing):**
 
@@ -31,7 +31,7 @@ function LoadingSpinner() {
 ```tsx
 function LoadingSpinner() {
   return (
-    <div className="animate-spin">
+    <div className="inline-block animate-spin">
       <svg 
         width="24" 
         height="24" 
